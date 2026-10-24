@@ -1709,6 +1709,10 @@ body.is-scrolled .drag-hint {
 
 .project-cta-wrapper {
   margin-top: 0.2rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
 .project-cta-link {

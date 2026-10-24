@@ -158,6 +158,21 @@
       }
     });
 
+    // 5. If landing via anchor hash (e.g. #sec-interactive-demo), reveal target and scroll
+    if (window.location.hash) {
+      try {
+        const hashEl = document.querySelector(window.location.hash);
+        if (hashEl) {
+          markRevealed(hashEl, hashEl.id);
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              hashEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 120);
+          });
+        }
+      } catch (err) {}
+    }
+
     // ========================================================================
     // Minimal Dot Section Navigator (All 18 Editorial Headings & Rolling Wheel)
     // ========================================================================

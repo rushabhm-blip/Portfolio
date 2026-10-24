@@ -2492,12 +2492,11 @@ function initProjectExpandingTransitions() {
     isTransitioning = true;
 
     const thumbnailLink = card.querySelector('.project-thumbnail-link');
-    const ctaLink = card.querySelector('.project-cta-link');
-    let targetUrl = (link && typeof link.getAttribute === 'function' && link.getAttribute('href')) ||
+    const clickedLink = link || (e && e.currentTarget && typeof e.currentTarget.getAttribute === 'function' ? e.currentTarget : null);
+    let targetUrl = (clickedLink && clickedLink.getAttribute('href')) ||
                       (thumbnailLink && thumbnailLink.getAttribute('href')) ||
-                      (ctaLink && ctaLink.getAttribute('href')) ||
                       '/projects/sajag/';
-    if (targetUrl && !targetUrl.endsWith('/') && !targetUrl.includes('.')) {
+    if (targetUrl && !targetUrl.endsWith('/') && !targetUrl.includes('.') && !targetUrl.includes('#')) {
       targetUrl += '/';
     }
     const projectId = card.getAttribute('data-project-id') || 'sajag';
@@ -2668,28 +2667,27 @@ function initProjectExpandingTransitions() {
     }
   }
 
-  // Bind all project rows (supports thumbnail click & explore link click)
+  // Bind all project rows (supports thumbnail click & explore / demo link clicks)
   projectRows.forEach((card) => {
     const thumbnailLink = card.querySelector('.project-thumbnail-link');
-    const ctaLink = card.querySelector('.project-cta-link');
-    let targetUrl = (thumbnailLink && thumbnailLink.getAttribute('href')) ||
-                    (ctaLink && ctaLink.getAttribute('href')) ||
-                    '/projects/sajag/';
-    if (targetUrl && !targetUrl.endsWith('/') && !targetUrl.includes('.')) {
-      targetUrl += '/';
+    const ctaLinks = Array.from(card.querySelectorAll('.project-cta-link'));
+    let defaultUrl = (thumbnailLink && thumbnailLink.getAttribute('href')) || '/projects/sajag/';
+    if (defaultUrl && !defaultUrl.endsWith('/') && !defaultUrl.includes('.') && !defaultUrl.includes('#')) {
+      defaultUrl += '/';
     }
 
     // Warm up cache on hover or touch
-    [thumbnailLink, ctaLink].forEach((el) => {
+    [thumbnailLink, ...ctaLinks].forEach((el) => {
       if (!el) return;
-      el.addEventListener('pointerenter', () => prefetchProjectRoute(targetUrl));
-      el.addEventListener('focus', () => prefetchProjectRoute(targetUrl));
-      el.addEventListener('touchstart', () => prefetchProjectRoute(targetUrl), { passive: true });
+      const url = el.getAttribute('href') || defaultUrl;
+      el.addEventListener('pointerenter', () => prefetchProjectRoute(url));
+      el.addEventListener('focus', () => prefetchProjectRoute(url));
+      el.addEventListener('touchstart', () => prefetchProjectRoute(url), { passive: true });
     });
 
     // Thumbnail click triggers zoom transition
     if (thumbnailLink) {
-      thumbnailLink.addEventListener('click', (e) => handleTriggerClick(e, card));
+      thumbnailLink.addEventListener('click', (e) => handleTriggerClick(e, card, thumbnailLink));
     }
 
     // Showcase column container click triggers zoom transition
@@ -2703,10 +2701,10 @@ function initProjectExpandingTransitions() {
       });
     }
 
-    // Text link click triggers zoom transition from corresponding thumbnail
-    if (ctaLink) {
-      ctaLink.addEventListener('click', (e) => handleTriggerClick(e, card));
-    }
+    // Text link clicks trigger zoom transition with their respective target URL
+    ctaLinks.forEach((cta) => {
+      cta.addEventListener('click', (e) => handleTriggerClick(e, card, cta));
+    });
   });
 
   // Handle browser Back / Forward buttons seamlessly
