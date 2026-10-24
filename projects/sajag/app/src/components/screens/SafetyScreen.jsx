@@ -595,11 +595,13 @@ export default function SafetyScreen({ onNavigate }) {
           <Navigation className="w-4 h-4 fill-[#1D61F2]" />
         </button>
 
-        {/* BOTTOM-RIGHT: + Mark unsafe area Button */}
+        {/* BOTTOM-RIGHT: + Mark unsafe area Button - Positioned above preview card so it is always visible */}
         {!isMappingMode && !sosActive && (
           <button
-            onClick={() => setIsMappingMode(true)}
-            className="absolute right-4 bottom-4 z-[800] px-4 py-2.5 rounded-full bg-[#1D61F2] hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg active:scale-95 transition-all cursor-pointer pointer-events-auto"
+            onClick={() => {
+              setIsMappingMode(true);
+            }}
+            className={`absolute right-4 ${selectedComplaint && !showFullDetails ? 'bottom-[215px]' : 'bottom-4'} z-[1300] px-4 py-2.5 rounded-full bg-[#1D61F2] hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xl border border-white/20 active:scale-95 transition-all cursor-pointer pointer-events-auto`}
           >
             <Plus className="w-4 h-4 stroke-[3]" />
             <span>Mark unsafe area</span>
@@ -662,7 +664,7 @@ export default function SafetyScreen({ onNavigate }) {
       </div>
 
       {/* BOTTOM PREVIEW CARD (MATCHING REFERENCE MOCKUP) */}
-      {selectedComplaint && !showFullDetails && !showIncidentModal && !sosActive && (
+      {selectedComplaint && !isMappingMode && !showFullDetails && !showIncidentModal && !sosActive && (
         <div
           style={{ position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 1200 }}
           className="w-full flex justify-center p-0"
@@ -671,7 +673,7 @@ export default function SafetyScreen({ onNavigate }) {
             {/* Drag Handle */}
             <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto -mt-1 mb-2.5" />
 
-            {/* Top Row: Icon + Category tag + Distance */}
+            {/* Top Row: Icon + Category tag + Distance + Dismiss Button */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center text-white shrink-0 ${
@@ -698,9 +700,19 @@ export default function SafetyScreen({ onNavigate }) {
                 </span>
               </div>
 
-              <span className="text-xs font-semibold text-gray-500">
-                {selectedComplaint.distance}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-gray-500">
+                  {selectedComplaint.distance}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedComplaint(null)}
+                  className="p-1 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer"
+                  title="Close card"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
 
             {/* Title */}
