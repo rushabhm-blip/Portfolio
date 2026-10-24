@@ -1,0 +1,10 @@
+{
+  "appId": "com.sajag.smartcity",
+  "appName": "Sahaj Smart City",
+  "webDir": "dist",
+  "backgroundColor": "#FFFFFF",
+  "android": {
+    "backgroundColor": "#FFFFFF"
+  }
+}
+

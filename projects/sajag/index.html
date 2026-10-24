@@ -12,7 +12,7 @@
       }
     } catch (e) {}
   </script>
-  <link rel="stylesheet" href="/projects/sajag/case-study.css?v=16">
+  <link rel="stylesheet" href="/projects/sajag/case-study.css?v=17">
 </head>
 <body>
 
@@ -146,6 +146,12 @@
       <li class="cs-dot-item" data-index="17">
         <a href="#sec-learnings" class="cs-dot-link" aria-label="Learnings & Reflections">
           <span class="cs-dot-label">Learnings & Reflections</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="18">
+        <a href="#sec-interactive-demo" class="cs-dot-link" aria-label="Interactive App Demo">
+          <span class="cs-dot-label">Live App Demo</span>
           <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
         </a>
       </li>
@@ -400,6 +406,46 @@
       </div>
       <div class="cs-body-block">
         <img src="/assets/projects/sajag/sections_2x/18_learnings_body.png" alt="Connected services need clear roles, system thinking reveals dependencies, iteration improves clarity, visual consistency supports understanding." width="1198" height="1306" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 19: Interactive Live Experience -->
+    <section class="case-section sec-interactive-demo" id="sec-interactive-demo" data-section="sec-interactive-demo">
+      <div class="cs-demo-wrapper">
+        <div class="cs-demo-intro">
+          <div class="cs-demo-pill">FUNCTIONAL PROTOTYPE</div>
+          <h2 class="cs-demo-title">Experience Sajag Live in Action</h2>
+          <p class="cs-demo-subtitle">
+            Explore the responsive interface directly within this interactive mobile sandbox, or download the Android build on your personal device.
+          </p>
+        </div>
+
+        <div class="cs-device-stage">
+          <div class="cs-device-iphone">
+            <div class="cs-device-island">
+              <span class="cs-island-camera"></span>
+              <span class="cs-island-speaker"></span>
+            </div>
+            <iframe 
+              src="./demo/" 
+              class="cs-device-screen" 
+              title="Sajag Interactive Experience"
+              loading="lazy"
+              allow="geolocation">
+            </iframe>
+          </div>
+        </div>
+
+        <div class="cs-demo-actions">
+          <a href="./demo/" target="_blank" rel="noopener" class="cs-demo-btn cs-demo-btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            <span>Open Fullscreen Web App</span>
+          </a>
+          <a href="./app/Sahaj-Smart-City-debug.apk" download="Sahaj-Smart-City.apk" class="cs-demo-btn cs-demo-btn-secondary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Download Android APK (19 MB)</span>
+          </a>
+        </div>
       </div>
     </section>
 

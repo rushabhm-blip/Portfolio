@@ -1,0 +1,2808 @@
+{
+  "city": "delhi",
+  "cityName": "Delhi Metro (DMRC)",
+  "center": [
+    28.6139,
+    77.209
+  ],
+  "bounds": {
+    "minLat": 28.35,
+    "maxLat": 28.85,
+    "minLng": 76.9,
+    "maxLng": 77.5
+  },
+  "lines": [
+    {
+      "id": "yellow-line",
+      "name": "Yellow Line",
+      "terminals": "Samaypur Badli ↔ Millennium City Centre",
+      "color": "#EAB308",
+      "glowColor": "#FDE047",
+      "textColor": "#FFFFFF",
+      "segments": [
+        [
+          [
+            28.72592,
+            77.16267
+          ],
+          [
+            28.71642,
+            77.17046
+          ],
+          [
+            28.70696,
+            77.18053
+          ],
+          [
+            28.70278,
+            77.19363
+          ],
+          [
+            28.69785,
+            77.20722
+          ],
+          [
+            28.6948,
+            77.21483
+          ],
+          [
+            28.68802,
+            77.2214
+          ],
+          [
+            28.67726,
+            77.2241
+          ],
+          [
+            28.6675,
+            77.22817
+          ],
+          [
+            28.65785,
+            77.23014
+          ],
+          [
+            28.64931,
+            77.22637
+          ],
+          [
+            28.64307,
+            77.22144
+          ],
+          [
+            28.63282,
+            77.21826
+          ],
+          [
+            28.62295,
+            77.21389
+          ],
+          [
+            28.61474,
+            77.21191
+          ],
+          [
+            28.61166,
+            77.21198
+          ],
+          [
+            28.59726,
+            77.21088
+          ],
+          [
+            28.58708,
+            77.21209
+          ],
+          [
+            28.57526,
+            77.20935
+          ],
+          [
+            28.56892,
+            77.20771
+          ],
+          [
+            28.55979,
+            77.20682
+          ],
+          [
+            28.54335,
+            77.20667
+          ],
+          [
+            28.52798,
+            77.20565
+          ],
+          [
+            28.5206,
+            77.20138
+          ],
+          [
+            28.51302,
+            77.18648
+          ],
+          [
+            28.50671,
+            77.17484
+          ],
+          [
+            28.49927,
+            77.16153
+          ],
+          [
+            28.49383,
+            77.14922
+          ],
+          [
+            28.48076,
+            77.12583
+          ],
+          [
+            28.48203,
+            77.10232
+          ],
+          [
+            28.48182,
+            77.09235
+          ],
+          [
+            28.47957,
+            77.08006
+          ],
+          [
+            28.47209,
+            77.07175
+          ],
+          [
+            28.45927,
+            77.07268
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "blue-line",
+      "name": "Blue Line",
+      "terminals": "Dwarka Sec 21 ↔ Noida City Centre / Vaishali",
+      "color": "#2563EB",
+      "glowColor": "#60A5FA",
+      "textColor": "#FFFFFF",
+      "segments": [
+        [
+          [
+            28.55226,
+            77.05828
+          ],
+          [
+            28.56583,
+            77.06706
+          ],
+          [
+            28.57487,
+            77.06454
+          ],
+          [
+            28.58068,
+            77.05682
+          ],
+          [
+            28.58657,
+            77.04929
+          ],
+          [
+            28.59232,
+            77.04051
+          ],
+          [
+            28.59722,
+            77.03326
+          ],
+          [
+            28.60223,
+            77.02588
+          ],
+          [
+            28.61564,
+            77.02197
+          ],
+          [
+            28.61932,
+            77.03326
+          ],
+          [
+            28.62025,
+            77.04514
+          ],
+          [
+            28.62177,
+            77.05585
+          ],
+          [
+            28.62481,
+            77.0653
+          ],
+          [
+            28.62943,
+            77.07767
+          ],
+          [
+            28.63305,
+            77.08669
+          ],
+          [
+            28.63657,
+            77.09648
+          ],
+          [
+            28.64039,
+            77.10495
+          ],
+          [
+            28.64379,
+            77.11284
+          ],
+          [
+            28.64902,
+            77.1227
+          ],
+          [
+            28.65274,
+            77.13164
+          ],
+          [
+            28.65784,
+            77.14248
+          ],
+          [
+            28.65575,
+            77.15057
+          ],
+          [
+            28.6516,
+            77.15824
+          ],
+          [
+            28.64498,
+            77.16929
+          ],
+          [
+            28.6425,
+            77.17815
+          ],
+          [
+            28.644,
+            77.18855
+          ],
+          [
+            28.64427,
+            77.19988
+          ],
+          [
+            28.63923,
+            77.2084
+          ],
+          [
+            28.63282,
+            77.21826
+          ],
+          [
+            28.63003,
+            77.22436
+          ],
+          [
+            28.62588,
+            77.2341
+          ],
+          [
+            28.62342,
+            77.2425
+          ],
+          [
+            28.62051,
+            77.24993
+          ],
+          [
+            28.62331,
+            77.26792
+          ],
+          [
+            28.61806,
+            77.27869
+          ],
+          [
+            28.60442,
+            77.28925
+          ],
+          [
+            28.59428,
+            77.29455
+          ],
+          [
+            28.58916,
+            77.30204
+          ],
+          [
+            28.58512,
+            77.31139
+          ],
+          [
+            28.57819,
+            77.31757
+          ],
+          [
+            28.57081,
+            77.32612
+          ],
+          [
+            28.56409,
+            77.3342
+          ],
+          [
+            28.56714,
+            77.34598
+          ],
+          [
+            28.57466,
+            77.35608
+          ]
+        ],
+        [
+          [
+            28.62331,
+            77.26792
+          ],
+          [
+            28.63064,
+            77.27749
+          ],
+          [
+            28.63663,
+            77.28683
+          ],
+          [
+            28.64171,
+            77.29543
+          ],
+          [
+            28.64849,
+            77.30558
+          ],
+          [
+            28.64695,
+            77.31603
+          ],
+          [
+            28.64544,
+            77.32432
+          ],
+          [
+            28.64997,
+            77.33974
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "red-line",
+      "name": "Red Line",
+      "terminals": "Rithala ↔ Dilshad Garden",
+      "color": "#EF4444",
+      "glowColor": "#F87171",
+      "textColor": "#FFFFFF",
+      "segments": [
+        [
+          [
+            28.72072,
+            77.10713
+          ],
+          [
+            28.71483,
+            77.11467
+          ],
+          [
+            28.7076,
+            77.12591
+          ],
+          [
+            28.70317,
+            77.13223
+          ],
+          [
+            28.6981,
+            77.14024
+          ],
+          [
+            28.69591,
+            77.15226
+          ],
+          [
+            28.68894,
+            77.1616
+          ],
+          [
+            28.68254,
+            77.16459
+          ],
+          [
+            28.67319,
+            77.16994
+          ],
+          [
+            28.66999,
+            77.18169
+          ],
+          [
+            28.66662,
+            77.19882
+          ],
+          [
+            28.66636,
+            77.20727
+          ],
+          [
+            28.66711,
+            77.21653
+          ],
+          [
+            28.6675,
+            77.22817
+          ],
+          [
+            28.668,
+            77.24994
+          ],
+          [
+            28.66989,
+            77.26678
+          ],
+          [
+            28.6718,
+            77.27756
+          ],
+          [
+            28.67345,
+            77.28962
+          ],
+          [
+            28.67544,
+            77.30095
+          ],
+          [
+            28.67579,
+            77.31239
+          ],
+          [
+            28.67592,
+            77.32142
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "airport-express",
+      "name": "Airport Express",
+      "terminals": "New Delhi ↔ IGI Airport / Dwarka Sec 21",
+      "color": "#F97316",
+      "glowColor": "#FB923C",
+      "textColor": "#FFFFFF",
+      "segments": [
+        [
+          [
+            28.64307,
+            77.22144
+          ],
+          [
+            28.62901,
+            77.2119
+          ],
+          [
+            28.59178,
+            77.16155
+          ],
+          [
+            28.54881,
+            77.12092
+          ],
+          [
+            28.55693,
+            77.08669
+          ],
+          [
+            28.55226,
+            77.05828
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "violet-line",
+      "name": "Violet Line",
+      "terminals": "Central Secretariat ↔ Badarpur Border",
+      "color": "#8B5CF6",
+      "glowColor": "#A78BFA",
+      "textColor": "#FFFFFF",
+      "segments": [
+        [
+          [
+            28.61474,
+            77.21191
+          ],
+          [
+            28.60276,
+            77.22829
+          ],
+          [
+            28.5904,
+            77.23326
+          ],
+          [
+            28.5843,
+            77.23766
+          ],
+          [
+            28.57079,
+            77.23653
+          ],
+          [
+            28.56417,
+            77.23423
+          ],
+          [
+            28.55527,
+            77.24205
+          ],
+          [
+            28.55148,
+            77.25154
+          ],
+          [
+            28.55007,
+            77.25835
+          ],
+          [
+            28.54451,
+            77.26401
+          ],
+          [
+            28.54292,
+            77.27504
+          ],
+          [
+            28.53824,
+            77.28319
+          ],
+          [
+            28.52878,
+            77.28826
+          ],
+          [
+            28.51938,
+            77.29388
+          ],
+          [
+            28.50254,
+            77.2993
+          ],
+          [
+            28.49334,
+            77.30307
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "green-line",
+      "name": "Green Line",
+      "terminals": "Mundka ↔ Inderlok / Kirti Nagar",
+      "color": "#10B981",
+      "glowColor": "#34D399",
+      "textColor": "#FFFFFF",
+      "segments": [
+        [
+          [
+            28.68321,
+            77.03133
+          ],
+          [
+            28.68221,
+            77.04381
+          ],
+          [
+            28.68208,
+            77.05596
+          ],
+          [
+            28.68231,
+            77.06471
+          ],
+          [
+            28.6818,
+            77.07385
+          ],
+          [
+            28.6809,
+            77.08077
+          ],
+          [
+            28.67959,
+            77.09261
+          ],
+          [
+            28.67855,
+            77.10227
+          ],
+          [
+            28.6773,
+            77.11228
+          ],
+          [
+            28.67734,
+            77.11965
+          ],
+          [
+            28.6749,
+            77.13056
+          ],
+          [
+            28.67289,
+            77.14614
+          ],
+          [
+            28.67153,
+            77.15527
+          ],
+          [
+            28.67319,
+            77.16994
+          ]
+        ],
+        [
+          [
+            28.67153,
+            77.15527
+          ],
+          [
+            28.66199,
+            77.15748
+          ],
+          [
+            28.65575,
+            77.15057
+          ]
+        ]
+      ]
+    }
+  ],
+  "stations": [
+    {
+      "id": "delhi-0",
+      "name": "Adarsh Nagar",
+      "coords": [
+        28.71642,
+        77.17046
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-1",
+      "name": "AIIMS",
+      "coords": [
+        28.56892,
+        77.20771
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-2",
+      "name": "Akshardham",
+      "coords": [
+        28.61806,
+        77.27869
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-3",
+      "name": "Anand Vihar",
+      "coords": [
+        28.64695,
+        77.31603
+      ],
+      "line": "blue-line-branch",
+      "lineName": "Blue Line branch",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line branch"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-4",
+      "name": "Arjan Garh",
+      "coords": [
+        28.48076,
+        77.12583
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-5",
+      "name": "Ashok Park Main",
+      "coords": [
+        28.67153,
+        77.15527
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-6",
+      "name": "Azadpur",
+      "coords": [
+        28.70696,
+        77.18053
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-7",
+      "name": "Badarpur",
+      "coords": [
+        28.49334,
+        77.30307
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-8",
+      "name": "Barakhambha Road",
+      "coords": [
+        28.63003,
+        77.22436
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-9",
+      "name": "Botanical Garden",
+      "coords": [
+        28.56409,
+        77.3342
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-10",
+      "name": "Central Secretariat",
+      "coords": [
+        28.61474,
+        77.21191
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line & Violet Line",
+      "isInterchange": true,
+      "lines": [
+        "Yellow Line",
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-11",
+      "name": "Chandni Chowk",
+      "coords": [
+        28.65785,
+        77.23014
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-12",
+      "name": "Chhatarpur",
+      "coords": [
+        28.50671,
+        77.17484
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-13",
+      "name": "Chawri Bazar",
+      "coords": [
+        28.64931,
+        77.22637
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-14",
+      "name": "Civil Lines",
+      "coords": [
+        28.67726,
+        77.2241
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-15",
+      "name": "Delhi Aerocity",
+      "coords": [
+        28.54881,
+        77.12092
+      ],
+      "line": "airport-express",
+      "lineName": "Airport Express",
+      "isInterchange": false,
+      "lines": [
+        "Airport Express"
+      ],
+      "color": "#EA580C"
+    },
+    {
+      "id": "delhi-16",
+      "name": "Dhaula Kuan",
+      "coords": [
+        28.59178,
+        77.16155
+      ],
+      "line": "airport-express",
+      "lineName": "Airport Express",
+      "isInterchange": false,
+      "lines": [
+        "Airport Express"
+      ],
+      "color": "#EA580C"
+    },
+    {
+      "id": "delhi-17",
+      "name": "Dilshad Garden",
+      "coords": [
+        28.67592,
+        77.32142
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-18",
+      "name": "Dwarka",
+      "coords": [
+        28.61564,
+        77.02197
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-19",
+      "name": "Dwarka Morh",
+      "coords": [
+        28.61932,
+        77.03326
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-20",
+      "name": "Dwarka Sector 10",
+      "coords": [
+        28.58068,
+        77.05682
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-21",
+      "name": "Dwarka Sector 11",
+      "coords": [
+        28.58657,
+        77.04929
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-22",
+      "name": "Dwarka Sector 12",
+      "coords": [
+        28.59232,
+        77.04051
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-23",
+      "name": "Dwarka Sector 13",
+      "coords": [
+        28.59722,
+        77.03326
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-24",
+      "name": "Dwarka Sector 14",
+      "coords": [
+        28.60223,
+        77.02588
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-25",
+      "name": "Dwarka Sector 21",
+      "coords": [
+        28.55226,
+        77.05828
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line & Airport Express",
+      "isInterchange": true,
+      "lines": [
+        "Blue Line",
+        "Airport Express"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-26",
+      "name": "Dwarka Sector 8",
+      "coords": [
+        28.56583,
+        77.06706
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-27",
+      "name": "Dwarka Sector 9",
+      "coords": [
+        28.57487,
+        77.06454
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-28",
+      "name": "Ghitorni",
+      "coords": [
+        28.49383,
+        77.14922
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-29",
+      "name": "Govind Puri",
+      "coords": [
+        28.54451,
+        77.26401
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-30",
+      "name": "Green Park",
+      "coords": [
+        28.55979,
+        77.20682
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-31",
+      "name": "GTB Nagar",
+      "coords": [
+        28.69785,
+        77.20722
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-32",
+      "name": "Guru Dronacharya",
+      "coords": [
+        28.48203,
+        77.10232
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-33",
+      "name": "Hauz Khas",
+      "coords": [
+        28.54335,
+        77.20667
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-34",
+      "name": "HUDA City Centre",
+      "coords": [
+        28.45927,
+        77.07268
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-35",
+      "name": "IFFCO Chowk",
+      "coords": [
+        28.47209,
+        77.07175
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-36",
+      "name": "INA",
+      "coords": [
+        28.57526,
+        77.20935
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-37",
+      "name": "Inderlok",
+      "coords": [
+        28.67319,
+        77.16994
+      ],
+      "line": "red-line",
+      "lineName": "Red Line & Green Line",
+      "isInterchange": true,
+      "lines": [
+        "Red Line",
+        "Green Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-38",
+      "name": "Indira Gandhi International Airport",
+      "coords": [
+        28.55693,
+        77.08669
+      ],
+      "line": "airport-express",
+      "lineName": "Airport Express",
+      "isInterchange": false,
+      "lines": [
+        "Airport Express"
+      ],
+      "color": "#EA580C"
+    },
+    {
+      "id": "delhi-39",
+      "name": "Indraprastha",
+      "coords": [
+        28.62051,
+        77.24993
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-40",
+      "name": "Jahangirpuri",
+      "coords": [
+        28.72592,
+        77.16267
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-41",
+      "name": "Janakpuri East",
+      "coords": [
+        28.63305,
+        77.08669
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-42",
+      "name": "Janakpuri West",
+      "coords": [
+        28.62943,
+        77.07767
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-43",
+      "name": "Jangpura",
+      "coords": [
+        28.5843,
+        77.23766
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-44",
+      "name": "Jasola Apollo",
+      "coords": [
+        28.53824,
+        77.28319
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-45",
+      "name": "Jawaharlal Nehru Stadium",
+      "coords": [
+        28.5904,
+        77.23326
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-46",
+      "name": "Jhandewalan",
+      "coords": [
+        28.64427,
+        77.19988
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-47",
+      "name": "Jhilmil",
+      "coords": [
+        28.67579,
+        77.31239
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-48",
+      "name": "Jor Bagh",
+      "coords": [
+        28.58708,
+        77.21209
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-49",
+      "name": "Kailash Colony",
+      "coords": [
+        28.55527,
+        77.24205
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-50",
+      "name": "Kalkaji Mandir",
+      "coords": [
+        28.55007,
+        77.25835
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-51",
+      "name": "Kanhiya Nagar",
+      "coords": [
+        28.68254,
+        77.16459
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-52",
+      "name": "Karkarduma",
+      "coords": [
+        28.64849,
+        77.30558
+      ],
+      "line": "blue-line-branch",
+      "lineName": "Blue Line branch",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line branch"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-53",
+      "name": "Karol Bagh",
+      "coords": [
+        28.644,
+        77.18855
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-54",
+      "name": "Kashmere Gate",
+      "coords": [
+        28.6675,
+        77.22817
+      ],
+      "line": "red-line",
+      "lineName": "Red Line & Yellow Line",
+      "isInterchange": true,
+      "lines": [
+        "Red Line",
+        "Yellow Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-55",
+      "name": "Kaushambi",
+      "coords": [
+        28.64544,
+        77.32432
+      ],
+      "line": "blue-line-branch",
+      "lineName": "Blue Line branch",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line branch"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-56",
+      "name": "Keshav Puram",
+      "coords": [
+        28.68894,
+        77.1616
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-57",
+      "name": "Khan Market",
+      "coords": [
+        28.60276,
+        77.22829
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-58",
+      "name": "Kirti Nagar",
+      "coords": [
+        28.65575,
+        77.15057
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line & Green Line",
+      "isInterchange": true,
+      "lines": [
+        "Blue Line",
+        "Green Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-59",
+      "name": "Kohat Enclave",
+      "coords": [
+        28.6981,
+        77.14024
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-60",
+      "name": "Lajpat Nagar",
+      "coords": [
+        28.57079,
+        77.23653
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-61",
+      "name": "Laxmi Nagar",
+      "coords": [
+        28.63064,
+        77.27749
+      ],
+      "line": "blue-line-branch",
+      "lineName": "Blue Line branch",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line branch"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-62",
+      "name": "Madipur",
+      "coords": [
+        28.67734,
+        77.11965
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-63",
+      "name": "Malviya Nagar",
+      "coords": [
+        28.52798,
+        77.20565
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-64",
+      "name": "Mandi House",
+      "coords": [
+        28.62588,
+        77.2341
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-65",
+      "name": "Mansarovar Park",
+      "coords": [
+        28.67544,
+        77.30095
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-66",
+      "name": "Mayur Vihar -I",
+      "coords": [
+        28.60442,
+        77.28925
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-67",
+      "name": "Mayur Vihar Extension",
+      "coords": [
+        28.59428,
+        77.29455
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-68",
+      "name": "MG Road",
+      "coords": [
+        28.47957,
+        77.08006
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-69",
+      "name": "Model Town",
+      "coords": [
+        28.70278,
+        77.19363
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-70",
+      "name": "Mohan Estate",
+      "coords": [
+        28.51938,
+        77.29388
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-71",
+      "name": "Moolchand",
+      "coords": [
+        28.56417,
+        77.23423
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-72",
+      "name": "Moti Nagar",
+      "coords": [
+        28.65784,
+        77.14248
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-73",
+      "name": "Mundka",
+      "coords": [
+        28.68321,
+        77.03133
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-74",
+      "name": "Nangloi",
+      "coords": [
+        28.68231,
+        77.06471
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-75",
+      "name": "Nangloi Railway station",
+      "coords": [
+        28.68208,
+        77.05596
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-76",
+      "name": "Nawada",
+      "coords": [
+        28.62025,
+        77.04514
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-77",
+      "name": "Nehru Place",
+      "coords": [
+        28.55148,
+        77.25154
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-78",
+      "name": "Netaji Subhash Place",
+      "coords": [
+        28.69591,
+        77.15226
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-79",
+      "name": "New Ashok Nagar",
+      "coords": [
+        28.58916,
+        77.30204
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-80",
+      "name": "New Delhi",
+      "coords": [
+        28.64307,
+        77.22144
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line & Airport Express",
+      "isInterchange": true,
+      "lines": [
+        "Yellow Line",
+        "Airport Express"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-81",
+      "name": "Nirman Vihar",
+      "coords": [
+        28.63663,
+        77.28683
+      ],
+      "line": "blue-line-branch",
+      "lineName": "Blue Line branch",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line branch"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-82",
+      "name": "Noida City Centre",
+      "coords": [
+        28.57466,
+        77.35608
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-83",
+      "name": "Noida Golf Course",
+      "coords": [
+        28.56714,
+        77.34598
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-84",
+      "name": "Noida Sector 15",
+      "coords": [
+        28.58512,
+        77.31139
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-85",
+      "name": "Noida Sector 16",
+      "coords": [
+        28.57819,
+        77.31757
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-86",
+      "name": "Noida Sector 18",
+      "coords": [
+        28.57081,
+        77.32612
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-87",
+      "name": "Okhla",
+      "coords": [
+        28.54292,
+        77.27504
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-88",
+      "name": "Paschim Vihar East",
+      "coords": [
+        28.6773,
+        77.11228
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-89",
+      "name": "Paschim Vihar West",
+      "coords": [
+        28.67855,
+        77.10227
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-90",
+      "name": "Patel Chowk",
+      "coords": [
+        28.62295,
+        77.21389
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-91",
+      "name": "Patel Nagar",
+      "coords": [
+        28.64498,
+        77.16929
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-92",
+      "name": "Peera Garhi",
+      "coords": [
+        28.67959,
+        77.09261
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-93",
+      "name": "Pitam Pura",
+      "coords": [
+        28.70317,
+        77.13223
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-94",
+      "name": "Pragati Maidan",
+      "coords": [
+        28.62342,
+        77.2425
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-95",
+      "name": "Pratap Nagar",
+      "coords": [
+        28.66662,
+        77.19882
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-96",
+      "name": "Preet Vihar",
+      "coords": [
+        28.64171,
+        77.29543
+      ],
+      "line": "blue-line-branch",
+      "lineName": "Blue Line branch",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line branch"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-97",
+      "name": "Pul Bangash",
+      "coords": [
+        28.66636,
+        77.20727
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-98",
+      "name": "Punjabi Bagh East",
+      "coords": [
+        28.67289,
+        77.14614
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-99",
+      "name": "Qutab Minar",
+      "coords": [
+        28.51302,
+        77.18648
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-100",
+      "name": "Race Course",
+      "coords": [
+        28.59726,
+        77.21088
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-101",
+      "name": "Rajdhani Park",
+      "coords": [
+        28.68221,
+        77.04381
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-102",
+      "name": "Rajendra Place",
+      "coords": [
+        28.6425,
+        77.17815
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-103",
+      "name": "Rajiv Chowk",
+      "coords": [
+        28.63282,
+        77.21826
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line & Blue Line",
+      "isInterchange": true,
+      "lines": [
+        "Yellow Line",
+        "Blue Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-104",
+      "name": "Rajouri Garden",
+      "coords": [
+        28.64902,
+        77.1227
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-105",
+      "name": "Ramakrishna Ashram Marg",
+      "coords": [
+        28.63923,
+        77.2084
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-106",
+      "name": "Ramesh Nagar",
+      "coords": [
+        28.65274,
+        77.13164
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-107",
+      "name": "Rithala",
+      "coords": [
+        28.72072,
+        77.10713
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-108",
+      "name": "Rohini East",
+      "coords": [
+        28.7076,
+        77.12591
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-109",
+      "name": "Rohini West",
+      "coords": [
+        28.71483,
+        77.11467
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-110",
+      "name": "Saket",
+      "coords": [
+        28.5206,
+        77.20138
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-111",
+      "name": "Sarita Vihar",
+      "coords": [
+        28.52878,
+        77.28826
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-112",
+      "name": "Satguru Ramsingh Marg",
+      "coords": [
+        28.66199,
+        77.15748
+      ],
+      "line": "green-line-branch",
+      "lineName": "Green Line branch",
+      "isInterchange": false,
+      "lines": [
+        "Green Line branch"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-113",
+      "name": "Seelampur",
+      "coords": [
+        28.66989,
+        77.26678
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-114",
+      "name": "Shadipur",
+      "coords": [
+        28.6516,
+        77.15824
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-115",
+      "name": "Shahdara",
+      "coords": [
+        28.67345,
+        77.28962
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-116",
+      "name": "Shastri Nagar",
+      "coords": [
+        28.66999,
+        77.18169
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-117",
+      "name": "Shastri Park",
+      "coords": [
+        28.668,
+        77.24994
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-118",
+      "name": "Shivaji Park",
+      "coords": [
+        28.6749,
+        77.13056
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-119",
+      "name": "Shivaji Stadium",
+      "coords": [
+        28.62901,
+        77.2119
+      ],
+      "line": "airport-express",
+      "lineName": "Airport Express",
+      "isInterchange": false,
+      "lines": [
+        "Airport Express"
+      ],
+      "color": "#EA580C"
+    },
+    {
+      "id": "delhi-120",
+      "name": "Sikandarpur",
+      "coords": [
+        28.48182,
+        77.09235
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-121",
+      "name": "Subhash Nagar",
+      "coords": [
+        28.64039,
+        77.10495
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-122",
+      "name": "Sultanpur",
+      "coords": [
+        28.49927,
+        77.16153
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-123",
+      "name": "Surajmal Stadium",
+      "coords": [
+        28.6818,
+        77.07385
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-124",
+      "name": "Tagore Garden",
+      "coords": [
+        28.64379,
+        77.11284
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-125",
+      "name": "Tilak Nagar",
+      "coords": [
+        28.63657,
+        77.09648
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-126",
+      "name": "Tis Hazari",
+      "coords": [
+        28.66711,
+        77.21653
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-127",
+      "name": "Tughlakabad",
+      "coords": [
+        28.50254,
+        77.2993
+      ],
+      "line": "violet-line",
+      "lineName": "Violet Line",
+      "isInterchange": false,
+      "lines": [
+        "Violet Line"
+      ],
+      "color": "#7C3AED"
+    },
+    {
+      "id": "delhi-128",
+      "name": "Udyog Bhawan",
+      "coords": [
+        28.61166,
+        77.21198
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-129",
+      "name": "Udyog Nagar",
+      "coords": [
+        28.6809,
+        77.08077
+      ],
+      "line": "green-line",
+      "lineName": "Green Line",
+      "isInterchange": false,
+      "lines": [
+        "Green Line"
+      ],
+      "color": "#16A34A"
+    },
+    {
+      "id": "delhi-130",
+      "name": "Uttam Nagar East",
+      "coords": [
+        28.62481,
+        77.0653
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-131",
+      "name": "Uttam Nagar West",
+      "coords": [
+        28.62177,
+        77.05585
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-132",
+      "name": "Vaishali",
+      "coords": [
+        28.64997,
+        77.33974
+      ],
+      "line": "blue-line-branch",
+      "lineName": "Blue Line branch",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line branch"
+      ],
+      "color": "#2563EB"
+    },
+    {
+      "id": "delhi-133",
+      "name": "Vidhan Sabha",
+      "coords": [
+        28.68802,
+        77.2214
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-134",
+      "name": "Vishwa Vidyalaya",
+      "coords": [
+        28.6948,
+        77.21483
+      ],
+      "line": "yellow-line",
+      "lineName": "Yellow Line",
+      "isInterchange": false,
+      "lines": [
+        "Yellow Line"
+      ],
+      "color": "#EAB308"
+    },
+    {
+      "id": "delhi-135",
+      "name": "Welcome",
+      "coords": [
+        28.6718,
+        77.27756
+      ],
+      "line": "red-line",
+      "lineName": "Red Line",
+      "isInterchange": false,
+      "lines": [
+        "Red Line"
+      ],
+      "color": "#DC2626"
+    },
+    {
+      "id": "delhi-136",
+      "name": "Yamuna Bank",
+      "coords": [
+        28.62331,
+        77.26792
+      ],
+      "line": "blue-line",
+      "lineName": "Blue Line",
+      "isInterchange": false,
+      "lines": [
+        "Blue Line"
+      ],
+      "color": "#2563EB"
+    }
+  ],
+  "interchanges": [
+    {
+      "name": "Rajiv Chowk",
+      "coords": [
+        28.63282,
+        77.21826
+      ],
+      "lines": [
+        "Yellow Line",
+        "Blue Line"
+      ]
+    },
+    {
+      "name": "Kashmere Gate",
+      "coords": [
+        28.6675,
+        77.22817
+      ],
+      "lines": [
+        "Red Line",
+        "Yellow Line"
+      ]
+    },
+    {
+      "name": "Central Secretariat",
+      "coords": [
+        28.61474,
+        77.21191
+      ],
+      "lines": [
+        "Yellow Line",
+        "Violet Line"
+      ]
+    },
+    {
+      "name": "Inderlok",
+      "coords": [
+        28.67319,
+        77.16994
+      ],
+      "lines": [
+        "Red Line",
+        "Green Line"
+      ]
+    },
+    {
+      "name": "Kirti Nagar",
+      "coords": [
+        28.65575,
+        77.15057
+      ],
+      "lines": [
+        "Blue Line",
+        "Green Line"
+      ]
+    },
+    {
+      "name": "New Delhi",
+      "coords": [
+        28.64307,
+        77.22144
+      ],
+      "lines": [
+        "Yellow Line",
+        "Airport Express"
+      ]
+    }
+  ]
+}
