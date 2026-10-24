@@ -842,6 +842,7 @@ function startHeroSequence() {
                         }, 200);
                       }
                     });
+                  }
                   } else {
                     isHeroSequenceComplete = true;
                     revealWorksShowcase();
