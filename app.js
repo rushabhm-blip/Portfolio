@@ -15,10 +15,16 @@ let dpr = window.devicePixelRatio || 1;
 // CONFIGURATION: RADIUS & RESOLUTION
 // =========================================================
 // Radius (in pixels) of the visible mesh around cursor on hover
+function getHoverRadius() {
+  return window.innerWidth <= 768 ? Math.min(width * 0.36, 135) : 350;
+}
 const HOVER_RADIUS = 350;
 
 // Grid dimensions & resolution
-const CELL_SIZE = 34; // spacing between vertices
+function getCellSize() {
+  return window.innerWidth <= 768 ? 24 : 34;
+}
+let CELL_SIZE = 34; // spacing between vertices
 let COLS = 0;
 let ROWS = 0;
 let gridWidth = 0;
@@ -301,6 +307,7 @@ function resizeCanvas() {
   const marginX = width * 1.2;
   const marginY = height * 0.8;
 
+  CELL_SIZE = getCellSize();
   COLS = Math.ceil((width + marginX * 2) / CELL_SIZE);
   ROWS = Math.ceil((height + marginY * 2) / CELL_SIZE);
 
@@ -349,8 +356,19 @@ let eyeFollowActive = true;
 
 function getHeroMidScreenOffset() {
   if (!heroCenterAnchorEl) return 0;
-  // Measure natural layout placement without transform
   gsap.set(heroCenterAnchorEl, { y: 0 });
+  const isMobile = window.innerWidth <= 900;
+
+  if (isMobile) {
+    const lineEl = document.querySelector('.hero-line-1') || document.getElementById('heroLine1');
+    const textTarget = heroTextWrapper || lineEl || heroCenterAnchorEl;
+    const textRect = textTarget.getBoundingClientRect();
+    const currentCenterY = textRect.top + textRect.height * 0.5;
+    const targetViewportCenter = window.innerHeight * 0.44;
+    return targetViewportCenter - currentCenterY;
+  }
+
+  // Natural layout placement for desktop (unchanged)
   const anchorRect = heroCenterAnchorEl.getBoundingClientRect();
   const lineEl = document.querySelector('.hero-line-1') || document.getElementById('heroLine1');
   const lineFontSize = lineEl ? (parseFloat(window.getComputedStyle(lineEl).fontSize) || 54) : 54;
@@ -450,6 +468,8 @@ function showCompletedHomeScreen() {
   }
   if (portraitWrapper) {
     portraitWrapper.style.width = '';
+    portraitWrapper.style.height = '';
+    portraitWrapper.style.margin = '';
     portraitWrapper.style.overflow = 'visible';
     portraitWrapper.style.opacity = '1';
     portraitWrapper.style.transform = 'none';
@@ -558,20 +578,32 @@ function resetHeroAndCharacter() {
   if (cursor1El) cursor1El.classList.add('hidden');
   if (cursor2El) cursor2El.classList.add('hidden');
 
+  const isMobile = window.innerWidth <= 900;
+  // Hide portrait wrapper completely at start so text can center
+  if (portraitWrapper) {
+    if (isMobile) {
+      portraitWrapper.style.width = '0px';
+      portraitWrapper.style.height = '0px';
+      portraitWrapper.style.margin = '0px';
+      portraitWrapper.style.overflow = 'hidden';
+      gsap.set(portraitWrapper, { opacity: 0, scale: 0.85, y: -20 });
+    } else {
+      portraitWrapper.style.width = '0px';
+      portraitWrapper.style.height = '';
+      portraitWrapper.style.margin = '';
+      portraitWrapper.style.overflow = 'hidden';
+      gsap.set(portraitWrapper, { opacity: 0, scale: 0.88, y: 15 });
+    }
+  }
+
   const midScreenY = getHeroMidScreenOffset();
   if (heroCenterAnchorEl) {
     // Start vertically in the middle of the screen
     gsap.set(heroCenterAnchorEl, { x: 0, y: midScreenY });
   }
   if (heroTextWrapper) {
-    // Start text centered - will shift left when portrait enters
+    // Start text centered
     gsap.set(heroTextWrapper, { y: 0, x: 0, rotation: 0, transformOrigin: '50% 50%' });
-  }
-  // Hide portrait wrapper completely at start so text can center
-  if (portraitWrapper) {
-    portraitWrapper.style.width = '0px';
-    portraitWrapper.style.overflow = 'hidden';
-    gsap.set(portraitWrapper, { opacity: 0, scale: 0.88, y: 15 });
   }
   if (heroKickerEl) {
     gsap.set(heroKickerEl, { opacity: 1, y: 0 });
@@ -649,12 +681,14 @@ function startHeroSequence() {
             typeTextToElement(line2PrefixEl, PHRASE_2_PREFIX, () => {
               typewriterTimeout = setTimeout(() => {
                 typeTextToElement(line2HighlightEl, PHRASE_2_HIGHLIGHT, () => {
-                  // Step 4: Reveal portrait on right - expand its container, glide up from mid-screen, and slide text left
+                  // Step 4: Reveal portrait on right (desktop) or above (mobile)
                   typewriterTimeout = setTimeout(() => {
+                  const isMobile = window.innerWidth <= 900;
+
                   if (heroCenterAnchorEl) {
                     gsap.to(heroCenterAnchorEl, {
                       y: 0,
-                      duration: 1.05,
+                      duration: isMobile ? 0.95 : 1.05,
                       ease: 'power3.out'
                     });
                   }
@@ -662,30 +696,92 @@ function startHeroSequence() {
                   if (portraitWrapper) {
                     portraitWrapper.style.overflow = 'visible';
                     
-                    // Measure natural width, then animate from 0
-                    gsap.set(portraitWrapper, { width: 'auto' });
-                    const naturalWidth = portraitWrapper.scrollWidth || portraitWrapper.offsetWidth;
-                    gsap.set(portraitWrapper, { width: 0 });
-                    
-                    // Smoothly expand the portrait container - this pushes text left
-                    gsap.to(portraitWrapper, {
-                      width: naturalWidth,
-                      duration: 0.85,
-                      ease: 'power3.out',
-                      onComplete: () => {
-                        portraitWrapper.style.width = '';
-                        portraitWrapper.style.overflow = '';
-                      }
-                    });
-                    
-                    // Fade in and scale the portrait
-                    gsap.to(portraitWrapper, {
-                      opacity: 1,
-                      scale: 1,
-                      y: 0,
-                      duration: 0.72,
-                      ease: 'back.out(1.5)',
-                      onComplete: () => {
+                    if (isMobile) {
+                      portraitWrapper.style.width = '';
+                      portraitWrapper.style.margin = '';
+                      // On mobile: expand height from 0 to 200px - smoothly pushes text DOWN below portrait
+                      gsap.to(portraitWrapper, {
+                        height: 200,
+                        opacity: 1,
+                        scale: 1,
+                        y: 0,
+                        duration: 0.88,
+                        ease: 'power3.out',
+                        onComplete: () => {
+                          portraitWrapper.style.height = '';
+                          portraitWrapper.style.overflow = '';
+                          // Step 5: Portrait character smile settles cleanly
+                          if (portraitSmile) {
+                            gsap.set(portraitSmile, { scaleX: 1, scaleY: 1, transformOrigin: '242.5px 424px' });
+                          }
+                          // Step 6: Reveal subtitle & previously worked with firm logos
+                          typewriterTimeout = setTimeout(() => {
+                            if (heroSubdescriptionEl) {
+                              gsap.to(heroSubdescriptionEl, {
+                                opacity: 1, y: 0, duration: 0.65, ease: 'power2.out'
+                              });
+                            }
+                            const credentialShowcases = [firmsShowcaseEl, educationShowcaseEl].filter(Boolean);
+                            if (credentialShowcases.length > 0) {
+                              gsap.to(credentialShowcases, {
+                                opacity: 1,
+                                y: 0,
+                                duration: 0.65,
+                                stagger: 0.12,
+                                delay: 0.1,
+                                ease: 'power2.out',
+                                onComplete: () => {
+                                  const kickerItems = heroKickerEl ? heroKickerEl.querySelectorAll('.kicker-word, .kicker-dot') : [];
+                                  if (kickerItems.length > 0) {
+                                    gsap.to(kickerItems, {
+                                      opacity: 1,
+                                      y: 0,
+                                      duration: 0.45,
+                                      stagger: 0.14,
+                                      ease: 'power2.out',
+                                      onComplete: () => {
+                                        isHeroSequenceComplete = true;
+                                        revealWorksShowcase();
+                                      }
+                                    });
+                                  } else {
+                                    isHeroSequenceComplete = true;
+                                    revealWorksShowcase();
+                                  }
+                                }
+                              });
+                            } else {
+                              isHeroSequenceComplete = true;
+                              revealWorksShowcase();
+                            }
+                          }, 200);
+                        }
+                      });
+                    } else {
+                      // Desktop: natural horizontal expansion pushing text left
+                      gsap.set(portraitWrapper, { width: 'auto' });
+                      const naturalWidth = portraitWrapper.scrollWidth || portraitWrapper.offsetWidth;
+                      gsap.set(portraitWrapper, { width: 0 });
+                      
+                      // Smoothly expand the portrait container - this pushes text left
+                      gsap.to(portraitWrapper, {
+                        width: naturalWidth,
+                        duration: 0.85,
+                        ease: 'power3.out',
+                        onComplete: () => {
+                          portraitWrapper.style.width = '';
+                          portraitWrapper.style.overflow = '';
+                        }
+                      });
+                      
+                      // Fade in and scale the portrait
+                      gsap.to(portraitWrapper, {
+                        opacity: 1,
+                        scale: 1,
+                        y: 0,
+                        duration: 0.72,
+                        ease: 'back.out(1.5)',
+                        onComplete: () => {
                         // Step 5: Portrait character smile settles cleanly
                         if (portraitSmile) {
                           gsap.set(portraitSmile, { scaleX: 1, scaleY: 1, transformOrigin: '242.5px 424px' });
@@ -861,8 +957,14 @@ function render(now) {
   screenMouse.x += (screenMouse.targetX - screenMouse.x) * 0.2;
   screenMouse.y += (screenMouse.targetY - screenMouse.y) * 0.2;
 
+  const isMobile = window.innerWidth <= 768;
   if (cursorEl) {
-    cursorEl.style.transform = `translate3d(${screenMouse.targetX}px, ${screenMouse.targetY}px, 0)`;
+    if (isMobile) {
+      cursorEl.style.display = 'none';
+    } else {
+      cursorEl.style.display = '';
+      cursorEl.style.transform = `translate3d(${screenMouse.targetX}px, ${screenMouse.targetY}px, 0)`;
+    }
   }
 
   const fov = 750;
@@ -874,7 +976,10 @@ function render(now) {
   const spotlightY = screenMouse.y;
   const oppSpotlightX = width - spotlightX;
   const oppSpotlightY = height - spotlightY;
-  const OPP_HOVER_RADIUS = HOVER_RADIUS * 0.68; // Smaller, more subtle opposite radius
+  const currentHoverRadius = getHoverRadius();
+  const OPP_HOVER_RADIUS = isMobile ? 0 : currentHoverRadius * 0.68; // Removed opposite spotlight on phone
+  const GRAVITY_RADIUS = currentHoverRadius * 1.15;
+  const cellSize = getCellSize();
 
   // 2D Array of projected points for current frame
   const points = [];
@@ -888,8 +993,8 @@ function render(now) {
       const actualC = c + startColOffset;
 
       // Base coordinate with infinite pan wrapping
-      let baseX = actualC * CELL_SIZE + pan.x;
-      let baseY = actualR * CELL_SIZE + pan.y;
+      let baseX = actualC * cellSize + pan.x;
+      let baseY = actualR * cellSize + pan.y;
 
       // Modulo wrap to make dragging truly infinite across screen
       baseX = ((((baseX + width) % gridWidth) + gridWidth) % gridWidth) - width * 0.5;
@@ -965,11 +1070,11 @@ function render(now) {
       const distToCursor = Math.hypot(projX - spotlightX, projY - spotlightY);
       const distToOpp = Math.hypot(projX - oppSpotlightX, projY - oppSpotlightY);
       let proximity = 0;
-      if (distToCursor < HOVER_RADIUS) {
-        const normDist = distToCursor / HOVER_RADIUS;
+      if (distToCursor < currentHoverRadius) {
+        const normDist = distToCursor / currentHoverRadius;
         proximity = Math.max(proximity, 0.5 * (1 + Math.cos(normDist * Math.PI)));
       }
-      if (distToOpp < OPP_HOVER_RADIUS) {
+      if (OPP_HOVER_RADIUS > 0 && distToOpp < OPP_HOVER_RADIUS) {
         const normDist = distToOpp / OPP_HOVER_RADIUS;
         const oppProx = 0.5 * (1 + Math.cos(normDist * Math.PI)) * 0.88;
         proximity = Math.max(proximity, oppProx);
@@ -1022,11 +1127,11 @@ function render(now) {
         const lineDistToOpp = Math.hypot(lineMidX - oppSpotlightX, lineMidY - oppSpotlightY);
         
         let lineProximity = 0;
-        if (lineDistToCursor < HOVER_RADIUS) {
-          const normDist = lineDistToCursor / HOVER_RADIUS;
+        if (lineDistToCursor < currentHoverRadius) {
+          const normDist = lineDistToCursor / currentHoverRadius;
           lineProximity = Math.max(lineProximity, 0.5 * (1 + Math.cos(normDist * Math.PI)));
         }
-        if (lineDistToOpp < OPP_HOVER_RADIUS) {
+        if (OPP_HOVER_RADIUS > 0 && lineDistToOpp < OPP_HOVER_RADIUS) {
           const normDist = lineDistToOpp / OPP_HOVER_RADIUS;
           const oppLineProx = 0.5 * (1 + Math.cos(normDist * Math.PI)) * 0.88;
           lineProximity = Math.max(lineProximity, oppLineProx);
@@ -1069,11 +1174,11 @@ function render(now) {
         const lineDistToOpp = Math.hypot(lineMidX - oppSpotlightX, lineMidY - oppSpotlightY);
         
         let lineProximity = 0;
-        if (lineDistToCursor < HOVER_RADIUS) {
-          const normDist = lineDistToCursor / HOVER_RADIUS;
+        if (lineDistToCursor < currentHoverRadius) {
+          const normDist = lineDistToCursor / currentHoverRadius;
           lineProximity = Math.max(lineProximity, 0.5 * (1 + Math.cos(normDist * Math.PI)));
         }
-        if (lineDistToOpp < OPP_HOVER_RADIUS) {
+        if (OPP_HOVER_RADIUS > 0 && lineDistToOpp < OPP_HOVER_RADIUS) {
           const normDist = lineDistToOpp / OPP_HOVER_RADIUS;
           const oppLineProx = 0.5 * (1 + Math.cos(normDist * Math.PI)) * 0.88;
           lineProximity = Math.max(lineProximity, oppLineProx);
@@ -1115,7 +1220,8 @@ function render(now) {
         const dotAlpha = (0.28 * animState.dotsOpacity * p.visibility).toFixed(3);
         ctx.fillStyle = `rgba(105, 59, 254, ${dotAlpha})`;
 
-        const radius = 1.35 * (p.scale || 1) * (0.55 + 0.45 * p.visibility);
+        const baseDotRadius = isMobile ? 0.9 : 1.35;
+        const radius = baseDotRadius * (p.scale || 1) * (0.55 + 0.45 * p.visibility);
         ctx.beginPath();
         ctx.arc(p.x, p.y, radius, 0, Math.PI * 2);
         ctx.fill();
