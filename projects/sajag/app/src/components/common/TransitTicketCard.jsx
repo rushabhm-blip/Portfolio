@@ -98,21 +98,21 @@ export default function TransitTicketCard({ onShowQR = () => {} }) {
               className="space-y-1 text-[11px] cursor-pointer"
             >
               {/* Metro Leg */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between gap-1">
+                <div className="flex items-center gap-1.5 min-w-0">
                   <TrainFront className="w-4 h-4 text-blue-600 stroke-[2.2] shrink-0" />
-                  <span className="font-semibold text-gray-800 w-24 truncate">Yellow Line</span>
-                  <span className="text-[10px] text-gray-500 font-medium bg-gray-100 px-1.5 py-0.2 rounded">Platform 2</span>
+                  <span className="font-semibold text-gray-800 shrink-0">Yellow Line</span>
+                  <span className="text-[10px] text-gray-500 font-medium bg-gray-100 px-1.5 py-0.5 rounded whitespace-nowrap shrink-0">Platform 2</span>
                 </div>
                 <span className="text-[10px] font-bold text-emerald-600 shrink-0">In 2 min</span>
               </div>
 
               {/* Bus Leg */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between gap-1">
+                <div className="flex items-center gap-1.5 min-w-0">
                   <BusFront className="w-4 h-4 text-emerald-600 stroke-[2.2] shrink-0" />
-                  <span className="font-semibold text-gray-800 w-24 truncate">Bus #502</span>
-                  <span className="text-[10px] text-gray-500 font-medium bg-gray-100 px-1.5 py-0.2 rounded">Bay 4</span>
+                  <span className="font-semibold text-gray-800 shrink-0">Bus #502</span>
+                  <span className="text-[10px] text-gray-500 font-medium bg-gray-100 px-1.5 py-0.5 rounded whitespace-nowrap shrink-0">Bay 4</span>
                 </div>
                 <span className="text-[10px] font-bold text-emerald-600 shrink-0">In 6 min</span>
               </div>
