@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70" width="100%" height="100%" fill="none" stroke="#18181b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Top Wall Edge Reference Line -->
+  <line x1="10" y1="12" x2="190" y2="12" stroke="#18181b" stroke-width="2" stroke-dasharray="4 4" opacity="0.3" />
+
+  <!-- Left Hand Gripping Over Ledge -->
+  <g class="hand-left">
+    <!-- Palm / Knuckles curve -->
+    <path d="M 45 42 Q 42 22 46 12 Q 49 4 56 4 Q 62 4 64 12 L 64 24" />
+    <!-- Index Finger -->
+    <path d="M 64 24 Q 63 10 68 4 Q 74 4 77 11 L 76 25" />
+    <!-- Middle Finger -->
+    <path d="M 76 25 Q 76 8 82 4 Q 88 4 90 12 L 89 26" />
+    <!-- Ring Finger -->
+    <path d="M 89 26 Q 90 11 95 6 Q 100 6 102 14 L 99 35" />
+    <!-- Thumb tuck -->
+    <path d="M 45 42 Q 35 34 38 22 Q 40 15 48 18" />
+    <!-- Wrist -->
+    <path d="M 42 62 Q 40 48 45 42" />
+    <path d="M 92 62 Q 95 48 99 35" />
+  </g>
+
+  <!-- Right Hand Gripping Over Ledge -->
+  <g class="hand-right">
+    <!-- Thumb tuck -->
+    <path d="M 155 42 Q 165 34 162 22 Q 160 15 152 18" />
+    <!-- Index Finger -->
+    <path d="M 155 42 Q 158 22 154 12 Q 151 4 144 4 Q 138 4 136 12 L 136 24" />
+    <!-- Middle Finger -->
+    <path d="M 136 24 Q 137 10 132 4 Q 126 4 123 11 L 124 25" />
+    <!-- Ring Finger -->
+    <path d="M 124 25 Q 124 8 118 4 Q 112 4 110 12 L 111 26" />
+    <!-- Pinky Finger -->
+    <path d="M 111 26 Q 110 11 105 6 Q 100 6 98 14 L 101 35" />
+    <!-- Wrist -->
+    <path d="M 158 62 Q 160 48 155 42" />
+    <path d="M 108 62 Q 105 48 101 35" />
+  </g>
+</svg>

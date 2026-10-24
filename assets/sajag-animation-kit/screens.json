@@ -1,0 +1,50 @@
+[
+  {
+    "id": "01-home",
+    "label": "Home",
+    "src": "assets/screens/01-home.png",
+    "png": "assets/screens/01-home.png"
+  },
+  {
+    "id": "02-transit",
+    "label": "Transit & routes",
+    "src": "assets/screens/02-transit.png",
+    "png": "assets/screens/02-transit.png"
+  },
+  {
+    "id": "03-parking",
+    "label": "Find parking",
+    "src": "assets/screens/03-parking.png",
+    "png": "assets/screens/03-parking.png"
+  },
+  {
+    "id": "04-safety",
+    "label": "Safety",
+    "src": "assets/screens/04-safety.png",
+    "png": "assets/screens/04-safety.png"
+  },
+  {
+    "id": "05-city-makers",
+    "label": "City Makers",
+    "src": "assets/screens/05-city-makers.png",
+    "png": "assets/screens/05-city-makers.png"
+  },
+  {
+    "id": "06-voice",
+    "label": "Sajag Voice",
+    "src": "assets/screens/06-voice.png",
+    "png": "assets/screens/06-voice.png"
+  },
+  {
+    "id": "07-kannada",
+    "label": "Namma Kannada",
+    "src": "assets/screens/07-kannada.png",
+    "png": "assets/screens/07-kannada.png"
+  },
+  {
+    "id": "08-welcome",
+    "label": "Welcome",
+    "src": "assets/screens/08-welcome.png",
+    "png": "assets/screens/08-welcome.png"
+  }
+]

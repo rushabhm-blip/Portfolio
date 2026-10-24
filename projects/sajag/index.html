@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sajag · Civic Mobility & Safety Case Study · Rushabh Mahore</title>
+  <meta name="description" content="A complete civic-tech case study reimagining urban mobility, public safety, and citizen participation in Bengaluru. Designed by Rushabh Mahore.">
+  <script>
+    try {
+      if (sessionStorage.getItem('portfolio_case_study_enter') === 'true') {
+        document.documentElement.classList.add('is-entering-transition');
+      }
+    } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="/projects/sajag/case-study.css?v=16">
+</head>
+<body>
+
+  <!-- Seamless White Transition Curtain -->
+  <div id="portfolioTransitionCurtain" class="portfolio-transition-curtain" aria-hidden="true"></div>
+
+  <!-- Top Sticky Navigation -->
+  <header class="cs-header" id="csHeader">
+    <div class="cs-header-inner">
+      <div class="cs-header-left">
+        <a href="/#home" class="cs-nav-logo" aria-label="Rushabh Home">rushabh<span class="logo-dot">.</span></a>
+        <a href="/#projects" class="cs-back-link" id="headerBackLink" aria-label="Back to projects">
+          <span aria-hidden="true">←</span>
+          <span>Back to projects</span>
+        </a>
+      </div>
+      <nav class="cs-nav-links" aria-label="Portfolio Navigation">
+        <a href="/#home" class="cs-nav-link">Home</a>
+        <a href="/#projects" class="cs-nav-link">Works</a>
+        <a href="/#about" class="cs-nav-link">About</a>
+        <a href="/#playground" class="cs-nav-link">Playground</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Minimal Dot Section Navigator (All 18 Editorial Headings) -->
+  <nav class="cs-dot-nav" id="csDotNav" aria-label="Section Navigation">
+    <ul class="cs-dot-list" role="list">
+      <li class="cs-dot-item is-active" data-index="0">
+        <a href="#sec-hero" class="cs-dot-link" aria-label="Overview" aria-current="true">
+          <span class="cs-dot-label">Overview</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="1">
+        <a href="#sec-process" class="cs-dot-link" aria-label="Design Process">
+          <span class="cs-dot-label">Design Process</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="2">
+        <a href="#sec-ordinary-day" class="cs-dot-link" aria-label="Familiar Compromises">
+          <span class="cs-dot-label">Familiar Compromises</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="3">
+        <a href="#sec-defining-challenge" class="cs-dot-link" aria-label="Defining Challenge">
+          <span class="cs-dot-label">Defining Challenge</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="4">
+        <a href="#sec-people-problems" class="cs-dot-link" aria-label="People & Problems">
+          <span class="cs-dot-label">People & Problems</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="5">
+        <a href="#sec-system-gaps" class="cs-dot-link" aria-label="System Gaps">
+          <span class="cs-dot-label">System Gaps</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="6">
+        <a href="#sec-design-brief" class="cs-dot-link" aria-label="Design Brief">
+          <span class="cs-dot-label">Design Brief</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="7">
+        <a href="#sec-ideas-solutions" class="cs-dot-link" aria-label="Ideas & Solutions">
+          <span class="cs-dot-label">Ideas & Solutions</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="8">
+        <a href="#sec-research-methodology" class="cs-dot-link" aria-label="Research Methodology">
+          <span class="cs-dot-label">Research Methodology</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="9">
+        <a href="#sec-empathy-mapping" class="cs-dot-link" aria-label="Empathy Mapping">
+          <span class="cs-dot-label">Empathy Mapping</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="10">
+        <a href="#sec-patterns-possibilities" class="cs-dot-link" aria-label="Patterns & Possibilities">
+          <span class="cs-dot-label">Patterns & Possibilities</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="11">
+        <a href="#sec-user-experience" class="cs-dot-link" aria-label="Five Planes of UX">
+          <span class="cs-dot-label">Five Planes of UX</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="12">
+        <a href="#sec-information-personality" class="cs-dot-link" aria-label="Information & Personality">
+          <span class="cs-dot-label">Information & Personality</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="13">
+        <a href="#sec-journey-transit" class="cs-dot-link" aria-label="Journey: Transit">
+          <span class="cs-dot-label">Journey: Transit</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="14">
+        <a href="#sec-journey-safety" class="cs-dot-link" aria-label="Journey: Safety">
+          <span class="cs-dot-label">Journey: Safety</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="15">
+        <a href="#sec-journey-parking" class="cs-dot-link" aria-label="Journey: Parking">
+          <span class="cs-dot-label">Journey: Parking</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="16">
+        <a href="#sec-community-ecosystem" class="cs-dot-link" aria-label="Community Ecosystem">
+          <span class="cs-dot-label">Community Ecosystem</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="17">
+        <a href="#sec-learnings" class="cs-dot-link" aria-label="Learnings & Reflections">
+          <span class="cs-dot-label">Learnings & Reflections</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Case Study Editorial Canvas -->
+  <main id="mainContent" class="case-study-canvas">
+    <!-- Section 1: SAJAG · Swacch, Surakshit, Sanchar -->
+    <section class="case-section" id="sec-hero" data-section="sec-hero">
+      <div class="sr-only">
+        <h2>SAJAG · Swacch, Surakshit, Sanchar</h2>
+        <p>A city we can care for, together. Project by Rushabh Mahore. Interaction design, System Design, UX Design.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/sajag/sections_2x/01_hero.png" alt="SAJAG · Swacch, Surakshit, Sanchar - A city we can care for, together. Project by Rushabh Mahore. Interaction design, System Design, UX Design." width="1198" height="800" loading="eager" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 2: Design Process · Double Diamond Framework -->
+    <section class="case-section" id="sec-process" data-section="sec-process">
+      <div class="sr-only">
+        <h2>Design Process · Double Diamond Framework</h2>
+        <p>01 Discover, 02 Define, 03 Develop, 04 Deliever. Reimagining How We Care for Our Cities.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/02_design_process_head.png" alt="Design Process · Double Diamond Framework" width="1198" height="120" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/02_design_process_body.png" alt="01 Discover, 02 Define, 03 Develop, 04 Deliever. Reimagining How We Care for Our Cities." width="1198" height="1980" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 3: 01. An Ordinary Day, Familiar Compromises -->
+    <section class="case-section" id="sec-ordinary-day" data-section="sec-ordinary-day">
+      <div class="sr-only">
+        <h2>01. An Ordinary Day, Familiar Compromises</h2>
+        <p>See a pothole, wait for a bus, see garbage piling up. When did that become normal? That is where Sajag comes in.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/03_ordinary_day_head.png" alt="01. An Ordinary Day, Familiar Compromises" width="1198" height="200" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/03_ordinary_day_body.png" alt="See a pothole, wait for a bus, see garbage piling up. When did that become normal? That is where Sajag comes in." width="1198" height="1700" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 4: 02. Defining the Challenge -->
+    <section class="case-section" id="sec-defining-challenge" data-section="sec-defining-challenge">
+      <div class="sr-only">
+        <h2>02. Defining the Challenge</h2>
+        <p>What: Disconnected transport systems. Why: Information spread across providers. How: Connect mobility, public services, safety, and civic participation.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/04_defining_challenge_head.png" alt="02. Defining the Challenge" width="1198" height="130" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/04_defining_challenge_body.png" alt="What: Disconnected transport systems. Why: Information spread across providers. How: Connect mobility, public services, safety, and civic participation." width="1198" height="570" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 5: 03. Understanding the People & Problems -->
+    <section class="case-section" id="sec-people-problems" data-section="sec-people-problems">
+      <div class="sr-only">
+        <h2>03. Understanding the People & Problems</h2>
+        <p>A city is shared, but lived differently: Student, Women commuter, Street vendor, Delivery worker, Older adult, Shopkeeper, Office worker, Parent.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/05_people_and_problems_head.png" alt="03. Understanding the People & Problems" width="1198" height="160" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/05_people_and_problems_body.png?v=colors_restored_1" alt="A city is shared, but lived differently: Student, Women commuter, Street vendor, Delivery worker, Older adult, Shopkeeper, Office worker, Parent." width="1198" height="3240" loading="eager" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 6: 04. Identifying Gaps within the System -->
+    <section class="case-section" id="sec-system-gaps" data-section="sec-system-gaps">
+      <div class="sr-only">
+        <h2>04. Identifying Gaps within the System</h2>
+        <p>The Vicious Loops, Iceberg Model (Events, Patterns, System structures, Mental models), Leverage points, and Stakeholder ecosystem.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/06_system_gaps_head.png" alt="04. Identifying Gaps within the System" width="1198" height="200" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/06_system_gaps_body.png" alt="The Vicious Loops, Iceberg Model (Events, Patterns, System structures, Mental models), Leverage points, and Stakeholder ecosystem." width="1198" height="5100" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 7: Design Brief -->
+    <section class="case-section" id="sec-design-brief" data-section="sec-design-brief">
+      <div class="sr-only">
+        <h2>Design Brief</h2>
+        <p>For whom: Residents, commuters and visitors. What: An inclusive companion. To enable: Informed travel choices and safer public spaces. Through: Identifying emerging needs.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/07_design_brief_head.png" alt="Design Brief" width="1198" height="310" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/07_design_brief_body.png" alt="For whom: Residents, commuters and visitors. What: An inclusive companion. To enable: Informed travel choices and safer public spaces. Through: Identifying emerging needs." width="1198" height="790" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 8: Ideas & Solutions -->
+    <section class="case-section" id="sec-ideas-solutions" data-section="sec-ideas-solutions">
+      <div class="sr-only">
+        <h2>Ideas & Solutions</h2>
+        <p>Smart Solutions for Smart City: Safety, Transportation, unsecure area marker, voice comments about space, and application workflow.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/08_ideas_solutions_head.png" alt="Ideas & Solutions" width="1198" height="140" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/08_ideas_solutions_body.png" alt="Smart Solutions for Smart City: Safety, Transportation, unsecure area marker, voice comments about space, and application workflow." width="1198" height="1760" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 9: Design Research Methodology & Inferences -->
+    <section class="case-section" id="sec-research-methodology" data-section="sec-research-methodology">
+      <div class="sr-only">
+        <h2>Design Research Methodology & Inferences</h2>
+        <p>Primary user research, observation studies, user interviews, affinity mapping, and synthesized quantitative & qualitative insights.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/09_research_methodology_head.png" alt="Design Research Methodology & Inferences" width="1198" height="200" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/09_research_methodology_body.png" alt="Primary user research, observation studies, user interviews, affinity mapping, and synthesized quantitative & qualitative insights." width="1198" height="4800" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 10: Empathy Mapping -->
+    <section class="case-section" id="sec-empathy-mapping" data-section="sec-empathy-mapping">
+      <div class="sr-only">
+        <h2>Empathy Mapping</h2>
+        <p>Think, Says, Feel, Do. The Butterfly Effect: small incidents lead to far-reaching consequences in public spaces.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/10_empathy_mapping_head.png" alt="Empathy Mapping" width="1198" height="150" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/10_empathy_mapping_body.png" alt="Think, Says, Feel, Do. The Butterfly Effect: small incidents lead to far-reaching consequences in public spaces." width="1198" height="1950" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 11: Patterns & Possibilities -->
+    <section class="case-section" id="sec-patterns-possibilities" data-section="sec-patterns-possibilities">
+      <div class="sr-only">
+        <h2>Patterns & Possibilities</h2>
+        <p>Synthesizing recurring friction patterns into proactive civic-tech touchpoints.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/11_patterns_possibilities_head.png" alt="Patterns & Possibilities" width="1198" height="180" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/11_patterns_possibilities_body.png" alt="Synthesizing recurring friction patterns into proactive civic-tech touchpoints." width="1198" height="1320" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 12: User Experience: Five Planes of UX -->
+    <section class="case-section" id="sec-user-experience" data-section="sec-user-experience">
+      <div class="sr-only">
+        <h2>User Experience: Five Planes of UX</h2>
+        <p>Strategy, Scope, Structure, Skeleton, and Surface planes applied to civic mobility.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/12_user_experience_head.png" alt="User Experience: Five Planes of UX" width="1198" height="600" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/12_user_experience_body.png" alt="Strategy, Scope, Structure, Skeleton, and Surface planes applied to civic mobility." width="1198" height="1800" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 13: Information Design & Sajags Personality -->
+    <section class="case-section" id="sec-information-personality" data-section="sec-information-personality">
+      <div class="sr-only">
+        <h2>Information Design & Sajags Personality</h2>
+        <p>Circular information architecture, tone of voice spectrum, and core screen hierarchy.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/13_information_personality_head.png" alt="Information Design & Sajags Personality" width="1198" height="115" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/13_information_personality_body.png" alt="Circular information architecture, tone of voice spectrum, and core screen hierarchy." width="1198" height="2785" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 14: User Journey: Transit, Simplified -->
+    <section class="case-section" id="sec-journey-transit" data-section="sec-journey-transit">
+      <div class="sr-only">
+        <h2>User Journey: Transit, Simplified</h2>
+        <p>End-to-end multi-modal transit planning, live tracking, ticketing, and one pass for all city needs.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/14_journey_transit_head.png" alt="User Journey: Transit, Simplified" width="1198" height="150" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/14_journey_transit_body.png" alt="End-to-end multi-modal transit planning, live tracking, ticketing, and one pass for all city needs." width="1198" height="2250" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 15: User Journey: Safety, Simplified -->
+    <section class="case-section" id="sec-journey-safety" data-section="sec-journey-safety">
+      <div class="sr-only">
+        <h2>User Journey: Safety, Simplified</h2>
+        <p>SOS dispatch, live hazard reporting, silent shortcuts, community assistance, and verified routing.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/15_journey_safety_head.png" alt="User Journey: Safety, Simplified" width="1198" height="140" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/15_journey_safety_body.png" alt="SOS dispatch, live hazard reporting, silent shortcuts, community assistance, and verified routing." width="1198" height="2860" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 16: User Journey: Parking, Simplified -->
+    <section class="case-section" id="sec-journey-parking" data-section="sec-journey-parking">
+      <div class="sr-only">
+        <h2>User Journey: Parking, Simplified</h2>
+        <p>Real-time parking availability, spot booking, dynamic QR access, and navigation assistance.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/16_journey_parking_head.png" alt="User Journey: Parking, Simplified" width="1198" height="130" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/16_journey_parking_body.png" alt="Real-time parking availability, spot booking, dynamic QR access, and navigation assistance." width="1198" height="2050" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 17: Community & Authority Ecosystem -->
+    <section class="case-section" id="sec-community-ecosystem" data-section="sec-community-ecosystem">
+      <div class="sr-only">
+        <h2>Community & Authority Ecosystem</h2>
+        <p>Civic reporting: Spot an issue, add evidence, submit report, ward review, assign crew, fix verification, and closed resolution.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/17_community_ecosystem_head.png" alt="Community & Authority Ecosystem" width="1198" height="140" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/17_community_ecosystem_body.png" alt="Civic reporting: Spot an issue, add evidence, submit report, ward review, assign crew, fix verification, and closed resolution." width="1198" height="3080" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 18: Learnings & Reflections -->
+    <section class="case-section" id="sec-learnings" data-section="sec-learnings">
+      <div class="sr-only">
+        <h2>Learnings & Reflections</h2>
+        <p>Connected services need clear roles, system thinking reveals dependencies, iteration improves clarity, visual consistency supports understanding.</p>
+      </div>
+      <div class="cs-heading-block">
+        <img src="/assets/projects/sajag/sections_2x/18_learnings_head.png" alt="Learnings & Reflections" width="1198" height="120" loading="lazy" decoding="async">
+      </div>
+      <div class="cs-body-block">
+        <img src="/assets/projects/sajag/sections_2x/18_learnings_body.png" alt="Connected services need clear roles, system thinking reveals dependencies, iteration improves clarity, visual consistency supports understanding." width="1198" height="1306" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Case Study Footer -->
+  <footer class="cs-footer">
+    <div class="cs-footer-inner">
+      <div class="cs-footer-copy">
+        <span class="cs-footer-title">Sajag · Civic Mobility & Safety</span>
+        <span class="cs-footer-sub">Rushabh Mahore · Interaction & System Design</span>
+      </div>
+      <div class="cs-footer-actions">
+        <a href="/#projects" class="cs-btn-secondary cs-back-link">← Back to projects</a>
+        <a href="#sec-hero" class="cs-btn-primary" id="backToTopBtn">↑ Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/projects/sajag/case-study.js?v=13"></script>
+</body>
+</html>

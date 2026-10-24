@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sajag · Moving screen showcase</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fff;color:#101c35;font-family:Inter,Arial,sans-serif}main{max-width:1440px;margin:auto;padding:48px 0 28px}header{padding:0 7%;margin-bottom:24px}header p{font-size:12px;letter-spacing:.16em;color:#64748b}h1{font-size:clamp(26px,3vw,40px);font-weight:600;letter-spacing:-.04em;margin:12px 0}.stage{position:relative;overflow:hidden;background:#fff;width:100%;height:650px;isolation:isolate;touch-action:pan-y}.outside{position:absolute;inset:0;z-index:1;mask-image:linear-gradient(to right,#000 0,#000 calc(50% - var(--fw)/2),transparent calc(50% - var(--fw)/2),transparent calc(50% + var(--fw)/2),#000 calc(50% + var(--fw)/2),#000 100%)}.screen{position:absolute;left:50%;top:50%;width:var(--sw);height:var(--sh);border-radius:14px;overflow:hidden;will-change:transform,opacity;transform-origin:center;background:#fff}.screen img{width:100%;height:100%;object-fit:fill;display:block;user-select:none;pointer-events:none}.window{position:absolute;left:50%;top:50%;width:var(--sw);height:var(--sh);transform:translate(-50%,-50%);overflow:hidden;border-radius:calc(var(--sw)*40/390);background:white;z-index:2}.window .screen{border-radius:0}.frame{position:absolute;left:50%;top:50%;width:var(--fw);height:var(--fh);transform:translate(-50%,-50%);pointer-events:none;z-index:3}.frame img{display:block;width:100%;height:100%}.controls{display:flex;align-items:center;justify-content:center;gap:12px;padding:24px 16px 8px}button{font:inherit;background:white;color:#17233b;border:1px solid #e1e6ee;border-radius:24px;padding:10px 17px;cursor:pointer}button:hover{background:#f6f8fc}button:focus-visible{outline:3px solid #7555ff;outline-offset:3px}#label{min-width:165px;text-align:center;font-size:14px}#hint{text-align:center;color:#778195;font-size:12px;margin:12px 20px}.sr{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:600px){main{padding-top:28px}header{margin-bottom:8px}h1{font-size:28px}.controls{gap:6px}button{padding:9px 12px}#label{min-width:130px;font-size:12px}}@media(prefers-reduced-motion:reduce){.screen{will-change:auto}}
+</style></head><body><main id="showcase"><header><p>SAJAG / INTERFACE EXPLORATION</p><h1>Your city, in motion.</h1></header><section class="stage" id="stage" aria-label="Sajag app screen carousel" aria-roledescription="carousel" tabindex="0"><div class="outside" id="outside" aria-hidden="true"></div><div class="window" id="window" aria-hidden="true"></div><div class="frame"><img src="assets/device/phone-frame.svg" alt="" /></div><span class="sr" id="current" aria-live="off"></span></section><nav class="controls" aria-label="Carousel controls"><button id="previous" aria-label="Move to the previous screen">←</button><span id="label"></span><button id="next" aria-label="Move to the next screen">→</button><button id="toggle">Pause</button></nav><p id="hint">Screens travel left → centre → right. Hover to pause; use arrows or swipe to explore.</p></main>
+<script>
+const SCREENS=[
+  {
+    "label": "Home",
+    "src": "assets/screens/01-home.png"
+  },
+  {
+    "label": "Transit & routes",
+    "src": "assets/screens/02-transit.png"
+  },
+  {
+    "label": "Find parking",
+    "src": "assets/screens/03-parking.png"
+  },
+  {
+    "label": "Safety",
+    "src": "assets/screens/04-safety.png"
+  },
+  {
+    "label": "City Makers",
+    "src": "assets/screens/05-city-makers.png"
+  },
+  {
+    "label": "Sajag Voice",
+    "src": "assets/screens/06-voice.png"
+  },
+  {
+    "label": "Namma Kannada",
+    "src": "assets/screens/07-kannada.png"
+  },
+  {
+    "label": "Welcome",
+    "src": "assets/screens/08-welcome.png"
+  }
+];
+const stage=document.getElementById('stage'),outside=document.getElementById('outside'),win=document.getElementById('window'),label=document.getElementById('label'),current=document.getElementById('current'),toggle=document.getElementById('toggle');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+const nodes=SCREENS.map((s,i)=>[outside,win].map(parent=>{let card=document.createElement('div');card.className='screen';let img=new Image();img.src=s.src;img.alt='';img.draggable=false;card.appendChild(img);parent.appendChild(card);return card;}));
+let width=280,gap=340,phase=0,elapsed=0,hover=false,focused=false,inView=true,userPaused=reduced.matches,busy=false,last=0,raf,shown=-1,touchX=0;
+const mod=(a,n)=>(a%n+n)%n;
+function measure(){width=Math.min(292,stage.clientWidth*(stage.clientWidth<600?.56:.29));const h=width*844/390;gap=width+Math.max(24,width*.2);stage.style.height=(h+52)+'px';stage.style.setProperty('--sw',width+'px');stage.style.setProperty('--sh',h+'px');stage.style.setProperty('--fw',width*422/390+'px');stage.style.setProperty('--fh',width*876/390+'px');paint();}
+function paint(){SCREENS.forEach((s,i)=>{const slot=mod(-i+phase+SCREENS.length/2,SCREENS.length)-SCREENS.length/2;const focus=Math.max(0,1-Math.abs(slot));const scale=.88+.12*focus;nodes[i].forEach(n=>{n.style.transform=`translate(-50%,-50%) translateX(${slot*gap}px) scale(${scale})`;n.style.opacity=Math.abs(slot)>2.6?'0':String(.62+.38*focus);});});const active=mod(Math.round(phase),SCREENS.length);if(active!==shown){shown=active;label.textContent=SCREENS[active].label;current.textContent=`Screen ${active+1} of ${SCREENS.length}: ${SCREENS[active].label}`;}}
+function updateToggle(){toggle.textContent=userPaused?'Play':'Pause';toggle.setAttribute('aria-label',userPaused?'Play screen animation':'Pause screen animation');}
+const ease=t=>t*t*(3-2*t);
+function move(direction=1){if(busy)return;busy=true;elapsed=0;const start=phase,end=Math.round(phase)+direction,duration=reduced.matches?0:1050;let begin=null;function tick(now){if(begin===null)begin=now;const t=duration?Math.min((now-begin)/duration,1):1;phase=start+(end-start)*ease(t);paint();if(t<1)requestAnimationFrame(tick);else{phase=mod(end,SCREENS.length);busy=false;paint();}}requestAnimationFrame(tick);}
+function loop(now){const dt=last?Math.min(now-last,100):0;last=now;if(!busy&&!userPaused&&!hover&&!focused&&inView&&!document.hidden&&!reduced.matches){elapsed+=dt;if(elapsed>=2400)move(1);}raf=requestAnimationFrame(loop);}
+stage.addEventListener('mouseenter',()=>hover=true);stage.addEventListener('mouseleave',()=>hover=false);stage.addEventListener('focus',()=>focused=true);stage.addEventListener('blur',()=>focused=false);
+document.getElementById('next').onclick=()=>move(1);document.getElementById('previous').onclick=()=>move(-1);toggle.onclick=()=>{userPaused=!userPaused;elapsed=0;updateToggle();};stage.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();move(e.key==='ArrowRight'?1:-1);}});stage.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].clientX;},{passive:true});stage.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-touchX;if(Math.abs(dx)>35)move(dx>0?1:-1);},{passive:true});
+const ro=new ResizeObserver(measure);ro.observe(stage);const io=new IntersectionObserver(e=>{inView=e[0].isIntersecting;elapsed=0;});io.observe(stage);reduced.addEventListener('change',()=>{userPaused=reduced.matches;updateToggle();});
+Promise.all([...document.images].map(img=>img.decode().catch(()=>{}))).then(()=>{measure();updateToggle();raf=requestAnimationFrame(loop);});window.addEventListener('pagehide',()=>{cancelAnimationFrame(raf);ro.disconnect();io.disconnect();});
+</script></body></html>

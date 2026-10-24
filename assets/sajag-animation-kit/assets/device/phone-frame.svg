@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="422" height="876" viewBox="0 0 422 876">
+ <defs><linearGradient id="metal" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#74777e"/><stop offset=".24" stop-color="#16181d"/><stop offset=".52" stop-color="#575b62"/><stop offset=".8" stop-color="#181a1e"/><stop offset="1" stop-color="#727780"/></linearGradient></defs>
+ <rect x="1" y="129" width="5" height="31" rx="2" fill="#373a40"/>
+ <rect x="1" y="182" width="5" height="61" rx="2" fill="#373a40"/>
+ <rect x="1" y="257" width="5" height="61" rx="2" fill="#373a40"/>
+ <rect x="416" y="204" width="5" height="90" rx="2" fill="#373a40"/>
+ <path fill="url(#metal)" fill-rule="evenodd" d="M57 2H365Q420 2 420 57V819Q420 874 365 874H57Q2 874 2 819V57Q2 2 57 2ZM56 16Q16 16 16 56V820Q16 860 56 860H366Q406 860 406 820V56Q406 16 366 16Z"/>
+ <rect x="7" y="7" width="408" height="862" rx="49" fill="none" stroke="#111318" stroke-width="12"/>
+ <rect x="16" y="16" width="390" height="844" rx="40" fill="none" stroke="#090a0d" stroke-width="2"/>
+</svg>

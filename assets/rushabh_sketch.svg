@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 440" width="100%" height="100%" fill="none" stroke="#18181b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  
+  <!-- Subtle Soft Fill Underlay for crisp separation over fabric grid -->
+  <g class="sketch-fill" fill="#ffffff" fill-opacity="0.95" stroke="none">
+    <!-- Head & Hair Silhouette Fill -->
+    <path d="M 120 120 Q 95 180 120 220 Q 160 250 200 220 Q 225 180 200 120 Q 190 70 160 70 Q 130 70 120 120 Z" />
+    <!-- Body Silhouette Fill -->
+    <path d="M 60 280 L 110 230 L 210 230 L 260 280 L 275 430 L 45 430 Z" />
+  </g>
+
+  <!-- HEAD & HAIR -->
+  <g class="sketch-head">
+    <!-- Hair Outline & Volume -->
+    <path class="draw-path" d="M 112 135 C 104 110 115 80 145 68 C 170 58 200 68 212 92 C 218 105 218 120 216 135 C 210 125 204 105 188 95 C 170 85 140 88 126 108 C 120 118 116 128 112 135 Z" fill="#18181b" fill-opacity="0.92" />
+    <!-- Hair Texture Strands -->
+    <path class="draw-path" d="M 148 72 Q 165 85 182 92" stroke="#ffffff" stroke-width="1.8" />
+    <path class="draw-path" d="M 132 88 Q 152 98 174 100" stroke="#ffffff" stroke-width="1.5" />
+    <path class="draw-path" d="M 124 105 Q 140 112 158 112" stroke="#ffffff" stroke-width="1.5" />
+
+    <!-- Left Ear -->
+    <path class="draw-path" d="M 116 142 Q 104 148 106 162 Q 108 175 118 178" />
+    <!-- Right Ear -->
+    <path class="draw-path" d="M 204 142 Q 216 148 214 162 Q 212 175 202 178" />
+
+    <!-- Face Contour & Jawline -->
+    <path class="draw-path" d="M 116 135 L 118 168 Q 122 208 160 216 Q 198 208 202 168 L 204 135" />
+
+    <!-- Eyebrows -->
+    <path class="draw-path" d="M 128 140 Q 140 134 150 140" stroke-width="3" />
+    <path class="draw-path" d="M 170 140 Q 180 134 192 140" stroke-width="3" />
+
+    <!-- Friendly Eyes (Warm Arc / Smiling) -->
+    <g class="sketch-eyes">
+      <!-- Left Eye -->
+      <path class="draw-path" d="M 130 152 Q 139 146 148 152" stroke-width="2.6" />
+      <circle cx="139" cy="154" r="2.8" fill="#18181b" />
+      <!-- Right Eye -->
+      <path class="draw-path" d="M 172 152 Q 181 146 190 152" stroke-width="2.6" />
+      <circle cx="181" cy="154" r="2.8" fill="#18181b" />
+    </g>
+
+    <!-- Nose Curve -->
+    <path class="draw-path" d="M 158 148 Q 163 162 160 172 Q 155 174 150 172" />
+
+    <!-- Warm Smile & Teeth -->
+    <g class="sketch-smile">
+      <!-- Upper Lip Smile Curve -->
+      <path class="draw-path" d="M 138 185 Q 160 190 182 185" stroke-width="2.6" />
+      <!-- Lower Open Smile Arc -->
+      <path class="draw-path" d="M 138 185 Q 160 206 182 185" fill="#ffffff" stroke-width="2.2" />
+      <!-- Smile Dimples -->
+      <path class="draw-path" d="M 135 182 Q 137 188 138 190" stroke-width="1.8" />
+      <path class="draw-path" d="M 185 182 Q 183 188 182 190" stroke-width="1.8" />
+    </g>
+
+    <!-- Groomed Beard / Stubble Contour -->
+    <path class="draw-path" d="M 120 166 Q 126 198 160 208 Q 194 198 200 166" stroke-dasharray="2 3" stroke-width="2" opacity="0.65" />
+    <!-- Mustache curve -->
+    <path class="draw-path" d="M 144 180 Q 160 183 176 180" stroke-dasharray="1.5 2" stroke-width="1.8" opacity="0.5" />
+  </g>
+
+  <!-- CLOTHING: TURTLENECK COLLAR -->
+  <g class="sketch-turtleneck">
+    <!-- Turtleneck Collar Shape -->
+    <path class="draw-path" d="M 136 216 Q 160 224 184 216 L 192 238 Q 160 248 128 238 Z" fill="#f8fafc" stroke-width="2.5" />
+    <!-- Ribbed Texture Lines -->
+    <path class="draw-path" d="M 145 220 L 142 240" stroke-width="1.5" opacity="0.4" />
+    <path class="draw-path" d="M 155 222 L 153 243" stroke-width="1.5" opacity="0.4" />
+    <path class="draw-path" d="M 165 222 L 167 243" stroke-width="1.5" opacity="0.4" />
+    <path class="draw-path" d="M 175 220 L 178 240" stroke-width="1.5" opacity="0.4" />
+  </g>
+
+  <!-- BODY: SUIT BLAZER & FOLDED ARMS -->
+  <g class="sketch-body">
+    <!-- Left Shoulder & Lapel -->
+    <path class="draw-path" d="M 128 238 L 86 262 Q 54 285 48 340 L 46 430" />
+    <path class="draw-path" d="M 132 242 L 118 290 L 138 310 L 152 340" />
+
+    <!-- Right Shoulder & Lapel -->
+    <path class="draw-path" d="M 192 238 L 234 262 Q 266 285 272 340 L 274 430" />
+    <path class="draw-path" d="M 188 242 L 202 290 L 182 310 L 168 340" />
+
+    <!-- Blazer Center V-Opening -->
+    <path class="draw-path" d="M 152 340 L 160 380 L 168 340" />
+    <circle cx="160" cy="405" r="3.5" fill="#18181b" />
+    <circle cx="160" cy="425" r="3.5" fill="#18181b" />
+
+    <!-- FOLDED ARMS (Crossed across chest) -->
+    <!-- Forearm 1 (Right arm crossing over left) -->
+    <path class="draw-path" d="M 64 340 Q 95 352 170 354 Q 225 352 256 340" stroke-width="3" />
+    <path class="draw-path" d="M 72 370 Q 120 382 175 380 Q 220 376 250 365" stroke-width="2.6" />
+
+    <!-- Hand tuck & cuff details -->
+    <!-- Right Hand resting on left bicep -->
+    <path class="draw-path" d="M 230 338 Q 248 335 254 346 Q 256 358 244 365" />
+    <path class="draw-path" d="M 236 345 L 248 348" stroke-width="1.8" />
+    <path class="draw-path" d="M 234 353 L 246 355" stroke-width="1.8" />
+
+    <!-- Left Hand tucked under right forearm -->
+    <path class="draw-path" d="M 90 356 Q 78 368 84 380 Q 94 386 108 382" />
+
+    <!-- Blazer Sleeve Folds & Seam Creases -->
+    <path class="draw-path" d="M 62 310 Q 75 320 68 338" stroke-width="1.8" opacity="0.6" />
+    <path class="draw-path" d="M 258 310 Q 245 320 252 338" stroke-width="1.8" opacity="0.6" />
+    <path class="draw-path" d="M 125 365 L 140 374" stroke-width="1.8" opacity="0.5" />
+    <path class="draw-path" d="M 185 365 L 170 374" stroke-width="1.8" opacity="0.5" />
+  </g>
+</svg>

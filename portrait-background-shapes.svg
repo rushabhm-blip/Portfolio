@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="840" viewBox="0 0 900 840" fill="none">
+  <title>Three pastel portrait background shapes</title>
+  <desc>Editable mint rounded square, lavender organic shape, and peach circle on a transparent background. Recreated from the reference.</desc>
+  <rect id="mint-rounded-square" x="144" y="57" width="151" height="151" rx="29" fill="#D9F5E4" transform="rotate(-19 219.5 132.5)"/>
+  <path id="lavender-organic-shape" d="M 472,52 C 611,29 722,153 754,296 C 779,408 765,546 708,680 C 681,742 653,774 600,776 C 488,783 327,800 204,728 C 92,662 28,555 19,456 C 10,375 42,332 113,281 C 203,217 260,154 334,110 C 385,80 426,59 472,52 Z" fill="#F1ECFF" fill-opacity="0.72"/>
+  <circle id="peach-circle" cx="698" cy="527" r="166" fill="#FFE4CE" fill-opacity="0.75"/>
+</svg>
