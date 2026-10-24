@@ -724,8 +724,8 @@ html.is-entering-transition .portfolio-transition-curtain {
   position: relative;
   width: 385px;
   max-width: 100%;
-  height: 790px;
-  background: #000000;
+  height: 820px;
+  background: #ffffff;
   border-radius: 52px;
   border: 12px solid #16181f;
   box-shadow: 
@@ -734,18 +734,46 @@ html.is-entering-transition .portfolio-transition-curtain {
     0 15px 35px -10px rgba(0, 102, 255, 0.12);
   overflow: hidden;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Authentic Mobile Status Bar (Time, Notch, Wi-Fi, Range, Battery) */
+.cs-device-status-bar {
+  position: relative;
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  background: #ffffff;
+  z-index: 30;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.cs-status-time {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  min-width: 44px;
 }
 
 .cs-device-island {
   position: absolute;
-  top: 10px;
+  top: 9px;
   left: 50%;
   transform: translateX(-50%);
   width: 110px;
   height: 26px;
   background: #000000;
   border-radius: 20px;
-  z-index: 30;
+  z-index: 31;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -771,11 +799,25 @@ html.is-entering-transition .portfolio-transition-curtain {
   display: block;
 }
 
+.cs-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #000000;
+  min-width: 44px;
+  justify-content: flex-end;
+}
+
+.cs-status-svg {
+  display: block;
+}
+
 .cs-device-screen {
   width: 100%;
-  height: 100%;
+  flex: 1;
   border: none;
-  border-radius: 40px;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
   background: #ffffff;
   display: block;
 }
@@ -841,13 +883,23 @@ html.is-entering-transition .portfolio-transition-curtain {
   .cs-device-iphone {
     width: 100%;
     max-width: 350px;
-    height: 680px;
+    height: 700px;
     border-width: 10px;
     border-radius: 44px;
   }
   
+  .cs-device-status-bar {
+    height: 40px;
+    padding: 0 16px;
+  }
+
+  .cs-device-island {
+    top: 7px;
+  }
+  
   .cs-device-screen {
-    border-radius: 34px;
+    border-bottom-left-radius: 34px;
+    border-bottom-right-radius: 34px;
   }
   
   .cs-demo-btn {
