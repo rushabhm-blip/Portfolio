@@ -6,5 +6,7 @@ node_modules/
 **/.agents/
 projects/sajag/app/android/
 projects/sajag/app/dist/
+*.apk
+**/*.apk
 *.log
 .DS_Store
