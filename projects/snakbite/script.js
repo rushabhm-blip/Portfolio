@@ -1252,6 +1252,34 @@ function initLandscapeLayerStory() {
     window.addEventListener('scroll', updateLayersOnScroll, { passive: true });
     updateLayersOnScroll();
 
+    // Forward touch swipes on paddy-sankey-card to iframe chart-scroll
+    const paddySankeyCard = document.querySelector('.paddy-sankey-card');
+    if (paddySankeyCard && sankeyIframe) {
+        let cardLastX = 0;
+        let cardIsTouch = false;
+
+        paddySankeyCard.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                cardIsTouch = true;
+                cardLastX = e.touches[0].clientX;
+            }
+        }, { passive: true });
+
+        paddySankeyCard.addEventListener('touchmove', (e) => {
+            if (!cardIsTouch || e.touches.length !== 1) return;
+            const curX = e.touches[0].clientX;
+            const deltaX = cardLastX - curX;
+            cardLastX = curX;
+            try {
+                sankeyIframe.contentWindow.postMessage({ type: 'scrollChartBy', deltaX }, '*');
+            } catch(e) {}
+        }, { passive: true });
+
+        const endCardTouch = () => { cardIsTouch = false; };
+        paddySankeyCard.addEventListener('touchend', endCardTouch, { passive: true });
+        paddySankeyCard.addEventListener('touchcancel', endCardTouch, { passive: true });
+    }
+
     // Recalculate animation measurements once web fonts are fully loaded
     if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(() => {

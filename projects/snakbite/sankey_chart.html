@@ -42,6 +42,7 @@ html, body {
   overflow-x: hidden;
   overflow-y: hidden;
   height: 100%;
+  touch-action: pan-x pan-y;
 }
 
 main {
@@ -663,6 +664,60 @@ for (const n of nodes) {
   if (n.s > 0 && n.in !== n.n) throw Error('Inflow mismatch: ' + n.id);
   if (n.s < 3 && n.out !== n.n) throw Error('Outflow mismatch: ' + n.id);
 }
+
+// Robust Mobile Touch & Drag Controller
+(function initMobileTouchScroll() {
+  const scrollContainer = document.querySelector('.chart-scroll');
+  if (!scrollContainer) return;
+
+  let isTouching = false;
+  let startX = 0;
+  let startY = 0;
+  let startScrollLeft = 0;
+  let isHorizontal = null;
+
+  scrollContainer.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 1) return;
+    isTouching = true;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    startScrollLeft = scrollContainer.scrollLeft;
+    isHorizontal = null;
+  }, { passive: true });
+
+  scrollContainer.addEventListener('touchmove', (e) => {
+    if (!isTouching || e.touches.length !== 1) return;
+    const currentX = e.touches[0].clientX;
+    const currentY = e.touches[0].clientY;
+    const diffX = currentX - startX;
+    const diffY = currentY - startY;
+
+    if (isHorizontal === null) {
+      if (Math.abs(diffX) > 4 || Math.abs(diffY) > 4) {
+        isHorizontal = Math.abs(diffX) >= Math.abs(diffY);
+      }
+    }
+
+    if (isHorizontal) {
+      scrollContainer.scrollLeft = startScrollLeft - diffX;
+    }
+  }, { passive: true });
+
+  const endTouch = () => {
+    isTouching = false;
+    isHorizontal = null;
+  };
+
+  scrollContainer.addEventListener('touchend', endTouch, { passive: true });
+  scrollContainer.addEventListener('touchcancel', endTouch, { passive: true });
+
+  // Direct message support from parent document
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'scrollChartBy' && typeof e.data.deltaX === 'number') {
+      scrollContainer.scrollLeft += e.data.deltaX;
+    }
+  });
+})();
 </script>
 </body>
 </html>
