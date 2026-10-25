@@ -19,7 +19,7 @@
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
-  <link rel="stylesheet" href="style.css?v=124">
+  <link rel="stylesheet" href="style.css?v=126">
 </head>
 
 <body>
@@ -541,17 +541,217 @@
               </div>
 
               <!-- Credit block immediately beneath the project details -->
-              <div class="project-metadata project-credit-block">
-                <span class="project-meta-line">2026 · Individual project</span>
-                <span class="project-meta-guidance">Guided by Amit Kapoor</span>
+              <div class="project-metadata project-credit-block" style="display: flex; flex-direction: column; align-items: flex-start; gap: 5px; margin-bottom: 1.45rem; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 0.88rem; color: #64748b; font-weight: 400; line-height: 1.4;">
+                <div class="project-meta-line" style="color: #64748b;">2026 · Individual project</div>
+                <div class="project-meta-guidance" style="color: #64748b;">Guided by Amit Kapoor</div>
               </div>
 
-              <!-- Project Tags -->
-              <div class="project-tags project-pill-tags" aria-label="Project focus areas">
-                <span class="project-tag pill-lavender">Data visualisation</span>
-                <span class="project-tag pill-mint">Visual storytelling</span>
-                <span class="project-tag pill-peach">Interaction design</span>
+              <!-- Project Tags: Exact Liquid Morphing SVG matching Sajag -->
+              <div class="project-tags" id="snakeProjectTagsContainer">
+                <svg id="keywordPillsSnakeSvg"
+                     class="keyword-pills-svg"
+                     xmlns="http://www.w3.org/2000/svg"
+                     width="660" height="160" viewBox="0 0 660 160"
+                     role="img" aria-labelledby="keywordPillsSnakeTitle">
+                  <title id="keywordPillsSnakeTitle">
+                    Data visualisation, Visual storytelling, Interaction design
+                  </title>
+
+                  <style>
+                    .kw-snake-static { display: none; }
+                    .kw-snake-labels {
+                      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                      font-size: 18px;
+                      font-weight: 600;
+                      letter-spacing: -0.01em;
+                      text-anchor: middle;
+                    }
+                    .kw-snake-lavender { fill: #513689; }
+                    .kw-snake-mint { fill: #235848; }
+                    .kw-snake-peach { fill: #8B432C; }
+
+                    @media (prefers-reduced-motion: reduce) {
+                      .kw-snake-animated { display: none !important; }
+                      .kw-snake-static { display: inline !important; }
+                      .kw-snake-labels { opacity: 1 !important; }
+                    }
+                  </style>
+
+                  <defs>
+                    <filter id="keywordPillsSnakeLiquidFilter"
+                            x="-20%" y="-100%" width="140%" height="300%"
+                            color-interpolation-filters="sRGB">
+                      <feGaussianBlur in="SourceGraphic"
+                                      stdDeviation="0" result="kwSnakeBlur">
+                        <animate attributeName="stdDeviation"
+                                 values="0;6;6;0;0"
+                                 keyTimes="0;.18;.38;.8;1"
+                                 dur="2.4s" fill="freeze"/>
+                      </feGaussianBlur>
+
+                      <feColorMatrix in="kwSnakeBlur" type="matrix"
+                        values="1 0 0 0 0
+                                0 1 0 0 0
+                                0 0 1 0 0
+                                0 0 0 18 -7"
+                        result="kwSnakeLiquid"/>
+
+                      <feComposite in="SourceGraphic"
+                                   in2="kwSnakeLiquid" operator="atop"/>
+                    </filter>
+                  </defs>
+
+                  <g class="kw-snake-animated" id="keywordPillsSnakeAnimatedGroup" filter="url(#keywordPillsSnakeLiquidFilter)">
+                    <!-- Lavender: Data visualisation -->
+                    <g>
+                      <animate attributeName="opacity"
+                               values="0;1" dur=".24s" fill="freeze"/>
+                      <rect x="12" y="52" width="206" height="56" rx="28" fill="#E6E0F8">
+                        <animate attributeName="x"
+                          values="256;238;222;18;12"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="width"
+                          values="28;64;96;200;206"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="height"
+                          values="28;64;88;60;56"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="y"
+                          values="66;48;36;50;52"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="rx"
+                          values="14;32;44;30;28"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                      </rect>
+                    </g>
+
+                    <!-- Mint: Visual storytelling -->
+                    <g>
+                      <animate attributeName="opacity"
+                               values="0;0;1" keyTimes="0;.2;1"
+                               dur=".3s" fill="freeze"/>
+                      <rect x="230" y="52" width="206" height="56" rx="28" fill="#DCEEE7">
+                        <animate attributeName="x"
+                          values="290;270;255;232;230"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="width"
+                          values="28;64;96;200;206"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="height"
+                          values="28;64;88;60;56"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="y"
+                          values="66;48;36;50;52"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="rx"
+                          values="14;32;44;30;28"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                      </rect>
+                    </g>
+
+                    <!-- Peach: Interaction design -->
+                    <g>
+                      <animate attributeName="opacity"
+                               values="0;0;1" keyTimes="0;.22;1"
+                               dur=".34s" fill="freeze"/>
+                      <rect x="448" y="52" width="198" height="56" rx="28" fill="#FDE8DE">
+                        <animate attributeName="x"
+                          values="330;350;380;440;448"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="width"
+                          values="28;64;96;190;198"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="height"
+                          values="28;64;88;60;56"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="y"
+                          values="66;48;36;50;52"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                        <animate attributeName="rx"
+                          values="14;32;44;30;28"
+                          keyTimes="0;.18;.38;.8;1"
+                          calcMode="spline"
+                          keySplines=".4 0 .6 1;.4 0 .6 1;.4 0 .2 1;.22 1 .36 1"
+                          dur="2.4s" fill="freeze"/>
+                      </rect>
+                    </g>
+                  </g>
+
+                  <!-- Static fallback for reduced motion -->
+                  <g class="kw-snake-static">
+                    <rect x="12" y="52" width="206" height="56" rx="28" fill="#E6E0F8"/>
+                    <rect x="230" y="52" width="206" height="56" rx="28" fill="#DCEEE7"/>
+                    <rect x="448" y="52" width="198" height="56" rx="28" fill="#FDE8DE"/>
+                  </g>
+
+                  <!-- Crisp Text Labels -->
+                  <g class="kw-snake-labels" opacity="0">
+                    <animate attributeName="opacity"
+                             from="0" to="1"
+                             begin="2.45s" dur=".35s"
+                             calcMode="spline"
+                             keyTimes="0;1"
+                             keySplines=".22 1 .36 1"
+                             fill="freeze"/>
+                    <text x="115" y="86" class="kw-snake-lavender">Data visualisation</text>
+                    <text x="333" y="86" class="kw-snake-mint">Visual storytelling</text>
+                    <text x="547" y="86" class="kw-snake-peach">Interaction design</text>
+                  </g>
+                </svg>
               </div>
+              <script>
+                (function() {
+                  var svg = document.getElementById('keywordPillsSnakeSvg');
+                  if (svg && typeof svg.pauseAnimations === 'function') {
+                    try {
+                      svg.pauseAnimations();
+                      svg.setCurrentTime(0);
+                    } catch (e) {}
+                  }
+                })();
+              </script>
 
               <!-- Action Links -->
               <div class="project-cta-wrapper">
@@ -577,7 +777,7 @@
     <span class="scroll-arrow">↓</span>
   </a>
 
-  <script src="app.js?v=124"></script>
+  <script src="app.js?v=126"></script>
 </body>
 
 </html>

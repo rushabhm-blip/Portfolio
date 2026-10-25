@@ -2790,58 +2790,73 @@ requestAnimationFrame(render);
 // One-time liquid entrance animation via IntersectionObserver
 // =========================================================
 function initLiquidKeywordPills() {
-  const pillsSvg = document.getElementById('keywordPillsSvg');
-  const pillsContainer = document.getElementById('projectTagsContainer') || document.querySelector('.project-tags');
-  if (!pillsSvg || !pillsContainer) return;
-
-  const isReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (isReduced) {
-    if (typeof pillsSvg.unpauseAnimations === 'function') {
-      try {
-        pillsSvg.setCurrentTime(2.85);
-        pillsSvg.unpauseAnimations();
-      } catch (e) {}
+  const configs = [
+    {
+      svgId: 'keywordPillsSvg',
+      containerId: 'projectTagsContainer',
+      groupId: 'keywordPillsAnimatedGroup'
+    },
+    {
+      svgId: 'keywordPillsSnakeSvg',
+      containerId: 'snakeProjectTagsContainer',
+      groupId: 'keywordPillsSnakeAnimatedGroup'
     }
-    const animGroup = document.getElementById('keywordPillsAnimatedGroup');
-    if (animGroup) animGroup.removeAttribute('filter');
-    return;
-  }
+  ];
 
-  // Ensure paused at t=0 before intersection
-  if (typeof pillsSvg.pauseAnimations === 'function') {
-    try {
-      pillsSvg.pauseAnimations();
-      pillsSvg.setCurrentTime(0);
-    } catch (e) {}
-  }
+  configs.forEach(({ svgId, containerId, groupId }) => {
+    const pillsSvg = document.getElementById(svgId);
+    const pillsContainer = document.getElementById(containerId);
+    if (!pillsSvg || !pillsContainer) return;
 
-  let hasStarted = false;
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting && !hasStarted) {
-        hasStarted = true;
-        observer.disconnect();
-
+    const isReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (isReduced) {
+      if (typeof pillsSvg.unpauseAnimations === 'function') {
         try {
-          pillsSvg.setCurrentTime(0);
+          pillsSvg.setCurrentTime(2.85);
           pillsSvg.unpauseAnimations();
         } catch (e) {}
-
-        // Remove temporary liquid joining filter once all pills settle (2.45s) for clean vector edges
-        setTimeout(() => {
-          const animGroup = document.getElementById('keywordPillsAnimatedGroup');
-          if (animGroup) {
-            animGroup.removeAttribute('filter');
-          }
-        }, 2450);
       }
-    });
-  }, {
-    threshold: 0.15,
-    rootMargin: '0px 0px -20px 0px'
-  });
+      const animGroup = document.getElementById(groupId);
+      if (animGroup) animGroup.removeAttribute('filter');
+      return;
+    }
 
-  observer.observe(pillsContainer);
+    // Ensure paused at t=0 before intersection
+    if (typeof pillsSvg.pauseAnimations === 'function') {
+      try {
+        pillsSvg.pauseAnimations();
+        pillsSvg.setCurrentTime(0);
+      } catch (e) {}
+    }
+
+    let hasStarted = false;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !hasStarted) {
+          hasStarted = true;
+          observer.disconnect();
+
+          try {
+            pillsSvg.setCurrentTime(0);
+            pillsSvg.unpauseAnimations();
+          } catch (e) {}
+
+          // Remove temporary liquid joining filter once all pills settle (2.45s) for clean vector edges
+          setTimeout(() => {
+            const animGroup = document.getElementById(groupId);
+            if (animGroup) {
+              animGroup.removeAttribute('filter');
+            }
+          }, 2450);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -20px 0px'
+    });
+
+    observer.observe(pillsContainer);
+  });
 }
 
 
