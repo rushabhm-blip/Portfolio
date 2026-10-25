@@ -1,0 +1,13 @@
+Replace ONLY the existing clock illustration with the supplied transparent animation. Preserve the background, all wording, layout, section height, alignment, and every other animation (including the 58,000 counter).
+
+Use frames/clock-000.png through clock-119.png in numerical order. All 120 frames are 768x768 transparent PNGs from one fixed master design. The red 6 is already included, identical in every frame: do not overlay another 6. The numeral uses P052 Roman, embedded in the PNGs; do not substitute or re-render it. Its red is #D94A45. Keep existing MORE THAN and LIVES LOST labels as separate live text in their existing positions, adjusting ONLY within the clock container if needed to prevent overlap. Preserve their font and color.
+
+Preload and decode all frames before playback. Render with canvas or a fixed-size image box, object-fit: contain; preserve identical bounds, scale, and center for all frames. Transparent pixels must remain transparent. Never auto-crop frames or fade between them.
+
+Play at 30fps (4 seconds per rotation), loop seamlessly. Use elapsed time from requestAnimationFrame: frameIndex = floor(elapsedMilliseconds * 30 / 1000) % 120. Do not use frame-by-frame setTimeout delays. Pause when the section is offscreen; resume without a jump. The last frame intentionally precedes the first by one normal movement step. Do not add a duplicate end frame or a pause.
+
+The only moving element is the red marker and its fading trailing arc. Keep the number, dial rings, tick marks, and six small red accents completely still. No number morphing, scaling, pulsing, or hue changes. No extra glow, hands, drop shadows, or colored background.
+
+Respect prefers-reduced-motion by displaying clock-000.png statically. Include accessible text describing the existing statistic; treat the clock motion as decorative. The 4-second loop is illustrative, not a real-time death counter. Do not change the statistic or suggest one death occurs each revolution.
+
+clock-preview.gif has a dark green background solely for review. Do NOT use the GIF as the production asset; use the transparent PNG frames.

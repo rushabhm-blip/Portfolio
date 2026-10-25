@@ -1,0 +1,44 @@
+const fs = require('fs');
+
+// Let's create an html page zooming closely on the snake in img_6, img_7, img_0, img_1
+const html = `<!DOCTYPE html>
+<html>
+<head>
+<title>Snake Zoom</title>
+<style>
+body { background: #03120B; color: #EEE; font-family: sans-serif; padding: 20px; }
+.card { display: inline-block; margin: 10px; background: #112; padding: 10px; }
+canvas { border: 1px solid #555; image-rendering: pixelated; }
+</style>
+</head>
+<body>
+<h1>Zoom on Snakes</h1>
+<div id="canvases"></div>
+
+<script>
+const files = [0, 1, 2, 3, 5, 6, 7, 8];
+const cDiv = document.getElementById('canvases');
+
+files.forEach(f => {
+  const img = new Image();
+  img.src = 'assets/frames/img_' + f + '.png';
+  img.onload = () => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = '<h3>img_' + f + '.png</h3>';
+    const canvas = document.createElement('canvas');
+    canvas.width = 600;
+    canvas.height = 200;
+    const ctx = canvas.getContext('2d');
+    // Draw bottom portion of image
+    ctx.drawImage(img, 0, 380, 1024, 196, 0, 0, 600, 200);
+    card.appendChild(canvas);
+    cDiv.appendChild(card);
+  };
+});
+</script>
+</body>
+</html>`;
+
+fs.writeFileSync('zoom_snakes.html', html);
+console.log('zoom_snakes.html written');

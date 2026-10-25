@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Measure Ref</title></head>
+<body>
+<pre id="out"></pre>
+<script>
+async function run() {
+  async function loadImg(src) {
+    const img = new Image();
+    img.src = src;
+    await new Promise(r => img.onload = r);
+    const cvs = document.createElement('canvas');
+    cvs.width = img.naturalWidth;
+    cvs.height = img.naturalHeight;
+    const ctx = cvs.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    return { cvs, ctx, w: cvs.width, h: cvs.height };
+  }
+
+  const ref = await loadImg('assets/frames/img_9.png');
+  const f5 = await loadImg('assets/frames/img_5.png');
+
+  // Find villager bounds in f5 (alpha > 50, x > 600)
+  const d5 = f5.ctx.getImageData(0, 0, f5.w, f5.h).data;
+  let minX5 = 1024, maxX5 = 0, minY5 = 576, maxY5 = 0;
+  for (let y = 0; y < f5.h; y++) {
+    for (let x = 600; x < f5.w; x++) {
+      const a = d5[(y * f5.w + x) * 4 + 3];
+      if (a > 50) {
+        if (x < minX5) minX5 = x;
+        if (x > maxX5) maxX5 = x;
+        if (y < minY5) minY5 = y;
+        if (y > maxY5) maxY5 = y;
+      }
+    }
+  }
+
+  // Find snake bounds in f5 (alpha > 100, x < 650, y > 350, dark)
+  let sMinX = 1024, sMaxX = 0, sMinY = 576, sMaxY = 0;
+  for (let y = 350; y < f5.h; y++) {
+    for (let x = 450; x < 650; x++) {
+      const idx = (y * f5.w + x) * 4;
+      const a = d5[idx + 3];
+      const r = d5[idx], g = d5[idx+1], b = d5[idx+2];
+      if (a > 150 && (r < 100 || g < 100)) {
+        if (x < sMinX) sMinX = x;
+        if (x > sMaxX) sMaxX = x;
+        if (y < sMinY) sMinY = y;
+        if (y > sMaxY) sMaxY = y;
+      }
+    }
+  }
+
+  // Find villager bounds in ref (x > 600)
+  const dRef = ref.ctx.getImageData(0, 0, ref.w, ref.h).data;
+  let minXr = 1024, maxXr = 0, minYr = 441, maxYr = 0;
+  // Look for light clothing / skin tones (r>120, g>100, b>70) in x > 800
+  for (let y = 0; y < ref.h; y++) {
+    for (let x = 800; x < ref.w; x++) {
+      const idx = (y * ref.w + x) * 4;
+      const r = dRef[idx], g = dRef[idx+1], b = dRef[idx+2];
+      if (r > 140 && g > 120 && b > 90) { // dhoti or skin or shirt
+        if (x < minXr) minXr = x;
+        if (x > maxXr) maxXr = x;
+        if (y < minYr) minYr = y;
+        if (y > maxYr) maxYr = y;
+      }
+    }
+  }
+
+  const out = {
+    refSize: { w: ref.w, h: ref.h },
+    f5Size: { w: f5.w, h: f5.h },
+    refVillager: { x: minXr, y: minYr, w: maxXr - minXr, h: maxYr - minYr, footY: maxYr },
+    f5Villager: { x: minX5, y: minY5, w: maxX5 - minX5, h: maxY5 - minY5, footY: maxY5 },
+    f5Snake: { x: sMinX, y: sMinY, w: sMaxX - sMinX, h: sMaxY - sMinY, baseline: sMaxY }
+  };
+
+  document.getElementById('out').textContent = JSON.stringify(out, null, 2);
+}
+run();
+</script>
+</body>
+</html>

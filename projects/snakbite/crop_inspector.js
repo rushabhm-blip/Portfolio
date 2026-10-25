@@ -1,0 +1,58 @@
+const fs = require('fs');
+
+// Let's create an html page zooming in on:
+// 1. Snake in each image
+// 2. Villager in each image
+// 3. Compare img_4 and img_8
+
+const html = `<!DOCTYPE html>
+<html>
+<head>
+<title>Detailed Frame Comparison</title>
+<style>
+body { background: #03120B; color: #EEE; font-family: sans-serif; padding: 20px; }
+.row { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
+.box { background: #112; border: 1px solid #444; padding: 5px; text-align: center; }
+img { border: 1px solid #666; }
+.snake-crop { width: 300px; height: 120px; object-fit: none; }
+</style>
+</head>
+<body>
+<h1>Detailed Crop Inspector</h1>
+<div id="crops"></div>
+
+<script>
+const crops = document.getElementById('crops');
+const files = [
+  { id: 0, name: 'img_0.png', desc: 'Snake far left (x~199)' },
+  { id: 1, name: 'img_1.png', desc: 'Snake farthest left (x~76)' },
+  { id: 2, name: 'img_2.png', desc: 'Snake center-right (x~424)' },
+  { id: 3, name: 'img_3.png', desc: 'Snake center-left (x~348)' },
+  { id: 4, name: 'img_4.png', desc: 'Batch 1 - Frame 03 candidate (x~566)' },
+  { id: 5, name: 'img_5.png', desc: 'Snake right (x~566)' },
+  { id: 6, name: 'img_6.png', desc: 'Snake right (x~490)' },
+  { id: 7, name: 'img_7.png', desc: 'Snake right (x~569)' },
+  { id: 8, name: 'img_8.png', desc: 'Batch 2 - Corrected Frame 03 candidate (x~565)' },
+  { id: 9, name: 'img_9.png', desc: 'Reference with BG' }
+];
+
+files.forEach(f => {
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = \`
+    <div style="width: 250px;">
+      <strong>[\${f.id}] \${f.name}</strong><br>
+      <small>\${f.desc}</small>
+    </div>
+    <div class="box">
+      <img src="assets/frames/\${f.name}" style="height: 180px;">
+    </div>
+  \`;
+  crops.appendChild(row);
+});
+</script>
+</body>
+</html>`;
+
+fs.writeFileSync('crop_inspector.html', html);
+console.log('crop_inspector.html written');

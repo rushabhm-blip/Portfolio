@@ -1,0 +1,998 @@
+        #snakes-neighbourhood-component {
+            --forest: #071F18;
+            --forest-surface: #0A2920;
+            --forest-elevated: #0E3328;
+            --ivory: #EEECE3;
+            --sage: #A8B9A3;
+            --muted-text: #9BAA9E;
+            --subtle-border: rgba(168, 185, 163, 0.20);
+            --subtle-border-strong: rgba(168, 185, 163, 0.42);
+            --error: #D94A45;
+            --font-serif: 'Cormorant Garamond', Georgia, serif;
+            --font-sans: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            box-sizing: border-box;
+            width: 100%;
+            background-color: transparent;
+            color: var(--ivory);
+            font-family: var(--font-sans);
+            padding: clamp(64px, 5vw, 80px);
+            position: relative;
+        }
+
+        html.snakes-standalone-page #snakes-neighbourhood-component {
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        #snakes-neighbourhood-component.is-embedded {
+            background-color: transparent;
+        }
+
+        #snakes-neighbourhood-component *,
+        #snakes-neighbourhood-component *::before,
+        #snakes-neighbourhood-component *::after {
+            box-sizing: border-box;
+        }
+
+        /* Responsive Editorial Grid */
+        #snakes-neighbourhood-component .snc-grid {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(0, 39fr) minmax(0, 61fr);
+            grid-template-areas:
+                "intro map"
+                "results map";
+            grid-template-rows: auto 1fr;
+            column-gap: clamp(40px, 4vw, 56px);
+            row-gap: 28px;
+            align-items: stretch;
+        }
+
+        #snakes-neighbourhood-component .snc-intro {
+            grid-area: intro;
+            min-width: 0;
+        }
+
+        #snakes-neighbourhood-component .snc-results-area {
+            grid-area: results;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #snakes-neighbourhood-component .snc-map-area {
+            grid-area: map;
+            min-width: 0;
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Editorial Header & Copy */
+        #snakes-neighbourhood-component .snc-eyebrow {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--sage);
+            margin: 0 0 12px 0;
+        }
+
+        #snakes-neighbourhood-component .snc-heading {
+            font-family: var(--font-serif);
+            font-weight: 500;
+            font-size: clamp(44px, 4.5vw, 68px);
+            line-height: 1.06;
+            color: var(--ivory);
+            margin: 0 0 14px 0;
+            letter-spacing: -0.01em;
+        }
+
+        #snakes-neighbourhood-component .snc-supporting {
+            font-size: 18px;
+            line-height: 1.55;
+            color: var(--ivory);
+            margin: 0 0 28px 0;
+            font-weight: 400;
+        }
+
+        /* Cohesive Location Search Form */
+        #snakes-neighbourhood-component .snc-search-form {
+            display: flex;
+            align-items: stretch;
+            border: 1px solid var(--subtle-border-strong);
+            border-radius: 7px;
+            background: rgba(10, 41, 32, 0.65);
+            transition: border-color 180ms ease;
+            margin-bottom: 12px;
+        }
+
+        #snakes-neighbourhood-component .snc-search-form:focus-within {
+            border-color: var(--ivory);
+            outline: 2px solid rgba(238, 236, 227, 0.25);
+            outline-offset: 2px;
+        }
+
+        #snakes-neighbourhood-component .snc-input-wrap {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-width: 0;
+        }
+
+        #snakes-neighbourhood-component .snc-search-icon {
+            position: absolute;
+            left: 14px;
+            width: 17px;
+            height: 17px;
+            stroke: var(--sage);
+            pointer-events: none;
+        }
+
+        #snakes-neighbourhood-component .snc-location-input {
+            width: 100%;
+            min-height: 46px;
+            padding: 10px 12px 10px 42px;
+            background: transparent;
+            border: none;
+            color: var(--ivory);
+            font-family: inherit;
+            font-size: 16px;
+            line-height: 1.4;
+            outline: none;
+        }
+
+        #snakes-neighbourhood-component .snc-location-input::placeholder {
+            color: var(--muted-text);
+            opacity: 1;
+        }
+
+        #snakes-neighbourhood-component .snc-btn-search {
+            min-height: 46px;
+            padding: 0 20px;
+            background: rgba(168, 185, 163, 0.14);
+            border: none;
+            border-left: 1px solid var(--subtle-border);
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            color: var(--ivory);
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 180ms ease, color 180ms ease;
+            white-space: nowrap;
+        }
+
+        #snakes-neighbourhood-component .snc-btn-search:hover {
+            background: rgba(168, 185, 163, 0.26);
+        }
+
+        #snakes-neighbourhood-component .snc-btn-search:focus-visible {
+            outline: 2px solid var(--ivory);
+            outline-offset: -2px;
+        }
+
+        /* Primary & Secondary Action Controls */
+        #snakes-neighbourhood-component .snc-primary-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 18px;
+        }
+
+        #snakes-neighbourhood-component .snc-btn-location {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 44px;
+            padding: 8px 16px;
+            background: rgba(168, 185, 163, 0.16);
+            border: 1px solid var(--subtle-border-strong);
+            border-radius: 7px;
+            color: var(--ivory);
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 180ms ease, border-color 180ms ease;
+        }
+
+        #snakes-neighbourhood-component .snc-btn-location:hover {
+            background: rgba(168, 185, 163, 0.28);
+            border-color: var(--sage);
+        }
+
+        #snakes-neighbourhood-component .snc-btn-location:focus-visible,
+        #snakes-neighbourhood-component .snc-text-control:focus-visible,
+        #snakes-neighbourhood-component .snc-secondary-btn:focus-visible,
+        #snakes-neighbourhood-component .snc-select:focus-visible {
+            outline: 2px solid var(--ivory);
+            outline-offset: 2px;
+        }
+
+        #snakes-neighbourhood-component .snc-text-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 44px;
+            padding: 6px 8px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            color: var(--sage);
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 400;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            text-decoration-color: rgba(168, 185, 163, 0.45);
+            cursor: pointer;
+            transition: color 180ms ease, text-decoration-color 180ms ease;
+        }
+
+        #snakes-neighbourhood-component .snc-text-control:hover,
+        #snakes-neighbourhood-component .snc-text-control[aria-pressed="true"] {
+            color: var(--ivory);
+            text-decoration-color: var(--ivory);
+        }
+
+        /* Manual Map Pick Banner */
+        #snakes-neighbourhood-component .snc-pick-banner {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border: 1px solid var(--sage);
+            border-radius: 7px;
+            background: rgba(14, 51, 40, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 15px;
+            color: var(--ivory);
+        }
+
+        #snakes-neighbourhood-component .snc-pick-banner[hidden] {
+            display: none !important;
+        }
+
+        /* Secondary Tools (Change Radius + Filter Species) */
+        #snakes-neighbourhood-component .snc-secondary-bar {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 16px;
+        }
+
+        #snakes-neighbourhood-component .snc-radius-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            color: var(--sage);
+        }
+
+        #snakes-neighbourhood-component .snc-radius-wrap[hidden] {
+            display: none !important;
+        }
+
+        #snakes-neighbourhood-component .snc-select {
+            min-height: 44px;
+            padding: 6px 12px;
+            background: var(--forest-surface);
+            border: 1px solid var(--subtle-border-strong);
+            border-radius: 6px;
+            color: var(--ivory);
+            font-family: inherit;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #snakes-neighbourhood-component .snc-species-filter-panel {
+            margin-top: 10px;
+            padding: 12px;
+            border: 1px solid var(--subtle-border);
+            border-radius: 7px;
+            background: rgba(10, 41, 32, 0.5);
+        }
+
+        #snakes-neighbourhood-component .snc-species-filter-panel[hidden] {
+            display: none !important;
+        }
+
+        #snakes-neighbourhood-component .snc-species-filter-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        #snakes-neighbourhood-component .snc-species-input {
+            flex: 1;
+            min-height: 44px;
+            padding: 8px 12px;
+            background: var(--forest);
+            border: 1px solid var(--subtle-border-strong);
+            border-radius: 6px;
+            color: var(--ivory);
+            font-family: inherit;
+            font-size: 16px;
+            outline: none;
+        }
+
+        #snakes-neighbourhood-component .snc-species-input:focus {
+            border-color: var(--ivory);
+        }
+
+        #snakes-neighbourhood-component .snc-secondary-btn {
+            min-height: 44px;
+            padding: 8px 14px;
+            background: rgba(168, 185, 163, 0.12);
+            border: 1px solid var(--subtle-border-strong);
+            border-radius: 6px;
+            color: var(--ivory);
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 180ms ease, border-color 180ms ease;
+        }
+
+        #snakes-neighbourhood-component .snc-secondary-btn:hover {
+            background: rgba(168, 185, 163, 0.24);
+            border-color: var(--sage);
+        }
+
+        /* Status & Feedback Banner */
+        #snakes-neighbourhood-component .snc-status-msg {
+            padding: 12px 14px;
+            border-radius: 7px;
+            border: 1px solid var(--subtle-border-strong);
+            background: rgba(10, 41, 32, 0.7);
+            color: var(--ivory);
+            font-size: 15px;
+            line-height: 1.45;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #snakes-neighbourhood-component .snc-status-msg[hidden] {
+            display: none !important;
+        }
+
+        #snakes-neighbourhood-component .snc-status-msg.is-error {
+            border-color: var(--error);
+            background: rgba(217, 74, 69, 0.12);
+        }
+
+        #snakes-neighbourhood-component .snc-status-msg .snc-error-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--error);
+            margin-right: 6px;
+        }
+
+        #snakes-neighbourhood-component .snc-status-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Results Section */
+        #snakes-neighbourhood-component .snc-invitation {
+            padding: 18px 0;
+            border-top: 1px solid var(--subtle-border);
+            border-bottom: 1px solid var(--subtle-border);
+            color: var(--sage);
+            font-size: 17px;
+            line-height: 1.5;
+        }
+
+        #snakes-neighbourhood-component .snc-invitation[hidden] {
+            display: none !important;
+        }
+
+        #snakes-neighbourhood-component .snc-results-header[hidden] {
+            display: none !important;
+        }
+
+        #snakes-neighbourhood-component .snc-results-title {
+            font-family: var(--font-serif);
+            font-weight: 500;
+            font-size: 28px;
+            line-height: 1.18;
+            color: var(--ivory);
+            margin: 0 0 6px 0;
+        }
+
+        #snakes-neighbourhood-component .snc-results-sub {
+            font-size: 15px;
+            line-height: 1.45;
+            color: var(--sage);
+            margin: 0;
+        }
+
+        #snakes-neighbourhood-component .snc-active-filter-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 14px;
+            border: 1px solid var(--subtle-border-strong);
+            border-radius: 6px;
+            background: rgba(168, 185, 163, 0.10);
+            font-size: 14px;
+            color: var(--ivory);
+        }
+
+        #snakes-neighbourhood-component .snc-active-filter-bar[hidden] {
+            display: none !important;
+        }
+
+        /* Editorial Species Rows */
+        #snakes-neighbourhood-component .snc-species-list {
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid var(--subtle-border);
+        }
+
+        #snakes-neighbourhood-component .snc-species-list:empty {
+            border-top: none;
+        }
+
+        #snakes-neighbourhood-component .snc-species-row {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            background: rgba(10, 41, 32, 0.50);
+            border: 1px solid var(--subtle-border);
+            border-radius: 8px;
+            color: var(--ivory);
+            font-family: inherit;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+        }
+
+        #snakes-neighbourhood-component .snc-species-row:hover {
+            background-color: rgba(168, 185, 163, 0.12);
+            border-color: var(--sage);
+            transform: translateX(2px);
+        }
+
+        #snakes-neighbourhood-component .snc-species-row:focus-visible {
+            outline: 2px solid var(--ivory);
+            outline-offset: 2px;
+        }
+
+        #snakes-neighbourhood-component .snc-species-row[aria-pressed="true"] {
+            background-color: rgba(168, 185, 163, 0.18);
+            border-color: var(--ivory);
+            box-shadow: 0 0 0 1px var(--ivory);
+        }
+
+        #snakes-neighbourhood-component .snc-row-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        #snakes-neighbourhood-component .snc-obs-count-line {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+
+        #snakes-neighbourhood-component .snc-row-arrow {
+            stroke: var(--sage);
+            transition: transform 180ms ease, stroke 180ms ease;
+            flex-shrink: 0;
+        }
+
+        #snakes-neighbourhood-component .snc-species-row:hover .snc-row-arrow {
+            stroke: var(--ivory);
+            transform: translateX(3px);
+        }
+
+        #snakes-neighbourhood-component .snc-row-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        #snakes-neighbourhood-component .snc-thumb-wrap {
+            width: 52px;
+            height: 52px;
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: var(--forest-surface);
+            border: 1px solid var(--subtle-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #snakes-neighbourhood-component .snc-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        #snakes-neighbourhood-component .snc-row-names {
+            min-width: 0;
+            flex: 1;
+        }
+
+        #snakes-neighbourhood-component .snc-com-name {
+            font-family: var(--font-serif);
+            font-weight: 500;
+            font-size: 23px;
+            line-height: 1.18;
+            color: var(--ivory);
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        #snakes-neighbourhood-component .snc-sci-name {
+            font-size: 14.5px;
+            font-style: italic;
+            color: var(--sage);
+            margin-top: 3px;
+            line-height: 1.35;
+        }
+
+        #snakes-neighbourhood-component .snc-row-right {
+            text-align: right;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        #snakes-neighbourhood-component .snc-obs-count {
+            font-size: 14px;
+            color: var(--sage);
+            white-space: nowrap;
+        }
+
+        #snakes-neighbourhood-component .snc-selected-tag {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--ivory);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        #snakes-neighbourhood-component .snc-expand-wrap[hidden] {
+            display: none !important;
+        }
+
+        /* Persistent Note & Source Metadata */
+        #snakes-neighbourhood-component .snc-footer-notes {
+            padding-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--muted-text);
+        }
+
+        #snakes-neighbourhood-component .snc-persistent-note {
+            color: var(--sage);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Map Frame & Controls */
+        #snakes-neighbourhood-component .snc-map-frame {
+            width: 100%;
+            height: 100%;
+            flex: 1 1 auto;
+            min-height: clamp(620px, 75vh, 800px);
+            background-color: var(--forest-surface);
+            border: 1px solid var(--subtle-border);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        #snakes-neighbourhood-component #snc-main-map {
+            width: 100%;
+            height: 100%;
+            background-color: var(--forest-surface);
+        }
+
+        #snakes-neighbourhood-component.is-picking-location #snc-main-map {
+            cursor: crosshair;
+        }
+
+        /* Tile Pane Styling ONLY — Never filter the entire map container */
+        #snakes-neighbourhood-component .leaflet-tile-pane .snc-basemap-tiles {
+            filter: invert(92%) hue-rotate(105deg) saturate(38%) brightness(76%) contrast(112%);
+        }
+
+        /* Map Overlay Controls (Top Left: All India + Explore a place, Top Right: Zoom) */
+        #snakes-neighbourhood-component .snc-map-top-bar {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            right: 14px;
+            z-index: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            pointer-events: none;
+            gap: 10px;
+        }
+
+        #snakes-neighbourhood-component .snc-map-left-controls {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            pointer-events: auto;
+        }
+
+        #snakes-neighbourhood-component .snc-map-btn {
+            min-height: 44px;
+            padding: 8px 14px;
+            background: rgba(7, 31, 24, 0.92);
+            border: 1px solid var(--subtle-border-strong);
+            border-radius: 6px;
+            color: var(--ivory);
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 180ms ease, border-color 180ms ease;
+        }
+
+        #snakes-neighbourhood-component .snc-map-btn:hover {
+            background: var(--forest-elevated);
+            border-color: var(--sage);
+        }
+
+        #snakes-neighbourhood-component .snc-map-btn:focus-visible,
+        #snakes-neighbourhood-component .snc-map-select:focus-visible,
+        #snakes-neighbourhood-component .snc-zoom-btn:focus-visible {
+            outline: 2px solid var(--ivory);
+            outline-offset: 2px;
+        }
+
+        #snakes-neighbourhood-component .snc-map-select {
+            min-height: 44px;
+            padding: 8px 12px;
+            background: rgba(7, 31, 24, 0.92);
+            border: 1px solid var(--subtle-border);
+            border-radius: 6px;
+            color: var(--sage);
+            font-family: inherit;
+            font-size: 16px;
+            cursor: pointer;
+            transition: border-color 180ms ease, color 180ms ease;
+        }
+
+        #snakes-neighbourhood-component .snc-map-select:hover {
+            color: var(--ivory);
+            border-color: var(--subtle-border-strong);
+        }
+
+        #snakes-neighbourhood-component .snc-zoom-group {
+            display: flex;
+            flex-direction: column;
+            background: rgba(7, 31, 24, 0.92);
+            border: 1px solid var(--subtle-border-strong);
+            border-radius: 6px;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        #snakes-neighbourhood-component .snc-zoom-btn {
+            width: 44px;
+            height: 44px;
+            background: transparent;
+            border: none;
+            color: var(--ivory);
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 180ms ease;
+        }
+
+        #snakes-neighbourhood-component .snc-zoom-btn:first-child {
+            border-bottom: 1px solid var(--subtle-border);
+        }
+
+        #snakes-neighbourhood-component .snc-zoom-btn:hover {
+            background: var(--forest-elevated);
+        }
+
+
+
+        /* Quiet Legend (Bottom Left, clear of attribution) */
+        #snakes-neighbourhood-component .snc-map-legend {
+            position: absolute;
+            bottom: 28px;
+            left: 14px;
+            z-index: 500;
+            background: rgba(7, 31, 24, 0.92);
+            border: 1px solid var(--subtle-border);
+            border-radius: 6px;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 13.5px;
+            color: var(--ivory);
+            pointer-events: none;
+        }
+
+        #snakes-neighbourhood-component .snc-legend-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #snakes-neighbourhood-component .snc-legend-row[hidden] {
+            display: none !important;
+        }
+
+        #snakes-neighbourhood-component .snc-legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--sage);
+            border: 1.5px solid var(--forest);
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        #snakes-neighbourhood-component .snc-legend-cluster {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #1C3F32;
+            border: 1px solid rgba(168, 185, 163, 0.45);
+            color: var(--ivory);
+            font-size: 10px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        #snakes-neighbourhood-component .snc-legend-area {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1.5px solid var(--sage);
+            background: rgba(168, 185, 163, 0.12);
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        /* Cluster Icons — Flat muted-green fill, ivory numerals, thin subtle border */
+        #snakes-neighbourhood-component .snc-cluster-icon {
+            background: transparent;
+        }
+
+        #snakes-neighbourhood-component .snc-cluster-hit {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #snakes-neighbourhood-component .snc-cluster-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #1A3C30;
+            color: var(--ivory);
+            border: 1px solid rgba(168, 185, 163, 0.42);
+            font-family: inherit;
+            font-weight: 500;
+            line-height: 1;
+            transition: background-color 160ms ease, border-color 160ms ease;
+        }
+
+        #snakes-neighbourhood-component .snc-cluster-icon:hover .snc-cluster-circle {
+            background-color: #244F40;
+            border-color: var(--ivory);
+        }
+
+        #snakes-neighbourhood-component .snc-cluster-28 { width: 28px; height: 28px; font-size: 12px; }
+        #snakes-neighbourhood-component .snc-cluster-34 { width: 34px; height: 34px; font-size: 13px; }
+        #snakes-neighbourhood-component .snc-cluster-42 { width: 42px; height: 42px; font-size: 13.5px; }
+        #snakes-neighbourhood-component .snc-cluster-50 { width: 50px; height: 50px; font-size: 14px; }
+
+        /* Search Location Pin */
+        #snakes-neighbourhood-component .snc-search-pin-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        #snakes-neighbourhood-component .snc-search-pin-label {
+            background: rgba(7, 31, 24, 0.94);
+            color: var(--ivory);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid var(--subtle-border-strong);
+        }
+
+        /* Leaflet Popups & Attribution */
+        #snakes-neighbourhood-component .leaflet-popup-content-wrapper {
+            background: var(--forest-surface) !important;
+            color: var(--ivory) !important;
+            border: 1px solid var(--subtle-border-strong);
+            border-radius: 7px !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+
+        #snakes-neighbourhood-component .leaflet-popup-tip {
+            background: var(--forest-surface) !important;
+        }
+
+        #snakes-neighbourhood-component .leaflet-popup-content {
+            margin: 0 !important;
+            width: 240px !important;
+            font-family: inherit;
+        }
+
+        #snakes-neighbourhood-component .leaflet-popup-close-button {
+            color: var(--ivory) !important;
+            font-size: 18px !important;
+            padding: 6px 8px 0 0 !important;
+        }
+
+        #snakes-neighbourhood-component .snc-popup-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+            background: var(--forest);
+            border-bottom: 1px solid var(--subtle-border);
+        }
+
+        #snakes-neighbourhood-component .snc-popup-body {
+            padding: 12px 14px 14px;
+        }
+
+        #snakes-neighbourhood-component .snc-popup-com {
+            font-family: var(--font-serif);
+            font-size: 21px;
+            font-weight: 500;
+            color: var(--ivory);
+            line-height: 1.15;
+            margin-bottom: 2px;
+        }
+
+        #snakes-neighbourhood-component .snc-popup-sci {
+            font-size: 14px;
+            font-style: italic;
+            color: var(--sage);
+            margin-bottom: 10px;
+        }
+
+        #snakes-neighbourhood-component .snc-popup-meta {
+            font-size: 13px;
+            color: var(--ivory);
+            border-top: 1px solid var(--subtle-border);
+            padding-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            line-height: 1.4;
+        }
+
+        #snakes-neighbourhood-component .snc-popup-meta span {
+            color: var(--sage);
+        }
+
+        #snakes-neighbourhood-component .snc-popup-link {
+            display: inline-block;
+            margin-top: 6px;
+            color: var(--sage);
+            font-size: 13px;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        #snakes-neighbourhood-component .snc-popup-link:hover {
+            color: var(--ivory);
+        }
+
+        #snakes-neighbourhood-component .leaflet-control-attribution {
+            background: rgba(7, 31, 24, 0.85) !important;
+            color: var(--muted-text) !important;
+            font-size: 11px !important;
+            padding: 2px 8px !important;
+            border-top: 1px solid var(--subtle-border);
+            border-left: 1px solid var(--subtle-border);
+            border-top-left-radius: 4px;
+        }
+
+        #snakes-neighbourhood-component .leaflet-control-attribution a {
+            color: var(--sage) !important;
+            text-decoration: none;
+        }
+
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+            #snakes-neighbourhood-component *,
+            #snakes-neighbourhood-component *::before,
+            #snakes-neighbourhood-component *::after {
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
+        }
+
+        /* Mobile Layout: heading -> search controls -> main map -> results -> source/note */
+        @media (max-width: 960px) {
+            #snakes-neighbourhood-component {
+                padding: 32px 22px;
+            }
+
+            #snakes-neighbourhood-component .snc-grid {
+                grid-template-columns: minmax(0, 1fr);
+                grid-template-areas:
+                    "intro"
+                    "map"
+                    "results";
+                row-gap: 24px;
+            }
+
+            #snakes-neighbourhood-component .snc-heading {
+                font-size: clamp(38px, 8vw, 44px);
+            }
+
+            #snakes-neighbourhood-component .snc-map-area {
+                height: auto;
+            }
+
+            #snakes-neighbourhood-component .snc-map-frame {
+                min-height: 0;
+                height: clamp(400px, 54vh, 500px);
+            }
+
+
+        }
+/* Subtle Section Entrance */
+.snakes-neighbourhood-section {
+    opacity: 1;
+    transition: opacity 0.4s ease-out;
+}

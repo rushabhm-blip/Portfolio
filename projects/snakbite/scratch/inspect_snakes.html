@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { background: #0c1810; color: #EEECE3; font-family: sans-serif; padding: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 25px; }
+  .cell { border: 1px solid rgba(255,255,255,0.2); padding: 8px; text-align: center; border-radius: 6px; background: rgba(0,0,0,0.4); }
+  canvas { width: 100%; height: auto; display: block; margin-top: 6px; image-rendering: pixelated; }
+</style>
+</head>
+<body>
+<h2>Region 1: Lower-Left Log (Brown Snake)</h2>
+<div class="grid" id="g1"></div>
+
+<h2>Region 2: Upper-Left Branch (Green Vine Snake)</h2>
+<div class="grid" id="g2"></div>
+
+<h2>Region 3: Right Tree Trunk (Banded Krait)</h2>
+<div class="grid" id="g3"></div>
+
+<h2>Region 4: Lower-Right Foliage (Green Head)</h2>
+<div class="grid" id="g4"></div>
+
+<script>
+const regions = [
+  { id: 'g1', x: 60, y: 310, w: 90, h: 60 },
+  { id: 'g2', x: 60, y: 30, w: 100, h: 60 },
+  { id: 'g3', x: 860, y: 90, w: 80, h: 120 },
+  { id: 'g4', x: 860, y: 320, w: 70, h: 60 }
+];
+
+const imgs = [];
+for (let i = 1; i <= 5; i++) {
+  const img = new Image();
+  img.src = `../assets/forest_edges/forest-edge-0${i}.png`;
+  imgs.push(img);
+}
+
+Promise.all(imgs.map(img => new Promise(r => {
+  if (img.complete) r();
+  else img.onload = r;
+}))).then(() => {
+  regions.forEach(reg => {
+    const container = document.getElementById(reg.id);
+    imgs.forEach((img, idx) => {
+      const cell = document.createElement('div');
+      cell.className = 'cell';
+      cell.innerHTML = `<div>Pose 0${idx+1}</div>`;
+      const cv = document.createElement('canvas');
+      cv.width = reg.w;
+      cv.height = reg.h;
+      const ctx = cv.getContext('2d');
+      ctx.drawImage(img, reg.x, reg.y, reg.w, reg.h, 0, 0, reg.w, reg.h);
+      cell.appendChild(cv);
+      container.appendChild(cell);
+    });
+  });
+});
+</script>
+</body>
+</html>

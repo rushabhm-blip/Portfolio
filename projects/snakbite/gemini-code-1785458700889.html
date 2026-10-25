@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Big Four Toxicology Comparison</title>
+
+  <!-- Google Fonts: Google Sans Flex, Plus Jakarta Sans, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Plotly.js CDN -->
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+
+  <style>
+    :root {
+      --bg-color: #FFFFFF;
+      --text-main: #1A1D20;
+      --text-muted: #4A5056;
+      --border-color: #E2E8F0;
+      
+      /* Modern Pastel Palette for Big Four */
+      --krait-pastel: #F87171;     /* Soft Coral Red */
+      --sawscaled-pastel: #FB923C; /* Soft Warm Amber */
+      --cobra-pastel: #38BDF8;     /* Soft Sky Blue */
+      --russell-pastel: #C084FC;   /* Soft Lavender Purple */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Google Sans Flex', 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+      line-height: 1.5;
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 920px;
+      background: #FFFFFF;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .kicker {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #C50000;
+      margin-bottom: 0.35rem;
+    }
+
+    h1 {
+      font-size: clamp(1.4rem, 3vw, 1.85rem);
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+
+    p.subtitle {
+      font-size: clamp(0.88rem, 1.8vw, 0.98rem);
+      color: var(--text-muted);
+      max-width: 720px;
+      margin: 0 auto;
+      font-weight: 400;
+    }
+
+    /* Filter Controls */
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin: 1.25rem 0 0.5rem;
+    }
+
+    .btn {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      padding: 0.45rem 0.9rem;
+      font-family: 'Google Sans Flex', 'Inter', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.25s ease;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background: #F1F5F9;
+      color: var(--text-main);
+      border-color: #CBD5E1;
+    }
+
+    .btn.active {
+      background: #1A1D20;
+      color: #FFFFFF;
+      border-color: #1A1D20;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .btn.active .btn-indicator {
+      box-shadow: 0 0 0 1.5px #FFFFFF;
+    }
+
+    /* Radar Chart Container */
+    .chart-box {
+      width: 100%;
+      height: 440px;
+      margin: 0.5rem 0;
+    }
+
+    /* Modern Minimalist Summary Table */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      text-align: left;
+    }
+
+    .data-table th, .data-table td {
+      padding: 0.65rem 0.9rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .data-table th {
+      background: #F8FAFC;
+      font-weight: 700;
+      color: var(--text-main);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tbody tr:hover {
+      background-color: #F8FAFC;
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      color: #FFFFFF;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .footer-note {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #767E86;
+      margin-top: 0.85rem;
+      padding-top: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <header>
+      <div class="kicker">Comparative Toxicology</div>
+      <h1>Profile of India's "Big Four" Venomous Snakes</h1>
+      <p class="subtitle">Normalized multi-axis trade-off between intrinsic venom toxicity (LD₅₀), average venom yield, total human lethal dose potential, and clinical impact.</p>
+    </header>
+
+    <!-- Filter Buttons -->
+    <div class="controls">
+      <button class="btn active" onclick="toggleSpecies('all', this)">
+        <span class="btn-indicator" style="background: #94A3B8;"></span>
+        Compare All
+      </button>
+      <button class="btn" onclick="toggleSpecies(0, this)">
+        <span class="btn-indicator" style="background: var(--krait-pastel);"></span>
+        #1 Common Krait
+      </button>
+      <button class="btn" onclick="toggleSpecies(1, this)">
+        <span class="btn-indicator" style="background: var(--sawscaled-pastel);"></span>
+        #2 Saw-scaled Viper
+      </button>
+      <button class="btn" onclick="toggleSpecies(2, this)">
+        <span class="btn-indicator" style="background: var(--cobra-pastel);"></span>
+        #3 Indian Cobra
+      </button>
+      <button class="btn" onclick="toggleSpecies(3, this)">
+        <span class="btn-indicator" style="background: var(--russell-pastel);"></span>
+        #4 Russell's Viper
+      </button>
+    </div>
+
+    <!-- Radar Chart Container -->
+    <div id="radarChart" class="chart-box"></div>
+
+    <!-- Data Summary Table -->
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Species</th>
+            <th>LD₅₀ Potency (mg/kg)</th>
+            <th>Avg. Yield (mg)</th>
+            <th>Yield Range (mg)</th>
+            <th>Primary Toxicity Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rank-badge" style="background: var(--krait-pastel);">1</span></td>
+            <td><strong>Common Indian Krait</strong></td>
+            <td>0.09</td>
+            <td>12.5</td>
+            <td>8 – 20</td>
+            <td>Potent Neurotoxic</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge" style="background: var(--sawscaled-pastel);">2</span></td>
+            <td><strong>Saw-scaled Viper</strong></td>
+            <td>0.15 – 0.24</td>
+            <td>14.0</td>
+            <td>5 – 20</td>
+            <td>Potent Hemotoxic</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge" style="background: var(--cobra-pastel);">3</span></td>
+            <td><strong>Indian Cobra</strong></td>
+            <td>0.28 – 0.56</td>
+            <td>190.0</td>
+            <td>150 – 250</td>
+            <td>Post-synaptic Neurotoxic</td>
+          </tr>
+          <tr>
+            <td><span class="rank-badge" style="background: var(--russell-pastel);">4</span></td>
+            <td><strong>Russell's Viper</strong></td>
+            <td>0.40 – 0.75</td>
+            <td>170.0</td>
+            <td>130 – 250</td>
+            <td>Cytotoxic &amp; Hemotoxic</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-note">
+      <span>Data Source: Standardized WHO &amp; Toxicology Benchmarks</span>
+      <span>Note: Lower LD₅₀ value denotes higher venom potency</span>
+    </div>
+  </div>
+
+  <script>
+    const axes = [
+      'Venom Potency<br>(1 / LD₅₀)',
+      'Venom Yield<br>(Avg. Volume)',
+      'Lethal Dose<br>Capacity',
+      'Systemic Speed<br>& Urgency',
+      'Bite Frequency<br>& Impact'
+    ];
+
+    // Normalized 0-100 values with modern soft pastel palettes and semi-transparent layers
+    const speciesData = [
+      {
+        name: '#1 Common Krait',
+        r: [100, 7, 30, 90, 65],
+        color: '#F87171',
+        fillcolor: 'rgba(248, 113, 113, 0.18)'
+      },
+      {
+        name: '#2 Saw-scaled Viper',
+        r: [48, 8, 15, 70, 80],
+        color: '#FB923C',
+        fillcolor: 'rgba(251, 146, 60, 0.18)'
+      },
+      {
+        name: '#3 Indian Cobra',
+        r: [23, 95, 100, 85, 75],
+        color: '#38BDF8',
+        fillcolor: 'rgba(56, 189, 248, 0.18)'
+      },
+      {
+        name: '#4 Russell\'s Viper',
+        r: [16, 85, 68, 95, 95],
+        color: '#C084FC',
+        fillcolor: 'rgba(192, 132, 252, 0.18)'
+      }
+    ];
+
+    const traces = speciesData.map((item) => ({
+      type: 'scatterpolar',
+      r: [...item.r, item.r[0]], // Close loop
+      theta: [...axes, axes[0]],
+      fill: 'toself',
+      fillcolor: item.fillcolor,
+      name: item.name,
+      line: { color: item.color, width: 2.2, shape: 'spline' },
+      marker: { size: 6, color: item.color, symbol: 'circle' },
+      hovertemplate: '<b>%{name}</b><br>%{theta}: <b>%{r} / 100</b><extra></extra>'
+    }));
+
+    const layout = {
+      autosize: true,
+      paper_bgcolor: 'rgba(0,0,0,0)',
+      plot_bgcolor: 'rgba(0,0,0,0)',
+      margin: { l: 70, r: 70, t: 25, b: 25 },
+      font: {
+        family: "'Google Sans Flex', 'Inter', sans-serif",
+        size: 11.5,
+        color: '#4A5056'
+      },
+      hoverlabel: {
+        bgcolor: '#1A1D20',
+        bordercolor: '#1A1D20',
+        font: {
+          family: "'Google Sans Flex', 'Inter', sans-serif",
+          size: 12,
+          color: '#FFFFFF'
+        }
+      },
+      polar: {
+        bgcolor: 'rgba(0,0,0,0)',
+        radialaxis: {
+          visible: true,
+          range: [0, 100],
+          showticklabels: false,
+          ticks: '',
+          linecolor: '#E2E8F0',
+          gridcolor: '#F1F5F9'
+        },
+        angularaxis: {
+          tickfont: {
+            family: "'Google Sans Flex', 'Inter', sans-serif",
+            size: 11,
+            color: '#1A1D20',
+            weight: 600
+          },
+          linecolor: '#E2E8F0',
+          gridcolor: '#F1F5F9'
+        }
+      },
+      showlegend: false
+    };
+
+    const config = { responsive: true, displayModeBar: false };
+
+    Plotly.newPlot('radarChart', traces, layout, config);
+
+    function toggleSpecies(index, element) {
+      const buttons = document.querySelectorAll('.btn');
+      buttons.forEach(b => b.classList.remove('active'));
+      element.classList.add('active');
+
+      const update = { visible: [] };
+      
+      if (index === 'all') {
+        update.visible = [true, true, true, true];
+      } else {
+        update.visible = [false, false, false, false];
+        update.visible[index] = true;
+      }
+
+      Plotly.restyle('radarChart', update);
+    }
+  </script>
+</body>
+</html>

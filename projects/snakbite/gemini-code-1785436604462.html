@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Realistic Snake Simulation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            cursor: crosshair; 
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .overlay h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+
+        .overlay p {
+            font-size: 0.85rem;
+            color: #4b5563;
+        }
+
+        .legend {
+            margin-top: 12px;
+            display: flex;
+            gap: 16px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot-v { width: 10px; height: 10px; border-radius: 50%; background: #dc2626; }
+        .dot-nv { width: 10px; height: 10px; border-radius: 50%; background: #10b981; }
+        .hint { margin-top: 10px; font-weight: 600; color: #6366f1; }
+    </style>
+</head>
+<body>
+
+
+
+    <canvas id="snakeCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('snakeCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // --- REALISTIC SPECIES CONFIGURATIONS ---
+        const SPECIES = [
+            // VENOMOUS
+            { name: "Russell's Viper", type: "venomous", base: "#b88a5a", dark: "#4a2c11", pattern: "blotches", radius: 5.5, speedMod: 0.7, headType: "triangular" },
+            { name: "Indian Cobra", type: "venomous", base: "#75634b", dark: "#2c2419", pattern: "solid", radius: 5.0, speedMod: 0.9, headType: "hood" },
+            { name: "Common Krait", type: "venomous", base: "#1e2024", dark: "#ffffff", pattern: "bands", radius: 3.5, speedMod: 1.0, headType: "smooth" },
+            { name: "Saw-scaled Viper", type: "venomous", base: "#a68865", dark: "#382512", pattern: "zigzag", radius: 4.0, speedMod: 0.8, headType: "triangular" },
+            
+            // NON-VENOMOUS
+            { name: "Indian Rat Snake", type: "non-venomous", base: "#8fa360", dark: "#2e361b", pattern: "mesh", radius: 4.5, speedMod: 1.4, headType: "smooth" },
+            { name: "Green Vine Snake", type: "non-venomous", base: "#72d141", dark: "#408a1e", pattern: "solid", radius: 2.2, speedMod: 1.1, headType: "pointed" },
+            { name: "Indian Rock Python", type: "non-venomous", base: "#856d53", dark: "#362719", pattern: "blotches", radius: 7.5, speedMod: 0.4, headType: "chunky" },
+            { name: "Checkered Keelback", type: "non-venomous", base: "#c9b657", dark: "#1a1811", pattern: "checkered", radius: 4.0, speedMod: 1.2, headType: "smooth" }
+        ];
+
+        // --- HIT EFFECT CLASS (Ground Splat & Text) ---
+        class HitEffect {
+            constructor(x, y, snakeType) {
+                this.x = x;
+                this.y = y;
+                this.type = snakeType;
+                this.life = 1.0; 
+                
+                // Generate a static irregular blood stain (like hitting a mosquito)
+                this.splats = Array.from({ length: 6 + Math.floor(Math.random() * 4) }, () => ({
+                    offsetX: (Math.random() - 0.5) * 22,
+                    offsetY: (Math.random() - 0.5) * 22,
+                    radiusX: Math.random() * 6 + 3,
+                    radiusY: Math.random() * 6 + 3,
+                    rotation: Math.random() * Math.PI * 2
+                }));
+            }
+
+            update() {
+                this.life -= 0.012; // Fades out slowly
+            }
+
+            // Drawn ON THE GROUND underneath the snake
+            drawSplat(ctx) {
+                if (this.life <= 0) return;
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = '#7f1d1d'; // Dark dried blood red
+                
+                this.splats.forEach(splat => {
+                    ctx.save();
+                    ctx.translate(this.x + splat.offsetX, this.y + splat.offsetY);
+                    ctx.rotate(splat.rotation);
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, splat.radiusX, splat.radiusY, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                });
+                
+                ctx.restore();
+            }
+
+            // Drawn FLOATING IN THE AIR above everything
+            drawText(ctx) {
+                if (this.life <= 0) return;
+                ctx.save();
+                ctx.globalAlpha = this.life;
+                
+                const textY = this.y - 30 - ((1 - this.life) * 30); 
+                const label = this.type === 'venomous' ? 'Venomous' : 'Non-Venomous';
+                
+                ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, sans-serif';
+                ctx.textAlign = 'center';
+                
+                // Outline
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 4;
+                ctx.lineJoin = 'round';
+                ctx.strokeText(label, this.x, textY);
+                
+                // Fill
+                ctx.fillStyle = this.type === 'venomous' ? '#dc2626' : '#10b981';
+                ctx.fillText(label, this.x, textY);
+
+                ctx.restore();
+            }
+        }
+
+        // --- SNAKE CLASS ---
+        class Snake {
+            constructor() {
+                this.reset(true);
+            }
+
+            reset(initial = false) {
+                this.species = SPECIES[Math.floor(Math.random() * SPECIES.length)];
+                this.direction = Math.random() < 0.5 ? 1 : -1; 
+                
+                this.headX = initial ? (Math.random() * (width + 200) - 100) : (this.direction === 1 ? -150 : width + 150);
+                this.headY = Math.random() * height;
+                
+                const sizeVariance = 0.8 + Math.random() * 0.4;
+                this.radius = this.species.radius * sizeVariance;
+                this.speed = (0.7 + Math.random() * 0.5) * this.species.speedMod * this.direction;
+                
+                this.numSegments = Math.floor(60 + (this.radius * 2) + Math.random() * 30);
+                this.segmentLength = 2.0; 
+                
+                this.waveFreq = 0.08 + Math.random() * 0.04;
+                this.waveAmp = (10 + Math.random() * 15) * sizeVariance;
+                this.secondaryFreq = this.waveFreq * 0.4; 
+                this.secondaryAmp = this.waveAmp * 0.3;
+                
+                this.phase = Math.random() * Math.PI * 2;
+                this.phaseSpeed = (Math.abs(this.speed) * 0.04) + 0.01;
+
+                this.tongueTimer = Math.random() * 100;
+                this.tongueFlicking = false;
+
+                this.isDead = false;
+                this.deathAlpha = 1.0;
+
+                this.segments = [];
+                for (let i = 0; i < this.numSegments; i++) {
+                    this.segments.push({ x: this.headX, y: this.headY, angle: 0 });
+                }
+            }
+
+            update() {
+                if (this.isDead) {
+                    this.deathAlpha -= 0.02; 
+                    if (this.deathAlpha <= 0) {
+                        this.reset(false); 
+                    }
+                    return; 
+                }
+
+                this.headX += this.speed;
+                this.phase += this.phaseSpeed;
+
+                const baseAngle = this.direction === 1 ? 0 : Math.PI;
+
+                this.tongueTimer++;
+                if (this.tongueTimer > 150 + Math.random() * 100) {
+                    this.tongueFlicking = true;
+                    if (this.tongueTimer > 180) {
+                        this.tongueFlicking = false;
+                        this.tongueTimer = 0;
+                    }
+                }
+
+                for (let i = 0; i < this.numSegments; i++) {
+                    const dist = i * this.segmentLength;
+                    const primaryWave = Math.sin(this.phase - i * this.waveFreq) * this.waveAmp;
+                    const secondaryWave = Math.sin((this.phase * 0.8) - i * this.secondaryFreq) * this.secondaryAmp;
+                    const waveOffset = (primaryWave + secondaryWave) * (1 - (i / this.numSegments) * 0.15); 
+                    
+                    const x = this.headX - this.direction * dist;
+                    const y = this.headY + waveOffset;
+
+                    let angle = baseAngle;
+                    if (i > 0) {
+                        const dx = this.segments[i - 1].x - x;
+                        const dy = this.segments[i - 1].y - y;
+                        angle = Math.atan2(dy, dx);
+                    }
+
+                    this.segments[i] = { x, y, angle };
+                }
+
+                const tail = this.segments[this.numSegments - 1];
+                if ((this.direction === 1 && tail.x > width + 200) || 
+                    (this.direction === -1 && tail.x < -200)) {
+                    this.reset(false);
+                }
+            }
+
+            getRadiusAt(i) {
+                const u = i / this.numSegments;
+                let r = this.radius;
+
+                if (u < 0.05) {
+                    r = r * (0.5 + (u / 0.05) * 0.5); 
+                } else if (u < 0.15 && this.species.headType === 'hood') {
+                    r = r * (1.0 + Math.sin(((u - 0.05) / 0.1) * Math.PI) * 0.5); 
+                } else if (u > 0.6) {
+                    const tailProg = (u - 0.6) / 0.4;
+                    r = r * (1 - Math.pow(tailProg, 1.5)) + 0.5; 
+                }
+                return Math.max(0.1, r);
+            }
+
+            getAlpha(x) {
+                const fadeArea = 250;
+                if (x < fadeArea) return Math.max(0, x / fadeArea);
+                if (x > width - fadeArea) return Math.max(0, (width - x) / fadeArea);
+                return 1;
+            }
+
+            draw(ctx) {
+                const headAlpha = this.getAlpha(this.headX);
+                const tailAlpha = this.getAlpha(this.segments[this.numSegments - 1].x);
+                const alpha = Math.min(headAlpha, tailAlpha) * this.deathAlpha; 
+
+                if (alpha <= 0.01) return;
+
+                ctx.save();
+                ctx.globalAlpha = alpha;
+
+                ctx.beginPath();
+                for (let i = 0; i < this.numSegments; i++) {
+                    ctx[i === 0 ? 'moveTo' : 'lineTo'](this.segments[i].x, this.segments[i].y + 12);
+                }
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.lineWidth = this.radius * 1.5;
+                ctx.strokeStyle = 'rgba(0, 0, 0, 0.12)'; 
+                ctx.filter = 'blur(4px)';
+                ctx.stroke();
+                ctx.filter = 'none';
+
+                for (let i = this.numSegments - 1; i >= 0; i--) {
+                    const seg = this.segments[i];
+                    const r = this.getRadiusAt(i);
+
+                    ctx.save();
+                    ctx.translate(seg.x, seg.y);
+                    ctx.rotate(seg.angle);
+
+                    ctx.fillStyle = this.species.base;
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, r * 1.05, r, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    if (this.isDead) {
+                        ctx.fillStyle = `rgba(220, 38, 38, ${0.4 * this.deathAlpha})`; 
+                        ctx.fill();
+                    }
+
+                    ctx.fillStyle = this.species.dark;
+                    if (this.species.pattern === 'blotches' && i % 8 < 4 && i > 5) {
+                        ctx.beginPath(); ctx.ellipse(0, 0, r * 0.6, r * 0.5, 0, 0, Math.PI * 2); ctx.fill();
+                    } else if (this.species.pattern === 'bands' && i % 6 < 2 && i > 3) {
+                        ctx.fillRect(-r * 0.5, -r * 0.9, r, r * 1.8);
+                    } else if (this.species.pattern === 'zigzag' && i % 5 === 0 && i > 4) {
+                        ctx.beginPath(); ctx.moveTo(-r*0.6, 0); ctx.lineTo(0, -r*0.8); ctx.lineTo(r*0.6, 0); ctx.lineTo(0, r*0.8); ctx.fill();
+                    } else if (this.species.pattern === 'checkered' && i % 3 === 0 && i > 3) {
+                        ctx.fillRect(i%6===0 ? -r*0.4 : 0, -r*0.6, r*0.4, r*0.4);
+                        ctx.fillRect(i%6!==0 ? -r*0.4 : 0, r*0.2, r*0.4, r*0.4);
+                    }
+
+                    ctx.restore();
+                }
+
+                ctx.beginPath();
+                for (let i = 0; i < this.numSegments - 5; i++) {
+                    const hx = this.segments[i].x - Math.sin(this.segments[i].angle) * (this.getRadiusAt(i) * 0.3);
+                    const hy = this.segments[i].y + Math.cos(this.segments[i].angle) * (this.getRadiusAt(i) * 0.3);
+                    ctx[i === 0 ? 'moveTo' : 'lineTo'](hx, hy);
+                }
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.lineWidth = this.radius * 0.25;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+
+                const head = this.segments[0];
+                const rHead = this.getRadiusAt(0);
+                
+                ctx.save();
+                ctx.translate(head.x, head.y);
+                ctx.rotate(head.angle);
+
+                ctx.fillStyle = this.species.base;
+                ctx.beginPath();
+                
+                if (this.species.headType === 'triangular' || this.species.headType === 'chunky') {
+                    ctx.moveTo(rHead * 1.5, 0); 
+                    ctx.lineTo(rHead * 0.5, -rHead * 1.4); 
+                    ctx.lineTo(-rHead * 0.5, -rHead * 1.2); 
+                    ctx.lineTo(-rHead * 0.5, rHead * 1.2); 
+                    ctx.lineTo(rHead * 0.5, rHead * 1.4); 
+                } else if (this.species.headType === 'pointed') {
+                    ctx.moveTo(rHead * 2.5, 0);
+                    ctx.lineTo(rHead * 0.5, -rHead * 0.8);
+                    ctx.lineTo(-rHead * 0.5, -rHead * 0.8);
+                    ctx.lineTo(-rHead * 0.5, rHead * 0.8);
+                    ctx.lineTo(rHead * 0.5, rHead * 0.8);
+                } else {
+                    ctx.ellipse(rHead * 0.5, 0, rHead * 1.2, rHead, 0, 0, Math.PI * 2);
+                }
+                
+                ctx.closePath();
+                ctx.fill();
+                
+                if (this.isDead) {
+                    ctx.fillStyle = `rgba(220, 38, 38, ${0.4 * this.deathAlpha})`;
+                    ctx.fill();
+                }
+
+                ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                const eyeX = this.species.headType === 'pointed' ? rHead * 1.2 : rHead * 0.6;
+                const eyeY = rHead * 0.65;
+                const eyeSize = rHead * 0.25;
+                
+                ctx.fillStyle = this.species.type === 'venomous' ? '#eab308' : '#4b5563'; 
+                ctx.beginPath(); ctx.arc(eyeX, -eyeY, eyeSize, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(eyeX, eyeY, eyeSize, 0, Math.PI * 2); ctx.fill();
+                
+                ctx.fillStyle = '#000000';
+                if (this.species.headType === 'triangular' || this.species.headType === 'chunky' || this.species.headType === 'pointed') {
+                    ctx.beginPath(); ctx.ellipse(eyeX, -eyeY, eyeSize*0.3, eyeSize*0.8, 0, 0, Math.PI*2); ctx.fill();
+                    ctx.beginPath(); ctx.ellipse(eyeX, eyeY, eyeSize*0.3, eyeSize*0.8, 0, 0, Math.PI*2); ctx.fill();
+                } else {
+                    ctx.beginPath(); ctx.arc(eyeX, -eyeY, eyeSize*0.6, 0, Math.PI*2); ctx.fill();
+                    ctx.beginPath(); ctx.arc(eyeX, eyeY, eyeSize*0.6, 0, Math.PI*2); ctx.fill();
+                }
+
+                if (this.tongueFlicking && !this.isDead) {
+                    const tLen = 12 + Math.sin(this.tongueTimer * 0.5) * 6;
+                    const snout = this.species.headType === 'pointed' ? rHead * 2.5 : rHead * 1.5;
+                    ctx.strokeStyle = '#ef4444';
+                    ctx.lineWidth = 1.2;
+                    ctx.beginPath();
+                    ctx.moveTo(snout, 0);
+                    ctx.lineTo(snout + tLen, 0);
+                    ctx.lineTo(snout + tLen + 4, -3);
+                    ctx.moveTo(snout + tLen, 0);
+                    ctx.lineTo(snout + tLen + 4, 3);
+                    ctx.stroke();
+                }
+
+                ctx.restore();
+                ctx.restore();
+            }
+        }
+
+        // --- ARRAYS & INITIALIZATION ---
+        const hitEffects = [];
+        const snakes = Array.from({ length: 22 }, () => new Snake());
+
+        // --- CLICK TO KILL LOGIC ---
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            for (let i = snakes.length - 1; i >= 0; i--) {
+                const snake = snakes[i];
+                if (snake.isDead) continue; 
+
+                let isHit = false;
+                
+                for (let j = 0; j < snake.segments.length; j += 2) {
+                    const seg = snake.segments[j];
+                    const r = snake.getRadiusAt(j);
+                    
+                    const dx = mouseX - seg.x;
+                    const dy = mouseY - seg.y;
+                    
+                    if (dx*dx + dy*dy <= (r + 4) * (r + 4)) {
+                        isHit = true;
+                        break;
+                    }
+                }
+
+                if (isHit) {
+                    snake.isDead = true; 
+                    hitEffects.push(new HitEffect(mouseX, mouseY, snake.species.type));
+                    break; 
+                }
+            }
+        });
+
+        function drawEdgeMasks() {
+            const margin = 200;
+            
+            const leftGrad = ctx.createLinearGradient(0, 0, margin, 0);
+            leftGrad.addColorStop(0, 'rgba(255,255,255,1)');
+            leftGrad.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = leftGrad;
+            ctx.fillRect(0, 0, margin, height);
+
+            const rightGrad = ctx.createLinearGradient(width - margin, 0, width, 0);
+            rightGrad.addColorStop(0, 'rgba(255,255,255,0)');
+            rightGrad.addColorStop(1, 'rgba(255,255,255,1)');
+            ctx.fillStyle = rightGrad;
+            ctx.fillRect(width - margin, 0, margin, height);
+        }
+
+        function animate() {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+
+            // Update effect lifecycle
+            for (let i = hitEffects.length - 1; i >= 0; i--) {
+                hitEffects[i].update();
+                if (hitEffects[i].life <= 0) {
+                    hitEffects.splice(i, 1);
+                }
+            }
+
+            // 1. Draw blood splatters ON THE GROUND (Underneath snakes)
+            hitEffects.forEach(effect => effect.drawSplat(ctx));
+
+            // 2. Draw Snakes
+            snakes.sort((a, b) => a.radius - b.radius);
+            snakes.forEach(snake => {
+                snake.update();
+                snake.draw(ctx);
+            });
+
+            // 3. Draw edge masks
+            drawEdgeMasks();
+
+            // 4. Draw Floating Text OVER everything
+            hitEffects.forEach(effect => effect.drawText(ctx));
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

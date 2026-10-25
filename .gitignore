@@ -9,4 +9,6 @@ projects/sajag/app/dist/
 *.apk
 **/*.apk
 *.log
+*.zip
+**/*.zip
 .DS_Store

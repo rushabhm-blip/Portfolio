@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panic vs Poison | A Story of Fear and Coexistence</title>
+    
+    <!-- Google Fonts: DM Serif Display, Playfair Display, Prata, Newsreader, Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Prata&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css?v=stats_beats_v2">
+</head>
+<body class="story-body">
+
+    <!-- Fixed Continuous Parallax Background Canvas -->
+    <div class="parallax-bg-wrapper" aria-hidden="true">
+        <div class="parallax-bg" id="parallax-bg"></div>
+        <canvas class="parallax-particles" id="ambient-particles"></canvas>
+        <div class="parallax-vignette"></div>
+    </div>
+
+    <!-- Transparent Animated Video Snake on Left Top Side (Plays entrance, then stops static) -->
+    <div class="snake-top-left-container" id="snake-container">
+        <video id="snake-video" class="snake-video-player" muted playsinline preload="auto">
+            <source src="assets/snake_animated.webm?v=stopped_v1" type="video/webm">
+            Your browser does not support transparent WebM video.
+        </video>
+    </div>
+
+    <!-- Main Editorial Scrollytelling Flow -->
+    <main class="story-container" id="story-root">
+        <!-- SCREEN 1: HERO TITLE & STAGE -->
+        <section class="hero-screen">
+            <div class="hero-content">
+                <h1 class="topic-title" id="topic-title">
+                    <span class="title-line">Panic <span class="title-vs">vs</span></span>
+                    <span class="title-line">Poison</span>
+                </h1>
+
+                <p class="hero-subtitle">
+                    A Story of Fear, Venom, and Coexistence
+                </p>
+
+                <div class="scroll-cue">
+                    <span class="scroll-cue-text">Scroll to begin the encounter</span>
+                    <div class="scroll-cue-line"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE EMERGENCE & THE FRACTURE (HUMAN VS SNAKE HABITAT) -->
+        <section class="landscape-screen" id="landscape-screen">
+            <div class="landscape-sticky-stage" id="landscape-sticky-stage">
+                
+                <!-- 2D Layered Stage: Reveals Mountains -> Land -> Trees -> Homes -> Crack -->
+                <div class="landscape-layers-container" id="landscape-layers-container">
+                    <img id="layer-mountains" class="landscape-layer layer-mountains" src="./assets/layers_clean/1_mountains.webp?v=blend_v2" alt="Mountains">
+                    <img id="layer-land" class="landscape-layer layer-land" src="./assets/layers_clean/2_land.webp?v=blend_v2" alt="Land">
+                    <img id="layer-trees" class="landscape-layer layer-trees" src="./assets/layers_clean/3_trees.webp?v=blend_v2" alt="Trees">
+                    <img id="layer-homes" class="landscape-layer layer-homes" src="./assets/layers_clean/4_homes.webp?v=blend_v2" alt="Homes">
+                    <img id="layer-crack" class="landscape-layer layer-crack" src="./assets/layers_clean/5_crack.webp?v=blend_v2" alt="The Fracture">
+                    <img id="layer-panorama" class="landscape-layer layer-panorama" src="./assets/stitched_panorama.webp?v=valley_v1" alt="Continuous Landscape Panorama">
+                </div>
+
+                <!-- Soft Atmospheric Bottom Fog / Vignette Blend with Canvas BG -->
+                <div class="landscape-bottom-blend" aria-hidden="true"></div>
+
+                <!-- Phase 1 Mountain Emergence Narrative Beat -->
+                <div class="mountain-story-block" id="mountain-story">
+                    <h2 class="mountain-headline">
+                        India is the snakebite capital of the world.
+                    </h2>
+                    <p class="mountain-subtext">
+                        The crisis is not the venom alone — it's the fear that surrounds it.
+                    </p>
+                </div>
+
+                <!-- Narrative Text: Section 2 Divide Editorial Elements -->
+                <!-- Left: "Same land, Different Fears" -->
+                <div class="habitat-editorial-card habitat-left" id="habitat-left">
+                    <h2 class="habitat-title habitat-title-left">
+                        Same land,<br>Different Fears.
+                    </h2>
+                </div>
+
+                <!-- Right: Shifted up into the right hillside / sky -->
+                <div class="habitat-editorial-card habitat-right" id="habitat-right">
+                    <h2 class="habitat-title habitat-title-right">
+                        A shared land,<br>a growing conflict.
+                    </h2>
+
+                    <p class="habitat-description habitat-desc-right">
+                        Every year, snakes and humans cross paths.<br>Too often, it ends in tragedy.
+                    </p>
+                </div>
+
+                <!-- Soft Dark Atmosphere Scrim for Data Beats (Eliminates harsh textures behind text) -->
+                <div class="landscape-stats-scrim" id="stats-scrim" aria-hidden="true"></div>
+
+                <!-- Sequential Center-Aligned Data Beats Container -->
+                <div class="stats-scrolly-container" id="stats-scrolly-container" aria-live="polite">
+
+                    <!-- BEAT 1: A Crisis Measured in Silence (1 in 2) -->
+                    <div class="stat-beat-card beat-scale" id="stat-beat-1">
+                        <span class="stat-kicker">The scale</span>
+                        <h2 class="stat-headline">A crisis measured in silence</h2>
+                        <div class="stat-dual-grid">
+                            <div class="donut-gauge-wrapper">
+                                <svg class="donut-gauge-svg" viewBox="0 0 160 160" width="150" height="150" aria-hidden="true">
+                                    <!-- Background Dark Slate Track (Left Half) -->
+                                    <circle cx="80" cy="80" r="66" fill="none" stroke="#2B3530" stroke-width="11" />
+                                    <!-- Highlight Terracotta Track (Right Half: 50%) -->
+                                    <circle cx="80" cy="80" r="66" fill="none" stroke="#D0482B" stroke-width="11"
+                                            stroke-dasharray="207.3 207.3" stroke-dashoffset="0"
+                                            transform="rotate(-90 80 80)" stroke-linecap="round" />
+                                </svg>
+                                <div class="donut-gauge-inner">
+                                    <span class="gauge-ratio">1 / 2</span>
+                                    <span class="gauge-sub">of global deaths</span>
+                                </div>
+                            </div>
+                            <p class="stat-statement">
+                                One in every two people who die of a snakebite
+                                <span class="highlight-terracotta">anywhere in the world</span> die
+                                right here, in India.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- BEAT 2: 58,000 Lives Lost (Counting Animation) -->
+                    <div class="stat-beat-card beat-annual" id="stat-beat-2">
+                        <div class="stat-big-number terracotta" id="counter-58k">0</div>
+                        <p class="stat-big-label">lives lost every year</p>
+                    </div>
+
+                    <!-- BEAT 3: 6 Deaths Every Hour -->
+                    <div class="stat-beat-card beat-hourly" id="stat-beat-3">
+                        <div class="stat-big-number ivory">6</div>
+                        <p class="stat-big-label">deaths, every single hour</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Downward scroll space for subsequent story stages -->
+        <div class="scroll-canvas-spacer" id="next-stages-anchor"></div>
+    </main>
+
+    <script src="script.js?v=stats_beats_v2"></script>
+</body>
+</html>

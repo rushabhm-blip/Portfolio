@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body>
+<pre id="out"></pre>
+<script>
+async function run() {
+  const files = [
+    'img_5.png', // 01 Approach
+    'img_7.png', // 02 Notice
+    'img_8.png', // 03 React (corrected)
+    'img_4.png', // Candidate?
+    'img_6.png', // 04 Turn
+    'img_2.png', // 05 Cross A
+    'img_3.png', // 06 Cross B
+    'img_0.png', // 07 Retreat
+    'img_1.png'  // 08 Hold
+  ];
+  const results = [];
+  for (const f of files) {
+    const img = new Image();
+    img.src = 'assets/frames/' + f;
+    await new Promise(r => img.onload = r);
+    const cvs = document.createElement('canvas');
+    cvs.width = img.naturalWidth;
+    cvs.height = img.naturalHeight;
+    const ctx = cvs.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    const d = ctx.getImageData(0, 0, cvs.width, cvs.height).data;
+    
+    // Measure villager (x > 750, find head top y and foot bottom y)
+    let topY = cvs.height, bottomY = 0, minX = cvs.width, maxX = 0;
+    for (let y = 0; y < cvs.height; y++) {
+      for (let x = 750; x < cvs.width; x++) {
+        const a = d[(y * cvs.width + x) * 4 + 3];
+        if (a > 60) {
+          if (y < topY) topY = y;
+          if (y > bottomY) bottomY = y;
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+        }
+      }
+    }
+    results.push({ file: f, topY, bottomY, h: bottomY - topY, w: maxX - minX, minX, maxX });
+  }
+  document.getElementById('out').textContent = JSON.stringify(results, null, 2);
+}
+run();
+</script>
+</body>
+</html>

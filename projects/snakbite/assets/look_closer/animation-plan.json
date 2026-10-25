@@ -1,0 +1,81 @@
+{
+  "coordinateSystem": {
+    "canonicalWidth": 1672,
+    "canonicalHeight": 941,
+    "sourceWidth": 1024,
+    "sourceHeight": 576,
+    "aspectRatio": "16:9"
+  },
+  "narrative": {
+    "heading": "Look closer.",
+    "subtitle": "Different species. Different anatomy.",
+    "speciesComparison": "Illustrative species comparison",
+    "disclaimer": "Appearance alone cannot identify a venomous snake. Observe from a distance.",
+    "ending": "Different species. Different anatomy."
+  },
+  "sequence": [
+    {
+      "range": [0.0, 0.10],
+      "activeFrames": [1],
+      "annotation": "Body form",
+      "targetFeature": "mid-body form",
+      "camera": { "focusX": 836, "focusY": 540, "zoom": 1.0 },
+      "dot": { "x": 680, "y": 550, "leaderAngle": -45 },
+      "showComparisonBadge": false
+    },
+    {
+      "range": [0.10, 0.26],
+      "activeFrames": [2, 3, 4],
+      "annotation": "Head profile",
+      "targetFeature": "head profile transition",
+      "camera": { "focusX": 1540, "focusY": 420, "zoom": 2.2 },
+      "dot": { "x": 1560, "y": 420, "leaderAngle": -135 },
+      "showComparisonBadge": true
+    },
+    {
+      "range": [0.26, 0.42],
+      "activeFrames": [5, 6],
+      "annotation": "Pupil shape",
+      "targetFeature": "elliptical pupil vs round pupil",
+      "camera": { "focusX": 1535, "focusY": 425, "zoom": 3.2 },
+      "dot": { "x": 1535, "y": 425, "leaderAngle": -140 },
+      "showComparisonBadge": true
+    },
+    {
+      "range": [0.42, 0.60],
+      "activeFrames": [7, 8],
+      "annotation": "Scale texture",
+      "targetFeature": "strongly keeled dorsal scales",
+      "camera": { "focusX": 980, "focusY": 550, "zoom": 2.0 },
+      "dot": { "x": 980, "y": 540, "leaderAngle": -60 },
+      "showComparisonBadge": true
+    },
+    {
+      "range": [0.60, 0.69],
+      "activeFrames": [8, 9],
+      "annotation": "Mouth opening",
+      "targetFeature": "jaw articulation",
+      "camera": { "focusX": 1510, "focusY": 440, "zoom": 2.4 },
+      "dot": { "x": 1540, "y": 440, "leaderAngle": -135 },
+      "showComparisonBadge": true
+    },
+    {
+      "range": [0.69, 0.85],
+      "activeFrames": [10, 11],
+      "annotation": "Front fangs",
+      "targetFeature": "solenoglyphous erect front fangs",
+      "camera": { "focusX": 1490, "focusY": 450, "zoom": 2.3 },
+      "dot": { "x": 1560, "y": 450, "leaderAngle": -135 },
+      "showComparisonBadge": true
+    },
+    {
+      "range": [0.85, 1.0],
+      "activeFrames": [10, 9, 12],
+      "annotation": "Different species. Different anatomy.",
+      "targetFeature": "Russell's viper full anatomy overview",
+      "camera": { "focusX": 836, "focusY": 540, "zoom": 1.0 },
+      "dot": { "x": 836, "y": 540, "leaderAngle": 0 },
+      "showComparisonBadge": false
+    }
+  ]
+}

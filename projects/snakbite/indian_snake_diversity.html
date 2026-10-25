@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Snake Diversity (307 Species)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@8..144,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            color-scheme: dark;
+            --font-main: 'Google Sans Flex', 'Google Sans', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --text-heading: #f4f6f4;
+            --text-body: #8ea395;
+            
+            /* Diagram Palette */
+            --color-med-sig: #d63053;   /* Venomous */
+            --color-venomous: #e69119;  /* Mildly Venomous */
+            --color-non-ven: #10ac84;   /* Non-Venomous */
+            --color-dimmed: rgba(255, 255, 255, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            font-family: var(--font-main);
+            background: transparent !important;
+            color: var(--text-heading);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .chart-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 16px;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Interactive Legend */
+        .interactive-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .legend-card {
+            display: flex;
+            align-items: center;
+            padding: 9px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .legend-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+            border-color: rgba(255, 255, 255, 0.28);
+            transform: translateY(-2px);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .legend-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            letter-spacing: 0.01em;
+        }
+
+        .legend-percent {
+            font-size: 0.85rem;
+            font-weight: 700;
+            opacity: 0;
+            max-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card-ms .legend-percent { color: var(--color-med-sig); }
+        .card-v .legend-percent { color: var(--color-venomous); }
+        .card-nv .legend-percent { color: #1dd1a1; }
+
+        .legend-card:hover .legend-percent {
+            max-width: 110px;
+            opacity: 1;
+            margin-left: 8px;
+        }
+
+        /* Dot Grid */
+        .dot-matrix {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transform: scale(0);
+            opacity: 0;
+            cursor: pointer;
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        background-color 0.3s ease, 
+                        opacity 0.3s ease,
+                        box-shadow 0.3s ease;
+        }
+
+        .dot:hover {
+            transform: scale(1.38) !important;
+            z-index: 10;
+        }
+
+        .type-ms { 
+            background-color: var(--color-med-sig); 
+            box-shadow: 0 0 10px rgba(214, 48, 83, 0.35);
+        }
+        .type-v { 
+            background-color: var(--color-venomous); 
+            box-shadow: 0 0 10px rgba(230, 145, 25, 0.25);
+        }
+        .type-nv { 
+            background-color: var(--color-non-ven); 
+            box-shadow: 0 0 10px rgba(16, 172, 132, 0.25);
+        }
+
+        .dot.dimmed {
+            background-color: var(--color-dimmed);
+            box-shadow: none;
+            transform: scale(0.65) !important;
+            opacity: 0.45 !important;
+        }
+
+        .chart-container.in-view .dot {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Tooltip */
+        #tooltip {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            background: rgba(5, 16, 11, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px);
+            color: var(--text-heading);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.4;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            max-width: 260px;
+        }
+
+        #tooltip.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #tooltip .t-name {
+            font-weight: 700;
+            font-size: 13px;
+            color: #ffffff;
+            display: block;
+        }
+
+        #tooltip .t-sci {
+            font-style: italic;
+            color: var(--text-body);
+            font-size: 11px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        #tooltip .t-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 11px;
+        }
+
+        #tooltip .t-badge {
+            font-weight: 700;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container { padding: 12px; }
+            .dot { width: 14px; height: 14px; }
+            .dot-matrix { gap: 6px; }
+            .legend-card { padding: 8px 14px; }
+            .legend-title { font-size: 0.78rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chart-container in-view" id="diversityChart">
+        <div class="interactive-legend">
+            <div class="legend-card card-ms" data-hover="ms">
+                <div class="legend-dot type-ms"></div>
+                <span class="legend-title">Venomous</span>
+                <span class="legend-percent" id="pct-ms"></span>
+            </div>
+            
+            <div class="legend-card card-v" data-hover="v">
+                <div class="legend-dot type-v"></div>
+                <span class="legend-title">Mildly Venomous</span>
+                <span class="legend-percent" id="pct-v"></span>
+            </div>
+            
+            <div class="legend-card card-nv" data-hover="nv">
+                <div class="legend-dot type-nv"></div>
+                <span class="legend-title">Non-Venomous</span>
+                <span class="legend-percent" id="pct-nv"></span>
+            </div>
+        </div>
+
+        <div class="dot-matrix" id="dotMatrix"></div>
+    </div>
+
+    <div id="tooltip" role="status" aria-hidden="true"></div>
+
+    <script>
+        const snakesData = [
+            {"name": "Indian Cobra", "sci": "Naja naja", "count": 1974, "cat": "ms", "label": "Venomous"},
+            {"name": "Malabarian Pit Viper", "sci": "Craspedocephalus malabaricus", "count": 1538, "cat": "ms", "label": "Venomous"},
+            {"name": "Russell's Viper", "sci": "Daboia russelii", "count": 1245, "cat": "ms", "label": "Venomous"},
+            {"name": "Common Bamboo Viper", "sci": "Craspedocephalus gramineus", "count": 902, "cat": "ms", "label": "Venomous"},
+            {"name": "Common Krait", "sci": "Bungarus caeruleus", "count": 811, "cat": "ms", "label": "Venomous"},
+            {"name": "Hump-nosed Viper", "sci": "Hypnale hypnale", "count": 666, "cat": "ms", "label": "Venomous"},
+            {"name": "Saw-scaled Viper", "sci": "Echis carinatus", "count": 460, "cat": "ms", "label": "Venomous"},
+            {"name": "Indian saw-scaled viper", "sci": "Echis carinatus carinatus", "count": 272, "cat": "ms", "label": "Venomous"},
+            {"name": "Beaked Sea Snake", "sci": "Hydrophis schistosus", "count": 215, "cat": "ms", "label": "Venomous"},
+            {"name": "Anamala Pit Viper", "sci": "Craspedocephalus anamallensis", "count": 147, "cat": "ms", "label": "Venomous"},
+            {"name": "Banded Krait", "sci": "Bungarus fasciatus", "count": 135, "cat": "ms", "label": "Venomous"},
+            {"name": "Large-scaled Pit Viper", "sci": "Craspedocephalus macrolepis", "count": 135, "cat": "ms", "label": "Venomous"},
+            {"name": "Black Coralsnake", "sci": "Calliophis nigrescens", "count": 126, "cat": "ms", "label": "Venomous"},
+            {"name": "Spot-tailed Pitviper", "sci": "Trimeresurus erythrurus", "count": 91, "cat": "ms", "label": "Venomous"},
+            {"name": "Monocellate Cobra", "sci": "Naja kaouthia", "count": 88, "cat": "ms", "label": "Venomous"},
+            {"name": "Northern King Cobra", "sci": "Ophiophagus hannah", "count": 84, "cat": "ms", "label": "Venomous"},
+            {"name": "Western Ghats King Cobra", "sci": "Ophiophagus kaalinga", "count": 84, "cat": "ms", "label": "Venomous"},
+            {"name": "Himalayan Pitviper", "sci": "Gloydius himalayanus", "count": 73, "cat": "ms", "label": "Venomous"},
+            {"name": "Andaman Pitviper", "sci": "Trimeresurus andersonii", "count": 65, "cat": "ms", "label": "Venomous"},
+            {"name": "Travancore Pit Viper", "sci": "Craspedocephalus travancoricus", "count": 63, "cat": "ms", "label": "Venomous"},
+            {"name": "Slender Coralsnake", "sci": "Calliophis melanurus", "count": 54, "cat": "ms", "label": "Venomous"},
+            {"name": "Chinese Mountain Pit Viper", "sci": "Ovophis monticola", "count": 54, "cat": "ms", "label": "Venomous"},
+            {"name": "Sochurek's saw-scaled viper", "sci": "Echis carinatus sochureki", "count": 53, "cat": "ms", "label": "Venomous"},
+            {"name": "Yellow-lipped Sea Krait", "sci": "Laticauda colubrina", "count": 47, "cat": "ms", "label": "Venomous"},
+            {"name": "Nepal Pitviper", "sci": "Trimeresurus septentrionalis", "count": 46, "cat": "ms", "label": "Venomous"},
+            {"name": "Bibron's Slender Coralsnake", "sci": "Calliophis bibroni", "count": 42, "cat": "ms", "label": "Venomous"},
+            {"name": "Salazar's Pit Viper", "sci": "Trimeresurus salazar", "count": 39, "cat": "ms", "label": "Venomous"},
+            {"name": "Spine-bellied Sea Snake", "sci": "Hydrophis curtus", "count": 33, "cat": "ms", "label": "Venomous"},
+            {"name": "Annulated Sea Snake", "sci": "Hydrophis cyanocinctus", "count": 30, "cat": "ms", "label": "Venomous"},
+            {"name": "Greater Black Krait", "sci": "Bungarus niger", "count": 29, "cat": "ms", "label": "Venomous"},
+            {"name": "Andaman Krait", "sci": "Bungarus andamanensis", "count": 24, "cat": "ms", "label": "Venomous"},
+            {"name": "MacClelland’s Coral Snake", "sci": "Sinomicrurus macclellandi", "count": 21, "cat": "ms", "label": "Venomous"},
+            {"name": "Yellow-bellied Sea Snake", "sci": "Hydrophis platurus", "count": 19, "cat": "ms", "label": "Venomous"},
+            {"name": "Pope’s Tree Viper", "sci": "Trimeresurus popeiorum", "count": 19, "cat": "ms", "label": "Venomous"},
+            {"name": "Southern Large-scaled pit viper", "sci": "Craspedocephalus peltopelor", "count": 13, "cat": "ms", "label": "Venomous"},
+            {"name": "Yellow Sea Snake", "sci": "Hydrophis spiralis", "count": 12, "cat": "ms", "label": "Venomous"},
+            {"name": "Sind Krait", "sci": "Bungarus sindanus", "count": 11, "cat": "ms", "label": "Venomous"},
+            {"name": "Jerdon's Pitviper", "sci": "Protobothrops jerdonii", "count": 11, "cat": "ms", "label": "Venomous"},
+            {"name": "Green Bamboo Leaf Pit Viper", "sci": "Trimeresurus medoensis", "count": 11, "cat": "ms", "label": "Venomous"},
+            {"name": "Northeastern Hill Krait", "sci": "Bungarus bungaroides", "count": 10, "cat": "ms", "label": "Venomous"},
+            {"name": "Dwarf Sea Snake", "sci": "Hydrophis caerulescens", "count": 9, "cat": "ms", "label": "Venomous"},
+            {"name": "Castoe's Coralsnake", "sci": "Calliophis castoe", "count": 7, "cat": "ms", "label": "Venomous"},
+            {"name": "Lesser Black Krait", "sci": "Bungarus lividus", "count": 6, "cat": "ms", "label": "Venomous"},
+            {"name": "Horseshoe Pitviper", "sci": "Craspedocephalus strigatus", "count": 6, "cat": "ms", "label": "Venomous"},
+            {"name": "Brown spotted pitviper", "sci": "Protobothrops mucrosquamatus", "count": 6, "cat": "ms", "label": "Venomous"},
+            {"name": "Wall's Sind Krait", "sci": "Bungarus walli", "count": 4, "cat": "ms", "label": "Venomous"},
+            {"name": "Andaman Cobra", "sci": "Naja sagittifera", "count": 4, "cat": "ms", "label": "Venomous"},
+            {"name": "Zayuan Mountain Pitviper", "sci": "Ovophis zayuensis", "count": 4, "cat": "ms", "label": "Venomous"},
+            {"name": "Kaulback's Lance-headed Pitviper", "sci": "Protobothrops kaulbacki", "count": 4, "cat": "ms", "label": "Venomous"},
+            {"name": "Striped Sea Snake", "sci": "Hydrophis fasciatus", "count": 3, "cat": "ms", "label": "Venomous"},
+            {"name": "Blue-lipped Sea Krait", "sci": "Laticauda laticaudata", "count": 3, "cat": "ms", "label": "Venomous"},
+            {"name": "Red spotted pitviper", "sci": "Protobothrops jerdonii xanthomelas", "count": 3, "cat": "ms", "label": "Venomous"},
+            {"name": "Gore's coral snake", "sci": "Sinomicrurus gorei", "count": 3, "cat": "ms", "label": "Venomous"},
+            {"name": "Car Nicobar Green Pitviper", "sci": "Trimeresurus davidi", "count": 3, "cat": "ms", "label": "Venomous"},
+            {"name": "Beddome's Coralsnake", "sci": "Calliophis beddomei", "count": 2, "cat": "ms", "label": "Venomous"},
+            {"name": "black coral snake", "sci": "Calliophis nigrescens nigrescens", "count": 2, "cat": "ms", "label": "Venomous"},
+            {"name": "Western bamboo pit viper", "sci": "Craspedocephalus occidentalis", "count": 2, "cat": "ms", "label": "Venomous"},
+            {"name": "Maya's pit viper", "sci": "Trimeresurus mayaae", "count": 2, "cat": "ms", "label": "Venomous"},
+            {"name": "Khandala Coralsnake", "sci": "Calliophis nigrescens khandallensis", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Chamba pit viper", "sci": "Gloydius chambensis", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Persian Gulf Sea Snake", "sci": "Hydrophis lapemoides", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Russell's Sea Snake", "sci": "Hydrophis obscurus", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Ornate Sea Snake", "sci": "Hydrophis ornatus", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Stokes' Sea Snake", "sci": "Hydrophis stokesii", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Viperine Sea Snake", "sci": "Hydrophis viperinus", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Levantine Viper", "sci": "Macrovipera lebetinus", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Gunther's Sea Snake", "sci": "Microcephalophis cantoris", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Slender Sea Snake", "sci": "Microcephalophis gracilis", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Asian Lanceheads", "sci": "Trimeresurus", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "White-lipped Pit Viper", "sci": "Trimeresurus albolabris", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Cantor's Pit Viper", "sci": "Trimeresurus cantori", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Island Pit Viper", "sci": "Trimeresurus labialis", "count": 1, "cat": "ms", "label": "Venomous"},
+            {"name": "Burmese White-lipped Tree Pitviper", "sci": "Trimeresurus uetzi", "count": 1, "cat": "ms", "label": "Venomous"},
+
+            {"name": "Chequered Keelback", "sci": "Fowlea piscator", "count": 3480, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Buff Striped Keelback", "sci": "Amphiesma stolatum", "count": 1325, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Indian Vine Snake", "sci": "Ahaetulla oxyrhynca", "count": 663, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Northern Western Ghats Vine Snake", "sci": "Ahaetulla borealis", "count": 600, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Farnsworth's Vine Snake", "sci": "Ahaetulla farnsworthi", "count": 389, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Common Cat Snake", "sci": "Boiga trigonata", "count": 345, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Nilgiri keelback", "sci": "Sahyadriophis beddomei", "count": 335, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Forsten's Cat Snake", "sci": "Boiga forsteni", "count": 200, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Green Keelback", "sci": "Rhabdophis plumbicolor", "count": 191, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Malabar Vine Snake", "sci": "Ahaetulla malabarica", "count": 170, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Split Keelback", "sci": "Atretium schistosum", "count": 160, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Collared Cat Snake", "sci": "Boiga nuchalis", "count": 151, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Indian Green Keelback", "sci": "Rhabdophis plumbicolor plumbicolor", "count": 143, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Beddome's Cat Snake", "sci": "Boiga beddomei", "count": 141, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Wynad Keelback", "sci": "Amphiesma monticola", "count": 137, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Asian Bockadam", "sci": "Cerberus rynchops", "count": 134, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Wall's Vine Snake", "sci": "Ahaetulla isabellina", "count": 119, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Thackeray's cat snake", "sci": "Boiga thackerayi", "count": 114, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Heller's Red-necked Keelback", "sci": "Rhabdophis helleri", "count": 84, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Yellow-green Cat Snake", "sci": "Boiga flaviviridis", "count": 75, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Andaman Keelback", "sci": "Fowlea tytleri", "count": 60, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Common Mock Viper", "sci": "Psammodynastes pulverulentus", "count": 60, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Sahyadri Hills Whipsnake", "sci": "Ahaetulla sahyadrensis", "count": 56, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Northern sahyadri keelback", "sci": "Sahyadriophis uttaraghati", "count": 46, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Günther's Vine Snake", "sci": "Ahaetulla dispar", "count": 44, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Ornate Flying Snake", "sci": "Chrysopelea ornata ornata", "count": 40, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Himalayan Keelback", "sci": "Herpetoreas platyceps", "count": 32, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Many-banded Cat Snake", "sci": "Boiga multifasciata", "count": 29, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Orange-collared Keelback", "sci": "Rhabdophis himalayanus", "count": 29, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Green Cat Snake", "sci": "Boiga cyanea", "count": 27, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Eyed Cat Snake", "sci": "Boiga siamensis", "count": 27, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Andaman Cat Snake", "sci": "Boiga andamanensis", "count": 24, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Variable Coloured Vine Snake", "sci": "Ahaetulla anomala", "count": 23, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Tawny Asian Cat Snake", "sci": "Boiga multomaculata ochracea", "count": 23, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Laudankia Vine Snake", "sci": "Ahaetulla laudankia", "count": 17, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Sri Lankan Flying Snake", "sci": "Chrysopelea taprobanica", "count": 17, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Pirmad Cat Snake", "sci": "Boiga dightoni", "count": 16, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Bindee keelback", "sci": "Rhabdophis bindi", "count": 14, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Leonard's Keelback", "sci": "Rhabdophis leonardi", "count": 13, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Wall's Keelback", "sci": "Herpetoreas xenura", "count": 8, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Many-spotted Cat Snake", "sci": "Boiga multomaculata", "count": 7, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Stoliczka's Asian Cat Snake", "sci": "Boiga stoliczkae", "count": 7, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Nicobar Cat Snake", "sci": "Boiga wallachi", "count": 6, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Bar-necked Keelback", "sci": "Fowlea schnurrenbergeri", "count": 6, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Yunnan keelback", "sci": "Hebius clerki", "count": 6, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Northern Polymorphic Asian Cat Snake", "sci": "Boiga multomaculata septentrionalis", "count": 5, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "St. John's Keelback", "sci": "Fowlea sanctijohannis", "count": 4, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Painted Keelback", "sci": "Xenochrophis cerasogaster", "count": 4, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Oriental Whipsnake", "sci": "Ahaetulla prasina", "count": 3, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "White-bellied Mangrove Snake", "sci": "Fordonia leucobalia", "count": 3, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Khasi Hills Keelback", "sci": "Hebius khasiensis", "count": 3, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Chin Hills Keelback", "sci": "Hebius venningi", "count": 2, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Sikkim Keelback", "sci": "Herpetoreas sieboldii", "count": 2, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Triangle Keelback", "sci": "Xenochrophis trianguligerus", "count": 2, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Travancore Vine Snake", "sci": "Ahaetulla travancorica", "count": 1, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Australasian Cat Snakes", "sci": "Boiga", "count": 1, "cat": "v", "label": "Mildly Venomous"},
+            {"name": "Yunnan Keelback Water Snake", "sci": "Trimerodytes yunnanensis", "count": 1, "cat": "v", "label": "Mildly Venomous"},
+
+            {"name": "Oriental Rat Snake", "sci": "Ptyas mucosa", "count": 2700, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Brahminy Blindsnake", "sci": "Indotyphlops braminus", "count": 942, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Indian Wolf Snake", "sci": "Lycodon aulicus", "count": 937, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Indian Python", "sci": "Python molurus", "count": 832, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Common Bronzeback Tree Snake", "sci": "Dendrelaphis tristis", "count": 812, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Streaked Kukri Snake", "sci": "Oligodon taeniolatus", "count": 721, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Rough-scaled Sand Boa", "sci": "Eryx conicus", "count": 708, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Common Indian trinket snake", "sci": "Coelognathus helena helena", "count": 485, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Travancore Wolf Snake", "sci": "Lycodon travancoricus", "count": 469, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Russell's Wolf Snake", "sci": "Lycodon fasciolatus", "count": 397, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Banded kukri snake", "sci": "Oligodon arnensis", "count": 329, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Red Sand Boa", "sci": "Eryx johnii", "count": 316, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Montane Trinket Snake", "sci": "Coelognathus helena monticollaris", "count": 294, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Barred Wolf Snake", "sci": "Lycodon striatus", "count": 219, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Tillack's Kukri Snake", "sci": "Oligodon tillacki", "count": 177, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Trinket Snake", "sci": "Coelognathus helena", "count": 171, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Karnataka Bronzeback", "sci": "Dendrelaphis chairecacos", "count": 149, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Russell's Kukri Snake", "sci": "Oligodon russelius", "count": 145, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Whitaker’s sand boa", "sci": "Eryx whitakeri", "count": 143, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Black-headed snake", "sci": "Sibynophis subpunctatus", "count": 126, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Beaked Blind Snake", "sci": "Grypotyphlops acutus", "count": 121, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Giri's Bronzeback", "sci": "Dendrelaphis girii", "count": 120, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Burmese Python", "sci": "Python bivittatus", "count": 115, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Golden Tree Snake", "sci": "Chrysopelea ornata", "count": 108, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Large-eyed bronzeback", "sci": "Dendrelaphis grandoculis", "count": 88, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Rainbow Mud Snake", "sci": "Enhydris enhydris", "count": 84, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Banded Racer", "sci": "Platyceps plinii", "count": 84, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Eastern bronzeback tree snake", "sci": "Dendrelaphis proarchos", "count": 81, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Phipson's Shieldtail", "sci": "Uropeltis phipsonii", "count": 81, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Copperhead Rat Snake", "sci": "Coelognathus radiatus", "count": 78, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Bombay Earth Snake", "sci": "Uropeltis macrolepis", "count": 66, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Big-eyed Bamboo Snake", "sci": "Pseudoxenodon macrops", "count": 57, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Perrotet's Mountain Snake", "sci": "Xylophis perroteti", "count": 54, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Collared Black-headed Snake", "sci": "Sibynophis collaris", "count": 51, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Vellore Bridal Snake", "sci": "Lycodon nympha", "count": 48, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Andaman Bronzeback", "sci": "Dendrelaphis andamanensis", "count": 46, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Light-barred Kukri Snake", "sci": "Oligodon albocinctus", "count": 44, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Ashok's Bronzeback", "sci": "Dendrelaphis ashoki", "count": 43, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Andaman Wolf Snake", "sci": "Lycodon hypsirhinoides", "count": 43, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Cat-eyed Fishing Snake", "sci": "Gerarda prevostiana", "count": 41, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Yellow-speckled Wolfsnake", "sci": "Lycodon jara", "count": 41, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Indo-Chinese Rat Snake", "sci": "Ptyas korros", "count": 40, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Himalayan Trinket", "sci": "Elaphe hodgsoni", "count": 39, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Elliot's Earth Snake", "sci": "Uropeltis ellioti", "count": 37, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Khaire's black earth snake", "sci": "Melanophidium khairei", "count": 36, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Indian Black Earth Snake", "sci": "Melanophidium wynaudense", "count": 36, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Malabar Brown Kukri Snake", "sci": "Oligodon affinis", "count": 36, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Kerala Mud Snake", "sci": "Dieurostus dussumieri", "count": 34, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Yellow-collared Wolf Snake", "sci": "Lycodon flavicollis", "count": 34, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Glossy-bellied Racer", "sci": "Platyceps ventromaculatus", "count": 34, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Green Rat Snake", "sci": "Ptyas nigromarginata", "count": 34, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Little File Snake", "sci": "Acrochordus granulatus", "count": 31, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Graceful Racer", "sci": "Platyceps gracilis", "count": 31, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Water Rhabdops", "sci": "Rhabdops aquaticus", "count": 31, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Eastern Trinket Snake", "sci": "Elaphe cantoris", "count": 30, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Nilgiri Burrowing Snake", "sci": "Plectrurus perroteti", "count": 30, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Calamaria Reed Snake", "sci": "Liopeltis calamaria", "count": 29, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Olive Trapezoid Snake", "sci": "Rhabdops olivaceus", "count": 28, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Madurai Shieldtail", "sci": "Platyplectrurus madurensis", "count": 27, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Bicoloured shieldtail", "sci": "Rhinophis melanoleucus", "count": 25, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Common Slug Snake", "sci": "Pareas monticola", "count": 22, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Nilgiri Uropeltis", "sci": "Uropeltis ocellata", "count": 22, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Sharma's Racer", "sci": "Platyceps bholanathi", "count": 21, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Siebold's Water Snake", "sci": "Ferania sieboldii", "count": 20, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Black-headed Royal Snake", "sci": "Spalerosophis atriceps", "count": 19, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Kerala Shieldtail", "sci": "Uropeltis ceylanica", "count": 19, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Captain’s Wood Snake", "sci": "Xylophis captaini", "count": 19, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Indian Egg-eater", "sci": "Boiga westermanni", "count": 18, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Northern Large-toothed Snake", "sci": "Lycodon septentrionalis", "count": 18, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Oreocryptophis porphyraceus porphyraceus", "sci": "Oreocryptophis porphyraceus porphyraceus", "count": 18, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Long Sand Racer", "sci": "Psammophis longifrons", "count": 16, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Yellow Whip Snake", "sci": "Ahaetulla flavescens", "count": 15, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Diard's Blindsnake", "sci": "Argyrophis diardii", "count": 14, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Zaw's Wolf Snake", "sci": "Lycodon zawi", "count": 14, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Cantor’s black-headed snake", "sci": "Sibynophis sagittarius", "count": 14, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Uropeltis macrolepis mahableshwarensis", "sci": "Uropeltis macrolepis mahableshwarensis", "count": 14, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Western Ghats Bronzeback", "sci": "Ahaetulla perroteti", "count": 13, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Arrow-headed trinket snake", "sci": "Coelognathus helena nigriangularis", "count": 13, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Black Cross-barred Kukri Snake", "sci": "Oligodon cinereus", "count": 13, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Red Mountain Ratsnake", "sci": "Oreocryptophis porphyraceus", "count": 13, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Sind Longnose Sand Snake", "sci": "Lytorhynchus paradoxus", "count": 11, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Joseph's Racer", "sci": "Platyceps josephi", "count": 11, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Condanarous Sandsnake", "sci": "Psammophis condanarus", "count": 11, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Pakistan Sand Racer", "sci": "Psammophis leithii", "count": 11, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Karinthandan's shield tail", "sci": "Rhinophis karinthandani", "count": 11, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Boulenger's Earth Snake", "sci": "Uropeltis myhendrae", "count": 11, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Indian Smooth Snake", "sci": "Wallophis brachyura", "count": 11, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Arrowback Tree Snake", "sci": "Boiga gocool", "count": 10, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Two-lined Black Earth Snake", "sci": "Melanophidium bilineatum", "count": 10, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Beddome's Black Earth Snake", "sci": "Melanophidium punctatum", "count": 10, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Forskal Sand Snake", "sci": "Psammophis schokari", "count": 10, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Yunnan Beauty Snake", "sci": "Elaphe taeniura yunnanensis", "count": 9, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Jerdon's Kukri Snake", "sci": "Oligodon venustus", "count": 9, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Red-tailed Green Ratsnake", "sci": "Gonyosoma oxycephalum", "count": 8, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Travancore Kukri Snake", "sci": "Oligodon travancoricus", "count": 8, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Ladakh Cliff Racer", "sci": "Platyceps rhodorachis ladacensis", "count": 8, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Slender Worm Snake", "sci": "Pseudoindotyphlops porrectus", "count": 8, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Mackinnon's Wolf Snake", "sci": "Lycodon bicolor", "count": 7, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Banded Wolf Snake", "sci": "Lycodon fasciatus", "count": 7, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Yellow-spotted Wolf Snake", "sci": "Lycodon flavomaculatus", "count": 7, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Uropeltis jerdoni", "sci": "Uropeltis jerdoni", "count": 7, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Spotted Earth Snake", "sci": "Uropeltis maculata", "count": 7, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Shevaroy Hills earth snake", "sci": "Uropeltis shorttii", "count": 7, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Boiga quincunciata", "sci": "Boiga quincunciata", "count": 6, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Bicatenate Uropeltis", "sci": "Uropeltis bicatenata", "count": 6, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Tailspot Uropeltis", "sci": "Uropeltis caudomaculata", "count": 6, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Anamalai Wood Snake", "sci": "Xylophis mosaicus", "count": 6, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Black Copper Rat Snake", "sci": "Coelognathus flavolineatus", "count": 5, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Blue Bronzeback", "sci": "Dendrelaphis cyanochloris", "count": 5, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Rice Paddy Snake", "sci": "Hypsiscopus plumbeus", "count": 5, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Deccan Wolf Snake", "sci": "Lycodon deccanensis", "count": 5, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Shorthead Kukri Snake", "sci": "Oligodon brevicauda", "count": 5, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Coral kukri snake", "sci": "Oligodon violaceus", "count": 5, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Pareas andersonii", "sci": "Pareas andersonii", "count": 5, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Salty Earth Snake", "sci": "Rhinophis sanguineus", "count": 5, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Lushai Hills Dragon Snake", "sci": "Stoliczkia vanhnuailianai", "count": 5, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Coral-bellied Wormsnake", "sci": "Trachischium guentheri", "count": 5, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Wallace's striped snake", "sci": "Wallaceophis gujaratensis", "count": 5, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Boulenger's Bronzeback", "sci": "Dendrelaphis bifrenalis", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Gore's bronzeback", "sci": "Dendrelaphis biloreatus", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Tiwar's Bronzeback", "sci": "Dendrelaphis humayuni", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Sistan Sand Boa", "sci": "Eryx sistanensis", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Green Bush Rat Snake", "sci": "Gonyosoma prasinum", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Reticulated Python", "sci": "Malayopython reticulatus", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "North-east Indian Kukri Snake", "sci": "Oligodon cyclurus", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Walnut Kukri Snake", "sci": "Oligodon juglandifer", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Cardamom Hills Earth Snake", "sci": "Rhinophis fergusonianus", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Diadem Snake", "sci": "Spalerosophis diadema", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Uropeltis", "sci": "Uropeltis", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Bhupathy’s shieldtail", "sci": "Uropeltis bhupathyi", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Madurai Shieldtail", "sci": "Uropeltis madurensis", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Red-spotted Shieldtail", "sci": "Uropeltis rubromaculata", "count": 4, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Bella Rat Snake", "sci": "Archelaphe bella", "count": 3, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Rein Snake", "sci": "Gonyosoma frenatum", "count": 3, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Gammie's Wolf Snake", "sci": "Lycodon gammiei", "count": 3, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Kukri Snakes", "sci": "Oligodon", "count": 3, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Bengalese Kukri Snake", "sci": "Oligodon dorsalis", "count": 3, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Pareas modestus", "sci": "Pareas modestus", "count": 3, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Jan’s Cliff Racer", "sci": "Platyceps rhodorachis", "count": 3, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Red-spotted Royal Snake", "sci": "Spalerosophis arenarius", "count": 3, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Blyth's Reticulate Snake", "sci": "Trachischium reticulata", "count": 3, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Indian Earth Snake", "sci": "Uropeltis pulneyensis", "count": 3, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Three-lined Shieldtail", "sci": "Platyplectrurus trilineatus", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Kerala Burrowing Snake", "sci": "Plectrurus aureus", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Smithophis atemporalis", "sci": "Smithophis atemporalis", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Hewston's Earth Snake", "sci": "Teretrurus hewstoni", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Travancore Earth Snake", "sci": "Teretrurus travancoricus", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Mizoram Ground Snake", "sci": "Trachischium hmuifang", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Olive Oriental Slender Snake", "sci": "Trachischium laeve", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Gunther's Shieldtail", "sci": "Uropeltis arcticeps", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Sirumalai Hills Earth Snake", "sci": "Uropeltis dindigalensis", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Asian Sunbeam Snake", "sci": "Xenopeltis unicolor", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Wayanad Narrow-headed Snake", "sci": "Xylophis chenkaruppan", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Günther's Mountain Snake", "sci": "Xylophis stenorhynchus", "count": 2, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Bronzebacks", "sci": "Dendrelaphis", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Mountain Bronzeback", "sci": "Dendrelaphis subocularis", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Beauty Ratsnake", "sci": "Elaphe taeniura", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Mandarin Ratsnake", "sci": "Euprepiophis mandarinus", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Günther's Reed Snake", "sci": "Gongylosoma frenata", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Common Ring-neck", "sci": "Gongylosoma scriptum", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Wolf Snakes and Bridal Snakes", "sci": "Lycodon", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Scarce Bridal Snake", "sci": "Lycodon gracilis", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "East Himalayan Banded Wolf Snake", "sci": "Lycodon latifasciatus", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Tiwari's Wolf Snake", "sci": "Lycodon tiwarii", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Zayu Wolf Snake", "sci": "Lycodon zayuensis", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Greater Reticulated Python", "sci": "Malayopython reticulatus reticulatus", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Assam Kukri Snake", "sci": "Oligodon catenatus", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Andaman Black Kukri Snake", "sci": "Oligodon woodmasoni", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Siruvani Hills Shieldtail", "sci": "Rhinophis siruvaniensis", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Tamil Nadu Earth Snake", "sci": "Rhinophis travancoricus", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Sinomicrurus macclellandi macclellandi", "sci": "Sinomicrurus macclellandi macclellandi", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Sinomicrurus macclellandi univirgatus", "sci": "Sinomicrurus macclellandi univirgatus", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Smithophis arunachalensis", "sci": "Smithophis arunachalensis", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Narrow-banded Rain Snake", "sci": "Smithophis leptofasciatus", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Teretrurus siruvaniensis", "sci": "Teretrurus siruvaniensis", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Mountain Worm-eating Snake", "sci": "Trachischium monticola", "count": 1, "cat": "nv", "label": "Non-venomous"},
+            {"name": "Red-lined Earth Snake", "sci": "Uropeltis rubrolineata", "count": 1, "cat": "nv", "label": "Non-venomous"}
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const matrixContainer = document.getElementById('dotMatrix');
+            const legendCards = document.querySelectorAll('.legend-card');
+            const tooltip = document.getElementById('tooltip');
+
+            const total = snakesData.length;
+            const counts = {
+                ms: snakesData.filter(s => s.cat === 'ms').length,
+                v: snakesData.filter(s => s.cat === 'v').length,
+                nv: snakesData.filter(s => s.cat === 'nv').length
+            };
+
+            document.getElementById('pct-ms').textContent = `${counts.ms} (${(counts.ms / total * 100).toFixed(1)}%)`;
+            document.getElementById('pct-v').textContent = `${counts.v} (${(counts.v / total * 100).toFixed(1)}%)`;
+            document.getElementById('pct-nv').textContent = `${counts.nv} (${(counts.nv / total * 100).toFixed(1)}%)`;
+
+            const badgeColors = {
+                ms: '#d63053',
+                v: '#e69119',
+                nv: '#1dd1a1'
+            };
+
+            snakesData.forEach((snake, i) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot', `type-${snake.cat}`);
+                dot.setAttribute('data-category', snake.cat);
+
+                const delay = (i * 2.5) + (Math.random() * 15);
+                dot.style.transitionDelay = `${delay}ms, 0s, 0s, 0s`;
+
+                dot.addEventListener('pointerenter', (e) => {
+                    dot.style.transitionDelay = '0s';
+                    tooltip.innerHTML = `
+                        <span class="t-name">${snake.name}</span>
+                        <span class="t-sci">${snake.sci}</span>
+                        <div class="t-meta">
+                            <span class="t-badge" style="color:${badgeColors[snake.cat]}">${snake.label}</span>
+                            <span>${snake.count.toLocaleString()} ${snake.count === 1 ? 'sighting' : 'sightings'}</span>
+                        </div>
+                    `;
+                    tooltip.classList.add('visible');
+                    moveTooltip(e);
+                });
+
+                dot.addEventListener('pointermove', moveTooltip);
+                dot.addEventListener('pointerleave', () => {
+                    tooltip.classList.remove('visible');
+                });
+
+                matrixContainer.appendChild(dot);
+            });
+
+            function moveTooltip(e) {
+                const pad = 14;
+                const x = Math.min(window.innerWidth - 270, e.clientX + pad);
+                const y = Math.max(12, e.clientY - 68);
+                tooltip.style.left = `${x}px`;
+                tooltip.style.top = `${y}px`;
+            }
+
+            const allDots = document.querySelectorAll('.dot');
+
+            legendCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    const hoverType = card.getAttribute('data-hover');
+                    allDots.forEach(dot => {
+                        dot.style.transitionDelay = '0s';
+                        if (dot.getAttribute('data-category') !== hoverType) {
+                            dot.classList.add('dimmed');
+                        } else {
+                            dot.classList.remove('dimmed');
+                        }
+                    });
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    allDots.forEach(dot => {
+                        dot.classList.remove('dimmed');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+const fs = require('fs');
+
+const html = `<!DOCTYPE html>
+<html>
+<head>
+<title>Crack Inspector</title>
+<style>
+body { margin: 0; background: #03120B; color: #fff; font-family: monospace; padding: 20px; }
+canvas { border: 1px solid red; max-width: 600px; }
+</style>
+</head>
+<body>
+<h1>5_crack.webp Alignment</h1>
+<div id="res"></div>
+<script>
+const img = new Image();
+img.src = 'assets/layers_clean/5_crack.webp';
+img.onload = () => {
+  const c = document.createElement('canvas');
+  c.width = img.naturalWidth;
+  c.height = img.naturalHeight;
+  const ctx = c.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+  const d = ctx.getImageData(0, 0, c.width, c.height).data;
+  
+  // Find crack x bounds at various y levels
+  const yLevels = [0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 0.85, 0.9];
+  const info = [];
+  yLevels.forEach(yF => {
+    const y = Math.round(c.height * yF);
+    let minX = c.width, maxX = 0;
+    for (let x = 0; x < c.width; x++) {
+      const a = d[(y * c.width + x) * 4 + 3];
+      if (a > 30) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+      }
+    }
+    info.push({ yF, y, minX, maxX, midX: (minX + maxX)/2, midXPct: ((minX + maxX)/(2 * c.width) * 100).toFixed(1) + '%' });
+  });
+  
+  document.getElementById('res').innerHTML = '<pre>' + JSON.stringify({
+    naturalWidth: img.naturalWidth,
+    naturalHeight: img.naturalHeight,
+    aspectRatio: (img.naturalWidth / img.naturalHeight).toFixed(3),
+    levels: info
+  }, null, 2) + '</pre>';
+  document.body.appendChild(c);
+};
+</script>
+</body>
+</html>`;
+
+fs.writeFileSync('inspect_crack.html', html);
+console.log('inspect_crack.html written');

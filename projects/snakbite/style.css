@@ -1,0 +1,4037 @@
+/* ==========================================================================
+   PANIC VS POISON: A STORY OF FEAR AND COEXISTENCE
+   Continuous Parallax Canvas & Animated Snake
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --color-panic: #EF4444;
+    /* Crimson Panic */
+    --color-poison: #34D399;
+    /* Serpentine Emerald */
+    --color-title: #EAE3D3;
+    /* Warm Ivory Parchment from Reference */
+    --text-light: #F8FAFC;
+    --text-muted: #94A3B8;
+    --font-title: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+    --font-serif: 'Newsreader', serif;
+    --font-body: 'Inter', -apple-system, sans-serif;
+}
+
+html {
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE / Edge */
+}
+
+body {
+    min-height: 100vh;
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE / Edge */
+    background-color: #03120B;
+    color: var(--text-light);
+    font-family: var(--font-body);
+}
+
+/* Universally hide scrollbars for WebKit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar,
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+}
+
+/* Fixed Continuous Parallax Background Canvas */
+.parallax-bg-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+    background-color: #03120B;
+}
+
+/* (Snake container styling consolidated in section below) */
+
+.parallax-bg {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
+    background-image: url('./assets/forest_hero_bg.png?v=forest_hero_restored');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: bg-breathe 22s ease-in-out infinite alternate;
+    will-change: transform;
+}
+
+@keyframes bg-breathe {
+    0% {
+        transform: scale(1) translate(0, 0);
+        filter: brightness(0.96) contrast(1.02);
+    }
+
+    50% {
+        transform: scale(1.03) translate(-0.8%, -0.5%);
+        filter: brightness(1.02) contrast(1.06);
+    }
+
+    100% {
+        transform: scale(1.01) translate(0.5%, 0.4%);
+        filter: brightness(0.98) contrast(1.03);
+    }
+}
+
+.parallax-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 35%, rgba(2, 14, 8, 0.6) 85%, #020E08 100%);
+    pointer-events: none;
+}
+
+.parallax-particles {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.85;
+}
+
+/* ==========================================================================
+   SNAKE ENTRANCE ON HERO SCREEN (TRANSPARENT VIDEO)
+   [RESTORE NOTE] Previous sizing: width: clamp(340px, 36vw, 680px);
+   ========================================================================== */
+.snake-top-left-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 6;
+    pointer-events: none;
+    overflow: hidden;
+    line-height: 0;
+    will-change: transform, opacity;
+    opacity: 0;
+    transition: opacity 1.2s ease-out;
+}
+
+.snake-top-left-container.is-entered {
+    opacity: 1;
+}
+
+.snake-video-player,
+.snake-video-element {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top left;
+    display: block;
+    background: transparent;
+    filter: drop-shadow(0 20px 45px rgba(0, 0, 0, 0.85));
+}
+
+/* ==========================================================================
+   HERO / TOPIC NAME SECTION
+   ========================================================================== */
+#story-root {
+    position: relative;
+    z-index: 10;
+    min-height: 250vh;
+    /* Downward scroll room */
+}
+
+.hero-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 1;
+    position: relative;
+    z-index: 12;
+    transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+
+/* Introductory Label (Above Title) */
+.hero-intro-label {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(11px, 0.82vw, 13px);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: rgba(238, 232, 213, 0.75); /* warm ivory #EEE8D5 at 75% opacity */
+    margin-bottom: 1.25rem;
+    display: inline-block;
+    line-height: 1;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+}
+
+/* Topic Title: The Fear Between Us */
+.topic-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(4.2rem, 9.5vw, 8.2rem);
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    color: #EEE8D5; /* warm ivory #EEE8D5 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.75rem;
+    text-shadow: 0 15px 45px rgba(0, 0, 0, 0.9);
+}
+
+.title-line {
+    display: block;
+}
+
+.title-line.title-upright {
+    font-style: normal;
+    font-weight: 300;
+}
+
+.title-line.title-italic {
+    font-style: italic;
+    font-weight: 300;
+}
+
+/* Hero Subtitle */
+.hero-subtitle {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: clamp(1.05rem, 1.8vw, 1.4rem);
+    color: rgba(238, 232, 213, 0.85); /* warm ivory #EEE8D5 at ~85% opacity */
+    max-width: 620px;
+    line-height: 1.6;
+    margin-bottom: 3.5rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Scroll Cue */
+.scroll-cue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgba(238, 232, 213, 0.80);
+    animation: bounce-subtle 2.5s infinite ease-in-out;
+}
+
+.scroll-cue-text {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    font-size: clamp(11px, 0.78vw, 12px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(238, 232, 213, 0.80); /* warm ivory #EEE8D5 at ~80% opacity */
+}
+
+.scroll-cue-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, rgba(238, 232, 213, 0.8), transparent);
+}
+
+@keyframes bounce-subtle {
+
+    0%,
+    100% {
+        transform: translateY(0);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: translateY(8px);
+        opacity: 1;
+    }
+}
+
+/* ==========================================================================
+   SECTION 2: 2D LAYERED LANDSCAPE REVEAL & THE FRACTURE
+   Mountains -> Land -> Trees -> Homes -> The Crack (Human vs Serpent Border)
+   ========================================================================== */
+.landscape-screen {
+    position: relative;
+    z-index: 15;
+    min-height: 1500vh;
+    display: block;
+    padding: 0;
+}
+
+.landscape-sticky-stage {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom,
+            #000 0%,
+            #000 calc(100% - 200px),
+            rgba(0, 0, 0, 0.75) calc(100% - 120px),
+            rgba(0, 0, 0, 0.25) calc(100% - 40px),
+            transparent 100%);
+    mask-image: linear-gradient(to bottom,
+            #000 0%,
+            #000 calc(100% - 200px),
+            rgba(0, 0, 0, 0.75) calc(100% - 120px),
+            rgba(0, 0, 0, 0.25) calc(100% - 40px),
+            transparent 100%);
+}
+
+/* 2D Full-Screen Multi-Layered Stage */
+.landscape-layers-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    pointer-events: none;
+    will-change: transform, opacity, filter;
+    /* Subtle 70px black gradient fade at the very bottom edge */
+    -webkit-mask-image: linear-gradient(to bottom,
+            #000 0%,
+            #000 calc(100% - 70px),
+            rgba(0, 0, 0, 0.70) calc(100% - 35px),
+            transparent 100%);
+    mask-image: linear-gradient(to bottom,
+            #000 0%,
+            #000 calc(100% - 70px),
+            rgba(0, 0, 0, 0.70) calc(100% - 35px),
+            transparent 100%);
+}
+
+.landscape-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center bottom;
+    display: block;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+    will-change: opacity, transform, clip-path;
+}
+
+.layer-mountains {
+    z-index: 1;
+}
+
+.layer-land {
+    z-index: 2;
+}
+
+.layer-trees {
+    z-index: 3;
+}
+
+.layer-homes {
+    z-index: 4;
+}
+
+.layer-crack {
+    z-index: 5;
+    filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.65));
+}
+
+.layer-panorama {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    object-position: center bottom;
+    z-index: 6;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-out;
+    will-change: opacity;
+}
+
+.landscape-layers-top-feather {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(to bottom,
+            #03120B 0%,
+            rgba(3, 18, 11, 0.70) 35%,
+            rgba(3, 18, 11, 0.20) 70%,
+            transparent 100%);
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+.landscape-layers-bottom-feather {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: linear-gradient(to top,
+            #020C07 0%,
+            rgba(2, 12, 7, 0.70) 50%,
+            transparent 100%);
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+/* Soft Atmospheric Bottom Fog / Vignette Blend with Canvas BG */
+.landscape-bottom-blend {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 220px;
+    background: linear-gradient(to bottom,
+            transparent 0%,
+            rgba(3, 18, 11, 0.35) 30%,
+            rgba(3, 18, 11, 0.80) 70%,
+            #03120B 100%);
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Beat 5: Villager & Snake Encounter Canvas Animation Layer */
+.encounter-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 16;
+    display: block;
+    opacity: 0;
+    will-change: opacity;
+    transition: opacity 0.2s ease-out;
+}
+
+/* Phase 1 Mountain Emergence Statement & India Map Animation */
+.mountain-story-block {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(90vw, 900px);
+    max-width: 900px;
+    text-align: center;
+    pointer-events: none;
+    z-index: 17;
+    will-change: opacity, transform;
+}
+
+.mountain-map-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 70vh;
+    max-height: 70vh;
+    pointer-events: none;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mountain-map-svg {
+    width: 100%;
+    height: 100%;
+    max-width: 650px;
+    max-height: 70vh;
+    overflow: visible;
+}
+
+.mountain-text-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.mountain-headline {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(36px, 5vw, 76px);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    max-width: 900px;
+    width: 100%;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.85), 0 2px 4px rgba(0, 0, 0, 0.95);
+}
+
+.m-line {
+    display: block;
+    will-change: opacity, transform;
+}
+
+.m-line-1 {
+    font-style: normal;
+    color: #EEE8D5;
+}
+
+.m-line-2 {
+    font-style: italic;
+    color: #D6B56D;
+}
+
+.mountain-subtext {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(16px, 1.4vw, 20px);
+    font-weight: 400;
+    font-style: normal;
+    line-height: 1.5;
+    color: rgba(238, 232, 213, 0.85);
+    text-align: center;
+    max-width: 680px;
+    margin: 28px auto 0;
+    padding: 0;
+    letter-spacing: normal;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+    will-change: opacity, transform;
+}
+
+.m-fear {
+    color: #D6B56D;
+    font-weight: 400;
+}
+
+@media (max-width: 600px) {
+    .m-line {
+        display: inline;
+    }
+    .m-line-1::after {
+        content: " ";
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mountain-map-layer,
+    #map-outline-layer {
+        opacity: 0.22 !important;
+    }
+    #map-mainland-stroke {
+        stroke-dashoffset: 0 !important;
+    }
+    #map-islands-stroke {
+        opacity: 1 !important;
+    }
+    #map-fill-layer {
+        opacity: 0.16 !important;
+    }
+    #map-mask-rect {
+        y: -100px !important;
+    }
+    .m-line-1,
+    .m-line-2 {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    .mountain-subtext {
+        opacity: 0.85 !important;
+        transform: none !important;
+    }
+}
+
+/* Habitat Editorial Story Text (Split Floating Typography across the Divide) */
+.habitat-editorial-card {
+    position: absolute;
+    pointer-events: auto;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    z-index: 18;
+    will-change: opacity, transform, filter;
+}
+
+/* Left Narrative Block (Bottom Left Farmland) */
+.habitat-editorial-card.habitat-left {
+    left: clamp(2rem, 7vw, 7rem);
+    bottom: clamp(3rem, 16vh, 9rem);
+    max-width: min(88vw, 440px);
+    text-align: left;
+}
+
+/* Right Narrative Block (Shifted Up on the Right Side in Mountain/Sky clearing) */
+.habitat-editorial-card.habitat-right {
+    right: clamp(2rem, 8vw, 8rem);
+    top: clamp(1.5rem, 4.5vh, 4rem);
+    max-width: min(88vw, 540px);
+    text-align: left;
+}
+
+/* Upper-Right Heading */
+.habitat-title.habitat-title-right {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(34px, 4vw, 64px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.85rem;
+    text-shadow: none;
+}
+
+.h-right-line-1 {
+    display: block;
+    font-style: normal;
+    color: #EEECE3;
+}
+
+.h-right-line-2 {
+    display: block;
+    font-style: italic;
+    color: #BBC3B3;
+}
+
+/* Upper-Right Supporting Paragraph */
+.habitat-description.habitat-desc-right {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(16px, 1.25vw, 20px);
+    line-height: 1.55;
+    letter-spacing: normal;
+    color: #D7DDD5;
+    max-width: 500px;
+    text-shadow: none;
+}
+
+/* Bottom-Left Statement */
+.habitat-title.habitat-title-left {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(24px, 2.3vw, 36px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-shadow: none;
+    margin: 0;
+}
+
+.h-left-line-1 {
+    display: block;
+    font-style: normal;
+    color: #BBC3B3;
+}
+
+.h-left-line-2 {
+    display: block;
+    font-style: normal;
+    color: #EEECE3;
+}
+
+@media (max-width: 600px) {
+    .h-right-line-1,
+    .h-right-line-2,
+    .h-left-line-1,
+    .h-left-line-2 {
+        display: inline;
+    }
+    .h-right-line-1::after,
+    .h-left-line-1::after {
+        content: " ";
+    }
+    .h-desc-br {
+        display: none;
+    }
+}
+
+.scroll-canvas-spacer {
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.stage-blank-green {
+    position: relative;
+    z-index: 15;
+    min-height: 120vh;
+    width: 100%;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .habitat-editorial-card.habitat-left {
+        left: 1.5rem;
+        bottom: 2rem;
+        max-width: 85vw;
+    }
+
+    .habitat-editorial-card.habitat-right {
+        right: 1.5rem;
+        top: 3.5rem;
+        max-width: 85vw;
+    }
+}
+
+/* ==========================================================================
+   Sequential Center-Aligned Data Beats (Scale, 58,000, 6 Deaths)
+   ========================================================================== */
+.landscape-stats-scrim {
+    position: absolute;
+    inset: 0;
+    background: 
+        linear-gradient(90deg, rgba(3, 16, 10, 0.45) 0%, rgba(3, 16, 10, 0.20) 35%, transparent 60%),
+        radial-gradient(circle at 50% 50%, rgba(6, 22, 14, 0.88) 0%, rgba(4, 18, 12, 0.82) 55%, rgba(3, 16, 10, 0.70) 100%);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 22;
+    will-change: opacity;
+}
+
+.stats-scrolly-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    z-index: 25;
+    pointer-events: none;
+}
+
+.stat-beat-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: min(96vw, 1200px);
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    will-change: opacity, transform, filter;
+}
+
+/* ==========================================================================
+   REFINED CRISIS SECTION (Beat 1: "A crisis measured in silence")
+   ========================================================================== */
+#stat-beat-1.stat-beat-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+    pointer-events: none;
+    z-index: 25;
+}
+
+.crisis-section-wrapper {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* Eyebrow — “THE SCALE” */
+.crisis-eyebrow {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: #A8B9A3;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: block;
+    line-height: 1.2;
+    will-change: opacity, transform;
+}
+
+/* Main heading — “A crisis measured in silence” */
+.crisis-headline {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(36px, 4.2vw, 64px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: #EEECE3;
+    text-align: center;
+    margin: 0 0 52px 0;
+    text-shadow: none;
+    will-change: opacity, transform;
+}
+
+/* Data Row (Max width ~780px, Centered) */
+.crisis-data-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    max-width: 780px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* Left Column: Statistic */
+.crisis-stat-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 0;
+    text-align: center;
+}
+
+/* Accessible 1 in 2 phrase */
+.crisis-stat-phrase {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+/* Numerals: Cormorant Garamond 400 upright */
+.crisis-num {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: clamp(88px, 9vw, 144px);
+    line-height: 0.9;
+    color: #A8B9A3;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
+    will-change: opacity, color;
+}
+
+/* "in": Cormorant Garamond 400 italic, ~38% of numeral size */
+.crisis-word-in {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(33px, 3.42vw, 55px);
+    line-height: 0.9;
+    color: #A8B9A3;
+    margin: 0 clamp(10px, 1.2vw, 18px);
+    will-change: opacity, color;
+    display: inline-block;
+}
+
+/* Statistic Label: “GLOBAL SNAKEBITE DEATHS” */
+.crisis-stat-label {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    font-size: clamp(10px, 0.95vw, 13px);
+    letter-spacing: 0.12em;
+    color: #A8B9A3;
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: 14px;
+    line-height: 1.2;
+    will-change: opacity, transform;
+}
+
+/* Vertical Divider (1px wide, ~140px tall) */
+.crisis-divider {
+    width: 1px;
+    height: 140px;
+    background-color: rgba(168, 185, 163, 0.3);
+    margin: 0 clamp(36px, 4vw, 48px);
+    flex-shrink: 0;
+    transform-origin: top center;
+    will-change: transform, opacity;
+}
+
+/* Right Column: Explanation */
+.crisis-explanation-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1 1 0;
+    text-align: left;
+}
+
+.crisis-explanation {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    font-size: clamp(20px, 2vw, 30px);
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    color: #EEECE3;
+    text-align: left;
+    margin: 0;
+    text-shadow: none;
+}
+
+.crisis-exp-line {
+    display: block;
+    will-change: opacity, transform;
+}
+
+.crisis-highlight-india {
+    font-weight: 600;
+    color: #EEECE3;
+    will-change: color;
+}
+
+/* Mobile & Narrow screens */
+@media (max-width: 768px) {
+    .crisis-eyebrow {
+        font-size: 11px;
+        margin-bottom: 14px;
+    }
+
+    .crisis-headline {
+        margin-bottom: 32px;
+    }
+
+    .crisis-data-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+    }
+
+    .crisis-stat-col {
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+    .crisis-divider {
+        width: 60px;
+        height: 1px;
+        margin: 0 auto 18px auto;
+        transform-origin: left center;
+    }
+
+    .crisis-explanation-col {
+        width: 100%;
+        text-align: center;
+    }
+
+    .crisis-explanation {
+        text-align: center;
+    }
+
+    .crisis-exp-line {
+        display: block;
+    }
+}
+
+.highlight-terracotta {
+    color: #D0482B;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   REFINED BEAT 2: "THE HUMAN COST" (58,000 Counter)
+   ========================================================================== */
+#stat-beat-2 .human-cost-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+#stat-beat-2 .human-cost-label {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    line-height: 1.4;
+    color: #A8B9A3;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 24px 0;
+    display: block;
+}
+
+#stat-beat-2 #counter-58k.human-cost-number {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: clamp(88px, 12vw, 180px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: #C18476;
+    text-shadow: none;
+    box-shadow: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    text-align: center;
+    margin: 0 0 24px 0;
+    padding: 0 0 0.05em 0;
+    overflow: visible;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
+    min-width: 3ch;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+#stat-beat-2 .human-cost-caption-main {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    font-size: clamp(18px, 1.7vw, 24px);
+    line-height: 1.4;
+    letter-spacing: normal;
+    color: #EEECE3;
+    text-align: center;
+    margin: 0 0 12px 0;
+    text-shadow: none;
+    display: block;
+}
+
+#stat-beat-2 .human-cost-caption-sub {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    font-size: clamp(14px, 1.1vw, 16px);
+    line-height: 1.5;
+    letter-spacing: normal;
+    color: #BBC3B3;
+    text-align: center;
+    margin: 0;
+    text-shadow: none;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    #stat-beat-2 .human-cost-label {
+        font-size: 11px;
+        margin-bottom: 16px;
+    }
+
+    #stat-beat-2 #counter-58k.human-cost-number {
+        margin-bottom: 16px;
+    }
+
+    #stat-beat-2 .human-cost-caption-main {
+        margin-bottom: 8px;
+    }
+}
+
+/* ==========================================================================
+   REFINED BEAT 3: "THE HUMAN COST" (More than 6 Lives Lost + Snakebite Anim)
+   ========================================================================== */
+/* ==========================================================================
+   REFINED BEAT 3: "THE HUMAN COST" (More than 6 Lives Lost + Snakebite Anim)
+   Balanced Two-Column Editorial Composition (Centered Shared Layout)
+   ========================================================================== */
+#stat-beat-3.stat-beat-card {
+    position: absolute;
+    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    padding: 0;
+    margin: 0;
+    transform: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 25;
+}
+
+/* Centered Shared Content Wrapper: balanced 2-column editorial grid */
+#stat-beat-3 .hourly-composition-wrapper {
+    position: relative;
+    width: min(1120px, calc(100% - 96px));
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(48px, 6vw, 96px);
+    pointer-events: auto;
+    box-sizing: border-box;
+    z-index: 2;
+}
+
+/* Subtle soft dark-green radial overlay behind the shared composition for readability */
+#stat-beat-3 .hourly-composition-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 130%;
+    height: 145%;
+    background: radial-gradient(ellipse at center, rgba(6, 22, 16, 0.72) 0%, rgba(5, 18, 13, 0.45) 55%, transparent 75%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Left column: the complete statistic, center-aligned */
+#stat-beat-3 .hourly-text-stack {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Header: DM Sans 500, 15px, tracking 0.20em, #A8B9A3 */
+#stat-beat-3 .hourly-eyebrow {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.20em;
+    line-height: 1.4;
+    color: #A8B9A3;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 32px 0;
+    display: block;
+}
+
+/* MORE THAN: DM Sans 500, 15px, tracking 0.14em, #EEECE3 */
+#stat-beat-3 .hourly-qualifier-top {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.14em;
+    line-height: 1.2;
+    color: #EEECE3;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 16px 0;
+    display: block;
+}
+
+/* Number 6: Cormorant Garamond 500, #D94A45, clamp(190px, 17vw, 260px), line-height: 0.85 */
+#stat-beat-3 .hourly-stat-number {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: clamp(190px, 17vw, 260px);
+    line-height: 0.85;
+    letter-spacing: -0.025em;
+    color: #D94A45;
+    text-shadow: none;
+    box-shadow: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-variant-numeric: lining-nums;
+    font-feature-settings: "lnum" 1;
+    white-space: nowrap;
+    display: block;
+}
+
+/* LIVES LOST: DM Sans 500, 15px, tracking 0.14em, #EEECE3 */
+#stat-beat-3 .hourly-qualifier-bottom {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.14em;
+    line-height: 1.2;
+    color: #EEECE3;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 16px 0 24px 0;
+    display: block;
+}
+
+#stat-beat-3 .hourly-caption-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0;
+}
+
+/* Every hour in India.: DM Sans 400, clamp(26px, 2.5vw, 34px), line-height: 1.3, #EEECE3 */
+#stat-beat-3 .hourly-caption-main {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    font-size: clamp(26px, 2.5vw, 34px);
+    line-height: 1.3;
+    letter-spacing: normal;
+    color: #EEECE3;
+    text-align: center;
+    margin: 0 0 10px 0;
+    text-shadow: none;
+    white-space: nowrap;
+    display: block;
+}
+
+/* On average.: DM Sans 400, 17px, #A8B9A3 */
+#stat-beat-3 .hourly-caption-sub {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.4;
+    letter-spacing: normal;
+    color: #A8B9A3;
+    text-align: center;
+    margin: 0;
+    text-shadow: none;
+    display: block;
+}
+
+/* Right column: five-frame illustration centered within its column */
+#stat-beat-3 .hourly-snakebite-wrapper {
+    position: relative;
+    width: min(100%, 480px);
+    aspect-ratio: 1 / 1;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 8%,
+        rgba(0, 0, 0, 0.20) 16%,
+        rgba(0, 0, 0, 0.75) 26%,
+        black 35%,
+        black 100%
+    );
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 8%,
+        rgba(0, 0, 0, 0.20) 16%,
+        rgba(0, 0, 0, 0.75) 26%,
+        black 35%,
+        black 100%
+    );
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+}
+
+#stat-beat-3 .hourly-snakebite-canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+/* Responsive Composition: Below 900px or compact viewports, switch to one column */
+@media (max-width: 900px), (max-height: 640px) and (max-width: 1100px) {
+    #stat-beat-3 .hourly-composition-wrapper {
+        grid-template-columns: 1fr;
+        gap: clamp(20px, 3vh, 28px);
+        width: min(92vw, 540px);
+        padding: 16px 0;
+    }
+
+    #stat-beat-3 .hourly-stat-number {
+        font-size: clamp(140px, 30vw, 190px);
+        line-height: 0.85;
+    }
+
+    #stat-beat-3 .hourly-eyebrow {
+        margin-bottom: 20px;
+    }
+
+    #stat-beat-3 .hourly-qualifier-top {
+        margin-bottom: 10px;
+    }
+
+    #stat-beat-3 .hourly-qualifier-bottom {
+        margin: 10px 0 16px 0;
+    }
+
+    #stat-beat-3 .hourly-caption-main {
+        font-size: clamp(22px, 5vw, 28px);
+        white-space: normal;
+        margin-bottom: 8px;
+    }
+
+    #stat-beat-3 .hourly-caption-sub {
+        font-size: 15px;
+    }
+
+    #stat-beat-3 .hourly-snakebite-wrapper {
+        width: min(68vw, 320px);
+    }
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Beat 3: Giant Editorial Numbers */
+.stat-big-number {
+    font-family: 'DM Serif Display', 'Playfair Display', serif;
+    font-size: clamp(6.2rem, 14vw, 11rem);
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.015em;
+    margin-bottom: 0.85rem;
+    text-shadow: 0 10px 45px rgba(0, 0, 0, 0.98), 0 2px 10px rgba(0, 0, 0, 0.95);
+}
+
+.stat-big-number.terracotta {
+    color: #D0482B;
+}
+
+.stat-big-number.ivory {
+    color: #F5F5ED;
+}
+
+.stat-big-label {
+    font-family: var(--font-sans);
+    font-size: clamp(1.2rem, 1.9vw, 1.55rem);
+    color: #9BA99E;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    margin-top: 0.4rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+}
+
+/* ==========================================================================
+   BEAT 4: MORTALITY CHART OVERLAY (Inline over landscape)
+   ========================================================================== */
+.beat-chart {
+    width: min(96vw, 1180px) !important;
+    max-width: 1180px;
+}
+
+.beat-chart .mortality-chart-iframe {
+    width: 100%;
+    height: 86vh;
+    max-height: 840px;
+    border: none;
+    display: block;
+    background: transparent;
+    border-radius: 0;
+    overflow: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.beat-chart .mortality-chart-iframe::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+@media (max-width: 768px) {
+    .beat-chart .mortality-chart-iframe {
+        height: 78vh;
+        max-height: 700px;
+    }
+}
+
+@media (max-width: 640px) {
+    .beat-chart {
+        width: 100vw !important;
+    }
+
+    .beat-chart .mortality-chart-iframe {
+        height: 65vh;
+        max-height: 600px;
+    }
+}
+
+/* ==========================================================================
+   BEAT 5: NATURAL DISASTER COMPARISON (Editorial Statement)
+   ========================================================================== */
+.beat-disaster {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100% !important;
+    max-width: 1200px !important;
+    padding: 0 clamp(24px, 4vw, 48px);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 28;
+    pointer-events: none;
+}
+
+.stat-disaster-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.stat-disaster-headline {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-weight: 600 !important;
+    font-style: normal !important;
+    font-size: clamp(32px, 3.5vw, 64px) !important;
+    line-height: 1.2 !important;
+    letter-spacing: normal !important;
+    color: #EEECE3 !important;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    text-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.95),
+        0 2px 10px rgba(0, 0, 0, 0.85);
+}
+
+.stat-disaster-headline .disaster-line {
+    display: block;
+}
+
+.stat-disaster-headline .highlight-disaster {
+    color: #D94A45 !important;
+    font-family: inherit !important;
+    font-weight: 600 !important;
+    font-style: normal !important;
+    display: inline-block;
+    white-space: nowrap;
+    text-shadow: 
+        0 0 28px rgba(217, 74, 69, 0.35),
+        0 4px 24px rgba(0, 0, 0, 0.95),
+        0 2px 10px rgba(0, 0, 0, 0.85);
+}
+
+.stat-disaster-subline {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: clamp(20px, 2vw, 32px) !important;
+    line-height: 1.4 !important;
+    color: #BBC3B3 !important;
+    text-align: center;
+    margin-top: clamp(28px, 2.5vw, 32px) !important;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    text-shadow: 
+        0 3px 18px rgba(0, 0, 0, 0.95),
+        0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+@media (max-width: 768px) {
+    .beat-disaster {
+        padding: 0 24px;
+    }
+
+    .stat-disaster-headline .highlight-disaster {
+        display: inline;
+        white-space: normal;
+    }
+}
+
+/* ==========================================================================
+   PADDY FIELD ENCOUNTER SCENE (Page scroll from below previous image)
+   ========================================================================== */
+.paddy-scene-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 23;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    will-change: transform, opacity;
+    transform: translate3d(0, 16vh, 0);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 50px, black 160px, black calc(100% - 160px), rgba(0, 0, 0, 0.4) calc(100% - 50px), transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.4) 50px, black 160px, black calc(100% - 160px), rgba(0, 0, 0, 0.4) calc(100% - 50px), transparent 100%);
+}
+
+.paddy-scene-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 50%;
+    opacity: 0.95;
+    filter: brightness(0.98) contrast(1.04);
+}
+
+.paddy-scene-blend {
+    position: absolute;
+    inset: 0;
+    /* Soft atmospheric dark feather so edges blend into canvas */
+    background: 
+        radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(2, 12, 7, 0.20) 75%, rgba(2, 12, 7, 0.65) 100%),
+        linear-gradient(to bottom, 
+            transparent 0%, 
+            rgba(2, 12, 7, 0.45) 60px, 
+            transparent 140px, 
+            transparent calc(100% - 140px), 
+            rgba(2, 12, 7, 0.45) calc(100% - 60px), 
+            transparent 100%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.paddy-seam-gradient {
+    display: none;
+}
+
+/* Blackout Scrim: Focused dark backdrop where the narrative text appears (~20-30% image visibility in text zone) */
+/* Blackout Scrim: Soft dark-green atmosphere behind text area on the right, keeping people on the left and snake below fully visible */
+.paddy-story-scrim {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 65% 70% at 72% 50%, rgba(2, 14, 8, 0.65) 0%, rgba(2, 14, 8, 0.30) 50%, transparent 85%);
+    pointer-events: none;
+    z-index: 22;
+    opacity: 0;
+    will-change: opacity;
+}
+
+.paddy-story-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    pointer-events: none;
+    z-index: 25;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.paddy-story-card {
+    position: relative;
+    left: 49%;
+    width: 44%;
+    max-width: 720px;
+    margin: 0;
+    padding: 24px 32px 24px 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    will-change: opacity, transform;
+    /* Subtle dark-green radial gradient behind the text only, smoothly blending into scene */
+    background: radial-gradient(ellipse at 40% 50%, rgba(3, 18, 11, 0.60) 0%, rgba(3, 18, 11, 0.25) 60%, transparent 90%);
+    border-radius: 28px;
+    border: none;
+    box-shadow: none;
+}
+
+.paddy-story-card .intro-line-lead {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: clamp(20px, 1.8vw, 28px) !important;
+    line-height: 1.4 !important;
+    letter-spacing: normal !important;
+    color: #BBC3B3 !important;
+    text-align: left !important;
+    align-self: flex-start !important;
+    margin: 0 0 16px 0 !important;
+    padding: 0 !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.90);
+}
+
+.paddy-story-card .intro-line-stat {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-weight: 600 !important;
+    font-style: normal !important;
+    font-size: clamp(48px, 5vw, 80px) !important;
+    line-height: 1.1 !important;
+    letter-spacing: normal !important;
+    color: #EEECE3 !important;
+    text-align: left !important;
+    align-self: flex-start !important;
+    margin: 0 0 clamp(28px, 2.5vw, 32px) 0 !important;
+    padding: 0 !important;
+    white-space: nowrap;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.95), 0 2px 10px rgba(0, 0, 0, 0.85);
+}
+
+.paddy-story-card .stat-highlight {
+    color: #D94A45 !important;
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-weight: 600 !important;
+    font-size: 1.02em !important;
+    font-style: normal !important;
+    font-variant-numeric: lining-nums !important;
+    font-feature-settings: "lnum" 1 !important;
+    display: inline !important;
+    margin: 0 0.15em 0 0 !important;
+    text-shadow: 0 0 28px rgba(217, 74, 69, 0.35), 0 4px 20px rgba(0, 0, 0, 0.95);
+}
+
+.paddy-story-card .intro-line-question {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    font-size: clamp(22px, 2vw, 30px) !important;
+    line-height: 1.35 !important;
+    letter-spacing: normal !important;
+    color: #EEECE3 !important;
+    text-align: left !important;
+    align-self: flex-start !important;
+    margin: 0 0 16px 0 !important;
+    padding: 0 !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.90);
+}
+
+.paddy-story-card .intro-line-pathways {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: clamp(18px, 1.5vw, 22px) !important;
+    line-height: 1.4 !important;
+    letter-spacing: normal !important;
+    color: #A8B9A3 !important;
+    text-align: left !important;
+    align-self: flex-start !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.90);
+}
+
+@media (max-width: 900px) {
+    .paddy-story-card {
+        left: 45%;
+        width: 49%;
+        max-width: none;
+        padding: 16px 20px 16px 12px;
+    }
+
+    .paddy-story-card .intro-line-stat {
+        white-space: normal;
+    }
+}
+
+@media (max-width: 680px) {
+    .paddy-story-overlay {
+        justify-content: flex-end;
+        padding: 24px 24px 48px 24px;
+    }
+
+    .paddy-story-card {
+        left: auto;
+        width: 100%;
+        max-width: 100%;
+        padding: 20px 24px;
+        border-radius: 20px;
+        background: radial-gradient(ellipse at 50% 50%, rgba(3, 18, 11, 0.82) 0%, rgba(3, 18, 11, 0.45) 75%, transparent 100%);
+    }
+
+    .paddy-story-card .intro-line-stat {
+        white-space: normal;
+    }
+}
+
+/* Beat 7: Clean Animated Sankey Stage Overlay */
+.paddy-sankey-stage {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 28;
+    pointer-events: none;
+    opacity: 0;
+    padding: 1.5rem;
+    will-change: opacity, transform;
+}
+
+.paddy-sankey-scrim {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 140%;
+    height: 140%;
+    max-width: 1700px;
+    background: radial-gradient(ellipse 55% 50% at 50% 50%, rgba(3, 20, 14, 0.94) 0%, rgba(3, 20, 14, 0.80) 42%, rgba(3, 20, 14, 0.25) 70%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+    filter: blur(36px);
+}
+
+.paddy-sankey-card {
+    width: min(98vw, 1420px);
+    height: min(92vh, 780px);
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    pointer-events: auto;
+    position: relative;
+    z-index: 2;
+}
+
+.paddy-sankey-card .sankey-chart-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    background: transparent;
+}
+
+/* ==========================================================================
+   SECTION 3: EDITORIAL CHAPTER - MYTHS DON'T CURE VENOM
+   ========================================================================== */
+.myths-chapter-screen {
+    position: relative;
+    z-index: 20;
+    min-height: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(5rem, 9vh, 7rem) clamp(24px, 4vw, 48px);
+    background: transparent;
+    box-sizing: border-box;
+}
+
+.myths-chapter-screen::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(96vw, 1180px);
+    height: 90%;
+    /* Soft, broad, feathered dark-emerald overlay (#03120D) at ~75% opacity near center, fading smoothly toward edges */
+    background: radial-gradient(ellipse 72% 64% at 50% 50%, rgba(3, 18, 13, 0.76) 0%, rgba(3, 18, 13, 0.58) 38%, rgba(3, 18, 13, 0.22) 70%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.myths-editorial-container {
+    max-width: 920px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    box-sizing: border-box;
+}
+
+/* Banner Block */
+.myths-banner-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.myths-line-lead {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    font-size: clamp(28px, 3.2vw, 44px) !important;
+    line-height: 1.15 !important;
+    letter-spacing: normal !important;
+    color: #EEECE3 !important;
+    text-align: center !important;
+    margin: 0 0 12px 0 !important;
+    padding: 0 !important;
+    text-shadow: none !important;
+}
+
+.myths-line-lead .highlight-venom {
+    color: #D94A45 !important;
+    font-family: inherit !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    text-shadow: none !important;
+}
+
+.myths-line-headline {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-weight: 600 !important;
+    font-style: normal !important;
+    font-size: clamp(48px, 6.2vw, 88px) !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.02em !important;
+    color: #EEECE3 !important;
+    text-align: center !important;
+    margin: 0 0 32px 0 !important;
+    padding: 0 !important;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.75) !important;
+}
+
+/* Core Question */
+.myths-question-text {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size: clamp(18px, 1.8vw, 21px) !important;
+    line-height: 1.5 !important;
+    color: #EEECE3 !important;
+    text-align: center !important;
+    max-width: 800px !important;
+    width: 100% !important;
+    margin: 0 auto 32px auto !important;
+    padding: 0 16px !important;
+    box-sizing: border-box !important;
+    text-wrap: balance !important;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Three-Step Visual Sequence */
+.myths-steps-sequence {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 620px;
+    width: 100%;
+    margin: 0 auto 40px auto;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+.myths-step-item {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.myths-step-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #A8B9A3;
+    margin: 0 auto;
+    flex-shrink: 0;
+}
+
+.myths-step-svg {
+    width: 44px;
+    height: 44px;
+    display: block;
+}
+
+.myths-step-connector {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    width: clamp(36px, 5.5vw, 60px);
+    color: #A8B9A3;
+    padding: 0 4px;
+    box-sizing: border-box;
+}
+
+.myths-connector-arrow {
+    width: 100%;
+    max-width: 52px;
+    height: 20px;
+    display: block;
+    color: #A8B9A3;
+}
+
+.myths-step-label {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-size: clamp(14px, 1.35vw, 15.5px) !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    line-height: 1.35 !important;
+    color: #EEECE3 !important;
+    margin-top: 12px !important;
+    text-align: center !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+/* Scroll Prompt */
+.myths-scroll-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 0 auto;
+    padding: 0;
+    border: none;
+    background: transparent;
+    opacity: 0.9;
+}
+
+.myths-prompt-text {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    letter-spacing: 0.10em !important;
+    text-transform: uppercase !important;
+    color: #A8B9A3 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.myths-prompt-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #A8B9A3 !important;
+    margin: 0 !important;
+    line-height: 1;
+    animation: prompt-bounce 2.2s ease-in-out infinite;
+}
+
+.myths-prompt-arrow svg {
+    width: 16px;
+    height: 16px;
+    stroke: #A8B9A3 !important;
+}
+
+@keyframes prompt-bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(6px);
+    }
+}
+
+@media (max-width: 768px) {
+    .myths-question-text {
+        margin-bottom: 28px !important;
+    }
+    .myths-steps-sequence {
+        max-width: 100%;
+        margin-bottom: 34px;
+        padding: 0 4px;
+    }
+    .myths-step-icon {
+        width: 32px;
+        height: 32px;
+    }
+    .myths-step-svg {
+        width: 32px;
+        height: 32px;
+    }
+    .myths-step-connector {
+        height: 32px;
+        width: clamp(22px, 4.5vw, 36px);
+        padding: 0 2px;
+    }
+    .myths-step-label {
+        font-size: clamp(12px, 3.2vw, 13px) !important;
+        margin-top: 10px !important;
+    }
+}
+
+/* ==========================================================================
+   SECTION 4: COUNTERFACTUAL SANKEY STAGE (100% HOSPITAL CARE)
+   ========================================================================== */
+.counterfactual-screen {
+    position: relative;
+    z-index: 20;
+    min-height: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: clamp(3rem, 6vh, 5rem) 1.5rem clamp(4rem, 8vh, 6rem) 1.5rem;
+    margin-top: 0;
+    background: transparent;
+}
+
+.counterfactual-sankey-scrim {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 140%;
+    height: 140%;
+    max-width: 1700px;
+    background: radial-gradient(ellipse 55% 50% at 50% 50%, rgba(3, 20, 14, 0.88) 0%, rgba(3, 20, 14, 0.68) 42%, rgba(3, 20, 14, 0.20) 70%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+    filter: blur(36px);
+}
+
+.counterfactual-container {
+    width: 100%;
+    max-width: 1440px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    z-index: 2;
+}
+
+.counterfactual-sankey-card {
+    width: min(98vw, 1420px);
+    height: min(92vh, 780px);
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    pointer-events: auto;
+    position: relative;
+}
+
+.counterfactual-sankey-card .sankey-counterfactual-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    background: transparent;
+}
+
+/* ==========================================================================
+   SECTION 5: THE UNSEEN TOLL (WHO COUNTS THE SNAKES?)
+   ========================================================================== */
+.unseen-chapter-screen {
+    position: relative;
+    z-index: 20;
+    min-height: 80vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(5rem, 10vh, 9rem) 24px clamp(6rem, 12vh, 10rem) 24px;
+    margin-top: clamp(4rem, 8vh, 8rem);
+    background: transparent;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Broad, softly feathered dark-emerald overlay behind central text */
+.unseen-chapter-screen::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(94vw, 1300px);
+    height: 90%;
+    background: radial-gradient(ellipse 65% 58% at 50% 50%, rgba(3, 18, 13, 0.88) 0%, rgba(3, 18, 13, 0.65) 45%, rgba(3, 18, 13, 0.22) 75%, transparent 100%);
+    filter: blur(32px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.unseen-editorial-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    width: 100%;
+    padding: 0 24px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(35px);
+    filter: blur(10px);
+    transition: opacity 1.25s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1.25s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 1.25s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform, filter;
+}
+
+.unseen-editorial-container.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+/* Opening sentence */
+.unseen-line-lead {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(18px, 1.5vw, 25px);
+    font-weight: 400;
+    font-style: normal;
+    color: #A8B9A3;
+    line-height: 1.45;
+    letter-spacing: normal;
+    text-align: center;
+    margin: 0 0 clamp(24px, 2.5vw, 36px) 0;
+    text-shadow: none;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1) 0.22s,
+                transform 1s cubic-bezier(0.16, 1, 0.3, 1) 0.22s;
+}
+
+.unseen-editorial-container.is-visible .unseen-line-lead {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Main question headline */
+.unseen-line-headline {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(40px, 4.5vw, 76px);
+    font-weight: 500;
+    font-style: normal;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto clamp(28px, 3vw, 40px) auto;
+    text-align: center;
+    text-shadow: none;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.38s,
+                transform 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.38s;
+}
+
+.unseen-editorial-container.is-visible .unseen-line-headline {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.unseen-headline-line {
+    display: block;
+}
+
+.unseen-headline-1 {
+    color: #EEECE3;
+}
+
+.unseen-headline-2 {
+    color: #D94A45;
+}
+
+/* Subtle centered soft-sage divider */
+.unseen-center-divider {
+    width: 64px;
+    height: 1px;
+    background: rgba(168, 185, 163, 0.25);
+    margin: 0 auto clamp(18px, 2vw, 24px) auto;
+    opacity: 0;
+    transform: scaleX(0.3);
+    transition: opacity 1.1s ease 0.5s, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
+}
+
+.unseen-editorial-container.is-visible .unseen-center-divider {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+/* Closing triad cadence */
+.unseen-triad-block {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s,
+                transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s;
+}
+
+.unseen-editorial-container.is-visible .unseen-triad-block {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.triad-item {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.triad-word {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(12px, 1.1vw, 15px);
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    line-height: 1.5;
+    text-transform: uppercase;
+    color: #A8B9A3;
+    text-shadow: none;
+    transition: color 0.3s ease;
+}
+
+.triad-sep {
+    color: #D94A45;
+    font-size: 13px;
+    line-height: 1;
+    margin-left: 1rem;
+    user-select: none;
+}
+
+@media (max-width: 768px) {
+    .triad-word {
+        letter-spacing: 0.11em;
+    }
+    .triad-sep {
+        margin-left: 0.65rem;
+    }
+    .unseen-triad-block {
+        gap: 0.4rem 0.65rem;
+    }
+}
+
+/* ==========================================================================
+   SECTION 6: BEYOND THE FEAR - SNAKE DIVERSITY (STICKY SCENE)
+   ========================================================================== */
+.diversity-chapter-section {
+    position: relative;
+    width: 100%;
+    height: 240svh;
+    background: transparent;
+    box-sizing: border-box;
+    z-index: 25;
+}
+
+.diversity-sticky-scene {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100svh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+}
+
+/* Panoramic Visual Layer: Spans 100% browser width & sticky height, vertical mask only */
+.diversity-scene-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 2;
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 10%,
+        black 90%,
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 10%,
+        black 90%,
+        transparent 100%
+    );
+}
+
+.diversity-scene-frames {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.diversity-scene-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    will-change: opacity;
+}
+
+.diversity-scene-frame.is-active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Soft Central Scrim below live text with no visible boundary */
+.diversity-text-scrim {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(80vw, 680px);
+    height: min(70vh, 560px);
+    background: radial-gradient(ellipse 55% 50% at 50% 50%, rgba(3, 18, 13, 0.74) 0%, rgba(3, 18, 13, 0.40) 55%, transparent 100%);
+    pointer-events: none;
+    z-index: 4;
+    filter: blur(28px);
+}
+
+/* Center Live Editorial Typography (Stationary, Unmasked, Separate Layer) */
+.diversity-center-editorial {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(90%, 540px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.diversity-eyebrow {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    letter-spacing: 0.16em !important;
+    text-transform: uppercase !important;
+    color: #A8B9A3 !important;
+    margin-bottom: 24px !important;
+    display: block !important;
+}
+
+.diversity-heading {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    font-size: clamp(36px, 3.8vw, 60px) !important;
+    line-height: 1.08 !important;
+    color: #EEECE3 !important;
+    text-align: center !important;
+    margin: 0 0 28px 0 !important;
+    letter-spacing: normal !important;
+    text-shadow: none !important;
+}
+
+.diversity-stat-number {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    font-size: clamp(100px, 11vw, 180px) !important;
+    line-height: 0.95 !important;
+    color: #EEECE3 !important;
+    text-align: center !important;
+    margin: 0 0 12px 0 !important;
+    letter-spacing: normal !important;
+    font-variant-numeric: normal !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+    text-shadow: none !important;
+}
+
+.diversity-stat-label {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-size: clamp(17px, 1.4vw, 22px) !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    line-height: 1.4 !important;
+    color: #A8B9A3 !important;
+    text-align: center !important;
+    margin: 0 0 36px 0 !important;
+}
+
+.diversity-scroll-cue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.diversity-scroll-cue-text {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    letter-spacing: 0.16em !important;
+    text-transform: uppercase !important;
+    color: #A8B9A3 !important;
+}
+
+.diversity-cue-arrow {
+    display: block;
+    color: #A8B9A3 !important;
+    stroke: #A8B9A3 !important;
+    animation: cue-bounce 2.2s ease-in-out infinite;
+}
+
+@keyframes cue-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+}
+
+/* Responsive Mobile Composition */
+@media (max-width: 768px) {
+    .diversity-scene-frame {
+        object-position: center 55%;
+    }
+
+    .diversity-center-editorial {
+        width: min(92%, 400px);
+    }
+
+    .diversity-eyebrow {
+        font-size: 11px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .diversity-heading {
+        font-size: clamp(22px, 5.5vw, 30px) !important;
+        margin-bottom: 14px !important;
+    }
+
+    .diversity-stat-number {
+        font-size: clamp(56px, 14vw, 84px) !important;
+        margin-bottom: 6px !important;
+    }
+
+    .diversity-stat-label {
+        font-size: clamp(13px, 3.2vw, 16px) !important;
+        margin-bottom: 18px !important;
+    }
+
+    .diversity-scroll-cue-text {
+        font-size: 11px !important;
+    }
+
+    .diversity-text-scrim {
+        width: 90vw;
+        height: 60vh;
+        filter: blur(20px);
+    }
+}
+
+/* Prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .diversity-chapter-section {
+        height: 100svh !important;
+    }
+    .diversity-cue-arrow {
+        animation: none !important;
+    }
+}
+
+/* ==========================================================================
+   SECTION 7: TRANSITION QUESTION - THREAT TO HUMAN LIFE
+   ========================================================================== */
+.threat-chapter-screen {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(60px, 8vh, 100px) clamp(24px, 5vw, 60px);
+    box-sizing: border-box;
+    background: transparent;
+    overflow: hidden;
+    z-index: 20;
+}
+
+/* Feathered dark radial scrim behind text for legibility over forest backdrop */
+.threat-text-scrim {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(92vw, 920px);
+    height: min(80vh, 620px);
+    background: radial-gradient(
+        ellipse 60% 55% at 50% 50%,
+        rgba(2, 16, 11, 0.84) 0%,
+        rgba(2, 16, 11, 0.54) 50%,
+        rgba(2, 16, 11, 0.15) 75%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 2;
+    filter: blur(34px);
+    opacity: 0.95;
+}
+
+/* Centered content container */
+.threat-content-container {
+    position: relative;
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 5;
+    opacity: 0;
+    transform: translateY(12px);
+    will-change: opacity, transform;
+}
+
+/* Question Typography */
+.threat-question-headline {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    font-size: clamp(60px, 4.6vw, 72px) !important;
+    line-height: 1.15 !important;
+    letter-spacing: normal !important;
+    text-align: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-shadow: none !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.threat-line {
+    display: block;
+}
+
+.threat-line-ivory {
+    color: #EEECE3 !important;
+}
+
+.threat-line-red {
+    color: #D94A45 !important;
+}
+
+/* Understated horizontal hairline divider: ~64px wide, 1px high, muted sage at low opacity */
+.threat-hairline-divider {
+    width: 64px;
+    height: 1px;
+    background: rgba(168, 185, 163, 0.28);
+    margin: clamp(40px, 4.5vh, 48px) auto 0 auto;
+    border: none;
+}
+
+/* Responsive Tablet Styling: 44-54px */
+@media (max-width: 1024px) {
+    .threat-question-headline {
+        font-size: clamp(44px, 5vw, 54px) !important;
+        line-height: 1.16 !important;
+    }
+}
+
+/* Responsive Mobile Styling: 34-40px, natural wrapping rather than forced desktop breaks */
+@media (max-width: 768px) {
+    .threat-line {
+        display: inline;
+    }
+
+    .threat-line-ivory:first-child::after,
+    .threat-line-ivory:nth-child(2)::after {
+        content: " ";
+    }
+
+    .threat-question-headline {
+        font-size: clamp(34px, 7vw, 40px) !important;
+        line-height: 1.2 !important;
+    }
+
+    .threat-hairline-divider {
+        margin-top: 36px;
+    }
+}
+
+/* Prefers-reduced-motion: show text without movement */
+@media (prefers-reduced-motion: reduce) {
+    .threat-content-container {
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* ==========================================================================
+   SECTION 8: DIVERSITY SPECTRUM - UNIT CHART (300 SPECIES)
+   ========================================================================== */
+.spectrum-chapter-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(70px, 9vh, 120px) clamp(20px, 4vw, 48px);
+    box-sizing: border-box;
+    background: transparent;
+    overflow: hidden;
+    z-index: 22;
+}
+
+/* Broad feathered dark-emerald radial scrim behind chart to quiet forest details */
+.spectrum-text-scrim {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(96vw, 1200px);
+    height: min(92vh, 880px);
+    background: radial-gradient(
+        ellipse 72% 64% at 50% 48%,
+        rgba(2, 16, 11, 0.92) 0%,
+        rgba(2, 16, 11, 0.76) 50%,
+        rgba(2, 16, 11, 0.22) 80%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 2;
+    filter: blur(36px);
+    opacity: 0.98;
+}
+
+.spectrum-container {
+    position: relative;
+    max-width: 1080px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 5;
+}
+
+/* Editorial Heading & Subtitle */
+.spectrum-header {
+    text-align: center;
+    margin-bottom: clamp(32px, 4vh, 46px);
+    max-width: 900px;
+    width: 100%;
+}
+
+.spectrum-heading {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    font-size: clamp(34px, 4.4vw, 58px) !important;
+    line-height: 1.15 !important;
+    letter-spacing: normal !important;
+    color: #EEECE3 !important;
+    text-align: center !important;
+    margin: 0 0 12px 0 !important;
+    text-shadow: none !important;
+}
+
+.spectrum-subheading {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-size: clamp(15px, 1.3vw, 18px) !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    color: #A8B9A3 !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+    text-align: center !important;
+}
+
+/* Three Clean, Evenly Spaced Category Summaries */
+.spectrum-categories {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 3vw, 44px);
+    width: 100%;
+    max-width: 860px;
+    margin-bottom: clamp(36px, 4.5vh, 50px);
+}
+
+.spectrum-category-btn {
+    background: transparent;
+    border: none;
+    padding: 12px 14px 16px 14px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    position: relative;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    outline: none;
+    border-radius: 4px;
+}
+
+.spectrum-category-btn:focus-visible {
+    outline: 2px solid rgba(168, 185, 163, 0.45);
+    outline-offset: 4px;
+}
+
+.spectrum-category-btn:hover {
+    transform: translateY(-1px);
+}
+
+.spectrum-category-btn.is-faded {
+    opacity: 0.65;
+}
+
+.spectrum-cat-metrics {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 6px;
+}
+
+.spectrum-cat-percent {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-size: clamp(34px, 3.8vw, 46px) !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    letter-spacing: -0.02em;
+}
+
+/* Category Colors for Percentage */
+#cat-btn-ms .spectrum-cat-percent { color: #d63053; }
+#cat-btn-v .spectrum-cat-percent { color: #e69119; }
+#cat-btn-nv .spectrum-cat-percent { color: #10ac84; }
+
+.spectrum-cat-label-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.spectrum-cat-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.dot-ms { background-color: #d63053; }
+.dot-v { background-color: #e69119; }
+.dot-nv { background-color: #10ac84; }
+
+.spectrum-cat-title {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-size: clamp(13px, 1vw, 14.5px) !important;
+    font-weight: 500 !important;
+    color: #EEECE3;
+    letter-spacing: 0.01em;
+}
+
+/* Restrained Underline for Active Category */
+.spectrum-active-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 14px;
+    right: 14px;
+    height: 2px;
+    background: transparent;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+#cat-btn-ms.is-active .spectrum-active-indicator { background: #d63053; }
+#cat-btn-v.is-active .spectrum-active-indicator { background: #e69119; }
+#cat-btn-nv.is-active .spectrum-active-indicator { background: #10ac84; }
+
+/* 307 Species Unit Grid - Natural Centered Flow */
+.spectrum-grid-card {
+    width: 100%;
+    max-width: 920px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: clamp(24px, 3vh, 36px);
+}
+
+.spectrum-dot-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 900px;
+    padding: 8px 0;
+}
+
+.spectrum-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                background-color 0.25s ease,
+                opacity 0.2s ease,
+                box-shadow 0.25s ease;
+    opacity: 1;
+    will-change: transform, opacity;
+}
+
+.spectrum-dot.type-ms { 
+    background-color: #d63053; 
+    box-shadow: 0 0 8px rgba(214, 48, 83, 0.35);
+}
+.spectrum-dot.type-v { 
+    background-color: #e69119; 
+    box-shadow: 0 0 8px rgba(230, 145, 25, 0.25);
+}
+.spectrum-dot.type-nv { 
+    background-color: #10ac84; 
+    box-shadow: 0 0 8px rgba(16, 172, 132, 0.25);
+}
+
+/* Inactive dots fade cleanly to opacity 0 with zero layout shift */
+.spectrum-dot.is-hidden {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+.spectrum-dot:hover,
+.spectrum-dot:focus-visible {
+    transform: scale(1.38);
+    z-index: 10;
+    outline: none;
+}
+
+/* Rich Floating Tooltip */
+.spectrum-tooltip {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000;
+    background: rgba(5, 16, 11, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(10px);
+    color: #f4f6f4;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    max-width: 260px;
+    min-width: 200px;
+}
+
+.spectrum-tooltip.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.spectrum-t-name {
+    font-weight: 700;
+    font-size: 13px;
+    color: #ffffff;
+    display: block;
+}
+
+.spectrum-t-sci {
+    font-style: italic;
+    color: #8ea395;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.spectrum-t-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 11px;
+}
+
+.spectrum-t-badge {
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.spectrum-t-count {
+    color: #a8b9a3;
+    font-size: 11px;
+}
+
+/* Status Bar & Reset Control */
+.spectrum-footer {
+    width: 100%;
+    max-width: 980px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+}
+
+.spectrum-status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    min-height: 28px;
+}
+
+.spectrum-status-text {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    color: #A8B9A3;
+    font-weight: 400;
+}
+
+.spectrum-reset-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(168, 185, 163, 0.3);
+    color: #EEECE3;
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: none;
+}
+
+.spectrum-reset-btn.is-active {
+    display: inline-block;
+}
+
+.spectrum-reset-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(168, 185, 163, 0.6);
+}
+
+/* Editorial Takeaway Line */
+.spectrum-takeaway {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(16px, 1.4vw, 20px);
+    font-weight: 500;
+    color: #c4d5c9;
+    text-align: center;
+    letter-spacing: 0.015em;
+    padding-top: 20px;
+    margin: 0;
+    opacity: 0.95;
+    position: relative;
+    width: 100%;
+}
+
+.spectrum-takeaway::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 1px;
+    background: rgba(168, 185, 163, 0.2);
+}
+
+/* Responsive Grid Breakpoints */
+@media (max-width: 900px) {
+    .spectrum-dot-grid {
+        gap: 6px;
+    }
+    .spectrum-dot {
+        width: 15px;
+        height: 15px;
+    }
+    .spectrum-categories {
+        gap: 16px;
+    }
+}
+
+@media (max-width: 680px) {
+    .spectrum-categories {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        max-width: 320px;
+    }
+    .spectrum-category-btn {
+        padding: 8px 10px 12px 10px;
+        width: 100%;
+    }
+    .spectrum-dot-grid {
+        gap: 6px;
+    }
+    .spectrum-dot {
+        width: 13px;
+        height: 13px;
+    }
+    .spectrum-def-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+/* Prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .spectrum-dot,
+    .spectrum-category-btn,
+    .spectrum-reset-btn {
+        transition: none !important;
+    }
+}
+
+/* ==========================================================================
+   SHARED FOREST ENVIRONMENT (SECTIONS 8 & 9)
+   ========================================================================== */
+.forest-environment-group {
+    position: relative;
+    width: 100%;
+    background: transparent;
+}
+
+/* Continuous Shared Snake-Scale Sticky Layer */
+.shared-scale-overlay {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    margin-bottom: -100vh;
+    pointer-events: none;
+    z-index: 1; /* Behind section content, above continuous dark-green background */
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.35s ease-out;
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 14%,
+        black 86%,
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 14%,
+        black 86%,
+        transparent 100%
+    );
+}
+
+.shared-scale-side {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: clamp(200px, 18vw, 340px);
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Independent opacity controls:
+   Left: ~0.24 (approx 0.20-0.25)
+   Right: ~0.50 (approx 0.40-0.55) */
+.shared-scale-left {
+    left: 0;
+    opacity: 0.24;
+}
+
+.shared-scale-right {
+    right: 0;
+    opacity: 0.50;
+}
+
+.shared-scale-img {
+    position: absolute;
+    top: 50%;
+    height: clamp(540px, 76vh, 860px);
+    width: calc(clamp(540px, 76vh, 860px) * 2.34325);
+    margin-top: calc(-0.5 * clamp(540px, 76vh, 860px));
+    background-image: url('assets/bigfour_scales_overlay.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.shared-scale-img-left {
+    left: 0;
+    transform: translate3d(0, 12px, 0);
+}
+
+.shared-scale-img-right {
+    right: 0;
+    transform: translate3d(0, -8px, 0);
+}
+
+@media (max-width: 1200px) {
+    .shared-scale-side {
+        width: clamp(130px, 13vw, 190px);
+    }
+    .shared-scale-left {
+        opacity: 0.20;
+    }
+    .shared-scale-right {
+        opacity: 0.45;
+    }
+}
+
+@media (max-width: 900px) {
+    .shared-scale-overlay {
+        display: none !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .shared-scale-img {
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* ==========================================================================
+   SECTION 9: THE BIG FOUR - DEADLIEST DRAW CARD DECK
+   ========================================================================== */
+
+.bigfour-chapter-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding: clamp(64px, 8vh, 100px) clamp(24px, 4vw, 56px);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    z-index: 5;
+    overflow-x: clip;
+}
+
+.bigfour-text-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse 75% 65% at 50% 50%, rgba(3, 18, 13, 0.72) 0%, rgba(3, 18, 13, 0) 100%);
+    z-index: 0;
+}
+
+.bigfour-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(320px, 1.15fr) minmax(340px, 0.85fr);
+    gap: clamp(64px, 7vw, 110px);
+    align-items: center;
+    justify-content: center;
+}
+
+/* Left Column: Editorial & Explanatory */
+.bigfour-col-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding-left: clamp(24px, 3.5vw, 56px); /* Shift text right to avoid forest imagery overlap */
+}
+
+.bigfour-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.bigfour-eyebrow-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.bigfour-eyebrow-line {
+    width: 32px;
+    height: 1px;
+    background: rgba(168, 185, 163, 0.45);
+}
+
+.bigfour-eyebrow {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: #A8B9A3;
+}
+
+.bigfour-main-question {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(38px, 4.2vw, 56px);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin: 0 0 24px; /* approx 24px below question */
+    text-align: left;
+}
+
+.bigfour-q-line1 {
+    color: #EEECE3; /* ivory */
+    display: block;
+}
+
+.bigfour-q-line2 {
+    color: #D94A45; /* muted red */
+    display: block;
+}
+
+.bigfour-desktop-break {
+    display: inline;
+}
+
+.bigfour-supporting-line {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(17px, 1.4vw, 19.5px);
+    font-weight: 400;
+    color: #A8B9A3;
+    margin: 0 0 clamp(56px, 6.5vh, 72px); /* A larger gap of approx 56-72px */
+    line-height: 1.45;
+}
+
+.bigfour-deck-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.bigfour-deck-heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(34px, 3.2vw, 44px);
+    font-weight: 500;
+    color: #EEECE3;
+    margin: 0 0 14px; /* approx 12-16px */
+    letter-spacing: -0.01em;
+}
+
+.bigfour-deck-instruction {
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(15px, 1.25vw, 17px);
+    font-weight: 400;
+    color: #A8B9A3;
+    margin: 0;
+    line-height: 1.45;
+}
+
+/* Right Column: Interactive Playing Card Deck */
+.bigfour-col-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Playing Card Stage: Slender 340px x 590px (aspect ratio ~0.576) */
+.bigfour-stage {
+    position: relative;
+    width: 340px;
+    max-width: calc(100vw - 48px);
+    height: 590px;
+    perspective: 1200px;
+    margin: 0 auto;
+    touch-action: pan-y;
+}
+
+/* The Card Body */
+.bigfour-stage .card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #FAF6EA;
+    border-radius: 12px;
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.45),
+        0 18px 42px rgba(0, 0, 0, 0.6);
+    transition: transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease, box-shadow 0.35s ease;
+    user-select: none;
+    touch-action: none;
+    cursor: grab;
+    will-change: transform;
+    color: #243D2C;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.bigfour-stage .card:active {
+    cursor: grabbing;
+}
+
+/* Inner Frame Surfaces */
+.bigfour-stage .card-inner {
+    width: 100%;
+    height: 100%;
+    background: #FAF6EA;
+    border: 1px solid #243D2C;
+    border-radius: 6px;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Dual Inset Border for Playing Card look */
+.bigfour-stage .card-front::before {
+    content: '';
+    position: absolute;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    border: 1.5px solid #243D2C;
+    top: 3px;
+    left: 3px;
+    pointer-events: none;
+    border-radius: 4px;
+    z-index: 1;
+}
+
+/* Vintage Card Back Surface */
+.bigfour-stage .card-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: #FAF6EA url('assets/card_back.svg') no-repeat center center;
+    background-size: 100% 100%;
+    border-radius: 6px;
+    border: 1px solid #243D2C;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    z-index: 2;
+}
+
+/* Rear Cards: OPAQUE, show card back, conceal front completely to prevent ghosting */
+.bigfour-stage .card.in-deck:not([data-index="0"]) .card-back {
+    opacity: 1;
+}
+
+.bigfour-stage .card.in-deck:not([data-index="0"]) .card-front {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Compact Stacking: Restrained rotation & small rightward fan */
+.bigfour-stage .card.in-deck[data-index="0"] {
+    z-index: 4;
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.bigfour-stage .card.in-deck[data-index="1"] {
+    z-index: 3;
+    transform: translate(14px, -3px) rotate(2.2deg);
+    opacity: 1;
+    pointer-events: none;
+}
+
+.bigfour-stage .card.in-deck[data-index="2"] {
+    z-index: 2;
+    transform: translate(26px, -6px) rotate(4.4deg);
+    opacity: 1;
+    pointer-events: none;
+}
+
+.bigfour-stage .card.in-deck[data-index="3"] {
+    z-index: 1;
+    transform: translate(36px, -9px) rotate(6.5deg);
+    opacity: 1;
+    pointer-events: none;
+}
+
+.bigfour-stage .card.discarded {
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 0.45s ease-out, opacity 0.35s ease-out;
+}
+
+/* Corner Rank & Suit */
+.bigfour-stage .corner {
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    font-family: 'Cinzel', serif;
+    z-index: 5;
+    color: #243D2C;
+}
+
+.bigfour-stage .corner .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.bigfour-stage .corner .suit {
+    font-size: 1.25rem;
+    margin-top: -1px;
+}
+
+/* Upper ~40% Snake Illustration */
+.bigfour-stage .card-art {
+    width: 100%;
+    height: 220px;
+    min-height: 220px;
+    max-height: 220px;
+    padding: 16px 20px 6px;
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.bigfour-stage .card-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    filter: contrast(1.1) saturate(1.05);
+}
+
+/* Card Content: Species Name, Divider, Metrics */
+.bigfour-stage .card-content {
+    padding: 8px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    z-index: 2;
+}
+
+.bigfour-stage .card-name {
+    font-family: 'Cinzel', 'Cormorant Garamond', serif;
+    font-size: 1.22rem;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.15;
+    letter-spacing: 0.05em;
+    margin: 4px 0 24px 0; /* 24px before divider per requirements */
+    color: #243D2C;
+}
+
+/* Divider with Star Icon */
+.bigfour-stage .divider {
+    display: flex;
+    align-items: center;
+    width: 76%;
+    margin: 0 auto 24px; /* 24px between divider and metrics */
+    color: #243D2C;
+}
+
+.bigfour-stage .divider::before,
+.bigfour-stage .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(36, 61, 44, 0.4);
+}
+
+.bigfour-stage .divider svg {
+    width: 12px;
+    height: 12px;
+    margin: 0 8px;
+    fill: #243D2C;
+    flex-shrink: 0;
+}
+
+/* Stats Table: Google Sans Flex per AGENTS.md */
+.bigfour-stage .stats-table {
+    width: 100%;
+    margin-top: 0;
+}
+
+.bigfour-stage .stat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0; /* consistent metric-row spacing */
+    border-bottom: 1px solid rgba(36, 61, 44, 0.16);
+}
+
+.bigfour-stage .stat-icon {
+    width: 15px;
+    height: 15px;
+    fill: #243D2C;
+    margin-right: 8px;
+    opacity: 0.85;
+    flex-shrink: 0;
+}
+
+.bigfour-stage .stat-label {
+    display: flex;
+    align-items: center;
+    font-family: 'Google Sans Flex', -apple-system, sans-serif !important;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #27382D;
+    flex-grow: 1;
+}
+
+.bigfour-stage .stat-value {
+    font-family: 'Google Sans Flex', -apple-system, sans-serif !important;
+    font-weight: 600;
+    font-size: 14.5px;
+    color: #121F16;
+    text-align: right;
+}
+
+/* Primary Toxicity Type */
+.bigfour-stage .stat-row.stat-row-toxicity {
+    border-bottom: none;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 22px; /* comfortable spacing below metrics */
+    gap: 4px;
+    padding-bottom: 0;
+}
+
+.bigfour-stage .stat-row.stat-row-toxicity .stat-label {
+    justify-content: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #435449;
+    font-weight: 600;
+}
+
+.bigfour-stage .stat-row.stat-row-toxicity .stat-value-toxicity {
+    font-family: 'Google Sans Flex', -apple-system, sans-serif !important;
+    font-weight: 700;
+    font-size: 13.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+/* Themed Toxicity Colors */
+.bigfour-stage .theme-krait .stat-row.stat-row-toxicity .stat-value-toxicity { color: #2D633B; }
+.bigfour-stage .theme-viper .stat-row.stat-row-toxicity .stat-value-toxicity { color: #A83230; }
+.bigfour-stage .theme-cobra .stat-row.stat-row-toxicity .stat-value-toxicity { color: #1E4D82; }
+.bigfour-stage .theme-russell .stat-row.stat-row-toxicity .stat-value-toxicity { color: #4A4B4C; }
+
+/* Controls Below Deck: Approx 24px clearance */
+.bigfour-controls {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+}
+
+.bigfour-draw-btn {
+    background: #A83230;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #EEECE3;
+    padding: 12px 28px;
+    font-family: 'Google Sans Flex', -apple-system, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border-radius: 8px;
+    cursor: pointer;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.22s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+}
+
+.bigfour-draw-btn:hover {
+    background: #BD3A38;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+    color: #FFFFFF;
+}
+
+.bigfour-draw-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.bigfour-draw-btn:focus-visible {
+    outline: 2px solid #EEECE3;
+    outline-offset: 3px;
+}
+
+.bigfour-draw-btn .btn-arrow {
+    font-size: 18px;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.bigfour-draw-btn:hover .btn-arrow {
+    transform: translateX(4px);
+}
+
+.bigfour-progress {
+    font-family: 'Google Sans Flex', -apple-system, sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #A8B9A3;
+    letter-spacing: 0.08em;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 960px) {
+    .bigfour-container {
+        grid-template-columns: 1fr;
+        gap: 48px;
+        text-align: center;
+    }
+    .bigfour-col-left {
+        align-items: center;
+        text-align: center;
+    }
+    .bigfour-header {
+        align-items: center;
+    }
+    .bigfour-main-question {
+        text-align: center;
+        font-size: 36px;
+    }
+    .bigfour-desktop-break {
+        display: none;
+    }
+    .bigfour-deck-intro {
+        align-items: center;
+        text-align: center;
+    }
+    .bigfour-supporting-line {
+        margin-bottom: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .bigfour-stage {
+        width: calc(100vw - 36px);
+        height: auto;
+        aspect-ratio: 340 / 590;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bigfour-stage .card {
+        transition: opacity 0.2s ease !important;
+    }
+    .bigfour-draw-btn {
+        transition: none !important;
+    }
+}
+
+/* ==========================================================================
+   SECTION 11: CLOSING SCREEN (LESS FEAR. MORE UNDERSTANDING.)
+   ========================================================================== */
+
+.closing-screen {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    min-height: 100svh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: clamp(80px, 10vh, 120px) clamp(24px, 5vw, 64px) clamp(240px, 28vh, 340px);
+    background-color: transparent; /* Transparent so underlying forest background stays continuous */
+    overflow: visible; /* Prevent clipping of transition blend layer across the section boundary */
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+/* Separate Absolutely Positioned 4K Background Layer Overlapping Boundary */
+.closing-bg-layer {
+    position: absolute;
+    top: -110px; /* Extends 110px up into the map section for an overlapping crossfade */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(100% + 110px);
+    background-image: url('assets/closing-background-4k.webp');
+    background-image: -webkit-image-set(url('assets/closing-background-4k.webp') 1x, url('assets/closing-background-4k.png') 1x);
+    background-image: image-set(url('assets/closing-background-4k.webp') type("image/webp"), url('assets/closing-background-4k.png') type("image/png"));
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 1;
+    /* Gradual multi-stop opacity crossfade across the 220px transition zone */
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0px,
+        rgba(0, 0, 0, 0.02) 30px,
+        rgba(0, 0, 0, 0.08) 60px,
+        rgba(0, 0, 0, 0.20) 90px,
+        rgba(0, 0, 0, 0.40) 120px,
+        rgba(0, 0, 0, 0.65) 150px,
+        rgba(0, 0, 0, 0.88) 185px,
+        black 220px,
+        black 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0px,
+        rgba(0, 0, 0, 0.02) 30px,
+        rgba(0, 0, 0, 0.08) 60px,
+        rgba(0, 0, 0, 0.20) 90px,
+        rgba(0, 0, 0, 0.40) 120px,
+        rgba(0, 0, 0, 0.65) 150px,
+        rgba(0, 0, 0, 0.88) 185px,
+        black 220px,
+        black 100%
+    );
+}
+
+/* Separate Feathered Blur Layer Across Boundary Transition Zone */
+.closing-transition-blur {
+    position: absolute;
+    top: -110px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 220px;
+    pointer-events: none;
+    z-index: 2; /* In front of backgrounds, behind live content */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    /* Feather edges so the blur itself creates no hard or rectangular boundary */
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.15) 15%,
+        rgba(0, 0, 0, 0.70) 35%,
+        rgba(0, 0, 0, 1.0) 50%,
+        rgba(0, 0, 0, 0.70) 65%,
+        rgba(0, 0, 0, 0.15) 85%,
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 0, 0, 0.15) 15%,
+        rgba(0, 0, 0, 0.70) 35%,
+        rgba(0, 0, 0, 1.0) 50%,
+        rgba(0, 0, 0, 0.70) 65%,
+        rgba(0, 0, 0, 0.15) 85%,
+        transparent 100%
+    );
+}
+
+/* Content Container Centered in Open Upper-Middle Space */
+.closing-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    pointer-events: auto;
+}
+
+/* Eyebrow */
+.closing-eyebrow {
+    font-family: 'Google Sans Flex', -apple-system, sans-serif;
+    font-size: clamp(12px, 1vw, 13px);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #A8B9A3;
+    margin: 0 0 clamp(36px, 4.5vh, 48px) 0;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Main Heading */
+.closing-heading {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(40px, 5.2vw, 88px);
+    line-height: 1.08;
+    margin: 0 0 clamp(32px, 4vh, 40px) 0;
+    letter-spacing: -0.015em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+}
+
+.closing-heading-primary {
+    color: #EEECE3;
+    display: block;
+}
+
+.closing-heading-secondary {
+    color: #A8B9A3;
+    display: block;
+}
+
+/* Supporting Copy */
+.closing-supporting {
+    max-width: 850px;
+    margin: 0 0 clamp(40px, 5vh, 56px) 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.3s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+}
+
+.closing-supporting-line {
+    font-family: 'Google Sans Flex', -apple-system, sans-serif;
+    font-size: clamp(16px, 1.35vw, 20px);
+    line-height: 1.55;
+    color: #EEECE3;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* Return Link Container */
+.closing-return-wrap {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.42s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.42s;
+}
+
+.closing-return-link {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #A8B9A3;
+    font-family: 'Google Sans Flex', -apple-system, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: color 0.22s ease, transform 0.22s ease;
+}
+
+.closing-return-link:hover {
+    color: #EEECE3;
+    transform: translateY(-2px);
+}
+
+.closing-return-link:focus-visible {
+    outline: 2px solid #EEECE3;
+    outline-offset: 4px;
+}
+
+.closing-arrow-icon {
+    transition: transform 0.22s ease;
+}
+
+.closing-return-link:hover .closing-arrow-icon {
+    transform: translateY(-3px);
+}
+
+/* When In View: Revealed State */
+.closing-screen.is-revealed .closing-eyebrow,
+.closing-screen.is-revealed .closing-heading,
+.closing-screen.is-revealed .closing-supporting,
+.closing-screen.is-revealed .closing-return-wrap {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Reduced Motion: Immediate display without movement */
+@media (prefers-reduced-motion: reduce) {
+    .closing-eyebrow,
+    .closing-heading,
+    .closing-supporting,
+    .closing-return-wrap {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    .closing-return-link:hover {
+        transform: none !important;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .closing-screen {
+        padding: 60px 24px clamp(180px, 26vh, 260px);
+        min-height: 100svh;
+    }
+
+    .closing-bg-layer {
+        top: -70px;
+        height: calc(100% + 70px);
+        -webkit-mask-image: linear-gradient(
+            to bottom,
+            transparent 0px,
+            rgba(0, 0, 0, 0.05) 25px,
+            rgba(0, 0, 0, 0.25) 55px,
+            rgba(0, 0, 0, 0.65) 90px,
+            rgba(0, 0, 0, 0.90) 120px,
+            black 140px,
+            black 100%
+        );
+        mask-image: linear-gradient(
+            to bottom,
+            transparent 0px,
+            rgba(0, 0, 0, 0.05) 25px,
+            rgba(0, 0, 0, 0.25) 55px,
+            rgba(0, 0, 0, 0.65) 90px,
+            rgba(0, 0, 0, 0.90) 120px,
+            black 140px,
+            black 100%
+        );
+    }
+
+    .closing-transition-blur {
+        top: -70px;
+        height: 140px;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    .closing-heading {
+        font-size: clamp(36px, 9vw, 52px);
+        line-height: 1.12;
+    }
+
+    .closing-supporting-line {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .closing-eyebrow {
+        margin-bottom: 28px;
+    }
+
+    .closing-supporting {
+        margin-bottom: 36px;
+    }
+}

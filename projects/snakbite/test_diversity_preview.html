@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Diversity Scrolly Stage Test</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Google+Sans+Flex:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #03120D;
+            color: #EEECE3;
+            font-family: 'Google Sans Flex', -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Spacer before diversity section to simulate preceding sections */
+        .mock-prior-section {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #A8B9A3;
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(168, 185, 163, 0.2);
+        }
+
+        /* DIVERSITY SECTION: 240svh tall for sticky scroll */
+        .diversity-chapter-section {
+            position: relative;
+            width: 100%;
+            height: 240svh;
+            background: #03120D;
+        }
+
+        /* Sticky 100svh viewport */
+        .diversity-sticky-scene {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100svh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #03120D;
+        }
+
+        /* Shared scene coordinate stage: fits fully within 100svh without cropping animals */
+        .diversity-scene-stage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(100vw, calc(100svh * 16 / 9));
+            height: min(100svh, calc(100vw * 9 / 16));
+            max-width: 1920px;
+            max-height: 1080px;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .diversity-bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Snake positioning and wrappers */
+        .diversity-snake-wrapper {
+            position: absolute;
+            z-index: 5;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .diversity-snake-frames {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .diversity-snake-frames .snake-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+            display: none;
+        }
+
+        .diversity-snake-frames .snake-frame.is-active {
+            display: block;
+        }
+
+        /* 1. Green Snake (upper left branch) */
+        .diversity-snake-green {
+            left: 5.08%;
+            top: 9.22%;
+            width: 28.71%;
+            height: 29.17%;
+        }
+
+        /* 2. Cobra Snake (upper right rock ledge) */
+        .diversity-snake-cobra {
+            left: 76.07%;
+            top: 9.55%;
+            width: 23.83%;
+            height: 42.36%;
+        }
+
+        /* 3. Brown Snake (lower left ground path) */
+        .diversity-snake-brown {
+            left: 4.20%;
+            top: 62.67%;
+            width: 28.71%;
+            height: 31.60%;
+        }
+
+        /* 4. Banded Snake (lower right ground rocks) */
+        .diversity-snake-banded {
+            left: 65.72%;
+            top: 65.28%;
+            width: 31.45%;
+            height: 26.74%;
+        }
+
+        /* Center Live Editorial Typography */
+        .diversity-center-editorial {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(90%, 540px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .diversity-eyebrow {
+            font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #A8B9A3;
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        .diversity-heading {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 500;
+            font-style: normal;
+            font-size: clamp(36px, 3.8vw, 60px);
+            line-height: 1.08;
+            color: #EEECE3;
+            text-align: center;
+            margin: 0 0 28px 0;
+            letter-spacing: normal;
+        }
+
+        .diversity-stat-number {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-weight: 500;
+            font-style: normal;
+            font-size: clamp(100px, 11vw, 180px);
+            line-height: 0.95;
+            color: #EEECE3;
+            text-align: center;
+            margin: 0 0 12px 0;
+            letter-spacing: -0.02em;
+        }
+
+        .diversity-stat-label {
+            font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: clamp(17px, 1.4vw, 22px);
+            font-weight: 400;
+            line-height: 1.4;
+            color: #A8B9A3;
+            text-align: center;
+            margin: 0 0 36px 0;
+        }
+
+        .diversity-scroll-cue {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .diversity-scroll-cue-text {
+            font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #A8B9A3;
+        }
+
+        .diversity-cue-arrow {
+            display: block;
+            color: #A8B9A3;
+            animation: cue-bounce 2.2s ease-in-out infinite;
+        }
+
+        @keyframes cue-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+
+        /* Mock following section */
+        .mock-next-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #A8B9A3;
+            font-size: 1.2rem;
+            border-top: 1px solid rgba(168, 185, 163, 0.2);
+        }
+
+        /* Responsive Mobile Layout */
+        @media (max-width: 768px) {
+            .diversity-scene-stage {
+                width: 100%;
+                height: 100%;
+                min-width: 0;
+                min-height: 0;
+                transform: none;
+                top: 0;
+                left: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+                padding: 3rem 1.5rem;
+            }
+
+            .diversity-bg-layer {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                opacity: 0.75;
+            }
+
+            .diversity-center-editorial {
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none;
+                width: 100%;
+                margin: auto 0;
+            }
+
+            .diversity-eyebrow { margin-bottom: 16px; }
+            .diversity-heading { margin-bottom: 18px; }
+            .diversity-stat-number { margin-bottom: 8px; }
+            .diversity-stat-label { margin-bottom: 24px; }
+
+            /* On mobile, upper snakes sit above text, lower snakes sit below */
+            .diversity-snake-green {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: 180px;
+                height: 100px;
+                margin-right: auto;
+            }
+
+            .diversity-snake-cobra {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: 130px;
+                height: 130px;
+                margin-left: auto;
+            }
+
+            .diversity-snake-brown {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: 170px;
+                height: 105px;
+                margin-right: auto;
+            }
+
+            .diversity-snake-banded {
+                position: relative;
+                top: auto;
+                left: auto;
+                width: 180px;
+                height: 90px;
+                margin-left: auto;
+            }
+        }
+
+        /* Prefers-reduced-motion */
+        @media (prefers-reduced-motion: reduce) {
+            .diversity-chapter-section {
+                height: auto;
+            }
+            .diversity-sticky-scene {
+                position: relative;
+                height: auto;
+                min-height: 100vh;
+            }
+            .diversity-cue-arrow {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mock-prior-section">
+        <span>Prior Section: The Unseen Toll</span>
+    </div>
+
+    <!-- DIVERSITY SECTION (240svh sticky scroll) -->
+    <section class="diversity-chapter-section" id="diversity-section">
+        <div class="diversity-sticky-scene" id="diversity-sticky-scene">
+            <div class="diversity-scene-stage" id="diversity-stage">
+                <!-- Static Illustrated Background Scene -->
+                <img class="diversity-bg-layer" src="assets/diversity/diversity_bg.jpg" alt="" aria-hidden="true" width="1024" height="575">
+
+                <!-- Snake 1: Green Snake (Upper Left Branch) -->
+                <div class="diversity-snake-wrapper diversity-snake-green" id="snake-green" aria-hidden="true">
+                    <div class="diversity-snake-frames">
+                        <img src="assets/diversity/green-01.png" class="snake-frame is-active" alt="" width="420" height="240">
+                        <img src="assets/diversity/green-02.png" class="snake-frame" alt="" width="420" height="240">
+                        <img src="assets/diversity/green-03.png" class="snake-frame" alt="" width="420" height="240">
+                        <img src="assets/diversity/green-04.png" class="snake-frame" alt="" width="420" height="240">
+                        <img src="assets/diversity/green-05.png" class="snake-frame" alt="" width="420" height="240">
+                        <img src="assets/diversity/green-06.png" class="snake-frame" alt="" width="420" height="240">
+                    </div>
+                </div>
+
+                <!-- Snake 2: Cobra (Upper Right Rock Ledge) -->
+                <div class="diversity-snake-wrapper diversity-snake-cobra" id="snake-cobra" aria-hidden="true">
+                    <div class="diversity-snake-frames">
+                        <img src="assets/diversity/cobra-01.png" class="snake-frame is-active" alt="" width="350" height="350">
+                        <img src="assets/diversity/cobra-02.png" class="snake-frame" alt="" width="350" height="350">
+                        <img src="assets/diversity/cobra-03.png" class="snake-frame" alt="" width="350" height="350">
+                        <img src="assets/diversity/cobra-04.png" class="snake-frame" alt="" width="350" height="350">
+                        <img src="assets/diversity/cobra-05.png" class="snake-frame" alt="" width="350" height="350">
+                        <img src="assets/diversity/cobra-06.png" class="snake-frame" alt="" width="350" height="350">
+                    </div>
+                </div>
+
+                <!-- Snake 3: Brown Snake (Lower Left Ground) -->
+                <div class="diversity-snake-wrapper diversity-snake-brown" id="snake-brown" aria-hidden="true">
+                    <div class="diversity-snake-frames">
+                        <img src="assets/diversity/brown-01.png" class="snake-frame is-active" alt="" width="420" height="260">
+                        <img src="assets/diversity/brown-02.png" class="snake-frame" alt="" width="420" height="260">
+                        <img src="assets/diversity/brown-03.png" class="snake-frame" alt="" width="420" height="260">
+                        <img src="assets/diversity/brown-04.png" class="snake-frame" alt="" width="420" height="260">
+                        <img src="assets/diversity/brown-05.png" class="snake-frame" alt="" width="420" height="260">
+                        <img src="assets/diversity/brown-06.png" class="snake-frame" alt="" width="420" height="260">
+                    </div>
+                </div>
+
+                <!-- Snake 4: Banded Snake (Lower Right Ground) -->
+                <div class="diversity-snake-wrapper diversity-snake-banded" id="snake-banded" aria-hidden="true">
+                    <div class="diversity-snake-frames">
+                        <img src="assets/diversity/banded-01.png" class="snake-frame is-active" alt="" width="460" height="220">
+                        <img src="assets/diversity/banded-02.png" class="snake-frame" alt="" width="460" height="220">
+                        <img src="assets/diversity/banded-03.png" class="snake-frame" alt="" width="460" height="220">
+                        <img src="assets/diversity/banded-04.png" class="snake-frame" alt="" width="460" height="220">
+                        <img src="assets/diversity/banded-05.png" class="snake-frame" alt="" width="460" height="220">
+                        <img src="assets/diversity/banded-06.png" class="snake-frame" alt="" width="460" height="220">
+                    </div>
+                </div>
+
+                <!-- Live Central Editorial Typography -->
+                <div class="diversity-center-editorial">
+                    <span class="diversity-eyebrow">BEYOND THE FEAR</span>
+
+                    <h2 class="diversity-heading">
+                        Discover India’s<br>snake diversity.
+                    </h2>
+
+                    <div class="diversity-stat-number">300+</div>
+
+                    <p class="diversity-stat-label">snake species across India</p>
+
+                    <div class="diversity-scroll-cue">
+                        <span class="diversity-scroll-cue-text">SCROLL TO EXPLORE</span>
+                        <svg class="diversity-cue-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <polyline points="19 12 12 19 5 12"></polyline>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="mock-next-section">
+        <span>Subsequent Stage</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initDiversityScrolly();
+        });
+
+        function initDiversityScrolly() {
+            const section = document.getElementById('diversity-section');
+            if (!section) return;
+
+            const isReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Snake elements & frame lists
+            const snakes = {
+                green: {
+                    wrapper: document.getElementById('snake-green'),
+                    frames: Array.from(document.querySelectorAll('#snake-green .snake-frame')),
+                    currentFrame: 0,
+                    start: 0.12,
+                    end: 0.72,
+                    // Rightward travel ~40% of displayed body width, slight branch slope
+                    travelX: 38, // in % of wrapper width
+                    travelY: 5,  // in % of wrapper height
+                },
+                cobra: {
+                    wrapper: document.getElementById('snake-cobra'),
+                    frames: Array.from(document.querySelectorAll('#snake-cobra .snake-frame')),
+                    currentFrame: 0,
+                    start: 0.18,
+                    end: 0.78,
+                    // Coil stationary, head sweeps across poses
+                    travelX: 0,
+                    travelY: 0,
+                },
+                brown: {
+                    wrapper: document.getElementById('snake-brown'),
+                    frames: Array.from(document.querySelectorAll('#snake-brown .snake-frame')),
+                    currentFrame: 0,
+                    start: 0.24,
+                    end: 0.84,
+                    // Rightward travel ~50% of displayed width along ground
+                    travelX: 48,
+                    travelY: 0,
+                },
+                banded: {
+                    wrapper: document.getElementById('snake-banded'),
+                    frames: Array.from(document.querySelectorAll('#snake-banded .snake-frame')),
+                    currentFrame: 0,
+                    start: 0.30,
+                    end: 0.90,
+                    // Leftward travel ~50% of displayed width along ground
+                    travelX: -48,
+                    travelY: 0,
+                }
+            };
+
+            // Preload and decode all frames
+            Object.values(snakes).forEach(snake => {
+                snake.frames.forEach(img => {
+                    if (img.decode) {
+                        img.decode().catch(() => {});
+                    }
+                });
+            });
+
+            if (isReducedMotion) {
+                // Static composition, no scroll animation
+                return;
+            }
+
+            let ticking = false;
+
+            function updateScroll() {
+                const rect = section.getBoundingClientRect();
+                const vpH = window.innerHeight;
+                const maxScroll = rect.height - vpH;
+
+                if (maxScroll <= 0) {
+                    ticking = false;
+                    return;
+                }
+
+                // p is 0 when section enters sticky pin (rect.top <= 0), 1 when it leaves
+                const p = Math.max(0, Math.min(1, -rect.top / maxScroll));
+
+                // Process each snake
+                for (const key in snakes) {
+                    const snake = snakes[key];
+                    // q = clamp((p - start) / (end - start), 0, 1)
+                    const q = Math.max(0, Math.min(1, (p - snake.start) / (snake.end - snake.start)));
+
+                    // frameIndex = min(5, floor(q * 6))
+                    const frameIndex = Math.min(5, Math.floor(q * 6));
+
+                    // Frame change
+                    if (snake.currentFrame !== frameIndex) {
+                        snake.frames[snake.currentFrame].classList.remove('is-active');
+                        snake.frames[frameIndex].classList.add('is-active');
+                        snake.currentFrame = frameIndex;
+                    }
+
+                    // Continuous translation of wrapper
+                    const currentX = snake.travelX * q;
+                    const currentY = snake.travelY * q;
+                    snake.wrapper.style.transform = `translate3d(${currentX.toFixed(2)}%, ${currentY.toFixed(2)}%, 0)`;
+                }
+
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(updateScroll);
+                    ticking = true;
+                }
+            }, { passive: true });
+
+            window.addEventListener('resize', () => {
+                if (!ticking) {
+                    requestAnimationFrame(updateScroll);
+                    ticking = true;
+                }
+            }, { passive: true });
+
+            // Initial call
+            updateScroll();
+        }
+    </script>
+</body>
+</html>

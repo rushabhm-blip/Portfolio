@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Decomposition & Extraction</title>
+<style>
+body { background: #08140e; color: #eee; font-family: monospace; padding: 20px; }
+.card { display: inline-block; margin: 10px; background: #020c07; border: 1px solid #334; padding: 10px; vertical-align: top; }
+canvas { border: 1px solid #555; display: block; margin-top: 5px; }
+button { padding: 8px 16px; background: #2f855a; color: white; border: none; cursor: pointer; border-radius: 4px; margin-bottom: 20px; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>Sprite Extraction & Precise Registration</h1>
+<button id="runBtn" onclick="processAll()">Process & Save Sprites</button>
+<div id="output"></div>
+
+<script>
+// Keyframe definitions
+// Frame 01: img_5.png
+// Frame 02: img_7.png
+// Frame 03: img_8.png
+// Frame 04: img_6.png
+// Frame 05: img_2.png
+// Frame 06: img_3.png
+// Frame 07: img_0.png
+// Frame 08: img_1.png
+
+const FRAMES = [
+  { id: 'f1', file: 'img_5.png', name: '01 Approach' },
+  { id: 'f2', file: 'img_7.png', name: '02 Notice' },
+  { id: 'f3', file: 'img_8.png', name: '03 React (Corrected)' },
+  { id: 'f4', file: 'img_6.png', name: '04 Turn Left' },
+  { id: 'f5', file: 'img_2.png', name: '05 Slither A' },
+  { id: 'f6', file: 'img_3.png', name: '06 Slither B' },
+  { id: 'f7', file: 'img_0.png', name: '07 Slither C' },
+  { id: 'f8', file: 'img_1.png', name: '08 Safe Left' }
+];
+
+async function processAll() {
+  const out = document.getElementById('output');
+  out.innerHTML = '<p>Loading images...</p>';
+  
+  const loaded = [];
+  for (const f of FRAMES) {
+    const img = new Image();
+    img.src = 'assets/frames/' + f.file;
+    await new Promise(r => img.onload = r);
+    loaded.push({ ...f, img });
+  }
+
+  out.innerHTML = '';
+
+  // 1. Inspect Villagers:
+  // In all frames, villager is in x: 620 to 1024, y: 80 to 520
+  // Let's create registered villager frames:
+  // We align them by foot baseline so the villager never jitters vertically.
+  // In frame 01 (walking), baseline is ~498
+  // In frame 02 (stopping), baseline is ~501
+  // In frame 03 (stepping back), baseline is ~498 (his back foot takes a step back, right toe planted)
+  // In frames 04-08 (standing), baseline is ~498-501
+  
+  const results = { villagers: [], snakes: [] };
+
+  for (let i = 0; i < loaded.length; i++) {
+    const item = loaded[i];
+    const w = item.img.naturalWidth;
+    const h = item.img.naturalHeight;
+
+    // Canvas to read pixels
+    const c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext('2d');
+    ctx.drawImage(item.img, 0, 0);
+    const idata = ctx.getImageData(0, 0, w, h);
+    const d = idata.data;
+
+    // Detect Snake BBox (x < 720, y > 380, dark pixels a > 50, not faint flashlight)
+    let sMinX = w, sMaxX = 0, sMinY = h, sMaxY = 0;
+    for (let y = 380; y < h; y++) {
+      for (let x = 0; x < (i === 0 || i === 1 ? 750 : 720); x++) {
+        const idx = (y * w + x) * 4;
+        const a = d[idx + 3];
+        const r = d[idx], g = d[idx+1], b = d[idx+2];
+        // Flashlight beam has low alpha or high lightness with no dark contours
+        // Snake scales have dark outlines (r < 90 && g < 80) and high alpha
+        if (a > 80 && (r < 110 && g < 100)) {
+          if (x < sMinX) sMinX = x;
+          if (x > sMaxX) sMaxX = x;
+          if (y < sMinY) sMinY = y;
+          if (y > sMaxY) sMaxY = y;
+        }
+      }
+    }
+
+    // Add padding around snake
+    const pad = 12;
+    sMinX = Math.max(0, sMinX - pad);
+    sMaxX = Math.min(w, sMaxX + pad);
+    sMinY = Math.max(0, sMinY - pad);
+    sMaxY = Math.min(h, sMaxY + pad);
+
+    // Crop Snake
+    const sc = document.createElement('canvas');
+    sc.width = sMaxX - sMinX;
+    sc.height = sMaxY - sMinY;
+    const sctx = sc.getContext('2d');
+    // Draw only the snake region
+    sctx.drawImage(item.img, sMinX, sMinY, sc.width, sc.height, 0, 0, sc.width, sc.height);
+
+    // Save snake info
+    results.snakes.push({
+      frame: item.id,
+      name: item.name,
+      bbox: { x: sMinX, y: sMinY, w: sc.width, h: sc.height },
+      dataUrl: sc.toDataURL('image/png')
+    });
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = '<strong>' + item.name + ' - Snake</strong><br>BBox: ' + sMinX + ',' + sMinY + ' (' + sc.width + 'x' + sc.height + ')';
+    card.appendChild(sc);
+    out.appendChild(card);
+  }
+
+  window.extractionResults = results;
+}
+</script>
+</body>
+</html>

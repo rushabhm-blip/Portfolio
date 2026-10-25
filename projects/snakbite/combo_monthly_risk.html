@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seasonal Risk Dynamics: Monthly Observations vs. Venomous Ratio</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Plotly CDN -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Google Sans Flex', 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+            background-color: #ffffff;
+            color: #1A1D20;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 1rem 1.5rem;
+        }
+
+        .chart-card {
+            width: 100%;
+            max-width: 1060px;
+            height: 100%;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 0.75rem;
+            padding: 0 0.5rem;
+        }
+
+        .header-titles {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .chart-title {
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            font-weight: 700;
+            color: #1A1D20;
+            letter-spacing: -0.02em;
+        }
+
+        .chart-subtitle {
+            font-size: clamp(0.85rem, 1.6vw, 0.95rem);
+            color: #4A5056;
+            font-weight: 400;
+        }
+
+        .legend-pills {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .legend-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: #4A5056;
+        }
+
+        .pill-indicator-bar {
+            width: 12px;
+            height: 12px;
+            background-color: #CBD5E1;
+            border-radius: 3px;
+        }
+
+        .pill-indicator-line {
+            width: 16px;
+            height: 3px;
+            background-color: #C50000;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .pill-indicator-line::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: #C50000;
+            border: 1.5px solid #ffffff;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #chart-container {
+            flex: 1;
+            width: 100%;
+            min-height: 480px;
+        }
+
+        /* Custom Plotly Tooltip styling */
+        .js-plotly-plot .plotly .httitle {
+            font-weight: 700 !important;
+        }
+
+        .chart-footer-note {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0.5rem 0;
+            font-size: 0.75rem;
+            color: #767E86;
+            border-top: 1px solid #F1F5F9;
+        }
+
+        .highlight-text {
+            font-weight: 600;
+            color: #C50000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chart-card">
+        <!-- Minimal Header -->
+        <div class="chart-header">
+            <div class="header-titles">
+            </div>
+            
+            <div class="legend-pills">
+                <div class="legend-pill">
+                    <span class="pill-indicator-bar"></span>
+                    <span>Total Sightings</span>
+                </div>
+                <div class="legend-pill">
+                    <span class="pill-indicator-line"></span>
+                    <span style="color: #C50000;">Venomous Share (%)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Plotly Chart -->
+        <div id="chart-container"></div>
+
+        <!-- Footer Caption -->
+        <div class="chart-footer-note">
+            <span>Source: Field Sightings Database &amp; Venomous Classification Metrics</span>
+            <span><span class="highlight-text">Monsoon Peak:</span> Sightings &amp; venomous risk both maximize during June–Sept</span>
+        </div>
+    </div>
+
+    <script>
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const totalObservations = [1876, 1613, 1780, 2377, 2816, 3980, 4291, 3449, 2984, 3329, 2683, 2230];
+        const venomousShare = [26.3, 21.9, 23.9, 22.7, 28.8, 32.1, 31.0, 32.9, 32.2, 32.5, 29.4, 28.9];
+
+        // Trace 1: Total Observations (Minimalist Bar)
+        const traceBars = {
+            x: months,
+            y: totalObservations,
+            name: "Total Sightings",
+            type: "bar",
+            marker: {
+                color: months.map((m, i) => (i >= 5 && i <= 8) ? '#94A3B8' : '#CBD5E1'), // Highlight monsoon months (Jun-Sep)
+                hoverbgcolor: '#64748B',
+                line: { width: 0 }
+            },
+            hovertemplate: '<b>%{x}</b><br>Total Sightings: <b>%{y:,}</b><extra></extra>',
+            yaxis: 'y'
+        };
+
+        // Trace 2: Venomous Share % (Sleek Crimson Spline)
+        const traceLine = {
+            x: months,
+            y: venomousShare,
+            name: "Venomous Share (%)",
+            type: "scatter",
+            mode: "lines+markers",
+            line: {
+                color: '#C50000',
+                width: 3.5,
+                shape: 'spline',
+                smoothing: 1.1
+            },
+            marker: {
+                color: '#C50000',
+                size: 8,
+                symbol: 'circle',
+                line: {
+                    color: '#FFFFFF',
+                    width: 2
+                }
+            },
+            hovertemplate: '<b>%{x}</b><br>Venomous Ratio: <b>%{y:.1f}%</b><extra></extra>',
+            yaxis: 'y2'
+        };
+
+        const layout = {
+            autosize: true,
+            margin: { l: 55, r: 55, t: 25, b: 45 },
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            showlegend: false,
+            hovermode: 'x unified',
+            hoverlabel: {
+                bgcolor: '#1A1D20',
+                bordercolor: '#1A1D20',
+                font: {
+                    family: "'Google Sans Flex', 'Inter', sans-serif",
+                    size: 13,
+                    color: '#FFFFFF'
+                }
+            },
+            xaxis: {
+                title: { text: '' },
+                tickfont: {
+                    family: "'Google Sans Flex', 'Inter', sans-serif",
+                    size: 13,
+                    color: '#4A5056',
+                    weight: 600
+                },
+                showgrid: false,
+                zeroline: false,
+                showline: true,
+                linecolor: '#E2E8F0',
+                linewidth: 1
+            },
+            yaxis: {
+                title: {
+                    text: 'Total Observations',
+                    font: {
+                        family: "'Google Sans Flex', 'Inter', sans-serif",
+                        size: 12,
+                        color: '#64748B'
+                    }
+                },
+                tickfont: {
+                    family: "'Google Sans Flex', 'Inter', sans-serif",
+                    size: 12,
+                    color: '#64748B'
+                },
+                gridcolor: '#F1F5F9',
+                gridwidth: 1,
+                zeroline: false,
+                showline: false,
+                range: [0, 5000]
+            },
+            yaxis2: {
+                title: {
+                    text: 'Venomous Share (%)',
+                    font: {
+                        family: "'Google Sans Flex', 'Inter', sans-serif",
+                        size: 12,
+                        color: '#C50000'
+                    }
+                },
+                tickfont: {
+                    family: "'Google Sans Flex', 'Inter', sans-serif",
+                    size: 12,
+                    color: '#C50000'
+                },
+                overlaying: 'y',
+                side: 'right',
+                showgrid: false,
+                zeroline: false,
+                showline: false,
+                range: [15, 40],
+                ticksuffix: '%'
+            },
+            annotations: [
+                {
+                    x: 'Jul',
+                    y: 4291,
+                    text: '<b>Peak Sightings: 4,291</b>',
+                    showarrow: true,
+                    arrowhead: 0,
+                    arrowsize: 0.8,
+                    arrowwidth: 1.5,
+                    arrowcolor: '#64748B',
+                    ax: 0,
+                    ay: -25,
+                    font: {
+                        family: "'Google Sans Flex', 'Inter', sans-serif",
+                        size: 11,
+                        color: '#475569'
+                    },
+                    bgcolor: '#F8FAFC',
+                    bordercolor: '#E2E8F0',
+                    borderwidth: 1,
+                    borderpad: 4
+                },
+                {
+                    x: 'Aug',
+                    y: 32.9,
+                    xref: 'x',
+                    yref: 'y2',
+                    text: '<b>Peak Venomous Risk: 32.9%</b>',
+                    showarrow: true,
+                    arrowhead: 0,
+                    arrowsize: 0.8,
+                    arrowwidth: 1.5,
+                    arrowcolor: '#C50000',
+                    ax: 45,
+                    ay: -22,
+                    font: {
+                        family: "'Google Sans Flex', 'Inter', sans-serif",
+                        size: 11,
+                        color: '#C50000'
+                    },
+                    bgcolor: '#FEF2F2',
+                    bordercolor: '#FCA5A5',
+                    borderwidth: 1,
+                    borderpad: 4
+                }
+            ],
+            shapes: [
+                // Soft background shading for Monsoon Season (Jun to Sep)
+                {
+                    type: 'rect',
+                    xref: 'x',
+                    yref: 'paper',
+                    x0: 'May',
+                    x1: 'Sep',
+                    y0: 0,
+                    y1: 1,
+                    fillcolor: 'rgba(203, 213, 225, 0.15)',
+                    line: { width: 0 },
+                    layer: 'below'
+                }
+            ]
+        };
+
+        const config = {
+            responsive: true,
+            displayModeBar: false
+        };
+
+        Plotly.newPlot('chart-container', [traceBars, traceLine], layout, config);
+    </script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Encounter Perfect Alignment Test</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #03120B;
+    color: #EEECE3;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+  }
+  .controls {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    background: rgba(0,0,0,0.88);
+    border: 1px solid #444;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  .controls input[type="range"] {
+    width: 280px;
+  }
+  .stage-wrap {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .bg-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+    pointer-events: none;
+  }
+  .crack-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+    pointer-events: none;
+    z-index: 5;
+    filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.65));
+  }
+  .encounter-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 16;
+  }
+  .text-layer {
+    position: absolute;
+    z-index: 18;
+    pointer-events: none;
+  }
+  /* Exact CSS from the real site */
+  .habitat-right {
+    right: clamp(2rem, 8vw, 8rem);
+    top: clamp(4.5rem, 18vh, 14rem);
+    max-width: min(88vw, 540px);
+    text-align: left;
+  }
+  .habitat-left {
+    left: clamp(2rem, 7vw, 7rem);
+    bottom: clamp(3rem, 16vh, 9rem);
+    max-width: min(88vw, 440px);
+    text-align: left;
+  }
+  .habitat-title-right {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(34px, 4vw, 64px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.85rem;
+  }
+  .h-right-line-1 { display: block; font-style: normal; color: #EEECE3; }
+  .h-right-line-2 { display: block; font-style: italic; color: #BBC3B3; }
+  .habitat-desc-right {
+    font-weight: 400;
+    font-size: clamp(16px, 1.25vw, 20px);
+    line-height: 1.55;
+    color: #D7DDD5;
+    max-width: 500px;
+  }
+  .habitat-title-left {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(24px, 2.3vw, 36px);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .h-left-line-1 { display: block; color: #EEECE3; }
+  .h-left-line-2 { display: block; color: #BBC3B3; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <label><strong>Timeline:</strong></label>
+  <input type="range" id="progressSlider" min="0" max="1" step="0.001" value="0">
+  <span id="sliderVal" style="font-family: monospace; width: 45px;">0%</span>
+  <span id="stageLabel" style="color: #4ade80;">01 Approach</span>
+</div>
+
+<div class="stage-wrap" id="stageWrap">
+  <img class="bg-layer" src="assets/layers_clean/4_homes.webp" style="z-index: 4;">
+  <img class="crack-layer" id="crackLayer" src="assets/layers_clean/5_crack.webp">
+
+  <!-- Encounter Animation Canvas Layer (z-index 16: above crack, below text) -->
+  <canvas class="encounter-canvas" id="encounterCanvas"></canvas>
+
+  <!-- Narrative Text (Exact HTML from index.html) -->
+  <div class="text-layer habitat-right" id="habitatRight">
+    <h2 class="habitat-title-right">
+      <span class="h-right-line-1">One shared home.</span>
+      <span class="h-right-line-2">Two sides of fear.</span>
+    </h2>
+    <p class="habitat-desc-right">
+      When human and snake habitats overlap,<br>fear can turn an encounter into conflict.
+    </p>
+  </div>
+
+  <div class="text-layer habitat-left" id="habitatLeft">
+    <h2 class="habitat-title-left">
+      <span class="h-left-line-1">Caught in the same conflict.</span>
+      <span class="h-left-line-2">Both trying to survive.</span>
+    </h2>
+  </div>
+</div>
+
+<script>
+const FRAME_SRCS = [
+  'assets/frames/img_5.png', // 0: Frame 01 - Approach
+  'assets/frames/img_7.png', // 1: Frame 02 - Notice
+  'assets/frames/img_8.png', // 2: Frame 03 - React (Corrected)
+  'assets/frames/img_6.png', // 3: Frame 04 - Turn left
+  'assets/frames/img_2.png', // 4: Frame 05 - Cross crack A
+  'assets/frames/img_3.png', // 5: Frame 06 - Cross crack B
+  'assets/frames/img_0.png', // 6: Frame 07 - Retreat
+  'assets/frames/img_1.png'  // 7: Frame 08 - Safe distance hold
+];
+
+const images = [];
+let loadedCount = 0;
+FRAME_SRCS.forEach((src, idx) => {
+  const img = new Image();
+  img.src = src;
+  if (idx === 3) {
+    img.onload = () => {
+      const offCanvas = document.createElement('canvas');
+      offCanvas.width = 1024;
+      offCanvas.height = 576;
+      const offCtx = offCanvas.getContext('2d');
+      const s = 360 / 398;
+      const dx = 83;
+      const dy = 32.2;
+      offCtx.drawImage(img, dx, dy, 1024 * s, 576 * s);
+      images[idx] = offCanvas;
+      loadedCount++;
+      if (loadedCount === FRAME_SRCS.length) init();
+    };
+  } else {
+    img.onload = () => {
+      images[idx] = img;
+      loadedCount++;
+      if (loadedCount === FRAME_SRCS.length) init();
+    };
+  }
+});
+
+const canvas = document.getElementById('encounterCanvas');
+const ctx = canvas.getContext('2d');
+const slider = document.getElementById('progressSlider');
+const sliderVal = document.getElementById('sliderVal');
+const stageLabel = document.getElementById('stageLabel');
+const habitatRight = document.getElementById('habitatRight');
+const habitatLeft = document.getElementById('habitatLeft');
+
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  render(parseFloat(slider.value));
+}
+window.addEventListener('resize', resize);
+
+const MILESTONES = [
+  { t: 0.00, frame: 0, label: '01 Approach (0-12%)' },
+  { t: 0.12, frame: 1, label: '02 Notice (12-25%)' },
+  { t: 0.25, frame: 2, label: '03 Reaction (25-38%)' },
+  { t: 0.38, frame: 3, label: '04 Turn (38-48%)' },
+  { t: 0.48, frame: 4, label: '05 Cross the Crack (48-68%)' },
+  { t: 0.58, frame: 5, label: '05/06 Slither Across' },
+  { t: 0.68, frame: 6, label: '06 Retreat (68-88%)' },
+  { t: 0.88, frame: 7, label: '07 Hold (88-100%)' },
+  { t: 1.00, frame: 7, label: '07 Hold' }
+];
+
+function calculateFraming(vpW, vpH) {
+  const groundY = Math.min(vpH * 0.92, Math.max(vpH * 0.84, vpH - 65));
+  const staticCeilingY = Math.max(vpH * 0.34, 300);
+
+  const maxVillagerH = Math.max(220, groundY - staticCeilingY);
+  let scale = maxVillagerH / 360;
+  const maxScale = Math.min(vpW / 1024, (vpH * 0.56) / 360);
+  scale = Math.min(scale, maxScale);
+
+  const renderW = 1024 * scale;
+  const renderH = 576 * scale;
+  const renderT = groundY - 498 * scale;
+
+  const bgCrackX = vpW * 0.534;
+  const frameCrackX = 534 * scale;
+  let renderL = bgCrackX - frameCrackX;
+
+  if (renderL + 980 * scale > vpW) {
+    renderL = vpW - 980 * scale - 15;
+  }
+  if (renderL < 0) {
+    renderL = Math.max(renderL, vpW - renderW);
+  }
+
+  return { renderW, renderH, renderL, renderT, scale };
+}
+
+function render(t) {
+  const vpW = window.innerWidth;
+  const vpH = window.innerHeight;
+  ctx.clearRect(0, 0, vpW, vpH);
+
+  const masterFade = Math.min(1, Math.max(0, t / 0.08));
+
+  let activeFrame = 0, label = '';
+  for (let i = 0; i < MILESTONES.length - 1; i++) {
+    const m1 = MILESTONES[i];
+    const m2 = MILESTONES[i+1];
+    if (t >= m1.t && t <= m2.t) {
+      const span = m2.t - m1.t;
+      const progressInSpan = span > 0 ? (t - m1.t) / span : 0;
+      activeFrame = progressInSpan < 0.5 ? m1.frame : m2.frame;
+      label = progressInSpan < 0.5 ? m1.label : m2.label;
+      break;
+    }
+  }
+  if (t >= 0.88) {
+    activeFrame = 7;
+    label = '07 Hold (88-100%)';
+  }
+
+  stageLabel.textContent = label;
+  sliderVal.textContent = Math.round(t * 100) + '%';
+
+  if (masterFade <= 0) return;
+
+  const { renderW, renderH, renderL, renderT } = calculateFraming(vpW, vpH);
+  const img = images[activeFrame];
+
+  if (img && (img.complete || img instanceof HTMLCanvasElement)) {
+    ctx.globalAlpha = masterFade;
+    ctx.drawImage(img, 0, 0, 1024, 576, renderL, renderT, renderW, renderH);
+  }
+
+  ctx.globalAlpha = 1.0;
+}
+
+function init() {
+  resize();
+  slider.addEventListener('input', () => {
+    render(parseFloat(slider.value));
+  });
+}
+</script>
+</body>
+</html>

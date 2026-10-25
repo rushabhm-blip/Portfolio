@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Look Closer - Scroll-Driven Anatomy Sequence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Google+Sans+Flex:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --color-ivory: #EEECE3;
+    --color-sage: #A8B9A3;
+    --color-muted-red: #D94A45;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: #0b140f;
+    background-image: url('assets/forest_hero_bg.png');
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-attachment: fixed;
+    background-size: cover;
+    color: var(--color-ivory);
+    font-family: 'Google Sans Flex', -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Dummy content before and after to test scroll integration */
+  .dummy-section {
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--color-sage);
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+  }
+
+  /* The Scroll Track */
+  .lookcloser-track {
+    position: relative;
+    width: 100%;
+    height: 550vh; /* 550vh of natural scroll distance */
+  }
+
+  /* Sticky Viewport Stage */
+  .lookcloser-sticky {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(1.5rem, 3vh, 2.5rem) 1.5rem clamp(1rem, 2.5vh, 2rem);
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Header Outside Scaled Canvas */
+  .lookcloser-header {
+    text-align: center;
+    pointer-events: auto;
+    z-index: 5;
+    max-width: 800px;
+  }
+
+  .lookcloser-comparison-badge {
+    display: inline-block;
+    font-family: 'Google Sans Flex', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-sage);
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .lookcloser-comparison-badge.visible {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+
+  .lookcloser-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(38px, 4.5vw, 64px);
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--color-ivory);
+    margin-bottom: 0.4rem;
+  }
+
+  .lookcloser-subtitle {
+    font-family: 'Google Sans Flex', sans-serif;
+    font-size: clamp(15px, 1.8vw, 18px);
+    font-weight: 400;
+    color: var(--color-sage);
+  }
+
+  /* Canvas Stage Wrapper */
+  .lookcloser-canvas-wrapper {
+    position: relative;
+    width: min(94vw, 1200px);
+    height: min(60vh, 675px);
+    margin: auto 0;
+    pointer-events: none;
+  }
+
+  canvas#lookcloserCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Annotation Layer */
+  .lookcloser-annotation-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: visible;
+  }
+
+  .lookcloser-annotation {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .lookcloser-annotation.active {
+    opacity: 1;
+  }
+
+  .annotation-dot {
+    width: 10px;
+    height: 10px;
+    background-color: var(--color-muted-red);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(217, 74, 69, 0.25);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .annotation-dot::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border: 1px solid rgba(217, 74, 69, 0.5);
+    border-radius: 50%;
+    animation: dotPulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  }
+
+  @keyframes dotPulse {
+    0% { transform: scale(0.8); opacity: 0.8; }
+    50% { transform: scale(1.6); opacity: 0; }
+    100% { transform: scale(0.8); opacity: 0; }
+  }
+
+  .annotation-line {
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--color-muted-red), var(--color-sage));
+  }
+
+  .annotation-tag {
+    font-family: 'Google Sans Flex', sans-serif;
+    font-size: clamp(14px, 1.4vw, 16px);
+    font-weight: 500;
+    color: var(--color-ivory);
+    background: rgba(13, 26, 18, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 5px 12px;
+    border-radius: 4px;
+    border: 1px solid rgba(168, 185, 163, 0.25);
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Footer Disclaimer */
+  .lookcloser-footer {
+    text-align: center;
+    pointer-events: auto;
+    z-index: 5;
+    max-width: 680px;
+    padding: 0.4rem 1rem;
+  }
+
+  .lookcloser-disclaimer {
+    font-family: 'Google Sans Flex', sans-serif;
+    font-size: clamp(13px, 1.4vw, 15px);
+    font-weight: 400;
+    color: var(--color-sage);
+    opacity: 0.85;
+    line-height: 1.4;
+  }
+
+  /* Stage Indicator */
+  .lookcloser-progress-bar {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .lookcloser-progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--color-sage);
+    transition: width 0.1s linear;
+  }
+
+  /* Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    .lookcloser-track {
+      height: auto;
+    }
+    .lookcloser-sticky {
+      position: relative;
+      height: auto;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="dummy-section">Previous Section (Deadliest Draw)</div>
+
+  <!-- Look Closer Section -->
+  <section class="lookcloser-track" id="lookCloserTrack">
+    <div class="lookcloser-sticky" id="lookCloserSticky">
+      
+      <!-- Top Editorial Header -->
+      <header class="lookcloser-header">
+        <div class="lookcloser-comparison-badge" id="lookCloserBadge">Illustrative species comparison</div>
+        <h2 class="lookcloser-title">Look closer.</h2>
+        <p class="lookcloser-subtitle" id="lookCloserSubtitle">Different species. Different anatomy.</p>
+      </header>
+
+      <!-- Interactive Canvas Stage -->
+      <div class="lookcloser-canvas-wrapper" id="lookCloserCanvasWrapper">
+        <canvas id="lookcloserCanvas"></canvas>
+        
+        <!-- Live Annotation Overlay -->
+        <div class="lookcloser-annotation-layer" id="annotationLayer">
+          <div class="lookcloser-annotation" id="featureAnnotation">
+            <div class="annotation-dot"></div>
+            <div class="annotation-line" id="annotationLine"></div>
+            <span class="annotation-tag" id="annotationText">Body form</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Footer -->
+      <footer class="lookcloser-footer">
+        <p class="lookcloser-disclaimer">Appearance alone cannot identify a venomous snake. Observe from a distance.</p>
+        <div class="lookcloser-progress-bar">
+          <div class="lookcloser-progress-fill" id="progressFill"></div>
+        </div>
+      </footer>
+
+    </div>
+  </section>
+
+  <div class="dummy-section">Next Section</div>
+
+<script>
+(function() {
+  const CANVAS_WIDTH = 1672;
+  const CANVAS_HEIGHT = 941;
+
+  // Preload all 12 frames
+  const frames = [];
+  let loadedCount = 0;
+  for (let i = 1; i <= 12; i++) {
+    const img = new Image();
+    img.src = `assets/look_closer/frame-${String(i).padStart(2, '0')}.png`;
+    img.onload = () => { loadedCount++; };
+    frames.push(img);
+  }
+
+  const track = document.getElementById('lookCloserTrack');
+  const canvas = document.getElementById('lookcloserCanvas');
+  const ctx = canvas.getContext('2d');
+  const badge = document.getElementById('lookCloserBadge');
+  const subtitle = document.getElementById('lookCloserSubtitle');
+  const annotation = document.getElementById('featureAnnotation');
+  const annotationText = document.getElementById('annotationText');
+  const progressFill = document.getElementById('progressFill');
+  const wrapper = document.getElementById('lookCloserCanvasWrapper');
+
+  // Linear interpolation
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  // Smoothstep
+  function smoothstep(min, max, val) {
+    const x = Math.max(0, Math.min(1, (val - min) / (max - min)));
+    return x * x * (3 - 2 * x);
+  }
+
+  // Camera targets and sequence definition
+  // Canonical coords 1672 x 941
+  function getCameraAndFrames(p) {
+    let focusX = 836;
+    let focusY = 540;
+    let zoom = 1.0;
+    let activeFrameA = 1;
+    let activeFrameB = 1;
+    let blend = 0; // 0 = 100% A, 1 = 100% B
+    let currentAnnotation = "Body form";
+    let dotX = 680;
+    let dotY = 550;
+    let showBadge = false;
+
+    if (p <= 0.10) {
+      // 0 - 10%: Frame 1, whole snake
+      focusX = 836;
+      focusY = 540;
+      zoom = 1.0;
+      activeFrameA = 1;
+      activeFrameB = 1;
+      blend = 0;
+      currentAnnotation = "Body form";
+      dotX = 680;
+      dotY = 550;
+      showBadge = false;
+    } else if (p <= 0.26) {
+      // 10 - 26%: Advance through frames 2, 3, 4 toward head profile
+      const t = (p - 0.10) / 0.16;
+      focusX = lerp(836, 1540, smoothstep(0, 1, t));
+      focusY = lerp(540, 420, smoothstep(0, 1, t));
+      zoom = lerp(1.0, 2.2, smoothstep(0, 1, t));
+      currentAnnotation = "Head profile";
+      dotX = 1560;
+      dotY = 420;
+      showBadge = true;
+
+      // Frames 2, 3, 4 with tight crossfades and stable holds
+      if (t < 0.33) {
+        // Frame 1 -> 2
+        const subT = t / 0.33;
+        activeFrameA = 1;
+        activeFrameB = 2;
+        blend = smoothstep(0.4, 0.6, subT);
+      } else if (t < 0.66) {
+        // Frame 2 -> 3
+        const subT = (t - 0.33) / 0.33;
+        activeFrameA = 2;
+        activeFrameB = 3;
+        blend = smoothstep(0.4, 0.6, subT);
+      } else {
+        // Frame 3 -> 4
+        const subT = (t - 0.66) / 0.34;
+        activeFrameA = 3;
+        activeFrameB = 4;
+        blend = smoothstep(0.4, 0.6, subT);
+      }
+    } else if (p <= 0.42) {
+      // 26 - 42%: Frames 5, 6 toward pupil
+      const t = (p - 0.26) / 0.16;
+      focusX = lerp(1540, 1535, smoothstep(0, 1, t));
+      focusY = lerp(420, 425, smoothstep(0, 1, t));
+      zoom = lerp(2.2, 3.2, smoothstep(0, 1, t));
+      currentAnnotation = "Pupil shape";
+      dotX = 1535;
+      dotY = 425;
+      showBadge = true;
+
+      if (t < 0.5) {
+        // Frame 4 -> 5
+        const subT = t / 0.5;
+        activeFrameA = 4;
+        activeFrameB = 5;
+        blend = smoothstep(0.4, 0.6, subT);
+      } else {
+        // Frame 5 -> 6
+        const subT = (t - 0.5) / 0.5;
+        activeFrameA = 5;
+        activeFrameB = 6;
+        blend = smoothstep(0.4, 0.6, subT);
+      }
+    } else if (p <= 0.60) {
+      // 42 - 60%: Frames 7, 8 pan to body scales
+      const t = (p - 0.42) / 0.18;
+      focusX = lerp(1535, 980, smoothstep(0, 1, t));
+      focusY = lerp(425, 550, smoothstep(0, 1, t));
+      zoom = lerp(3.2, 2.0, smoothstep(0, 1, t));
+      currentAnnotation = "Scale texture";
+      dotX = 980;
+      dotY = 540;
+      showBadge = true;
+
+      if (t < 0.5) {
+        // Frame 6 -> 7
+        const subT = t / 0.5;
+        activeFrameA = 6;
+        activeFrameB = 7;
+        blend = smoothstep(0.4, 0.6, subT);
+      } else {
+        // Frame 7 -> 8
+        const subT = (t - 0.5) / 0.5;
+        activeFrameA = 7;
+        activeFrameB = 8;
+        blend = smoothstep(0.4, 0.6, subT);
+      }
+    } else if (p <= 0.69) {
+      // 60 - 69%: Return camera to head while holding 8, introduce 9 (mouth opening)
+      const t = (p - 0.60) / 0.09;
+      focusX = lerp(980, 1510, smoothstep(0, 1, t));
+      focusY = lerp(550, 440, smoothstep(0, 1, t));
+      zoom = lerp(2.0, 2.4, smoothstep(0, 1, t));
+      currentAnnotation = "Mouth opening";
+      dotX = 1540;
+      dotY = 440;
+      showBadge = true;
+
+      if (t < 0.5) {
+        activeFrameA = 8;
+        activeFrameB = 8;
+        blend = 0;
+      } else {
+        const subT = (t - 0.5) / 0.5;
+        activeFrameA = 8;
+        activeFrameB = 9;
+        blend = smoothstep(0.4, 0.6, subT);
+      }
+    } else if (p <= 0.85) {
+      // 69 - 85%: Frames 10, 11 (front fangs) & hold
+      const t = (p - 0.69) / 0.16;
+      focusX = lerp(1510, 1490, smoothstep(0, 1, t));
+      focusY = lerp(440, 450, smoothstep(0, 1, t));
+      zoom = lerp(2.4, 2.3, smoothstep(0, 1, t));
+      currentAnnotation = "Front fangs";
+      dotX = 1560;
+      dotY = 450;
+      showBadge = true;
+
+      if (t < 0.3) {
+        // Frame 9 -> 10
+        const subT = t / 0.3;
+        activeFrameA = 9;
+        activeFrameB = 10;
+        blend = smoothstep(0.4, 0.6, subT);
+      } else if (t < 0.6) {
+        // Frame 10 -> 11
+        const subT = (t - 0.3) / 0.3;
+        activeFrameA = 10;
+        activeFrameB = 11;
+        blend = smoothstep(0.4, 0.6, subT);
+      } else {
+        // Hold 11
+        activeFrameA = 11;
+        activeFrameB = 11;
+        blend = 0;
+      }
+    } else {
+      // 85 - 100%: Close mouth reversing 10, 09 before 12, pull back smoothly
+      const t = (p - 0.85) / 0.15;
+      focusX = lerp(1490, 836, smoothstep(0, 1, t));
+      focusY = lerp(450, 540, smoothstep(0, 1, t));
+      zoom = lerp(2.3, 1.0, smoothstep(0, 1, t));
+      currentAnnotation = t > 0.8 ? "Different species. Different anatomy." : "Front fangs";
+      dotX = lerp(1560, 836, t);
+      dotY = lerp(450, 540, t);
+      showBadge = t < 0.8;
+
+      if (t < 0.25) {
+        // 11 -> 10
+        const subT = t / 0.25;
+        activeFrameA = 11;
+        activeFrameB = 10;
+        blend = smoothstep(0.4, 0.6, subT);
+      } else if (t < 0.5) {
+        // 10 -> 9
+        const subT = (t - 0.25) / 0.25;
+        activeFrameA = 10;
+        activeFrameB = 9;
+        blend = smoothstep(0.4, 0.6, subT);
+      } else if (t < 0.75) {
+        // 9 -> 12
+        const subT = (t - 0.5) / 0.25;
+        activeFrameA = 9;
+        activeFrameB = 12;
+        blend = smoothstep(0.4, 0.6, subT);
+      } else {
+        // Hold 12
+        activeFrameA = 12;
+        activeFrameB = 12;
+        blend = 0;
+      }
+    }
+
+    return { focusX, focusY, zoom, activeFrameA, activeFrameB, blend, currentAnnotation, dotX, dotY, showBadge };
+  }
+
+  function resizeCanvas() {
+    const rect = wrapper.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.height * dpr);
+  }
+
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    render();
+  });
+
+  function getScrollProgress() {
+    const rect = track.getBoundingClientRect();
+    const scrollDist = rect.height - window.innerHeight;
+    if (scrollDist <= 0) return 0;
+    const progress = -rect.top / scrollDist;
+    return Math.max(0, Math.min(1, progress));
+  }
+
+  function render() {
+    const p = getScrollProgress();
+    progressFill.style.width = (p * 100) + '%';
+
+    const state = getCameraAndFrames(p);
+
+    // Update UI elements
+    if (state.showBadge) {
+      badge.classList.add('visible');
+    } else {
+      badge.classList.remove('visible');
+    }
+
+    if (p > 0.85) {
+      subtitle.textContent = "Different species. Different anatomy.";
+    } else {
+      subtitle.textContent = "Different species. Different anatomy.";
+    }
+
+    // Annotation position
+    const rect = wrapper.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    const cw = canvas.width;
+    const ch = canvas.height;
+
+    ctx.clearRect(0, 0, cw, ch);
+
+    // Compute base scale to fit 1672 x 941 into canvas
+    const baseScale = Math.min(cw / CANVAS_WIDTH, ch / CANVAS_HEIGHT);
+    const s = baseScale * state.zoom;
+
+    // Center the focus point
+    ctx.save();
+    ctx.translate(cw / 2, ch / 2);
+    ctx.scale(s, s);
+    ctx.translate(-state.focusX, -state.focusY);
+
+    // Draw outgoing frame
+    const imgA = frames[state.activeFrameA - 1];
+    const imgB = frames[state.activeFrameB - 1];
+
+    if (imgA && imgA.complete) {
+      ctx.globalAlpha = 1.0 - state.blend;
+      ctx.drawImage(imgA, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    }
+
+    if (imgB && imgB.complete && state.blend > 0) {
+      ctx.globalAlpha = state.blend;
+      ctx.drawImage(imgB, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    }
+
+    ctx.restore();
+
+    // Position DOM annotation
+    // Screen coords within wrapper
+    const screenX = (rect.width / 2) + (state.dotX - state.focusX) * (baseScale * state.zoom / dpr);
+    const screenY = (rect.height / 2) + (state.dotY - state.focusY) * (baseScale * state.zoom / dpr);
+
+    if (p < 0.95) {
+      annotation.classList.add('active');
+      annotation.style.left = screenX + 'px';
+      annotation.style.top = screenY + 'px';
+      annotationText.textContent = state.currentAnnotation;
+    } else {
+      annotation.classList.remove('active');
+    }
+  }
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        render();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  resizeCanvas();
+  render();
+})();
+</script>
+</body>
+</html>

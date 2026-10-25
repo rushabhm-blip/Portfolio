@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Test Size Normalization & Snap</title>
+<style>
+  body { background: #03120B; color: #fff; font-family: sans-serif; padding: 20px; }
+  .grid { display: flex; gap: 15px; flex-wrap: wrap; }
+  .card { background: #111; border: 1px solid #444; padding: 10px; border-radius: 8px; text-align: center; }
+  canvas { border: 1px solid #333; background: #0a1f14; }
+</style>
+</head>
+<body>
+<h1>Frame Size Verification</h1>
+<div class="grid" id="grid"></div>
+<pre id="stats" style="margin-top: 20px; color: #4ade80;"></pre>
+
+<script>
+const files = [
+  'img_5.png', // 0
+  'img_7.png', // 1
+  'img_8.png', // 2
+  'img_6.png', // 3 (will be normalized)
+  'img_2.png', // 4
+  'img_3.png', // 5
+  'img_0.png', // 6
+  'img_1.png'  // 7
+];
+
+const grid = document.getElementById('grid');
+const stats = document.getElementById('stats');
+const results = [];
+
+async function check() {
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i];
+    const img = new Image();
+    img.src = 'assets/frames/' + f;
+    await new Promise(r => img.onload = r);
+
+    const c = document.createElement('canvas');
+    c.width = 1024;
+    c.height = 576;
+    const ctx = c.getContext('2d');
+
+    if (i === 3) {
+      // Normalize img_6
+      const s = 360 / 398;
+      const dx = 83;
+      const dy = 32.2;
+      ctx.drawImage(img, dx, dy, 1024 * s, 576 * s);
+    } else {
+      ctx.drawImage(img, 0, 0);
+    }
+
+    // Measure villager
+    const d = ctx.getImageData(0, 0, 1024, 576).data;
+    let topY = 576, bottomY = 0;
+    for (let y = 0; y < 576; y++) {
+      for (let x = 750; x < 1024; x++) {
+        const a = d[(y * 1024 + x) * 4 + 3];
+        if (a > 60) {
+          if (y < topY) topY = y;
+          if (y > bottomY) bottomY = y;
+        }
+      }
+    }
+
+    results.push({ frame: i, file: f, topY, bottomY, h: bottomY - topY });
+
+    // Draw guideline at head (138) and foot (498)
+    ctx.strokeStyle = '#ef4444';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(700, 138); ctx.lineTo(1024, 138);
+    ctx.moveTo(700, 498); ctx.lineTo(1024, 498);
+    ctx.stroke();
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<h4>Frame ${i}: ${f}</h4><p>Head: ${topY}, Foot: ${bottomY}, Height: ${bottomY - topY}</p>`;
+    c.style.width = '240px';
+    c.style.height = '135px';
+    card.appendChild(c);
+    grid.appendChild(card);
+  }
+
+  stats.textContent = JSON.stringify(results, null, 2);
+}
+check();
+</script>
+</body>
+</html>

@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Silent Crisis: Snakebite Mortality in Context</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            overflow: hidden !important;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+            height: 100%;
+            width: 100%;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar,
+        *::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+
+        body {
+            font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: transparent;
+            color: #C8D6CA;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Atmospheric backdrop when viewed standalone outside iframe */
+        html:not(.in-iframe) body {
+            background: #06160E;
+            background-image:
+                radial-gradient(ellipse at 50% 40%, rgba(18, 48, 30, 0.65) 0%, rgba(6, 22, 14, 0.95) 75%),
+                linear-gradient(180deg, #04120B 0%, #06160E 100%);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 12px 28px 10px;
+        }
+
+        /* ── Replay Button (Standalone mode) ── */
+        .replay-btn {
+            position: absolute;
+            top: 14px;
+            right: 28px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: #A8CCA9;
+            font-family: 'Google Sans Flex', -apple-system, sans-serif;
+            font-size: 0.74rem;
+            font-weight: 500;
+            padding: 5px 13px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(8px);
+            z-index: 10;
+        }
+
+        .replay-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(140, 215, 175, 0.55);
+            color: #FFFFFF;
+            transform: translateY(-1px);
+        }
+
+        html.in-iframe .replay-btn {
+            display: none !important;
+        }
+
+        /* ── Title Header ── */
+        h1 {
+            font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: clamp(1.45rem, 2.3vw, 1.95rem);
+            font-weight: 700;
+            color: #FFFFFF;
+            line-height: 1.2;
+            margin-bottom: 5px;
+            letter-spacing: -0.015em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
+        }
+
+        .subtitle {
+            font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: clamp(0.82rem, 1.05vw, 0.95rem);
+            font-weight: 400;
+            color: #9DBFA0;
+            line-height: 1.4;
+            margin-bottom: 3px;
+            text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85);
+        }
+
+        .scale-note {
+            font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.76rem;
+            font-weight: 400;
+            color: #7A9A7E;
+            margin-bottom: 12px;
+        }
+
+        /* ── SVG Container ── */
+        .chart-svg-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .chart-svg-container svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            overflow: visible;
+            shape-rendering: geometricPrecision;
+            text-rendering: geometricPrecision;
+        }
+
+        /* Text label styling with halo for readability */
+        .chart-label-text {
+            font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+            paint-order: stroke fill;
+            stroke: rgba(4, 18, 12, 0.95);
+            stroke-width: 3.5px;
+            stroke-linejoin: round;
+            user-select: none;
+        }
+
+        /* ── Hardware-Accelerated Keyframes ── */
+        @keyframes haloBreathing {
+            0% {
+                transform: scale(0.92);
+                opacity: 0.28;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 0.12;
+            }
+
+            100% {
+                transform: scale(0.92);
+                opacity: 0.28;
+            }
+        }
+
+        .halo-breathing {
+            animation: haloBreathing 3.0s ease-in-out infinite;
+        }
+
+        /* ── Source ── */
+        .source {
+            margin-top: 6px;
+            font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.72rem;
+            color: #55775C;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .chart-wrapper {
+                padding: 10px 14px 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chart-wrapper" id="mortalityChart">
+        <button class="replay-btn" id="replayBtn" title="Replay Animation">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+            </svg>
+            <span>Replay</span>
+        </button>
+
+        <h1>The Silent Crisis: Snakebite Mortality in Context</h1>
+        <p class="subtitle">Annual estimated human deaths in India across major health, accidental, and wildlife causes</p>
+        <p class="scale-note">Ranked causes · logarithmic scale</p>
+
+        <div class="chart-svg-container" id="chartSvg"></div>
+
+        <div class="source">Source: WHO, Million Death Study (eLife), NCRB 2023, ICMR, MoEFCC</div>
+    </div>
+
+    <script>
+        // Check if inside iframe
+        if (window.self !== window.top) {
+            document.documentElement.classList.add('in-iframe');
+        }
+
+        const DATA = [
+            { label: 'Heart Disease (Ischaemic)', value: 1750000, display: '1.75M', pos: 'above' },
+            { label: 'Tuberculosis', value: 400000, display: '400,000', pos: 'above' },
+            { label: 'Road Accidents', value: 173000, display: '173,000', pos: 'below' },
+            { label: 'Suicides', value: 171000, display: '171,000', pos: 'above' },
+            { label: 'Snakebites', value: 58000, display: '58,000', pos: 'above', highlight: true },
+            { label: 'Drowning', value: 38000, display: '38,000', pos: 'below' },
+            { label: 'Homicide (Murder)', value: 28000, display: '28,000', pos: 'above' },
+            { label: 'Rabies (Dog Bites)', value: 18000, display: '18,000', pos: 'below' },
+            { label: 'Lightning Strikes', value: 2800, display: '2,800', pos: 'above' },
+            { label: 'Elephant Attacks', value: 500, display: '500', pos: 'above' },
+        ];
+
+        let animTimeouts = [];
+        let isAnimating = false;
+
+        function clearAnimTimeouts() {
+            animTimeouts.forEach(t => clearTimeout(t));
+            animTimeouts = [];
+        }
+
+        function buildChart() {
+            const container = document.getElementById('chartSvg');
+            const W = 1180;
+            const H = 390;
+
+            const padLeft = 70;
+            const padRight = 75;
+            const chartW = W - padLeft - padRight;
+
+            // Logarithmic scale mapping
+            const minVal = 200;
+            const maxVal = 2500000;
+            const logMin = Math.log10(minVal);
+            const logMax = Math.log10(maxVal);
+
+            const yTop = 75;
+            const yBottom = 325;
+            const chartH = yBottom - yTop;
+
+            function yForValue(v) {
+                const logV = Math.log10(v);
+                const ratio = (logV - logMin) / (logMax - logMin);
+                return yBottom - ratio * chartH;
+            }
+
+            function xForIndex(i) {
+                return padLeft + (i / (DATA.length - 1)) * chartW;
+            }
+
+            // Calculate precise coordinates
+            const points = DATA.map((d, i) => ({
+                x: xForIndex(i),
+                y: yForValue(d.value),
+                ...d
+            }));
+
+            const hlIdx = points.findIndex(p => p.highlight);
+            const snakebitePt = points[hlIdx];
+            const suicidesPt = points[hlIdx - 1];
+            const drowningPt = points[hlIdx + 1];
+
+            let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+            // SVG Defs: Soft Glow Filters & Gradients
+            svg += `
+            <defs>
+                <filter id="glowCoral" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="blur"/>
+                    <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowStrong" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur"/>
+                    <feMerge>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="blur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <linearGradient id="gradSnakeToDrown" gradientUnits="userSpaceOnUse" 
+                    x1="${snakebitePt.x.toFixed(1)}" y1="${snakebitePt.y.toFixed(1)}" 
+                    x2="${drowningPt.x.toFixed(1)}" y2="${drowningPt.y.toFixed(1)}">
+                    <stop offset="0%" stop-color="#FF5A36"/>
+                    <stop offset="70%" stop-color="#7DCBA0"/>
+                </linearGradient>
+            </defs>`;
+
+            // 1. Subtle horizontal dashed guidelines
+            const guideValues = [1750000, 400000, 171000, 58000, 28000, 2800, 500];
+            svg += `<g class="guidelines" opacity="0.32">`;
+            guideValues.forEach(val => {
+                const gy = yForValue(val).toFixed(1);
+                svg += `<line x1="45" y1="${gy}" x2="${W - 45}" y2="${gy}" 
+                    stroke="rgba(140, 205, 165, 0.22)" stroke-width="1" stroke-dasharray="3 5"/>`;
+            });
+            svg += `</g>`;
+
+            // 2. Connecting Lines
+            // Base line connects all points 0 -> 9
+            const fullLinePath = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+
+            // Outward red highlight paths (BOTH ORIGINATE AT SNAKEBITES for symmetrical outward flow)
+            // Snakebites -> Suicides (drawn in reverse)
+            const pathSnakeToSuicides = `M${snakebitePt.x.toFixed(1)},${snakebitePt.y.toFixed(1)} L${suicidesPt.x.toFixed(1)},${suicidesPt.y.toFixed(1)}`;
+            // Snakebites -> Drowning
+            const pathSnakeToDrown = `M${snakebitePt.x.toFixed(1)},${snakebitePt.y.toFixed(1)} L${drowningPt.x.toFixed(1)},${drowningPt.y.toFixed(1)}`;
+
+            svg += `
+            <g class="chart-lines">
+                <!-- Base Connecting Line (Joins all 10 points) -->
+                <path id="baseLine" d="${fullLinePath}" 
+                    fill="none" stroke="#7DCBA0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.88"/>
+
+                <!-- Outward Red Highlight: Snakebites -> Suicides -->
+                <path id="hlLineIn" d="${pathSnakeToSuicides}" 
+                    fill="none" stroke="#FF5A36" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" 
+                    filter="url(#glowCoral)" opacity="0"/>
+
+                <!-- Outward Red Highlight: Snakebites -> Drowning -->
+                <path id="hlLineOut" d="${pathSnakeToDrown}" 
+                    fill="none" stroke="url(#gradSnakeToDrown)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"
+                    opacity="0"/>
+            </g>`;
+
+            // 3. Point Groups (Choreographed individually with GPU-composited transforms)
+            svg += `<g class="chart-points-container">`;
+            points.forEach((p, i) => {
+                const isHL = p.highlight;
+                const isAbove = p.pos === 'above';
+                const dotR = 5.5;
+                const stemLen = (i === 8 || i === 9) ? 24 : 18;
+
+                let nameY, valY, stemY1, stemY2;
+
+                if (isHL) {
+                    valY = p.y - 24;
+                    nameY = p.y - 43;
+                } else if (isAbove) {
+                    stemY1 = p.y - dotR - 1;
+                    stemY2 = p.y - dotR - stemLen;
+                    valY = p.y - dotR - stemLen - 5;
+                    nameY = valY - 15;
+                } else {
+                    stemY1 = p.y + dotR + 1;
+                    stemY2 = p.y + dotR + stemLen;
+                    nameY = p.y + dotR + stemLen + 14;
+                    valY = nameY + 15;
+                }
+
+                const nameColor = isHL ? '#FFFFFF' : '#D1DFD3';
+                const nameWeight = isHL ? '700' : '500';
+                const nameSize = isHL ? '15' : '12.5';
+                const valSize = isHL ? '16' : '12.5';
+
+                svg += `
+                <g id="pt-group-${i}">
+                    <!-- Stem -->
+                    ${!isHL ? `
+                    <line id="stem-${i}" 
+                        x1="${p.x.toFixed(1)}" y1="${stemY1.toFixed(1)}" 
+                        x2="${p.x.toFixed(1)}" y2="${stemY2.toFixed(1)}" 
+                        stroke="rgba(140, 215, 175, 0.58)" stroke-width="1.2" stroke-linecap="round"
+                        style="opacity: 0; stroke-dasharray: ${stemLen}; stroke-dashoffset: ${stemLen}; will-change: stroke-dashoffset, opacity;"/>
+                    ` : ''}
+
+                    <!-- Snakebite Sonar Ripple Shockwave (Hardware composited scale) -->
+                    ${isHL ? `
+                    <circle id="snakeRipple" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="26" 
+                        fill="none" stroke="#FF5A36" stroke-width="2" 
+                        style="transform-origin: ${p.x.toFixed(1)}px ${p.y.toFixed(1)}px; transform: scale(0.2); opacity: 0; will-change: transform, opacity;"/>
+                    ` : ''}
+
+                    <!-- Snakebite Outer Glowing Ring (Hardware composited scale) -->
+                    ${isHL ? `
+                    <circle id="snakeOuterHalo" class="halo-breathing" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="18" 
+                        fill="rgba(255,90,54,0.24)" filter="url(#glowStrong)"
+                        style="transform-origin: ${p.x.toFixed(1)}px ${p.y.toFixed(1)}px; transform: scale(0); opacity: 0; will-change: transform, opacity;"/>
+                    
+                    <circle id="snakeMidRing" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="12" 
+                        fill="rgba(255,90,54,0.40)" stroke="#FF5A36" stroke-width="1.5" filter="url(#glowCoral)"
+                        style="transform-origin: ${p.x.toFixed(1)}px ${p.y.toFixed(1)}px; transform: scale(0); opacity: 0; will-change: transform, opacity;"/>
+                    ` : ''}
+
+                    <!-- Main Dot Circle (Smoothly scales in, morphs color & size seamlessly) -->
+                    <circle id="${isHL ? 'snakeMainDot' : `dot-${i}`}" 
+                        cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="5.5" 
+                        fill="#88D9AB" stroke="#061A0E" stroke-width="1.5"
+                        style="transform-origin: ${p.x.toFixed(1)}px ${p.y.toFixed(1)}px; transform: scale(0); opacity: 0; will-change: transform, opacity, fill, r;"/>
+
+                    <!-- Snakebite White Core Highlight -->
+                    ${isHL ? `
+                    <circle id="snakeCoreWhite" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.8" fill="#FFFFFF"
+                        style="transform-origin: ${p.x.toFixed(1)}px ${p.y.toFixed(1)}px; transform: scale(0); opacity: 0; will-change: transform, opacity;"/>
+                    ` : ''}
+
+                    <!-- Labels Group (Glides in with ultra-soft deceleration) -->
+                    <g id="lbl-group-${i}" style="transform-origin: ${p.x.toFixed(1)}px ${p.y.toFixed(1)}px; transform: translateY(${isAbove ? '6px' : '-6px'}); opacity: 0; will-change: transform, opacity;">
+                        <text class="chart-label-text" x="${p.x.toFixed(1)}" y="${nameY.toFixed(1)}" 
+                            text-anchor="middle" font-size="${nameSize}" font-weight="${nameWeight}" fill="${nameColor}">
+                            ${p.label}
+                        </text>
+                        <text id="${isHL ? 'snakeValText' : `val-${i}`}" class="chart-label-text" 
+                            x="${p.x.toFixed(1)}" y="${valY.toFixed(1)}" 
+                            text-anchor="middle" font-size="${valSize}" font-weight="${isHL ? '800' : '700'}" 
+                            fill="#FFFFFF"
+                            style="transform-origin: ${p.x.toFixed(1)}px ${valY.toFixed(1)}px; will-change: transform, fill;">
+                            ${p.display}
+                        </text>
+                    </g>
+                </g>`;
+            });
+            svg += `</g>`;
+
+            svg += `</svg>`;
+            container.innerHTML = svg;
+        }
+
+        /**
+         * Set chart immediately to its complete, fully-rendered final state
+         */
+        function setCompletedState() {
+            clearAnimTimeouts();
+            isAnimating = false;
+
+            const baseLine = document.getElementById('baseLine');
+            if (baseLine) {
+                const len = baseLine.getTotalLength();
+                baseLine.style.transition = 'none';
+                baseLine.style.strokeDasharray = len;
+                baseLine.style.strokeDashoffset = '0';
+            }
+
+            const hlIn = document.getElementById('hlLineIn');
+            if (hlIn) {
+                const len = hlIn.getTotalLength();
+                hlIn.style.transition = 'none';
+                hlIn.style.strokeDasharray = len;
+                hlIn.style.strokeDashoffset = '0';
+                hlIn.style.opacity = '1';
+            }
+
+            const hlOut = document.getElementById('hlLineOut');
+            if (hlOut) {
+                const len = hlOut.getTotalLength();
+                hlOut.style.transition = 'none';
+                hlOut.style.strokeDasharray = len;
+                hlOut.style.strokeDashoffset = '0';
+                hlOut.style.opacity = '1';
+            }
+
+            for (let i = 0; i < DATA.length; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) {
+                    dot.style.transition = 'none';
+                    dot.style.opacity = '1';
+                    dot.style.transform = 'scale(1)';
+                }
+                const stem = document.getElementById(`stem-${i}`);
+                if (stem) {
+                    stem.style.transition = 'none';
+                    stem.style.opacity = '1';
+                    stem.style.strokeDashoffset = '0';
+                }
+                const lbl = document.getElementById(`lbl-group-${i}`);
+                if (lbl) {
+                    lbl.style.transition = 'none';
+                    lbl.style.opacity = '1';
+                    lbl.style.transform = 'translateY(0)';
+                }
+            }
+
+            // Snakebite highlight final state
+            const snakeMain = document.getElementById('snakeMainDot');
+            if (snakeMain) {
+                snakeMain.style.transition = 'none';
+                snakeMain.style.opacity = '1';
+                snakeMain.style.transform = 'scale(1)';
+                snakeMain.setAttribute('fill', '#FF5A36');
+                snakeMain.setAttribute('r', '7.5');
+                snakeMain.setAttribute('stroke-width', '0');
+            }
+
+            const snakeOuter = document.getElementById('snakeOuterHalo');
+            if (snakeOuter) {
+                snakeOuter.style.transition = 'none';
+                snakeOuter.style.opacity = '1';
+                snakeOuter.style.transform = 'scale(1)';
+            }
+
+            const snakeMid = document.getElementById('snakeMidRing');
+            if (snakeMid) {
+                snakeMid.style.transition = 'none';
+                snakeMid.style.opacity = '1';
+                snakeMid.style.transform = 'scale(1)';
+            }
+
+            const snakeWhite = document.getElementById('snakeCoreWhite');
+            if (snakeWhite) {
+                snakeWhite.style.transition = 'none';
+                snakeWhite.style.opacity = '1';
+                snakeWhite.style.transform = 'scale(1)';
+            }
+
+            const snakeVal = document.getElementById('snakeValText');
+            if (snakeVal) {
+                snakeVal.style.transition = 'none';
+                snakeVal.setAttribute('fill', '#FF5A36');
+                snakeVal.style.transform = 'scale(1)';
+            }
+        }
+
+        /**
+         * Ultra-Smooth Choreography:
+         * 1. Descending Cascade (1 -> 10): 150ms intervals, 0.65s gentle float-in
+         * 2. Continuous Line Sweep: 1.8s luxurious liquid ease (cubic-bezier(0.25, 1, 0.35, 1))
+         * 3. Symmetrical Red Ignition: Radiant pulse flows outward from Snakebites in both directions along line
+         */
+        function triggerChartAnimation() {
+            clearAnimTimeouts();
+            isAnimating = true;
+
+            const baseLine = document.getElementById('baseLine');
+            let baseLen = 2000;
+            if (baseLine) {
+                baseLen = baseLine.getTotalLength();
+                baseLine.style.transition = 'none';
+                baseLine.style.strokeDasharray = baseLen;
+                baseLine.style.strokeDashoffset = baseLen;
+            }
+
+            const hlIn = document.getElementById('hlLineIn');
+            let inLen = 150;
+            if (hlIn) {
+                inLen = hlIn.getTotalLength();
+                hlIn.style.transition = 'none';
+                hlIn.style.strokeDasharray = inLen;
+                hlIn.style.strokeDashoffset = inLen;
+                hlIn.style.opacity = '0';
+            }
+
+            const hlOut = document.getElementById('hlLineOut');
+            let outLen = 150;
+            if (hlOut) {
+                outLen = hlOut.getTotalLength();
+                hlOut.style.transition = 'none';
+                hlOut.style.strokeDasharray = outLen;
+                hlOut.style.strokeDashoffset = outLen;
+                hlOut.style.opacity = '0';
+            }
+
+            // Reset Snakebite elements
+            const snakeMain = document.getElementById('snakeMainDot');
+            if (snakeMain) {
+                snakeMain.style.transition = 'none';
+                snakeMain.style.opacity = '0';
+                snakeMain.style.transform = 'scale(0)';
+                snakeMain.setAttribute('fill', '#88D9AB');
+                snakeMain.setAttribute('r', '5.5');
+                snakeMain.setAttribute('stroke-width', '1.5');
+            }
+
+            const snakeOuter = document.getElementById('snakeOuterHalo');
+            if (snakeOuter) {
+                snakeOuter.style.transition = 'none';
+                snakeOuter.style.opacity = '0';
+                snakeOuter.style.transform = 'scale(0)';
+            }
+
+            const snakeMid = document.getElementById('snakeMidRing');
+            if (snakeMid) {
+                snakeMid.style.transition = 'none';
+                snakeMid.style.opacity = '0';
+                snakeMid.style.transform = 'scale(0)';
+            }
+
+            const snakeWhite = document.getElementById('snakeCoreWhite');
+            if (snakeWhite) {
+                snakeWhite.style.transition = 'none';
+                snakeWhite.style.opacity = '0';
+                snakeWhite.style.transform = 'scale(0)';
+            }
+
+            const snakeVal = document.getElementById('snakeValText');
+            if (snakeVal) {
+                snakeVal.style.transition = 'none';
+                snakeVal.setAttribute('fill', '#FFFFFF');
+                snakeVal.style.transform = 'scale(1)';
+            }
+
+            const snakeRipple = document.getElementById('snakeRipple');
+            if (snakeRipple) {
+                snakeRipple.style.transition = 'none';
+                snakeRipple.style.opacity = '0';
+                snakeRipple.style.transform = 'scale(0.2)';
+                snakeRipple.style.strokeWidth = '2px';
+            }
+
+            // Reset all regular dots, stems, labels
+            for (let i = 0; i < DATA.length; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) {
+                    dot.style.transition = 'none';
+                    dot.style.opacity = '0';
+                    dot.style.transform = 'scale(0)';
+                }
+                const stem = document.getElementById(`stem-${i}`);
+                if (stem) {
+                    const stemLen = (i === 8 || i === 9) ? 24 : 18;
+                    stem.style.transition = 'none';
+                    stem.style.opacity = '0';
+                    stem.style.strokeDashoffset = `${stemLen}`;
+                }
+                const lbl = document.getElementById(`lbl-group-${i}`);
+                if (lbl) {
+                    lbl.style.transition = 'none';
+                    lbl.style.opacity = '0';
+                    const offsetY = (DATA[i].pos === 'above') ? '6px' : '-6px';
+                    lbl.style.transform = `translateY(${offsetY})`;
+                }
+            }
+
+            void document.body.offsetWidth; // Force reflow
+
+            // ════════════════════════════════════════════════════════════════════
+            // PHASE 1: Gentle Descending Cascade (1 -> 10)
+            // Staggered at 145ms with 0.60s ultra-soft deceleration curve
+            // ════════════════════════════════════════════════════════════════════
+            const STEP_INTERVAL = 145; // ms between each point
+            for (let i = 0; i < DATA.length; i++) {
+                const t = setTimeout(() => {
+                    // 1. Dot expands softly like a water droplet settling
+                    const targetDot = DATA[i].highlight ? snakeMain : document.getElementById(`dot-${i}`);
+                    if (targetDot) {
+                        targetDot.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease';
+                        targetDot.style.opacity = '1';
+                        targetDot.style.transform = 'scale(1)';
+                    }
+
+                    // 2. Stem gently unrolls outward from dot
+                    const stem = document.getElementById(`stem-${i}`);
+                    if (stem) {
+                        stem.style.transition = 'stroke-dashoffset 0.48s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease';
+                        stem.style.opacity = '1';
+                        stem.style.strokeDashoffset = '0';
+                    }
+
+                    // 3. Label glides into resting position with liquid ease
+                    const lbl = document.getElementById(`lbl-group-${i}`);
+                    if (lbl) {
+                        lbl.style.transition = 'transform 0.60s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease';
+                        lbl.style.opacity = '1';
+                        lbl.style.transform = 'translateY(0)';
+                    }
+                }, 40 + i * STEP_INTERVAL);
+                animTimeouts.push(t);
+            }
+
+            // ════════════════════════════════════════════════════════════════════
+            // PHASE 2: Luxurious Continuous Line Sweep
+            // Starts gracefully as tail points finish settling; glides over 1.8s
+            // ════════════════════════════════════════════════════════════════════
+            const LINE_START = 40 + (DATA.length - 1) * STEP_INTERVAL + 120; // ~1420ms
+            const LINE_DURATION = 1750; // ms
+
+            const tLine = setTimeout(() => {
+                if (baseLine) {
+                    baseLine.style.transition = `stroke-dashoffset ${LINE_DURATION}ms cubic-bezier(0.25, 1, 0.35, 1)`;
+                    baseLine.style.strokeDashoffset = '0';
+                }
+            }, LINE_START);
+            animTimeouts.push(tLine);
+
+            // ════════════════════════════════════════════════════════════════════
+            // PHASE 3: Symmetrical Radiant Morph on Snakebite
+            // Seamlessly takes over right as line connects final point
+            // ════════════════════════════════════════════════════════════════════
+            const HL_START = LINE_START + LINE_DURATION + 60; // ~3230ms
+
+            const tHl = setTimeout(() => {
+                // A. Hardware-accelerated circular sonar wave radiates outward
+                if (snakeRipple) {
+                    snakeRipple.style.transition = 'transform 0.95s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.95s ease-out, stroke-width 0.95s ease-out';
+                    snakeRipple.style.opacity = '0.70';
+                    snakeRipple.style.transform = 'scale(1.45)';
+                    snakeRipple.style.strokeWidth = '0.5px';
+
+                    setTimeout(() => {
+                        snakeRipple.style.opacity = '0';
+                    }, 400);
+                }
+
+                // B. Symmetrical Red Lines draw OUTWARD from Snakebites in both directions
+                if (hlIn) {
+                    hlIn.style.transition = 'stroke-dashoffset 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease';
+                    hlIn.style.opacity = '1';
+                    hlIn.style.strokeDashoffset = '0';
+                }
+
+                if (hlOut) {
+                    hlOut.style.transition = 'stroke-dashoffset 0.65s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease';
+                    hlOut.style.opacity = '1';
+                    hlOut.style.strokeDashoffset = '0';
+                }
+
+                // C. Dot morphs color and size with liquid ease: #88D9AB -> #FF5A36
+                if (snakeMain) {
+                    snakeMain.style.transition = 'fill 0.55s cubic-bezier(0.16, 1, 0.3, 1), r 0.55s cubic-bezier(0.34, 1.3, 0.64, 1), stroke-width 0.4s ease';
+                    snakeMain.setAttribute('fill', '#FF5A36');
+                    snakeMain.setAttribute('r', '7.5');
+                    snakeMain.setAttribute('stroke-width', '0');
+                }
+
+                // D. Outer rings bloom softly outward
+                if (snakeMid) {
+                    snakeMid.style.transition = 'transform 0.65s cubic-bezier(0.34, 1.25, 0.64, 1), opacity 0.5s ease';
+                    snakeMid.style.opacity = '1';
+                    snakeMid.style.transform = 'scale(1)';
+                }
+
+                if (snakeOuter) {
+                    snakeOuter.style.transition = 'transform 0.75s cubic-bezier(0.34, 1.2, 0.64, 1), opacity 0.55s ease';
+                    snakeOuter.style.opacity = '1';
+                    snakeOuter.style.transform = 'scale(1)';
+                }
+
+                if (snakeWhite) {
+                    snakeWhite.style.transition = 'transform 0.45s cubic-bezier(0.34, 1.3, 0.64, 1), opacity 0.4s ease';
+                    snakeWhite.style.opacity = '1';
+                    snakeWhite.style.transform = 'scale(1)';
+                }
+
+                // E. Value text "58,000" dissolves into coral-red with a floating breath
+                if (snakeVal) {
+                    snakeVal.style.transition = 'fill 0.5s ease, transform 0.35s cubic-bezier(0.34, 1.35, 0.64, 1)';
+                    snakeVal.setAttribute('fill', '#FF5A36');
+                    snakeVal.style.transform = 'scale(1.09)';
+
+                    setTimeout(() => {
+                        snakeVal.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+                        snakeVal.style.transform = 'scale(1)';
+                    }, 340);
+                }
+
+                isAnimating = false;
+            }, HL_START);
+            animTimeouts.push(tHl);
+        }
+
+        // Parent message listener from scrollytelling page
+        window.addEventListener('message', (event) => {
+            if (event.data === 'animateChart' || event.data === 'triggerAnimation') {
+                triggerChartAnimation();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            buildChart();
+
+            // Notify parent scrollytelling container that iframe is ready
+            try {
+                window.parent.postMessage('chartReady', '*');
+            } catch (e) { }
+
+            // Auto-trigger if standalone tab
+            if (window.self === window.top) {
+                setTimeout(() => {
+                    triggerChartAnimation();
+                }, 400);
+            } else {
+                // In iframe: default to completed state after 2.5s if no message arrives
+                setTimeout(() => {
+                    if (!isAnimating && document.getElementById('baseLine').style.strokeDashoffset !== '0') {
+                        setCompletedState();
+                    }
+                }, 2500);
+            }
+
+            // Replay button listener
+            const replayBtn = document.getElementById('replayBtn');
+            if (replayBtn) {
+                replayBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    triggerChartAnimation();
+                });
+            }
+
+            // Rebuild on window resize
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    buildChart();
+                    setCompletedState();
+                }, 200);
+            });
+        });
+    </script>
+</body>
+
+</html>

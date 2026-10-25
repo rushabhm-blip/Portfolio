@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Full Frame Crossfade Test</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #03120B;
+    color: #EEECE3;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+  }
+  .controls {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    background: rgba(0,0,0,0.85);
+    border: 1px solid #444;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  .controls input[type="range"] {
+    width: 320px;
+  }
+  .stage-wrap {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .bg-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+    pointer-events: none;
+  }
+  .crack-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+    pointer-events: none;
+    z-index: 5;
+    filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.65));
+  }
+  .encounter-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 16;
+  }
+  .text-layer {
+    position: absolute;
+    z-index: 18;
+    pointer-events: none;
+  }
+  .text-right {
+    right: clamp(2rem, 8vw, 8rem);
+    top: clamp(4.5rem, 18vh, 14rem);
+    max-width: 500px;
+  }
+  .text-left {
+    left: clamp(2rem, 7vw, 7rem);
+    bottom: clamp(3rem, 16vh, 9rem);
+    max-width: 440px;
+  }
+  h2 {
+    font-family: Georgia, serif;
+    font-size: clamp(34px, 4vw, 64px);
+    font-weight: normal;
+    line-height: 1.08;
+  }
+  .h-sub {
+    font-size: clamp(16px, 1.25vw, 20px);
+    color: #D7DDD5;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <label><strong>Timeline (0% - 100%):</strong></label>
+  <input type="range" id="progressSlider" min="0" max="1" step="0.001" value="0">
+  <span id="sliderVal" style="font-family: monospace; width: 50px;">0%</span>
+  <span id="stageLabel" style="color: #4ade80;">01 Approach</span>
+</div>
+
+<div class="stage-wrap" id="stageWrap">
+  <img class="bg-layer" src="assets/layers_clean/4_homes.webp" style="z-index: 4;">
+  <img class="crack-layer" id="crackLayer" src="assets/layers_clean/5_crack.webp">
+
+  <!-- Encounter Animation Canvas -->
+  <canvas class="encounter-canvas" id="encounterCanvas"></canvas>
+
+  <div class="text-layer text-right">
+    <h2 style="color: #EEECE3;">One shared home.<br><span style="font-style: italic; color: #BBC3B3;">Two sides of fear.</span></h2>
+    <p class="h-sub">When human and snake habitats overlap,<br>fear can turn an encounter into conflict.</p>
+  </div>
+
+  <div class="text-layer text-left">
+    <h2 style="color: #EEECE3;">Caught in the same conflict.<br>Both trying to survive.</h2>
+  </div>
+</div>
+
+<script>
+// The 8 frames specified by user
+const FRAME_SRCS = [
+  'assets/frames/img_5.png', // 0: 01 Approach
+  'assets/frames/img_7.png', // 1: 02 Notice
+  'assets/frames/img_8.png', // 2: 03 React (corrected)
+  'assets/frames/img_6.png', // 3: 04 Turn
+  'assets/frames/img_2.png', // 4: 05 Cross
+  'assets/frames/img_3.png', // 5: 06 Cross continue
+  'assets/frames/img_0.png', // 6: 07 Retreat
+  'assets/frames/img_1.png'  // 7: 08 Hold
+];
+
+const images = [];
+let loadedCount = 0;
+FRAME_SRCS.forEach((src) => {
+  const img = new Image();
+  img.src = src;
+  img.onload = () => {
+    loadedCount++;
+    if (loadedCount === FRAME_SRCS.length) {
+      init();
+    }
+  };
+  images.push(img);
+});
+
+const canvas = document.getElementById('encounterCanvas');
+const ctx = canvas.getContext('2d');
+const slider = document.getElementById('progressSlider');
+const sliderVal = document.getElementById('sliderVal');
+const stageLabel = document.getElementById('stageLabel');
+
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  render(parseFloat(slider.value));
+}
+window.addEventListener('resize', resize);
+
+// How the 1024x576 frames align with the background:
+// Background layers (1920x1080) use: object-fit: cover; object-position: center bottom;
+// Let's compute the exact geometry of a 16:9 box fitted with object-position: center bottom
+function getCoverGeometry(vpW, vpH) {
+  const baseAspect = 16 / 9; // 1920/1080 = 1024/576 = 1.7777...
+  const vpAspect = vpW / vpH;
+  let rW, rH, rL, rT;
+  if (vpAspect > baseAspect) {
+    rW = vpW;
+    rH = vpW / baseAspect;
+    rL = 0;
+    rT = vpH - rH; // aligned to bottom!
+  } else {
+    rH = vpH;
+    rW = vpH * baseAspect;
+    rL = (vpW - rW) / 2; // centered horizontally!
+    rT = 0;
+  }
+  return { rW, rH, rL, rT };
+}
+
+// Milestone mapping from prompt:
+// 0–12%   — Approach (frame 0)
+// 12–25%  — Notice (frame 1)
+// 25–38%  — Reaction (frame 2)
+// 38–48%  — Turn (frame 3)
+// 48–68%  — Cross the crack (frames 4, 5)
+// 68–88%  — Retreat (frames 6, 7)
+// 88–100% — Hold (frame 7)
+const MILESTONES = [
+  { t: 0.00, frame: 0, label: '01 Approach' },
+  { t: 0.12, frame: 1, label: '02 Notice' },
+  { t: 0.25, frame: 2, label: '03 Reaction' },
+  { t: 0.38, frame: 3, label: '04 Turn' },
+  { t: 0.48, frame: 4, label: '05 Cross the Crack' },
+  { t: 0.58, frame: 5, label: '05/06 Slither Across' },
+  { t: 0.68, frame: 6, label: '06 Retreat' },
+  { t: 0.88, frame: 7, label: '07 Safe Separation / Hold' },
+  { t: 1.00, frame: 7, label: '07 Hold' }
+];
+
+function render(t) {
+  const vpW = window.innerWidth;
+  const vpH = window.innerHeight;
+  ctx.clearRect(0, 0, vpW, vpH);
+
+  const { rW, rH, rL, rT } = getCoverGeometry(vpW, vpH);
+
+  // Fade in at the very start: 0 -> 1 over 0 to 0.06
+  const masterFade = Math.min(1, Math.max(0, t / 0.06));
+
+  // Find which two milestone frames we are between
+  let fA = 0, fB = 0, blend = 0, label = '';
+  for (let i = 0; i < MILESTONES.length - 1; i++) {
+    const m1 = MILESTONES[i];
+    const m2 = MILESTONES[i+1];
+    if (t >= m1.t && t <= m2.t) {
+      fA = m1.frame;
+      fB = m2.frame;
+      const span = m2.t - m1.t;
+      const rawBlend = span > 0 ? (t - m1.t) / span : 0;
+      // Smooth cosine crossfade between poses
+      blend = 0.5 - 0.5 * Math.cos(rawBlend * Math.PI);
+      label = m1.label;
+      break;
+    }
+  }
+
+  stageLabel.textContent = label;
+  sliderVal.textContent = Math.round(t * 100) + '%';
+
+  if (masterFade <= 0) return;
+
+  if (fA === fB || blend <= 0.001) {
+    ctx.globalAlpha = masterFade;
+    ctx.drawImage(images[fA], 0, 0, 1024, 576, rL, rT, rW, rH);
+  } else if (blend >= 0.999) {
+    ctx.globalAlpha = masterFade;
+    ctx.drawImage(images[fB], 0, 0, 1024, 576, rL, rT, rW, rH);
+  } else {
+    // Smooth crossfade between frame A and frame B
+    ctx.globalAlpha = masterFade * (1 - blend);
+    ctx.drawImage(images[fA], 0, 0, 1024, 576, rL, rT, rW, rH);
+
+    ctx.globalAlpha = masterFade * blend;
+    ctx.drawImage(images[fB], 0, 0, 1024, 576, rL, rT, rW, rH);
+  }
+
+  ctx.globalAlpha = 1.0;
+}
+
+function init() {
+  resize();
+  slider.addEventListener('input', () => {
+    render(parseFloat(slider.value));
+  });
+}
+</script>
+</body>
+</html>

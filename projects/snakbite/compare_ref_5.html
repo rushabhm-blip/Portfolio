@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Compare Reference and Frame 01</title>
+<style>
+  body { margin: 0; background: #03120B; color: #fff; font-family: sans-serif; padding: 20px; }
+  .stage { position: relative; width: 1024px; height: 576px; border: 1px solid #555; background: #000; }
+  .ref { position: absolute; top: 0; left: 0; width: 1024px; height: 441px; opacity: 0.6; }
+  .frame { position: absolute; top: 0; left: 0; width: 1024px; height: 576px; opacity: 0.7; }
+  .controls { margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="controls">
+  <label><input type="checkbox" id="showRef" checked> Show Reference (img_9.png)</label>
+  <label style="margin-left: 20px;"><input type="checkbox" id="showFrame" checked> Show Frame 01 (img_5.png)</label>
+  <span style="margin-left: 20px;" id="info"></span>
+</div>
+<div class="stage" id="stage">
+  <img class="ref" id="refImg" src="assets/frames/img_9.png">
+  <img class="frame" id="frameImg" src="assets/frames/img_5.png">
+</div>
+
+<script>
+  const ref = document.getElementById('refImg');
+  const frame = document.getElementById('frameImg');
+  document.getElementById('showRef').onchange = (e) => ref.style.display = e.target.checked ? 'block' : 'none';
+  document.getElementById('showFrame').onchange = (e) => frame.style.display = e.target.checked ? 'block' : 'none';
+
+  // Compare pixel alignments
+  window.onload = () => {
+    document.getElementById('info').textContent = `Ref: ${ref.naturalWidth}x${ref.naturalHeight}, Frame: ${frame.naturalWidth}x${frame.naturalHeight}`;
+  };
+</script>
+</body>
+</html>

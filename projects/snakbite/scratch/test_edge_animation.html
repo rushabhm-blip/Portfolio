@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Forest Edges Snake Animation Test</title>
+<style>
+  body {
+    background: #0d1a12 url('../assets/forest_hero_bg.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #EEECE3;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
+  }
+  .controls {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.85);
+    padding: 12px 24px;
+    border-radius: 8px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  input[type=range] { width: 400px; }
+  .stage {
+    position: relative;
+    width: 1200px;
+    height: 511px;
+    margin: 80px auto 0;
+    border: 1px dashed rgba(255,255,255,0.2);
+  }
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .zooms {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  .zoom-box {
+    background: rgba(0,0,0,0.7);
+    border: 1px solid #444;
+    padding: 10px;
+    text-align: center;
+  }
+  .zoom-box canvas {
+    width: 200px;
+    height: 150px;
+    image-rendering: pixelated;
+  }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <span>Progress:</span>
+  <input type="range" id="slider" min="0" max="1000" value="0">
+  <span id="progLabel">0% (Frame 1)</span>
+  <label><input type="checkbox" id="isolatedMode" checked> Clean Masked Mode</label>
+</div>
+
+<div class="stage">
+  <canvas id="mainCanvas" width="1024" height="436"></canvas>
+</div>
+
+<div class="zooms">
+  <div class="zoom-box">
+    <h4>Upper-Left Vine Snake</h4>
+    <canvas id="zoomVine" width="120" height="80"></canvas>
+  </div>
+  <div class="zoom-box">
+    <h4>Lower-Left Log Viper</h4>
+    <canvas id="zoomLog" width="120" height="80"></canvas>
+  </div>
+  <div class="zoom-box">
+    <h4>Right Trunk Krait</h4>
+    <canvas id="zoomKrait" width="100" height="150"></canvas>
+  </div>
+  <div class="zoom-box">
+    <h4>Lower-Right Foliage Viper</h4>
+    <canvas id="zoomGreen" width="100" height="80"></canvas>
+  </div>
+</div>
+
+<script>
+const imgs = [];
+for (let i = 1; i <= 5; i++) {
+  const img = new Image();
+  img.src = `../assets/forest_edges/forest-edge-0${i}.png`;
+  imgs.push(img);
+}
+
+const mainCv = document.getElementById('mainCanvas');
+const mainCtx = mainCv.getContext('2d');
+const slider = document.getElementById('slider');
+const progLabel = document.getElementById('progLabel');
+const isolatedCheck = document.getElementById('isolatedMode');
+
+// Zoom contexts
+const zVine = document.getElementById('zoomVine').getContext('2d');
+const zLog = document.getElementById('zoomLog').getContext('2d');
+const zKrait = document.getElementById('zoomKrait').getContext('2d');
+const zGreen = document.getElementById('zoomGreen').getContext('2d');
+
+// Region definitions in 1024x436
+const SNAKE_REGIONS = [
+  // Upper-left branch vine snake
+  { id: 'vine', x: 55, y: 30, w: 105, h: 50, feather: 6 },
+  // Lower-left log viper
+  { id: 'log', x: 60, y: 305, w: 90, h: 65, feather: 6 },
+  // Right trunk krait
+  { id: 'krait', x: 865, y: 90, w: 75, h: 125, feather: 8 },
+  // Lower-right foliage pit viper
+  { id: 'green', x: 865, y: 320, w: 70, h: 55, feather: 6 }
+];
+
+function smoothstep(min, max, val) {
+  const x = Math.max(0, Math.min(1, (val - min) / (max - min)));
+  return x * x * (3 - 2 * x);
+}
+
+function render(p) {
+  mainCtx.clearRect(0, 0, 1024, 436);
+
+  // 1. Always draw Frame 01 as the stationary stable base
+  mainCtx.drawImage(imgs[0], 0, 0, 1024, 436);
+
+  // If p == 0, base is 100% frame 01
+  if (p > 0.005) {
+    // Map p (0..1) to frame indices (0..4)
+    // 0.00 -> Frame 0
+    // 0.25 -> Frame 1
+    // 0.50 -> Frame 2
+    // 0.75 -> Frame 3
+    // 1.00 -> Frame 4
+    const scaled = p * 4;
+    const idxA = Math.min(3, Math.floor(scaled));
+    const idxB = idxA + 1;
+    const frac = scaled - idxA;
+    // Controlled crossfade between adjacent poses
+    const blend = smoothstep(0.35, 0.65, frac);
+
+    SNAKE_REGIONS.forEach(reg => {
+      // Create a masked patch for this snake region
+      mainCtx.save();
+
+      // Elliptical/rounded clip path with soft boundaries
+      mainCtx.beginPath();
+      // Ellipse centered in region
+      const cx = reg.x + reg.w / 2;
+      const cy = reg.y + reg.h / 2;
+      mainCtx.ellipse(cx, cy, reg.w / 2, reg.h / 2, 0, 0, Math.PI * 2);
+      mainCtx.clip();
+
+      // If idxA > 0, draw Pose A
+      if (idxA > 0) {
+        mainCtx.globalAlpha = 1.0 - blend;
+        mainCtx.drawImage(imgs[idxA], 0, 0, 1024, 436);
+      }
+
+      // Draw Pose B
+      if (blend > 0) {
+        mainCtx.globalAlpha = blend;
+        mainCtx.drawImage(imgs[idxB], 0, 0, 1024, 436);
+      }
+
+      mainCtx.restore();
+    });
+  }
+
+  // Update zoom displays
+  zVine.clearRect(0, 0, 120, 80);
+  zVine.drawImage(mainCv, 55, 25, 120, 80, 0, 0, 120, 80);
+
+  zLog.clearRect(0, 0, 120, 80);
+  zLog.drawImage(mainCv, 55, 300, 120, 80, 0, 0, 120, 80);
+
+  zKrait.clearRect(0, 0, 100, 150);
+  zKrait.drawImage(mainCv, 855, 80, 100, 150, 0, 0, 100, 150);
+
+  zGreen.clearRect(0, 0, 100, 80);
+  zGreen.drawImage(mainCv, 855, 315, 100, 80, 0, 0, 100, 80);
+}
+
+slider.addEventListener('input', (e) => {
+  const p = e.target.value / 1000;
+  const frameNum = 1 + (p * 4);
+  progLabel.textContent = (p * 100).toFixed(0) + '% (Pose ~' + frameNum.toFixed(2) + ')';
+  render(p);
+});
+
+Promise.all(imgs.map(img => new Promise(r => {
+  if (img.complete) r();
+  else img.onload = r;
+}))).then(() => {
+  render(0);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+const fs = require('fs');
+
+const html = `<!DOCTYPE html>
+<html>
+<head>
+<title>Snake & Villager Inspector</title>
+<style>
+body { background: #03120B; color: #EEE; font-family: sans-serif; padding: 20px; }
+.row { display: flex; gap: 20px; margin-bottom: 30px; align-items: flex-end; border-bottom: 1px solid #333; padding-bottom: 20px; }
+.canvas-wrap { border: 1px solid #555; background: #071a10; }
+</style>
+</head>
+<body>
+<h1>Inspect All 8 Frames In Potential Order</h1>
+<div id="views"></div>
+
+<script>
+const order = [
+  { id: 5, label: '01 - img_5.png' },
+  { id: 7, label: '02 candidate A - img_7.png' },
+  { id: 6, label: '02 candidate B - img_6.png' },
+  { id: 8, label: '03 (corrected) - img_8.png' },
+  { id: 4, label: '03 (old discarded) - img_4.png' },
+  { id: 2, label: '04 - img_2.png' },
+  { id: 3, label: '05 - img_3.png' },
+  { id: 0, label: '06 - img_0.png' },
+  { id: 1, label: '07/08 - img_1.png' }
+];
+
+const container = document.getElementById('views');
+
+order.forEach(item => {
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.innerHTML = \`
+    <div style="width: 250px;">
+      <h3>\${item.label}</h3>
+    </div>
+    <div class="canvas-wrap">
+      <img src="assets/frames/img_\${item.id}.png" style="width: 700px; display: block;">
+    </div>
+  \`;
+  container.appendChild(row);
+});
+</script>
+</body>
+</html>`;
+
+fs.writeFileSync('inspect_all_frames.html', html);
+console.log('inspect_all_frames.html created');

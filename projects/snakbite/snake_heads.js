@@ -1,0 +1,52 @@
+const fs = require('fs');
+
+const html = `<!DOCTYPE html>
+<html>
+<head>
+<title>Snake Head Closeup</title>
+<style>
+body { background: #03120B; color: #EEE; font-family: sans-serif; padding: 20px; }
+.card { display: inline-block; margin: 15px; background: #112; padding: 15px; border: 1px solid #444; }
+canvas { border: 2px solid #00ff88; image-rendering: pixelated; width: 400px; height: 200px; }
+</style>
+</head>
+<body>
+<h1>Snake Head Closeup</h1>
+<div id="canvases"></div>
+
+<script>
+const list = [
+  { id: 5, sx: 650, sy: 440, w: 100, h: 50, desc: 'img_5 (head at right?)' },
+  { id: 7, sx: 650, sy: 440, w: 100, h: 50, desc: 'img_7 (head at right?)' },
+  { id: 6, sx: 470, sy: 450, w: 100, h: 50, desc: 'img_6 (head at left x=470?)' },
+  { id: 8, sx: 530, sy: 430, w: 100, h: 60, desc: 'img_8 (head curled?)' },
+  { id: 2, sx: 400, sy: 450, w: 100, h: 50, desc: 'img_2 (head at left x=400?)' },
+  { id: 3, sx: 330, sy: 450, w: 100, h: 50, desc: 'img_3 (head at left x=330?)' },
+  { id: 0, sx: 180, sy: 450, w: 100, h: 50, desc: 'img_0 (head at left x=180?)' },
+  { id: 1, sx: 60, sy: 450, w: 100, h: 50, desc: 'img_1 (head at left x=60?)' }
+];
+
+const cDiv = document.getElementById('canvases');
+
+list.forEach(item => {
+  const img = new Image();
+  img.src = 'assets/frames/img_' + item.id + '.png';
+  img.onload = () => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = '<h3>' + item.desc + '</h3>';
+    const canvas = document.createElement('canvas');
+    canvas.width = item.w;
+    canvas.height = item.h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, item.sx, item.sy, item.w, item.h, 0, 0, item.w, item.h);
+    card.appendChild(canvas);
+    cDiv.appendChild(card);
+  };
+});
+</script>
+</body>
+</html>`;
+
+fs.writeFileSync('snake_heads.html', html);
+console.log('snake_heads.html written');

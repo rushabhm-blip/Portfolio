@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Patient Pathway · Snakebite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@8..144,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #EEECE3;
+  --muted: #A8B9A3;
+  
+  /* Reference diagram palette */
+  --c-bite: #7f8fa6;
+  --c-hospital: #2e86de;
+  --c-healer: #e69119;
+  --c-timely: #10ac84;
+  --c-delayed: #e67e22;
+  --c-nocare: #d63053;
+  --c-recovery: #1dd1a1;
+  --c-disability: #3b82f6;
+  --c-fatal: #718093;
+  
+  --font-sans: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+:root, html, body {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+html, body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  height: 100%;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  max-width: 1540px;
+  margin: auto;
+  padding: 16px 2.5vw;
+}
+
+.stages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.stage {
+  position: relative;
+  border: 0;
+  border-top: 2px solid rgba(255, 255, 255, 0.15);
+  background: none;
+  text-align: left;
+  color: var(--muted);
+  padding: 10px 0 6px;
+  cursor: pointer;
+  font: 600 13px/1.3 var(--font-sans);
+  letter-spacing: 0.01em;
+  transition: color 0.35s ease, border-color 0.35s ease;
+}
+
+.stage span {
+  display: inline-block;
+  color: rgba(168, 185, 163, 0.6);
+  margin-right: 8px;
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  transition: color 0.35s ease;
+}
+
+.stage:hover {
+  color: var(--ink);
+}
+
+.stage.active {
+  color: var(--ink);
+  border-top-color: var(--c-timely);
+}
+
+.stage.active span {
+  color: var(--c-timely);
+}
+
+.chart-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 10px 0 4px;
+}
+
+.chart-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.chart-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 3px;
+}
+
+.chart-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.chart {
+  min-width: 960px;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.flow {
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1), fill-opacity 0.35s ease, stroke-opacity 0.35s ease;
+  fill-opacity: 0.42;
+  stroke-width: 1;
+  stroke-opacity: 0.65;
+  cursor: pointer;
+}
+
+.flow:hover {
+  fill-opacity: 0.62;
+  stroke-opacity: 0.92;
+}
+
+/* Future nodes and flows are 100% hidden so they don't spoil where paths land */
+.node {
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.node.revealed {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.node text {
+  font-family: var(--font-sans);
+  pointer-events: none;
+}
+
+/* Clean, sharp 2-line Google Sans Flex hierarchy */
+.node .kicker {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 2px 7px rgba(0, 0, 0, 0.95);
+}
+
+.node .headline {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  fill: var(--ink);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 2px 8px rgba(0, 0, 0, 0.95);
+}
+
+.flow.dim {
+  opacity: 0.06 !important;
+}
+
+.node.dim {
+  opacity: 0.22 !important;
+}
+
+.node:focus {
+  outline: none;
+}
+
+.node:focus .bar {
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.person {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.85));
+}
+
+#tooltip {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+  background: rgba(5, 16, 11, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  color: var(--ink);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+#tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#tooltip strong {
+  display: block;
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--c-timely);
+  margin-bottom: 2px;
+}
+
+@media(max-width:700px) {
+  main { padding: 16px 12px; }
+  .stages { gap: 8px; }
+  .stage { font-size: 11px; }
+  .stage span { display: block; margin-bottom: 4px; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+<main>
+  <nav class="stages" aria-label="Pathway stages">
+    <button class="stage" data-step="0"><span>01</span>100 Combined Bites</button>
+    <button class="stage" data-step="1"><span>02</span>First Response</button>
+    <button class="stage" data-step="2"><span>03</span>Treatment Timing</button>
+    <button class="stage" data-step="3"><span>04</span>Final Outcomes</button>
+  </nav>
+
+  <div class="chart-scroll">
+    <div class="chart">
+      <svg id="chart" viewBox="0 0 1320 570" role="img" aria-labelledby="title desc">
+        <title id="title">Illustrative pathway for 100 snakebite patients</title>
+        <desc id="desc">45 first attend hospital and 55 visit a traditional healer. 40 receive timely antivenom, 40 delayed antivenom and 20 no effective care. Final outcomes: 63 recoveries, 16 permanent disabilities and 21 lives lost.</desc>
+      </svg>
+    </div>
+  </div>
+</main>
+
+<div id="tooltip" role="status" aria-hidden="true"></div>
+
+<script>
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.querySelector('#chart');
+const tooltip = document.querySelector('#tooltip');
+
+const colors = {
+  bite: '#7f8fa6',
+  hospital: '#2e86de',
+  healer: '#e69119',
+  timely: '#10ac84',
+  delayed: '#e67e22',
+  nocare: '#d63053',
+  recovery: '#1dd1a1',
+  disability: '#3b82f6',
+  fatal: '#718093'
+};
+
+const nodes = [
+  {id:'bite', kicker:'100 COMBINED BITES', name:'100 People Bitten by a Snake', n:100, x:24, y:165, s:0, c:colors.bite},
+  {id:'hospital', kicker:'45% HEALTHCARE', name:'Direct Hospital Care — 45', n:45, x:344, y:95, s:1, c:colors.hospital},
+  {id:'healer', kicker:'55% DELAY RISK', name:'Traditional Healer First — 55', n:55, x:344, y:350, s:1, c:colors.healer},
+  {id:'timely', kicker:'TIMELY CARE', name:'Timely ASV — Within 4 Hours', n:40, x:664, y:75, s:2, c:colors.timely},
+  {id:'delayed', kicker:'DELAYED TREATMENT', name:'Delayed ASV — After 4 Hours', n:40, x:664, y:275, s:2, c:colors.delayed},
+  {id:'nocare', kicker:'CRITICAL RISK', name:'No Effective Medical Care', n:20, x:664, y:475, s:2, c:colors.nocare},
+  {id:'recovery', kicker:'63 RECOVERED', name:'Full Recovery — 63', n:63, x:984, y:75, s:3, c:colors.recovery},
+  {id:'disability', kicker:'16 DISABLED (AMPUTATION / BLINDNESS)', name:'Permanent Disability — 16', n:16, x:984, y:335, s:3, c:colors.disability},
+  {id:'fatal', kicker:'21 LIVES LOST (DEATHS)', name:'Fatal Outcome (Deaths) — 21', n:21, x:984, y:475, s:3, c:colors.fatal}
+];
+
+const links = [
+  ['bite','hospital',45],
+  ['bite','healer',55],
+  ['hospital','timely',40],
+  ['hospital','delayed',5],
+  ['healer','delayed',35],
+  ['healer','nocare',20],
+  ['timely','recovery',39],
+  ['timely','disability',1],
+  ['delayed','recovery',22],
+  ['delayed','disability',10],
+  ['delayed','fatal',8],
+  ['nocare','recovery',2],
+  ['nocare','disability',5],
+  ['nocare','fatal',13]
+];
+
+const map = Object.fromEntries(nodes.map(n => [n.id, n]));
+const unit = 2.15;
+
+function el(tag, attrs, parent = svg, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (text !== undefined) e.textContent = text;
+  parent.appendChild(e);
+  return e;
+}
+
+const defs = el('defs', {});
+const flows = el('g', {});
+const labels = el('g', {});
+
+nodes.forEach(n => { n.out = 0; n.in = 0; });
+
+function showTooltip(evt, title, subtitle) {
+  tooltip.innerHTML = `<strong>${title}</strong>${subtitle}`;
+  tooltip.classList.add('visible');
+  moveTooltip(evt);
+}
+
+function moveTooltip(evt) {
+  const pad = 16;
+  const x = Math.min(window.innerWidth - 250, evt.clientX + pad);
+  const y = Math.max(16, evt.clientY - 48);
+  tooltip.style.left = x + 'px';
+  tooltip.style.top = y + 'px';
+}
+
+function hideTooltip() {
+  tooltip.classList.remove('visible');
+}
+
+// Smooth gradient ribbons
+links.forEach(([a, b, v], idx) => {
+  const A = map[a], B = map[b];
+  const x = A.x + 10, X = B.x;
+  const y = A.y + A.out * unit, Y = B.y + B.in * unit;
+  const h = v * unit, d = (X - x) * 0.48;
+  A.out += v;
+  B.in += v;
+
+  const gradId = `flow-grad-${idx}`;
+  const grad = el('linearGradient', {id: gradId, gradientUnits: 'userSpaceOnUse', x1: x, y1: y, x2: X, y2: Y}, defs);
+  el('stop', {offset: '0%', 'stop-color': B.c, 'stop-opacity': '0.78'}, grad);
+  el('stop', {offset: '100%', 'stop-color': B.c, 'stop-opacity': '0.95'}, grad);
+
+  const p = el('path', {
+    d: `M${x},${y} C${x+d},${y} ${X-d},${Y} ${X},${Y} v${h} C${X-d},${Y+h} ${x+d},${y+h} ${x},${y+h} Z`,
+    fill: `url(#${gradId})`,
+    stroke: B.c,
+    class: 'flow'
+  }, flows);
+
+  p.dataset.step = B.s;
+  p.dataset.from = a;
+  p.dataset.to = b;
+  p.style.opacity = '0';
+
+  p.addEventListener('pointerenter', e => showTooltip(e, `${A.name.split(' — ')[0]} → ${B.name.split(' — ')[0]}`, `${v} of 100 people (${Math.round((v / A.n) * 100)}% of group)`));
+  p.addEventListener('pointermove', moveTooltip);
+  p.addEventListener('pointerleave', hideTooltip);
+});
+
+// Clean Google Sans Flex stage nodes (strictly hidden until reached)
+nodes.forEach(n => {
+  const g = el('g', {
+    class: 'node' + (n.s === 0 ? ' revealed' : ''),
+    tabindex: '0',
+    role: 'button',
+    'aria-label': `${n.kicker}: ${n.name}`
+  }, labels);
+  n.el = g;
+
+  el('rect', {
+    class: 'bar',
+    x: n.x,
+    y: n.y,
+    width: 10,
+    height: Math.max(4, n.n * unit),
+    fill: n.c,
+    rx: 1
+  }, g);
+
+  const kicker = el('text', {class: 'kicker', x: n.x, y: n.y - 24}, g, n.kicker);
+  kicker.style.fill = n.c === colors.fatal ? '#a4b0be' : n.c;
+
+  el('text', {class: 'headline', x: n.x, y: n.y - 8}, g, n.name);
+
+  g.addEventListener('pointerenter', e => {
+    focusNode(n.id);
+    showTooltip(e, n.kicker, `${n.n} people at this stage`);
+  });
+  g.addEventListener('pointermove', moveTooltip);
+  g.addEventListener('pointerleave', () => {
+    focusNode(null);
+    hideTooltip();
+  });
+  g.addEventListener('focus', () => focusNode(n.id));
+  g.addEventListener('blur', () => focusNode(null));
+  g.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { g.blur(); focusNode(null); }
+  });
+});
+
+function focusNode(id) {
+  document.querySelectorAll('.flow').forEach(p => {
+    p.classList.toggle('dim', !!id && p.dataset.from !== id && p.dataset.to !== id);
+  });
+}
+
+let step = 0;
+
+function show(s) {
+  step = Math.max(0, Math.min(3, s));
+  document.querySelectorAll('.flow').forEach(p => {
+    p.style.opacity = Number(p.dataset.step) <= step ? '1' : '0';
+  });
+  // Future steps stay 0% opacity until the walkers arrive
+  nodes.forEach(n => {
+    n.el.classList.toggle('revealed', n.s <= step);
+  });
+  document.querySelectorAll('.stage').forEach((b, i) => {
+    b.classList.toggle('active', i <= step);
+    b.setAttribute('aria-current', i === step ? 'step' : 'false');
+  });
+}
+
+// Compute individual routes for 100 people
+const people = Array.from({length: 100}, (_, i) => ({id: i, route: ['bite'], positions: []}));
+for (let stage = 0; stage < 3; stage++) {
+  for (const node of nodes.filter(n => n.s === stage)) {
+    const cohort = people.filter(p => p.route[stage] === node.id);
+    let offset = 0;
+    for (const [from, to, count] of links.filter(l => l[0] === node.id)) {
+      cohort.slice(offset, offset + count).forEach(p => p.route.push(to));
+      offset += count;
+    }
+  }
+}
+
+for (const n of nodes) {
+  const group = people.filter(p => p.route[n.s] === n.id);
+  group.forEach((p, i) => {
+    p.positions[n.s] = {
+      x: n.x + 26 + (i % 10) * 14.5,
+      y: n.y + 10 + Math.floor(i / 10) * 20.5
+    };
+  });
+}
+
+// Indianized Rural Villager Silhouettes (Women in Saree + Juda bun, Men in Pagdi turban + Dhoti/Kurta, Elders with Lathi stick)
+const walkers = el('g', {'aria-hidden': 'true', id: 'walkers'});
+for (const p of people) {
+  const profileType = p.id % 3;
+  const hasLathi = (p.id % 9 === 0);
+
+  p.el = el('g', {
+    class: 'person',
+    fill: 'none',
+    stroke: colors.bite,
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round'
+  }, walkers);
+
+  // Ground shadow
+  el('ellipse', {cx: 0, cy: 11.5, rx: 3.2, ry: 1.1, fill: 'rgba(0,0,0,0.55)', stroke: 'none'}, p.el);
+
+  if (profileType === 0) {
+    // Woman in Saree + side hair bun (Juda)
+    el('circle', {cx: 0.3, cy: -5.8, r: 2.1, fill: 'currentColor', stroke: 'none'}, p.el);
+    el('circle', {cx: -2.0, cy: -5.3, r: 1.35, fill: 'currentColor', stroke: 'none'}, p.el);
+    el('path', {d: 'M-1.5,-3.2 L1.6,-3.2 L2.5,7.2 L-2.4,7.2 Z', fill: 'currentColor', stroke: 'none'}, p.el);
+    el('path', {d: 'M-1.2,-2.8 Q-3.8,0.5 -3.2,4.2', 'stroke-width': '1.2', fill: 'none'}, p.el);
+  } else if (profileType === 1) {
+    // Farmer in Pagdi turban & Dhoti-Kurta
+    el('circle', {cx: 0.3, cy: -5.5, r: 2.0, fill: 'currentColor', stroke: 'none'}, p.el);
+    el('path', {d: 'M-2.2,-6.2 C-2.4,-8.6 2.8,-8.8 2.6,-6.0 C2.5,-4.8 -2.0,-4.8 -2.2,-6.2 Z', fill: 'currentColor', stroke: 'none'}, p.el);
+    el('path', {d: 'M-1.4,-3.0 Q-3.5,-0.5 -3.0,2.8', 'stroke-width': '1.15', fill: 'none'}, p.el);
+    el('path', {d: 'M-1.7,-3.1 L1.8,-3.1 L2.1,5.6 L-1.9,5.6 Z', fill: 'currentColor', stroke: 'none'}, p.el);
+  } else {
+    // Villager in Kurta
+    el('circle', {cx: 0.3, cy: -5.8, r: 2.15, fill: 'currentColor', stroke: 'none'}, p.el);
+    el('path', {d: 'M-1.6,-3.1 L1.7,-3.1 L1.9,5.8 L-1.8,5.8 Z', fill: 'currentColor', stroke: 'none'}, p.el);
+  }
+
+  p.arms = el('path', {d: 'M-2.4,3.5 L0,-2.0 L2.4,3.5', 'stroke-width': '1.35'}, p.el);
+  p.legs = el('path', {d: 'M-1.5,11 L-0.4,5.2 M0.4,5.2 L1.5,11', 'stroke-width': '1.5'}, p.el);
+  if (hasLathi) {
+    p.stick = el('path', {d: 'M2.6,1.5 L3.4,11.2', 'stroke-width': '1.1'}, p.el);
+  }
+}
+
+// Clip paths to unfurl ribbons behind walkers
+const reveal = [];
+for (let i = 1; i <= 3; i++) {
+  const clip = el('clipPath', {id: 'leg-reveal-' + i, clipPathUnits: 'userSpaceOnUse'}, defs);
+  reveal[i] = el('rect', {x: 0, y: 0, width: 0, height: 570}, clip);
+  document.querySelectorAll('.flow').forEach(path => {
+    if (+path.dataset.step === i) path.setAttribute('clip-path', `url(#leg-reveal-${i})`);
+  });
+}
+
+const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+const starts = [0.7, 4.5, 8.3], travel = 3.0, duration = 12.6;
+let time = 0, playing = false, frameId = 0, last = 0, finished = false, announced = -1;
+
+const clamp = v => Math.min(1, Math.max(0, v));
+const smooth = v => { v = clamp(v); return v * v * (3 - 2 * v); };
+
+function paint(t) {
+  let stage = 0;
+  for (let i = 0; i < 3; i++) {
+    if (t >= starts[i] + 0.35) stage = i + 1;
+  }
+  if (stage !== announced) { show(stage); announced = stage; }
+
+  for (let i = 0; i < 3; i++) {
+    const u = clamp((t - starts[i]) / travel);
+    const x = map[people[0].route[i]].x;
+    const X = nodes.find(n => n.s === i + 1).x;
+    reveal[i + 1].setAttribute('width', x + 10 + (X - x) * smooth(u));
+  }
+
+  for (const p of people) {
+    let pos = p.positions[0], gait = 0, lean = 0, color = colors.bite;
+    for (let i = 0; i < 3; i++) {
+      const delay = (p.id % 10) * 0.035 + Math.floor(p.id / 10) * 0.015;
+      const u = clamp((t - starts[i] - delay) / (travel - 0.5));
+      if (t < starts[i]) break;
+      const a = p.positions[i], b = p.positions[i + 1];
+      const x = smooth(u);
+      const y = smooth((u - 0.15) / 0.7);
+      pos = {x: a.x + (b.x - a.x) * x, y: a.y + (b.y - a.y) * y};
+      const activeWalk = (u > 0 && u < 1) ? Math.min(1, u * 10, (1 - u) * 10) : 0;
+      gait = activeWalk ? Math.sin(t * 14.5 + p.id * 0.7) * activeWalk : 0;
+      lean = activeWalk * 3.8;
+      color = u > 0.72 ? map[p.route[i + 1]].c : map[p.route[i]].c;
+    }
+    const bob = Math.abs(gait) * 0.8;
+    p.el.setAttribute('transform', `translate(${pos.x.toFixed(2)},${(pos.y - bob).toFixed(2)}) rotate(${lean.toFixed(1)})`);
+    p.el.setAttribute('stroke', color);
+    p.el.style.color = color;
+    p.arms.setAttribute('d', `M${(-2.2 - gait * 1.5).toFixed(2)},3.4 L0,-2.0 L${(2.2 + gait * 1.5).toFixed(2)},3.4`);
+    p.legs.setAttribute('d', `M${(-1.3 - gait * 2.1).toFixed(2)},11 L-0.3,5.2 M0.3,5.2 L${(1.3 + gait * 2.1).toFixed(2)},11`);
+    if (p.stick) {
+      p.stick.setAttribute('d', `M${(2.2 + gait * 1.5).toFixed(2)},3.2 L${(3.2 + gait * 1.8).toFixed(2)},11.2`);
+    }
+  }
+}
+
+function tick(now) {
+  if (!playing) return;
+  if (last) time += Math.min((now - last) / 1000, 0.08);
+  last = now;
+  paint(time);
+  if (time >= duration) {
+    time = duration;
+    finished = true;
+    pause();
+    return;
+  }
+  frameId = requestAnimationFrame(tick);
+}
+
+function pause() {
+  playing = false;
+  cancelAnimationFrame(frameId);
+  last = 0;
+}
+
+function play(restart = true) {
+  cancelAnimationFrame(frameId);
+  last = 0;
+  if (reduced.matches) {
+    time = duration;
+    finished = true;
+    playing = false;
+    paint(time);
+    return;
+  }
+  if (restart || finished) {
+    time = 0;
+    finished = false;
+    announced = -1;
+  }
+  playing = true;
+  paint(time);
+  frameId = requestAnimationFrame(tick);
+}
+
+function seek(t) {
+  pause();
+  time = Math.max(0, Math.min(duration, t));
+  finished = time === duration;
+  paint(time);
+}
+
+// Clicking any of the 4 top stages jumps to that stage (clicking 01 replays the walk)
+document.querySelectorAll('.stage').forEach(b => {
+  b.onclick = () => {
+    const s = +b.dataset.step;
+    if (s === 0) {
+      play(true);
+    } else {
+      seek(starts[s - 1] + travel);
+    }
+  };
+});
+
+document.addEventListener('visibilitychange', () => { last = 0; });
+
+// Parent scrollytelling iframe integration
+window.addEventListener('message', e => {
+  if (e.data === 'playSankey' || e.data === 'playCounterfactual') play(true);
+  if (e.data && (e.data.type === 'sankeyProgress' || e.data.type === 'counterfactualProgress') && Number.isFinite(e.data.progress)) {
+    seek(clamp(e.data.progress) * duration);
+  }
+});
+
+// If embedded inside an iframe, prepare at initial state (seek 0) so animation begins when scrolled to
+const isEmbedded = (window.self !== window.top);
+if (isEmbedded) {
+  seek(0);
+} else {
+  play(true);
+}
+
+window.sankey = {
+  seek,
+  play,
+  pause,
+  getState: () => ({time, playing, count: people.length, routes: people.map(p => p.route.slice())})
+};
+
+for (const n of nodes) {
+  if (n.s > 0 && n.in !== n.n) throw Error('Inflow mismatch: ' + n.id);
+  if (n.s < 3 && n.out !== n.n) throw Error('Outflow mismatch: ' + n.id);
+}
+</script>
+</body>
+</html>

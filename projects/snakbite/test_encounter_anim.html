@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Encounter Animation Test Stage</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #03120B;
+    color: #EEECE3;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+  }
+  .controls {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    background: rgba(0,0,0,0.85);
+    border: 1px solid #444;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  .controls input[type="range"] {
+    width: 320px;
+  }
+  .stage-wrap {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .bg-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+    pointer-events: none;
+  }
+  .crack-layer {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+    pointer-events: none;
+    z-index: 5;
+    filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.65));
+  }
+  .encounter-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 16;
+  }
+  .text-layer {
+    position: absolute;
+    z-index: 18;
+    pointer-events: none;
+  }
+  .text-right {
+    right: clamp(2rem, 8vw, 8rem);
+    top: clamp(4.5rem, 18vh, 14rem);
+    max-width: 500px;
+  }
+  .text-left {
+    left: clamp(2rem, 7vw, 7rem);
+    bottom: clamp(3rem, 16vh, 9rem);
+    max-width: 440px;
+  }
+  h2 {
+    font-family: Georgia, serif;
+    font-size: 38px;
+    font-weight: normal;
+    line-height: 1.1;
+  }
+  .h-sub {
+    font-size: 16px;
+    color: #BBC3B3;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <label><strong>Timeline (0% - 100%):</strong></label>
+  <input type="range" id="progressSlider" min="0" max="1" step="0.001" value="0">
+  <span id="sliderVal" style="font-mono; width: 60px;">0%</span>
+  <span id="stageLabel" style="color: #4ade80;">01 Approach</span>
+</div>
+
+<div class="stage-wrap" id="stageWrap">
+  <!-- Actual background layers from the site -->
+  <img class="bg-layer" src="assets/layers_clean/4_homes.webp" style="z-index: 4;">
+  <img class="crack-layer" id="crackLayer" src="assets/layers_clean/5_crack.webp">
+
+  <!-- Encounter Animation Canvas Layer (z-index 16: above crack, below text) -->
+  <canvas class="encounter-canvas" id="encounterCanvas"></canvas>
+
+  <!-- Section Narrative Text (z-index 18) -->
+  <div class="text-layer text-right">
+    <h2>One shared home.<br><em>Two sides of fear.</em></h2>
+    <p class="h-sub">When human and snake habitats overlap,<br>fear can turn an encounter into conflict.</p>
+  </div>
+
+  <div class="text-layer text-left">
+    <h2>Caught in the same conflict.<br>Both trying to survive.</h2>
+  </div>
+</div>
+
+<script>
+// We load the 8 transparent images
+const FRAME_SRCS = [
+  'assets/frames/img_5.png', // 0: Frame 01 - Approach (facing right)
+  'assets/frames/img_7.png', // 1: Frame 02 - Notice (facing right, illuminated)
+  'assets/frames/img_8.png', // 2: Frame 03 - React (Corrected, curled S-curve turning)
+  'assets/frames/img_6.png', // 3: Frame 04 - Turn left (head facing left)
+  'assets/frames/img_2.png', // 4: Frame 05 - Slither A
+  'assets/frames/img_3.png', // 5: Frame 06 - Slither B
+  'assets/frames/img_0.png', // 6: Frame 07 - Slither C
+  'assets/frames/img_1.png'  // 7: Frame 08 - Safe distance on left
+];
+
+const images = [];
+let loadedCount = 0;
+FRAME_SRCS.forEach((src, idx) => {
+  const img = new Image();
+  img.src = src;
+  img.onload = () => {
+    loadedCount++;
+    if (loadedCount === FRAME_SRCS.length) {
+      init();
+    }
+  };
+  images.push(img);
+});
+
+const canvas = document.getElementById('encounterCanvas');
+const ctx = canvas.getContext('2d');
+const slider = document.getElementById('progressSlider');
+const sliderVal = document.getElementById('sliderVal');
+const stageLabel = document.getElementById('stageLabel');
+const crackLayer = document.getElementById('crackLayer');
+
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  render(parseFloat(slider.value));
+}
+window.addEventListener('resize', resize);
+
+// Precise sprite bounding boxes in original 1024x576 coordinate space
+// Villager:
+// Frame 01 (img_5): x=666, y=138, w=316, h=359, footY=497
+// Frame 02 (img_7): x=666, y=140, w=327, h=361, footY=501
+// Frame 03 (img_8): x=666, y=138, w=349, h=360, footY=498 (recoil back)
+// Frame 04-08: villager standing relaxed/watchful
+const VILLAGER_BOXES = [
+  { imgIdx: 0, sx: 660, sy: 130, sw: 330, sh: 375, footY: 497, footX: 840 },
+  { imgIdx: 1, sx: 660, sy: 130, sw: 335, sh: 375, footY: 501, footX: 840 },
+  { imgIdx: 2, sx: 650, sy: 130, sw: 365, sh: 375, footY: 498, footX: 840 },
+  { imgIdx: 3, sx: 660, sy: 130, sw: 335, sh: 375, footY: 501, footX: 840 },
+  { imgIdx: 4, sx: 660, sy: 130, sw: 335, sh: 375, footY: 501, footX: 840 },
+  { imgIdx: 5, sx: 660, sy: 130, sw: 335, sh: 375, footY: 501, footX: 840 },
+  { imgIdx: 6, sx: 660, sy: 130, sw: 335, sh: 375, footY: 501, footX: 840 },
+  { imgIdx: 7, sx: 660, sy: 130, sw: 335, sh: 375, footY: 501, footX: 840 }
+];
+
+// Snake Sprites (tight bounding box in 1024x576)
+const SNAKE_BOXES = [
+  { imgIdx: 0, sx: 554, sy: 445, sw: 207, sh: 63, origX: 554, facing: 'right' },
+  { imgIdx: 1, sx: 557, sy: 452, sw: 204, sh: 61, origX: 557, facing: 'right' },
+  { imgIdx: 2, sx: 553, sy: 434, sw: 178, sh: 77, origX: 553, facing: 'curled' },
+  { imgIdx: 3, sx: 477, sy: 449, sw: 254, sh: 68, origX: 477, facing: 'left' },
+  { imgIdx: 4, sx: 412, sy: 446, sw: 235, sh: 62, origX: 412, facing: 'left' },
+  { imgIdx: 5, sx: 336, sy: 447, sw: 236, sh: 61, origX: 336, facing: 'left' },
+  { imgIdx: 6, sx: 187, sy: 440, sw: 256, sh: 66, origX: 187, facing: 'left' },
+  { imgIdx: 7, sx: 64,  sy: 446, sw: 267, sh: 64, origX: 64,  facing: 'left' }
+];
+
+// Torch Beam Bounding Box & Source
+// Flashlight beam extends from villager hand (x~750, y~320) down towards the ground (x~550-750, y~480)
+// It is naturally baked into the villager layer, but we can also modulate its opacity!
+
+function getCoverGeometry(vpW, vpH) {
+  const baseAspect = 16 / 9;
+  const vpAspect = vpW / vpH;
+  let rW, rH, rL, rT;
+  if (vpAspect > baseAspect) {
+    rW = vpW;
+    rH = vpW / baseAspect;
+    rL = 0;
+    rT = vpH - rH; // object-position: center bottom
+  } else {
+    rH = vpH;
+    rW = vpH * baseAspect;
+    rL = (vpW - rW) / 2; // object-position: center bottom
+    rT = 0;
+  }
+  return { rW, rH, rL, rT, scale: rW / 1024 };
+}
+
+function render(t) {
+  const vpW = window.innerWidth;
+  const vpH = window.innerHeight;
+  ctx.clearRect(0, 0, vpW, vpH);
+
+  const geom = getCoverGeometry(vpW, vpH);
+  const { rW, rH, rL, rT, scale } = geom;
+
+  // Timeline specification:
+  // 0–12% — Approach: Fade in illustration. Villager small leftward approach (01 -> 02). Snake on right.
+  // 12–25% — Notice: Hold frame 02. Pale torch beam illuminates snake.
+  // 25–38% — Reaction: Transition to corrected frame 03. Villager steps back. Snake curls.
+  // 38–48% — Turn: Transition to frame 04. Snake head clearly leftward before travel.
+  // 48–68% — Cross the crack: Snake moves smoothly left through frames 05–06 across crack.
+  // 68–88% — Retreat: Continue left through frames 07–08. Slithering rhythm.
+  // 88–100% — Hold: Hold final pose. Safe separation.
+
+  // Master Fade: 0 -> 1 between t=0 and t=0.08
+  let masterAlpha = Math.min(1, Math.max(0, t / 0.08));
+
+  let villagerPoseIdx = 0;
+  let snakePoseIdx = 0;
+  let stageName = '';
+  let snakeTravelX = 0; // translation in 1024 coords
+
+  // Position of crack in 1024 coordinates:
+  // From our crack inspection: crack at ground level (yF=0.8) is at 53.4% of width = 1024 * 0.534 = ~546px!
+  const crack1024X = 546;
+  const snakeStartX = 620; // right of crack
+  const snakeEndX = 110;   // safe distance on left (above text, left of crack)
+
+  // Villager approach:
+  let villagerApproachOffset = 0; // small leftward step during approach
+
+  if (t < 0.12) {
+    stageName = '01 Approach (0-12%)';
+    const subT = t / 0.12;
+    // Villager approaches using frames 01 -> 02
+    villagerPoseIdx = subT < 0.6 ? 0 : 1;
+    // Small approach step of ~12px in 1024 coords
+    villagerApproachOffset = (1 - subT) * 15;
+    snakePoseIdx = 0;
+    snakeTravelX = snakeStartX;
+  }
+  else if (t < 0.25) {
+    stageName = '02 Notice (12-25%)';
+    villagerPoseIdx = 1; // frame 02 hold
+    villagerApproachOffset = 0;
+    snakePoseIdx = 1;    // frame 02 (illuminated on right)
+    snakeTravelX = snakeStartX;
+  }
+  else if (t < 0.38) {
+    stageName = '03 Reaction (25-38%)';
+    const subT = (t - 0.25) / (0.38 - 0.25);
+    villagerPoseIdx = subT < 0.15 ? 1 : 2; // corrected frame 03 (backward step)
+    villagerApproachOffset = 0;
+    snakePoseIdx = subT < 0.15 ? 1 : 2;    // frame 03 (curls to turn)
+    snakeTravelX = snakeStartX;
+  }
+  else if (t < 0.48) {
+    stageName = '04 Turn (38-48%)';
+    const subT = (t - 0.38) / (0.48 - 0.38);
+    villagerPoseIdx = 2; // holds step back
+    villagerApproachOffset = 0;
+    snakePoseIdx = 3;    // frame 04 (facing left before travel begins)
+    snakeTravelX = snakeStartX;
+  }
+  else if (t < 0.68) {
+    stageName = '05 Cross Crack (48-68%)';
+    const subT = (t - 0.48) / (0.68 - 0.48);
+    // Villager stands watchful / begins to relax
+    villagerPoseIdx = 4;
+    villagerApproachOffset = 0;
+
+    // Smooth continuous travel from right of crack (620) to past crack (360)
+    const smoothT = 0.5 - 0.5 * Math.cos(subT * Math.PI);
+    snakeTravelX = snakeStartX + (400 - snakeStartX) * smoothT;
+
+    // Slithering cycle between poses 4 and 5 (img_2 and img_3)
+    // 2 full slither wave cycles
+    const wave = Math.sin(subT * Math.PI * 3);
+    snakePoseIdx = wave >= 0 ? 4 : 5;
+  }
+  else if (t < 0.88) {
+    stageName = '06 Retreat (68-88%)';
+    const subT = (t - 0.68) / (0.88 - 0.68);
+    villagerPoseIdx = 6; // relaxed standing pose
+    villagerApproachOffset = 0;
+
+    // Continue smooth travel from 400 to snakeEndX (110)
+    const smoothT = 0.5 - 0.5 * Math.cos(subT * Math.PI);
+    snakeTravelX = 400 + (snakeEndX - 400) * smoothT;
+
+    // Slithering cycle between poses 6 and 7 (img_0 and img_1)
+    const wave = Math.sin(subT * Math.PI * 3);
+    snakePoseIdx = wave >= 0 ? 6 : 7;
+  }
+  else {
+    stageName = '07 Hold (88-100%)';
+    villagerPoseIdx = 7; // relaxed pose
+    villagerApproachOffset = 0;
+    snakePoseIdx = 7;    // holds safe distance on left
+    snakeTravelX = snakeEndX;
+  }
+
+  stageLabel.textContent = stageName;
+  sliderVal.textContent = Math.round(t * 100) + '%';
+
+  ctx.globalAlpha = masterAlpha;
+
+  // 1. DRAW VILLAGER
+  const vBox = VILLAGER_BOXES[villagerPoseIdx];
+  const vImg = images[vBox.imgIdx];
+  if (vImg) {
+    // Registered coordinate:
+    // We anchor the foot baseline to y = 500 in 1024x576 space
+    const targetFootY = 500;
+    const dy = (targetFootY - (vBox.footY - vBox.sy));
+    const destVX = rL + (vBox.sx + villagerApproachOffset) * scale;
+    const destVY = rT + dy * scale;
+    const destVW = vBox.sw * scale;
+    const destVH = vBox.sh * scale;
+
+    ctx.drawImage(vImg, vBox.sx, vBox.sy, vBox.sw, vBox.sh, destVX, destVY, destVW, destVH);
+  }
+
+  // 2. DRAW SOFT TORCH BEAM
+  // Flashlight beam:
+  // In frames 01-03, the beam illuminates the snake directly.
+  // In frames 04-08, prompt: "Once the snake retreats, the beam stays near the villager’s foreground rather than stretching across the page to chase it."
+  // The baked flashlight beam in the villager's frame already does this naturally!
+
+  // 3. DRAW SNAKE (CONTINUOUS INTERPOLATION ACROSS THE CRACK)
+  const sBox = SNAKE_BOXES[snakePoseIdx];
+  const sImg = images[sBox.imgIdx];
+  if (sImg) {
+    // The snake sprite's ground baseline is at y = 450 + sBox.sh
+    const destSW = sBox.sw * scale;
+    const destSH = sBox.sh * scale;
+    const destSX = rL + (snakeTravelX - sBox.sw * 0.5) * scale;
+    // Ground baseline alignment:
+    const targetSnakeBaseline = 505;
+    const destSY = rT + (targetSnakeBaseline - sBox.sh) * scale;
+
+    ctx.drawImage(sImg, sBox.sx, sBox.sy, sBox.sw, sBox.sh, destSX, destSY, destSW, destSH);
+  }
+
+  ctx.globalAlpha = 1.0;
+}
+
+function init() {
+  resize();
+  slider.addEventListener('input', () => {
+    render(parseFloat(slider.value));
+  });
+}
+</script>
+</body>
+</html>
