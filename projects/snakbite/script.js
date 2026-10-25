@@ -2445,3 +2445,24 @@ function initClosingSection() {
         });
     }
 }
+
+(function initBackToProjectsNav() {
+
+    // Enhanced navigation for Go back to projects buttons (start & end)
+    const backToProjectsBtns = [
+        document.getElementById('storyStartBackBtn'),
+        document.getElementById('closingProjectsBtn')
+    ];
+
+    backToProjectsBtns.forEach((btn) => {
+        if (!btn) return;
+        btn.addEventListener('click', (e) => {
+            // Support local file testing protocol seamlessly
+            if (window.location.protocol === 'file:') {
+                e.preventDefault();
+                window.location.href = '../../index.html#projects';
+            }
+        });
+    });
+
+})();

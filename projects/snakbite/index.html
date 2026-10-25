@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
     <link rel="stylesheet" href="assets/neighbourhood_map.css?v=snc_v3" />
-    <link rel="stylesheet" href="style.css?v=blend_v1">
+    <link rel="stylesheet" href="style.css?v=nav_v2">
 </head>
 <body class="story-body">
 
@@ -37,9 +37,22 @@
     </div>
 
     <!-- Main Editorial Scrollytelling Flow -->
+    
+    
+
     <main class="story-container" id="story-root">
         <!-- SCREEN 1: HERO TITLE & STAGE -->
         <section class="hero-screen" id="hero-screen">
+            <!-- Start Navigation: Go Back to Projects -->
+            <header class="story-top-nav" id="storyTopNav">
+                <a href="/#projects" class="story-back-btn" id="storyStartBackBtn" aria-label="Go back to projects">
+                    <svg class="story-back-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Go back to projects</span>
+                </a>
+            </header>
             <div class="hero-content">
                 <span class="hero-intro-label">HUMANS, SNAKES & COEXISTENCE</span>
 
@@ -1323,7 +1336,15 @@
                     <p class="closing-supporting-line">Protecting people and making space for wildlife is what comes next.</p>
                 </div>
 
-                <div class="closing-return-wrap">
+                <div class="closing-actions-wrap">
+                    <a href="/#projects" class="closing-projects-btn" id="closingProjectsBtn" aria-label="Go back to projects">
+                        <svg class="closing-btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        <span>Go back to projects</span>
+                    </a>
+
                     <a href="#hero-screen" class="closing-return-link" id="closingReturnBtn" aria-label="Return to the beginning of the story">
                         <svg class="closing-arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <line x1="12" y1="19" x2="12" y2="5"></line>
@@ -1342,6 +1363,6 @@
     <!-- Observation Dataset and Interactive Map Controller -->
     <script src="assets/snake_observations_data.js"></script>
     <script src="assets/neighbourhood_map.js?v=snc_v3"></script>
-    <script src="script.js?v=closing_v1"></script>
+    <script src="script.js?v=nav_v2"></script>
 </body>
 </html>

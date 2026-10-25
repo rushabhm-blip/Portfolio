@@ -4035,3 +4035,145 @@ body::-webkit-scrollbar,
         margin-bottom: 36px;
     }
 }
+
+
+/* ==========================================================================
+   BACK TO PROJECTS NAVIGATION (START & END BUTTONS)
+   ========================================================================== */
+
+/* Start Screen Floating Top Navigation */
+.story-top-nav {
+    position: absolute;
+    top: clamp(20px, 3vh, 36px);
+    left: clamp(20px, 3.5vw, 44px);
+    z-index: 50;
+    pointer-events: auto;
+}
+
+.story-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px 10px 14px;
+    border-radius: 9999px;
+    background: rgba(7, 31, 24, 0.76);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(168, 185, 163, 0.28);
+    color: #EEECE3;
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-back-btn:hover {
+    background: rgba(14, 46, 36, 0.92);
+    border-color: rgba(168, 185, 163, 0.55);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55), 0 0 16px rgba(168, 185, 163, 0.22);
+}
+
+.story-back-btn:focus-visible {
+    outline: 2px solid #EEECE3;
+    outline-offset: 4px;
+}
+
+.story-back-arrow {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story-back-btn:hover .story-back-arrow {
+    transform: translateX(-4px);
+}
+
+/* Closing Screen: Actions Wrap & Back to Projects Button */
+.closing-actions-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.42s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) 0.42s;
+}
+
+.closing-projects-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 30px 13px 22px;
+    border-radius: 9999px;
+    background: rgba(238, 236, 227, 0.95);
+    color: #071F18;
+    font-family: 'Google Sans Flex', -apple-system, BlinkMacSystemFont, 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4), 0 0 16px rgba(238, 236, 227, 0.15);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.closing-projects-btn:hover {
+    background: #FFFFFF;
+    color: #05140F;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55), 0 0 24px rgba(238, 236, 227, 0.3);
+}
+
+.closing-projects-btn:focus-visible {
+    outline: 2px solid #EEECE3;
+    outline-offset: 4px;
+}
+
+.closing-btn-arrow {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.closing-projects-btn:hover .closing-btn-arrow {
+    transform: translateX(-4px);
+}
+
+.closing-screen.is-revealed .closing-actions-wrap {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .story-top-nav {
+    position: absolute;
+    top: clamp(20px, 3vh, 36px);
+    left: clamp(20px, 3.5vw, 44px);
+    z-index: 50;
+    pointer-events: auto;
+}
+    .story-back-btn {
+        padding: 8px 14px 8px 10px;
+        font-size: 13px;
+        gap: 8px;
+    }
+    .closing-projects-btn {
+        padding: 12px 24px 12px 18px;
+        font-size: 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .closing-actions-wrap {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    .story-back-btn:hover,
+    .closing-projects-btn:hover {
+        transform: none !important;
+    }
+}
+
