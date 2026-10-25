@@ -1423,6 +1423,11 @@ body.is-scrolled .drag-hint {
   background-color: #ffffff;
 }
 
+.snake-thumbnail-video {
+  object-position: center center;
+  background-color: #06110a;
+}
+
 /* Figma Zoom Expanding Rectangle Transition Overlay */
 .figma-zoom-overlay {
   position: fixed;
