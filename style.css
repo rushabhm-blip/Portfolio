@@ -1275,7 +1275,7 @@ body.is-scrolled .drag-hint {
 
 .projects-container {
   width: 100%;
-  max-width: 1240px;
+  max-width: 1360px;
   margin: 0 auto;
   padding: 0 clamp(1.5rem, 4vw, 3.5rem);
   display: flex;
@@ -1291,23 +1291,23 @@ body.is-scrolled .drag-hint {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  gap: clamp(2.5rem, 5.5vw, 5.5rem);
+  gap: clamp(2.5rem, 4.5vw, 4.5rem);
 }
 
-/* Left: 52% of available row width */
+/* Left: Showcase column sized for 750px width at 750x500 */
 .project-showcase-column {
-  flex: 0 0 52%;
-  max-width: 52%;
-  width: 52%;
+  flex: 1 1 56%;
+  max-width: 750px;
+  width: 100%;
   position: relative;
   margin-top: 1.75rem;
   margin-bottom: 2.25rem;
 }
 
-/* Image frame: strictly 6 / 5 aspect ratio */
+/* Image frame: strictly 750 / 500 (3 / 2) aspect ratio */
 .project-frame-container {
   width: 100%;
-  aspect-ratio: 6 / 5;
+  aspect-ratio: 750 / 500;
   position: relative;
   background: transparent;
   overflow: visible;
@@ -1760,6 +1760,6 @@ body.is-scrolled .drag-hint {
     width: 100%;
   }
   .project-frame-container {
-    aspect-ratio: 6 / 5;
+    aspect-ratio: 750 / 500;
   }
 }
