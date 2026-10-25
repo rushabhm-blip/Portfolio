@@ -99,6 +99,8 @@ main {
 .chart-scroll {
   overflow-x: auto;
   overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
   position: relative;
   background: transparent;
   border: none;
@@ -616,8 +618,18 @@ document.querySelectorAll('.stage').forEach(b => {
     const s = +b.dataset.step;
     if (s === 0) {
       play(true);
+      const scrollEl = document.querySelector('.chart-scroll');
+      if (scrollEl && scrollEl.scrollLeft > 0) {
+        scrollEl.scrollTo({ left: 0, behavior: 'smooth' });
+      }
     } else {
       seek(starts[s - 1] + travel);
+      const scrollEl = document.querySelector('.chart-scroll');
+      if (scrollEl && scrollEl.scrollWidth > scrollEl.clientWidth) {
+        const stepRatios = [0, 0.22, 0.55, 1];
+        const maxScroll = scrollEl.scrollWidth - scrollEl.clientWidth;
+        scrollEl.scrollTo({ left: Math.round(maxScroll * (stepRatios[s] || 0)), behavior: 'smooth' });
+      }
     }
   };
 });

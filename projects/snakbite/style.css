@@ -1527,7 +1527,7 @@ body::-webkit-scrollbar,
     width: 100vw;
     height: 100vh;
     pointer-events: none;
-    z-index: 23;
+    z-index: 35;
     opacity: 0;
     visibility: hidden;
     display: flex;
@@ -1732,7 +1732,7 @@ body::-webkit-scrollbar,
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 28;
+    z-index: 38;
     pointer-events: none;
     opacity: 0;
     padding: 1.5rem;
@@ -4204,6 +4204,36 @@ body::-webkit-scrollbar,
         margin-left: 0;
         margin-right: 0;
         box-sizing: border-box;
+    }
+
+    /* 2. First Sankey Diagram Mobile Touch Scrolling */
+    .paddy-scene-stage {
+        z-index: 35 !important;
+    }
+
+    .paddy-sankey-stage {
+        z-index: 38 !important;
+        padding: 0 !important;
+    }
+
+    .paddy-sankey-card {
+        pointer-events: auto !important;
+        touch-action: pan-x pan-y !important;
+    }
+
+    .paddy-sankey-card .sankey-chart-iframe {
+        pointer-events: auto !important;
+        touch-action: pan-x pan-y !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .paddy-sankey-scrim {
+        pointer-events: none !important;
+    }
+
+    #stat-beat-3 .hourly-composition-wrapper,
+    #stat-beat-3 .hourly-text-stack {
+        pointer-events: none;
     }
 }
 

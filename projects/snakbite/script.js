@@ -1099,6 +1099,12 @@ function initLandscapeLayerStory() {
                 statBeat3.style.pointerEvents = 'none';
                 renderHourlyBeat(1.0);
             }
+            if (hourlyCompositionWrapper) {
+                hourlyCompositionWrapper.style.pointerEvents = statBeat3.style.pointerEvents;
+            }
+            if (hourlyTextStack) {
+                hourlyTextStack.style.pointerEvents = statBeat3.style.pointerEvents;
+            }
         }
 
         // Beat 4: Mortality Chart (progress 0.745 -> 0.845)
@@ -1185,6 +1191,7 @@ function initLandscapeLayerStory() {
                 paddySceneStage.style.filter = 'none';
                 paddySceneStage.style.visibility = 'visible';
                 paddySceneStage.style.pointerEvents = 'auto';
+                paddySceneStage.style.zIndex = '35';
             }
         }
 
