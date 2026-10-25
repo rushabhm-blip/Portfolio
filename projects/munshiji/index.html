@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Munshiji · Financial Learning & Decision Support Companion · Rushabh Mahore</title>
+  <meta name="description" content="A comprehensive UI/UX case study exploring financial literacy, habit-building, and anxiety-free investing for first-time investors. Designed by Rushabh Mahore.">
+  <script>
+    try {
+      if (sessionStorage.getItem('portfolio_case_study_enter') === 'true') {
+        document.documentElement.classList.add('is-entering-transition');
+      }
+    } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="/projects/munshiji/case-study.css?v=1">
+</head>
+<body>
+
+  <!-- Seamless White Transition Curtain -->
+  <div id="portfolioTransitionCurtain" class="portfolio-transition-curtain" aria-hidden="true"></div>
+
+  <!-- Top Sticky Navigation -->
+  <header class="cs-header" id="csHeader">
+    <div class="cs-header-inner">
+      <div class="cs-header-left">
+        <a href="/#home" class="cs-nav-logo" aria-label="Rushabh Home">rushabh<span class="logo-dot">.</span></a>
+        <a href="/#projects" class="cs-back-link" id="headerBackLink" aria-label="Back to projects">
+          <span aria-hidden="true">←</span>
+          <span>Back to projects</span>
+        </a>
+      </div>
+      <nav class="cs-nav-links" aria-label="Portfolio Navigation">
+        <a href="/#home" class="cs-nav-link">Home</a>
+        <a href="/#projects" class="cs-nav-link">Works</a>
+        <a href="/#about" class="cs-nav-link">About</a>
+        <a href="/#playground" class="cs-nav-link">Playground</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Minimal Dot Section Navigator (All 20 Editorial Sections) -->
+  <nav class="cs-dot-nav" id="csDotNav" aria-label="Section Navigation">
+    <ul class="cs-dot-list" role="list">
+      <li class="cs-dot-item is-active" data-index="0">
+        <a href="#sec-hero" class="cs-dot-link" aria-label="Overview" aria-current="true">
+          <span class="cs-dot-label">Overview</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="1">
+        <a href="#sec-design-process" class="cs-dot-link" aria-label="Design Process">
+          <span class="cs-dot-label">Design Process</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="2">
+        <a href="#sec-story-loops" class="cs-dot-link" aria-label="Story of Every Month">
+          <span class="cs-dot-label">Monthly Story & Loops</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="3">
+        <a href="#sec-defining-challenge" class="cs-dot-link" aria-label="Defining Challenge">
+          <span class="cs-dot-label">Defining Challenge</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="4">
+        <a href="#sec-vicious-loops" class="cs-dot-link" aria-label="Vicious Loops & Iceberg">
+          <span class="cs-dot-label">Loops & Leverage</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="5">
+        <a href="#sec-stakeholder-ecosystem" class="cs-dot-link" aria-label="Stakeholder Ecosystem">
+          <span class="cs-dot-label">Stakeholder Ecosystem</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="6">
+        <a href="#sec-design-brief" class="cs-dot-link" aria-label="Design Brief">
+          <span class="cs-dot-label">Design Brief</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="7">
+        <a href="#sec-ideas-solutions" class="cs-dot-link" aria-label="Ideas & Solutions">
+          <span class="cs-dot-label">Ideas & Solutions</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="8">
+        <a href="#sec-research-methodology" class="cs-dot-link" aria-label="Research Methodology">
+          <span class="cs-dot-label">Research Methodology</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="9">
+        <a href="#sec-user-interviews" class="cs-dot-link" aria-label="User Interviews">
+          <span class="cs-dot-label">User Interviews</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="10">
+        <a href="#sec-persona-creation" class="cs-dot-link" aria-label="Persona Creation">
+          <span class="cs-dot-label">Persona Creation</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="11">
+        <a href="#sec-empathy-mapping" class="cs-dot-link" aria-label="Empathy Mapping">
+          <span class="cs-dot-label">Empathy Mapping</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="12">
+        <a href="#sec-patterns-possibilities" class="cs-dot-link" aria-label="Patterns & Possibilities">
+          <span class="cs-dot-label">Patterns & Possibilities</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="13">
+        <a href="#sec-ux-planes" class="cs-dot-link" aria-label="Five Planes of UX">
+          <span class="cs-dot-label">Five Planes of UX</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="14">
+        <a href="#sec-flow-architecture" class="cs-dot-link" aria-label="User Flow & Architecture">
+          <span class="cs-dot-label">User Flow & IA</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="15">
+        <a href="#sec-personality-companion" class="cs-dot-link" aria-label="Companion Identity & Journey">
+          <span class="cs-dot-label">Companion Identity</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="16">
+        <a href="#sec-feature-learn" class="cs-dot-link" aria-label="Feature: Learn">
+          <span class="cs-dot-label">Feature: Learn</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="17">
+        <a href="#sec-feature-goals" class="cs-dot-link" aria-label="Feature: Goals">
+          <span class="cs-dot-label">Feature: Goals</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="18">
+        <a href="#sec-feature-radio" class="cs-dot-link" aria-label="Feature: Radio">
+          <span class="cs-dot-label">Feature: Radio</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="19">
+        <a href="#sec-feature-portfolio" class="cs-dot-link" aria-label="Portfolio & Gyroscope">
+          <span class="cs-dot-label">Portfolio & Gyroscope</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Case Study Editorial Canvas -->
+  <main id="mainContent" class="case-study-canvas">
+
+    <!-- Section 1: Hero -->
+    <section class="case-section" id="sec-hero" data-section="sec-hero">
+      <div class="sr-only">
+        <h2>Munshiji · Financial Learning & Decision Support Companion</h2>
+        <p>A financial learning & decision support companion. Project by Rushabh Mahore. Interaction design, System Design, UX Design.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/01_hero.png" alt="Munshiji · Financial Learning & Decision Support Companion - Project by Rushabh Mahore. Interaction design, System Design, UX Design." width="1138" height="890" loading="eager" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 2: Design Process -->
+    <section class="case-section" id="sec-design-process" data-section="sec-design-process">
+      <div class="sr-only">
+        <h2>Design Process · Double Diamond Framework</h2>
+        <p>01 Discover: Understand financial behavior, 02 Define: Focus the design direction, 03 Develop: Make the experience tangible, 04 Deliver: Test and refine the prototype.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/02_design_process.png" alt="Design Process · Double Diamond Framework: Discover, Define, Develop, Deliver" width="1138" height="1630" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 3: Story of Every Month & Behavioral Loops -->
+    <section class="case-section" id="sec-story-loops" data-section="sec-story-loops">
+      <div class="sr-only">
+        <h2>01. Story of Every Month & Behavioral Loops</h2>
+        <p>Salary credited, small amount saved, but where did the money go? Six core loops: Information overload, Comparison trap, Trust confusion, Loss anxiety, Passive investing, Broken habits.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/03_monthly_story_loops.png" alt="01. Story of Every Month & Behavioral Loops: Information overload, comparison trap, trust confusion, and loss anxiety." width="1138" height="2840" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 4: Defining the Challenge -->
+    <section class="case-section" id="sec-defining-challenge" data-section="sec-defining-challenge">
+      <div class="sr-only">
+        <h2>02. Defining the Challenge</h2>
+        <p>Why: Financial platforms prioritize transactions over understanding. What: Beginners struggle with unfamiliar terms and conflicting advice. How: Making learning and saving simple, familiar, and approachable.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/04_defining_challenge.png" alt="02. Defining the Challenge: Why, What, and How." width="1138" height="760" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 5: The Vicious Loops & System Iceberg -->
+    <section class="case-section" id="sec-vicious-loops" data-section="sec-vicious-loops">
+      <div class="sr-only">
+        <h2>03. The Vicious Loops, Iceberg Model & Leverage Points</h2>
+        <p>Identifying vicious reinforcing loops, Iceberg model (Events, Patterns, System structures, Mental models), and Leverage points to interrupt recurring problems.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/05_vicious_loops_iceberg.png" alt="03. The Vicious Loops & System Iceberg Model" width="1138" height="2730" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 6: Stakeholder Ecosystem & Munshiji Intervention -->
+    <section class="case-section" id="sec-stakeholder-ecosystem" data-section="sec-stakeholder-ecosystem">
+      <div class="sr-only">
+        <h2>04. Stakeholder Ecosystem & Munshiji Intervention</h2>
+        <p>Current vs proposed connections across banks, regulators, creators, family, and where Munshiji intervenes to provide verified insights and decision support.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/06_stakeholder_ecosystem.png" alt="04. Stakeholder Ecosystem & Munshiji Intervention" width="1138" height="2170" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 7: Design Brief -->
+    <section class="case-section" id="sec-design-brief" data-section="sec-design-brief">
+      <div class="sr-only">
+        <h2>05. Design Brief</h2>
+        <p>For first-time investors, small savers, and uncertain investors: Simple financial lessons, evidence-based claim checks, portfolio insights, and contextual guidance.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/07_design_brief.png" alt="05. Design Brief: A financial learning & decision-support companion." width="1138" height="1080" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 8: Ideas & Solutions -->
+    <section class="case-section" id="sec-ideas-solutions" data-section="sec-ideas-solutions">
+      <div class="sr-only">
+        <h2>06. Ideas & Solutions</h2>
+        <p>Exploration of object-based interactions, Gullak savings, Radio discussions, and tactile learning companions.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/08_ideas_solutions.png" alt="06. Ideas & Solutions: Baithak, Gullak, Khatabook, and Radio concepts." width="1138" height="1380" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 9: Design Research Methodology -->
+    <section class="case-section" id="sec-research-methodology" data-section="sec-research-methodology">
+      <div class="sr-only">
+        <h2>07. Design Research Methodology</h2>
+        <p>Discover, Understand, Synthesize, Develop, and Validate phases. Flowchart study of industry benchmarks like Groww.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/09_research_methodology.png" alt="07. Design Research Methodology and Flowchart Study" width="1138" height="2200" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 10: User Interviews & Repeated Patterns -->
+    <section class="case-section" id="sec-user-interviews" data-section="sec-user-interviews">
+      <div class="sr-only">
+        <h2>08. User Interviews & Repeated Patterns</h2>
+        <p>In-depth interviews with participants, uncovering money habits, hesitation, advice sources, and tracking gaps.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/10_user_interviews.png" alt="08. User Interviews & Repeated Patterns to Core Problems" width="1138" height="2220" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 11: Persona Creation -->
+    <section class="case-section" id="sec-persona-creation" data-section="sec-persona-creation">
+      <div class="sr-only">
+        <h2>09. Persona Creation & Behavioral Dynamics</h2>
+        <p>Detailed personas capturing overwhelmed beginners, FOMO-driven investors, and tradition-oriented savers.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/11_persona_creation.png" alt="09. Persona Creation: Overwhelmed beginner, FOMO investor, and cautious saver." width="1138" height="1620" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 12: Empathy Mapping -->
+    <section class="case-section" id="sec-empathy-mapping" data-section="sec-empathy-mapping">
+      <div class="sr-only">
+        <h2>10. Empathy Mapping</h2>
+        <p>Mapping what users Say, Think, Feel, and Do when faced with saving and investing decisions.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/12_empathy_mapping.png" alt="10. Empathy Mapping: Say, Think, Feel, Do." width="1138" height="1130" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 13: Patterns & Possibilities -->
+    <section class="case-section" id="sec-patterns-possibilities" data-section="sec-patterns-possibilities">
+      <div class="sr-only">
+        <h2>11. Patterns & Possibilities</h2>
+        <p>Transforming observed friction points into concrete UX opportunities across learning, trust, clarity, risk, readiness, and progress.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/13_patterns_possibilities.png" alt="11. Patterns & Possibilities: Observed patterns and proposed improvements." width="1138" height="2170" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 14: Five Planes of User Experience -->
+    <section class="case-section" id="sec-ux-planes" data-section="sec-ux-planes">
+      <div class="sr-only">
+        <h2>12. Five Planes of User Experience</h2>
+        <p>Strategy, Scope, Structure, Skeleton, and Surface: Defining typography, color foundations, screen states, and accessible navigation.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/14_user_experience_planes.png" alt="12. Five Planes of User Experience: Strategy, Scope, Structure, Skeleton, Surface." width="1138" height="1780" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 15: User Flow & Information Architecture -->
+    <section class="case-section" id="sec-flow-architecture" data-section="sec-flow-architecture">
+      <div class="sr-only">
+        <h2>13. User Flow & Information Architecture</h2>
+        <p>Comprehensive system flowchart linking Home hub, Gullak savings, Learn journeys, Goal tracking, Radio episodes, and Portfolio holdings.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/15_user_flow_architecture.png" alt="13. User Flow & Information Architecture Flowchart" width="1138" height="2100" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 16: Munshiji Identity & Daily Journeys -->
+    <section class="case-section" id="sec-personality-companion" data-section="sec-personality-companion">
+      <div class="sr-only">
+        <h2>14. Munshiji Identity & Daily Journeys</h2>
+        <p>The warm, patient character identity of Munshiji, alongside the core Home and Gullak coin-drop user journeys.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/16_personality_companion.png" alt="14. Munshiji Character Identity, Home Experience, and Gullak Savings Flow" width="1138" height="3550" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 17: Feature: Small Lessons, Visible Growth -->
+    <section class="case-section" id="sec-feature-learn" data-section="sec-feature-learn">
+      <div class="sr-only">
+        <h2>15. Feature: Small Lessons, Visible Growth</h2>
+        <p>Bite-sized, modular lessons with progress visualizers, interactive practice, and accessible financial concepts.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/17_feature_learn.png" alt="15. Feature Showcase: Small Lessons, Visible Growth (Learn Module)" width="1138" height="1310" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 18: Feature: Make Room for What Matters -->
+    <section class="case-section" id="sec-feature-goals" data-section="sec-feature-goals">
+      <div class="sr-only">
+        <h2>16. Feature: Make Room for What Matters</h2>
+        <p>Personalized goal setting: Choose a goal, an amount, and a timeline that fits your lifestyle without pressure.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/18_feature_goals.png" alt="16. Feature Showcase: Make Room for What Matters (Goals Module)" width="1138" height="1320" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 19: Feature: Radio · Money Made Clearer -->
+    <section class="case-section" id="sec-feature-radio" data-section="sec-feature-radio">
+      <div class="sr-only">
+        <h2>17. Feature: Radio · Money Made Clearer</h2>
+        <p>Audio storytelling and quick takeaways explaining market news, financial history, and investing fundamentals in plain language.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/19_feature_radio.png" alt="17. Feature Showcase: Radio · Money Made Clearer" width="1138" height="820" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 20: Feature: Portfolio Insights & Gyroscope Room -->
+    <section class="case-section" id="sec-feature-portfolio" data-section="sec-feature-portfolio">
+      <div class="sr-only">
+        <h2>18. Portfolio Insights & Gyroscope Room</h2>
+        <p>Holdings comparison, performance context without jargon, interactive 3D gyroscope exploration of Munshiji's room, and voice queries.</p>
+      </div>
+      <div class="cs-canvas-block">
+        <img src="/assets/projects/munshiji/sections_2x/20_feature_portfolio_gyroscope.png" alt="18. Portfolio Insights, Spatial Gyroscope Navigation, and Voice Assistant" width="1138" height="3954" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Case Study Footer -->
+  <footer class="cs-footer">
+    <div class="cs-footer-inner">
+      <div class="cs-footer-copy">
+        <span class="cs-footer-title">Munshiji · Financial Learning & Decision Support Companion</span>
+        <span class="cs-footer-sub">Rushabh Mahore · Interaction & System Design</span>
+      </div>
+      <div class="cs-footer-actions">
+        <a href="/#projects" class="cs-btn-secondary cs-back-link">← Back to projects</a>
+        <a href="#sec-hero" class="cs-btn-primary" id="backToTopBtn">↑ Back to top</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/projects/munshiji/case-study.js?v=1"></script>
+</body>
+</html>

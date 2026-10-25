@@ -1,0 +1,417 @@
+/* ==========================================================================
+   Munshiji Case Study - Editorial Canvas & Seamless Artboard Flow
+   Preserves 100% Exact Figma Alignment, Spacing, Typography & Artwork (Node 67:2)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --color-bg-page: #ffffff;
+  --color-bg-canvas: #ffffff;
+  --color-border-subtle: rgba(226, 232, 240, 0.8);
+  --color-brand-accent: #6C5CE7;
+  --color-brand-accent-hover: #5846E2;
+  --color-brand-accent-subtle: rgba(108, 92, 231, 0.08);
+  --color-text-main: #0f172a;
+  --color-text-muted: #64748b;
+  
+  /* Container width matching Figma artboard node 67:2 (1138px) */
+  --canvas-max-width: 1138px;
+}
+
+@media (min-width: 1201px) and (max-width: 1599px) {
+  :root {
+    --canvas-max-width: 980px;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+  :root {
+    --canvas-max-width: 900px;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --canvas-max-width: 100%;
+  }
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: #ffffff;
+  color: var(--color-text-main);
+  line-height: 1.5;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Incoming White Transition Curtain from Portfolio Zoom */
+.portfolio-transition-curtain {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff;
+  z-index: 99999999;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+
+html.is-entering-transition .portfolio-transition-curtain {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Screen reader text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Sticky Header */
+.cs-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-border-subtle);
+  z-index: 1000;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.cs-header-inner {
+  max-width: var(--canvas-max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cs-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.cs-nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.cs-nav-logo .logo-dot {
+  color: var(--color-brand-accent);
+}
+
+.cs-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(241, 245, 249, 0.7);
+  transition: all 0.2s ease;
+}
+
+.cs-back-link:hover {
+  color: var(--color-text-main);
+  background: rgba(226, 232, 240, 0.9);
+  transform: translateX(-2px);
+}
+
+.cs-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.cs-nav-link {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.cs-nav-link:hover {
+  color: var(--color-text-main);
+}
+
+/* Minimal Editorial Dot Navigator */
+.cs-dot-nav {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+}
+
+.cs-dot-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  padding: 8px 4px;
+}
+
+.cs-dot-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.cs-dot-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  padding: 4px;
+}
+
+.cs-dot-node-wrapper {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cs-dot-node {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #cbd5e1;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cs-dot-item.is-active .cs-dot-node {
+  width: 9px;
+  height: 9px;
+  background-color: var(--color-brand-accent);
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+}
+
+.cs-dot-label {
+  position: absolute;
+  right: 24px;
+  background: rgba(15, 23, 42, 0.88);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.cs-dot-item:hover .cs-dot-label,
+.cs-dot-link:focus .cs-dot-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (max-width: 1200px) {
+  .cs-dot-nav {
+    display: none;
+  }
+}
+
+/* Case Study Canvas Layout */
+.case-study-canvas {
+  width: 100%;
+  max-width: var(--canvas-max-width);
+  margin: 0 auto;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Case Section */
+.case-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: #ffffff;
+}
+
+.cs-canvas-block {
+  width: 100%;
+  position: relative;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.cs-canvas-block img {
+  width: 100%;
+  height: auto;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: auto;
+}
+
+/* Subtle progressive reveal transition */
+.case-section:not(.is-revealed) .cs-canvas-block {
+  opacity: 0.95;
+}
+
+.case-section.is-revealed .cs-canvas-block {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+/* Footer */
+.cs-footer {
+  width: 100%;
+  border-top: 1px solid var(--color-border-subtle);
+  background: #fafafa;
+  padding: 3.5rem 1.5rem;
+  margin-top: 4rem;
+}
+
+.cs-footer-inner {
+  max-width: var(--canvas-max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.cs-footer-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cs-footer-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.cs-footer-sub {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+}
+
+.cs-footer-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cs-btn-primary, .cs-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.cs-btn-primary {
+  background: var(--color-text-main);
+  color: #ffffff;
+}
+
+.cs-btn-primary:hover {
+  background: #334155;
+  transform: translateY(-2px);
+}
+
+.cs-btn-secondary {
+  background: #ffffff;
+  color: var(--color-text-main);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.cs-btn-secondary:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .cs-header-inner {
+    padding: 0 1rem;
+  }
+  .cs-nav-links {
+    display: none;
+  }
+  .cs-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cs-footer-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

@@ -2800,6 +2800,11 @@ function initLiquidKeywordPills() {
       svgId: 'keywordPillsSnakeSvg',
       containerId: 'snakeProjectTagsContainer',
       groupId: 'keywordPillsSnakeAnimatedGroup'
+    },
+    {
+      svgId: 'keywordPillsMunshijiSvg',
+      containerId: 'munshijiProjectTagsContainer',
+      groupId: 'keywordPillsMunshijiAnimatedGroup'
     }
   ];
 
