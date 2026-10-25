@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <title>Portfolio — Infinite Flowing Fabric Grid</title>
+  <script src="password-gate.js"></script>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -779,7 +779,16 @@
                 </div>
 
                 <a href="/projects/munshiji/" class="project-thumbnail-link" aria-label="Explore Munshiji case study">
-                  <img src="/assets/projects/munshiji/thumbnail.png" alt="Munshiji - Financial learning and decision support companion" class="project-image" loading="lazy" />
+                  <video class="project-image munshiji-thumbnail-video"
+                         autoplay
+                         muted
+                         loop
+                         playsinline
+                         preload="auto"
+                         poster="assets/projects/munshiji/thumbnail.png">
+                    <source src="assets/projects/munshiji/thumbnail_video.mp4" type="video/mp4">
+                    <img src="assets/projects/munshiji/thumbnail.png" alt="Munshiji - Financial learning and decision support companion" class="project-image" loading="lazy" />
+                  </video>
                 </a>
 
                 <!-- Figma-Style Drag Selection Rectangle Overlay -->

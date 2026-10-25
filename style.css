@@ -1413,6 +1413,11 @@ body.is-scrolled .drag-hint {
   pointer-events: none;
 }
 
+.munshiji-thumbnail-video {
+  object-position: 52% center;
+  background-color: #ede3d9;
+}
+
 /* Figma Zoom Expanding Rectangle Transition Overlay */
 .figma-zoom-overlay {
   position: fixed;

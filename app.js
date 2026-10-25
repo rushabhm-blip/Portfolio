@@ -1615,6 +1615,9 @@ function initProjectShowcase() {
     if (img) {
       img.style.visibility = 'visible';
       img.style.opacity = '1';
+      if (img.tagName === 'VIDEO' && img.paused) {
+        img.play().catch(() => {});
+      }
     }
     if (crosshair) {
       crosshair.style.opacity = '0';
@@ -1683,6 +1686,9 @@ function initProjectShowcase() {
       gsap.killTweensOf(img);
       img.style.opacity = '0';
       img.style.visibility = 'hidden';
+      if (img.tagName === 'VIDEO' && !img.paused) {
+        img.pause();
+      }
     }
     if (info) {
       gsap.killTweensOf(info);
@@ -1828,6 +1834,9 @@ function initProjectShowcase() {
       ease: 'power1.out',
       onStart: () => {
         gsap.set(img, { visibility: 'visible' });
+        if (img && img.tagName === 'VIDEO' && img.paused) {
+          img.play().catch(() => {});
+        }
       }
     });
 
@@ -2560,6 +2569,12 @@ function initProjectExpandingTransitions() {
     imgClone.style.objectFit = 'cover';
     imgClone.style.display = 'block';
     imgClone.style.borderRadius = `${initialRadius}px`;
+    if (imgClone.tagName === 'VIDEO') {
+      try {
+        imgClone.currentTime = thumbnailImg.currentTime || 0;
+        imgClone.play().catch(() => {});
+      } catch (e) {}
+    }
     cardEl.appendChild(imgClone);
 
     // Figma corner handles
