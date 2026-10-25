@@ -1109,6 +1109,10 @@ function render(now) {
   if (animState.linesProgress > 0 && animState.linesOpacity > 0) {
     ctx.lineWidth = 1;
 
+    const isDark = document.body.classList.contains('dark-theme');
+    const lineRgb = isDark ? '167, 139, 250' : '105, 59, 254';
+    const dotRgb = isDark ? '224, 231, 255' : '105, 59, 254';
+
     const maxLineRadius = 2.4;
     const currentMaxProg = animState.linesProgress * maxLineRadius;
 
@@ -1146,12 +1150,12 @@ function render(now) {
         if (currentMaxProg >= dist) {
           const drawRatio = Math.min(1, (currentMaxProg - dist) / 0.25);
 
-          // Subtle purple tinted delicate line
+          // Subtle tinted delicate line
           const baseAlpha = 0.048 * animState.linesOpacity * lineVisibility;
           const depthAlpha = baseAlpha * (0.8 + (p1.scale - 1) * 1.2);
-          const finalAlpha = Math.max(0.004, Math.min(0.095, depthAlpha));
+          const finalAlpha = Math.max(0.004, Math.min(isDark ? 0.16 : 0.095, depthAlpha * (isDark ? 1.55 : 1)));
 
-          ctx.strokeStyle = `rgba(105, 59, 254, ${finalAlpha.toFixed(3)})`;
+          ctx.strokeStyle = `rgba(${lineRgb}, ${finalAlpha.toFixed(3)})`;
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p1.x + (p2.x - p1.x) * drawRatio, p1.y + (p2.y - p1.y) * drawRatio);
@@ -1194,9 +1198,9 @@ function render(now) {
 
           const baseAlpha = 0.048 * animState.linesOpacity * lineVisibility;
           const depthAlpha = baseAlpha * (0.8 + (p1.scale - 1) * 1.2);
-          const finalAlpha = Math.max(0.004, Math.min(0.095, depthAlpha));
+          const finalAlpha = Math.max(0.004, Math.min(isDark ? 0.16 : 0.095, depthAlpha * (isDark ? 1.55 : 1)));
 
-          ctx.strokeStyle = `rgba(105, 59, 254, ${finalAlpha.toFixed(3)})`;
+          ctx.strokeStyle = `rgba(${lineRgb}, ${finalAlpha.toFixed(3)})`;
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p1.x + (p2.x - p1.x) * drawRatio, p1.y + (p2.y - p1.y) * drawRatio);
@@ -1208,6 +1212,9 @@ function render(now) {
 
   // 2. Render Grid of Dots
   if (animState.dotsOpacity > 0) {
+    const isDark = document.body.classList.contains('dark-theme');
+    const dotRgb = isDark ? '224, 231, 255' : '105, 59, 254';
+
     for (let r = 0; r < ROWS; r++) {
       for (let c = 0; c < COLS; c++) {
         const p = points[r][c];
@@ -1218,8 +1225,8 @@ function render(now) {
         // Skip points outside reveal / spotlight radius
         if (p.visibility <= 0.005) continue;
 
-        const dotAlpha = (0.28 * animState.dotsOpacity * p.visibility).toFixed(3);
-        ctx.fillStyle = `rgba(105, 59, 254, ${dotAlpha})`;
+        const dotAlpha = ((isDark ? 0.42 : 0.28) * animState.dotsOpacity * p.visibility).toFixed(3);
+        ctx.fillStyle = `rgba(${dotRgb}, ${dotAlpha})`;
 
         const baseDotRadius = isMobile ? 0.9 : 1.35;
         const radius = baseDotRadius * (p.scale || 1) * (0.55 + 0.45 * p.visibility);
@@ -2798,7 +2805,43 @@ if (hasSeenIntro || isReturningFromProject || isAnchorNavigation || savedReturnS
 initSajagShowcase();
 initProjectShowcase();
 initLiquidKeywordPills();
+initThemeToggle();
 requestAnimationFrame(render);
+
+// =========================================================
+// DARK MODE / LIGHT MODE THEME CONTROLLER
+// Supports smooth toggle, persistence, and system preference
+// =========================================================
+function initThemeToggle() {
+  const toggleBtn = document.getElementById('themeToggleBtn');
+  if (!toggleBtn) return;
+
+  const savedTheme = localStorage.getItem('portfolio_theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    document.body.classList.add('dark-theme');
+    document.documentElement.classList.add('dark-theme');
+  } else {
+    document.body.classList.remove('dark-theme');
+    document.documentElement.classList.remove('dark-theme');
+  }
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const isDark = document.body.classList.toggle('dark-theme');
+    document.documentElement.classList.toggle('dark-theme', isDark);
+    try {
+      localStorage.setItem('portfolio_theme', isDark ? 'dark' : 'light');
+    } catch (err) {}
+
+    // Subtle tactile button pop
+    toggleBtn.style.transform = 'scale(0.88)';
+    setTimeout(() => {
+      toggleBtn.style.transform = '';
+    }, 150);
+  });
+}
 
 // =========================================================
 // LIQUID KEYWORD PILLS ENTRANCE CONTROLLER

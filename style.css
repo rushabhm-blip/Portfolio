@@ -191,6 +191,72 @@ body.scroll-locked {
   margin-left: 0.5px;
 }
 
+.nav-right-group {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.4rem, 2.5vw, 2.4rem);
+  pointer-events: auto;
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #0f172a;
+  cursor: pointer !important;
+  pointer-events: auto;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.35s ease,
+              border-color 0.35s ease,
+              box-shadow 0.35s ease,
+              color 0.25s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+  outline: none;
+  padding: 0;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.08);
+  border-color: #693bfe;
+  color: #693bfe;
+  box-shadow: 0 4px 16px rgba(105, 59, 254, 0.22);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.92);
+}
+
+.theme-toggle-btn .theme-icon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.35s ease;
+}
+
+.theme-toggle-btn .sun-icon {
+  transform: rotate(90deg) scale(0);
+  opacity: 0;
+}
+
+.theme-toggle-btn .moon-icon {
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+}
+
 .nav-container {
   display: flex;
   align-items: center;
@@ -1145,6 +1211,22 @@ body.is-scrolled .drag-hint {
     font-size: 1.22rem;
     flex-shrink: 0;
   }
+  .nav-right-group {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+    flex-shrink: 1;
+  }
+  .theme-toggle-btn {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+  .theme-toggle-btn svg {
+    width: 16px;
+    height: 16px;
+  }
   .nav-container {
     display: flex;
     align-items: center;
@@ -1840,3 +1922,437 @@ body.is-scrolled .drag-hint {
     aspect-ratio: 750 / 500;
   }
 }
+
+/* =========================================================
+   DARK THEME: COSMIC OBSIDIAN & STARLIGHT
+   ========================================================= */
+
+body.dark-theme,
+html.dark-theme {
+  background-color: #07090e !important;
+  color: #f8fafc !important;
+}
+
+body.dark-theme {
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.3s ease;
+}
+
+/* Stage Canvas Background in Dark Mode */
+body.dark-theme .stage-container,
+html.dark-theme .stage-container {
+  background: radial-gradient(circle at 75% 18%, #141028 0%, #07090e 55%, #040508 100%) !important;
+  transition: background 0.5s ease;
+}
+
+/* Top Nav in Dark Mode */
+body.dark-theme .top-nav-header::before,
+html.dark-theme .top-nav-header::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(7, 9, 14, 0.92) 0%,
+    rgba(7, 9, 14, 0.68) 40%,
+    rgba(7, 9, 14, 0.25) 70%,
+    rgba(7, 9, 14, 0) 100%
+  ) !important;
+}
+
+body.dark-theme .nav-logo,
+html.dark-theme .nav-logo {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .logo-dot,
+html.dark-theme .logo-dot {
+  color: #a78bfa !important;
+  text-shadow: 0 0 10px rgba(167, 139, 250, 0.7);
+}
+
+body.dark-theme .nav-link,
+html.dark-theme .nav-link {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .nav-link:hover,
+body.dark-theme .nav-link.active,
+html.dark-theme .nav-link:hover,
+html.dark-theme .nav-link.active {
+  color: #ffffff !important;
+}
+
+body.dark-theme .nav-link::after,
+html.dark-theme .nav-link::after {
+  background: #a78bfa !important;
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.7);
+}
+
+/* Dark mode toggle button active appearance */
+body.dark-theme .theme-toggle-btn,
+html.dark-theme .theme-toggle-btn {
+  background: rgba(20, 24, 38, 0.85);
+  border-color: rgba(167, 139, 250, 0.45);
+  color: #f8fafc;
+  box-shadow: 0 0 16px rgba(167, 139, 250, 0.32);
+}
+
+body.dark-theme .theme-toggle-btn:hover,
+html.dark-theme .theme-toggle-btn:hover {
+  border-color: #c084fc;
+  color: #c084fc;
+  box-shadow: 0 0 24px rgba(192, 132, 252, 0.5);
+}
+
+body.dark-theme .theme-toggle-btn .sun-icon,
+html.dark-theme .theme-toggle-btn .sun-icon {
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+}
+
+body.dark-theme .theme-toggle-btn .moon-icon,
+html.dark-theme .theme-toggle-btn .moon-icon {
+  transform: rotate(-90deg) scale(0);
+  opacity: 0;
+}
+
+/* Custom Cursor in Dark Mode */
+body.dark-theme .cursor-ring {
+  border-color: #f1f5f9;
+  box-shadow: 0 0 12px rgba(167, 139, 250, 0.5);
+}
+
+body.dark-theme .cursor-dot {
+  background-color: #a78bfa;
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.9);
+}
+
+/* Hero Section in Dark Mode */
+body.dark-theme .hero-line-1 {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .line-2-prefix {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .line-2-highlight {
+  color: #c084fc !important;
+  text-shadow: 0 0 24px rgba(192, 132, 252, 0.45);
+}
+
+body.dark-theme .type-cursor {
+  background-color: #f8fafc !important;
+}
+
+body.dark-theme .type-cursor.cursor-2 {
+  background-color: #c084fc !important;
+}
+
+body.dark-theme .hero-subdescription {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .firms-divider {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.14) 25%, rgba(255, 255, 255, 0.14) 75%, transparent 100%) !important;
+}
+
+body.dark-theme .firms-label {
+  color: #64748b !important;
+}
+
+body.dark-theme .firm-logo,
+body.dark-theme .education-logo {
+  filter: invert(1) brightness(0.9) contrast(1.1);
+  opacity: 0.85;
+}
+
+body.dark-theme .firm-logo:hover,
+body.dark-theme .education-logo:hover {
+  filter: invert(1) brightness(1.15) contrast(1.25);
+  opacity: 1;
+}
+
+/* Portrait in Dark Mode */
+body.dark-theme .portrait-backdrop-silhouette ellipse,
+body.dark-theme .portrait-backdrop-silhouette rect,
+body.dark-theme .portrait-backdrop-silhouette path {
+  fill: #07090e !important;
+  transition: fill 0.35s ease;
+}
+
+body.dark-theme .portrait-body-group path,
+body.dark-theme .portrait-eyes-group path,
+body.dark-theme .portrait-smile-group path {
+  fill: #f1f5f9 !important;
+  transition: fill 0.35s ease;
+}
+
+body.dark-theme .portrait-bg-shapes {
+  filter: brightness(0.88) saturate(1.2) drop-shadow(0 0 35px rgba(167, 139, 250, 0.3));
+  opacity: 0.88;
+}
+
+/* Philosophy Statement in Dark Mode */
+body.dark-theme .works-statement-text {
+  color: #f8fafc !important;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.08);
+}
+
+/* 3-Column Phone Carousel in Dark Mode */
+body.dark-theme .carousel-lavender-glow {
+  background: radial-gradient(
+    ellipse 62% 52% at 50% 48%,
+    rgba(99, 102, 241, 0.2) 0%,
+    rgba(147, 51, 234, 0.1) 45%,
+    rgba(7, 9, 14, 0) 75%
+  ) !important;
+}
+
+body.dark-theme .carousel-grid-mesh {
+  opacity: 0.08;
+  filter: invert(1);
+}
+
+body.dark-theme .carousel-sublabel {
+  color: #a78bfa !important;
+}
+
+body.dark-theme .carousel-heading {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .carousel-body {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .carousel-caption-text {
+  color: #cbd5e1 !important;
+}
+
+/* Selected Projects Section in Dark Mode */
+body.dark-theme .projects-section,
+html.dark-theme .projects-section {
+  background-color: #07090e !important;
+}
+
+body.dark-theme .projects-section::before,
+html.dark-theme .projects-section::before {
+  background-image: radial-gradient(
+    circle at center,
+    rgba(167, 139, 250, 0.25) 1.25px,
+    transparent 1.25px
+  ) !important;
+}
+
+body.dark-theme .project-title {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .project-lead {
+  color: #cbd5e1 !important;
+}
+
+body.dark-theme .project-description p {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .project-metadata,
+body.dark-theme .project-meta-line,
+body.dark-theme .project-meta-guidance {
+  color: #94a3b8 !important;
+}
+
+body.dark-theme .metadata-separator {
+  color: #475569 !important;
+}
+
+body.dark-theme .project-cta-link {
+  color: #f8fafc !important;
+  border-bottom-color: #f8fafc !important;
+}
+
+body.dark-theme .project-cta-link:hover {
+  color: #a78bfa !important;
+  border-bottom-color: #a78bfa !important;
+}
+
+body.dark-theme .figma-meta-label {
+  color: #64748b !important;
+}
+
+body.dark-theme .figma-meta-year {
+  color: #f8fafc !important;
+}
+
+body.dark-theme .figma-dimension-badge {
+  background: #4f46e5 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 8px rgba(79, 70, 229, 0.5) !important;
+}
+
+body.dark-theme .figma-selection-box {
+  border-color: #4f46e5 !important;
+  background: rgba(79, 70, 229, 0.06) !important;
+}
+
+body.dark-theme .figma-handle {
+  background: #07090e !important;
+  border-color: #818cf8 !important;
+}
+
+body.dark-theme .figma-crosshair svg line {
+  stroke: #818cf8 !important;
+}
+
+body.dark-theme .munshiji-thumbnail-video {
+  background-color: #14121d !important;
+}
+
+body.dark-theme .sajag-thumbnail-video {
+  background-color: #0f1118 !important;
+}
+
+/* Replay Button & Drag Hint in Dark Mode */
+body.dark-theme .replay-btn {
+  background: rgba(15, 23, 42, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #f8fafc !important;
+}
+
+body.dark-theme .replay-btn:hover {
+  background: #a78bfa !important;
+  color: #07090e !important;
+  border-color: #a78bfa !important;
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.45) !important;
+}
+
+body.dark-theme .drag-hint {
+  color: #64748b !important;
+}
+
+body.dark-theme .drag-hint svg {
+  color: #64748b !important;
+}
+
+/* =========================================================
+   DARK MODE CELESTIAL STAR STICKERS
+   ========================================================= */
+
+.dark-stickers-layer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 12;
+  overflow: hidden;
+}
+
+.star-sticker {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(0.3) rotate(var(--rot, 0deg));
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              visibility 0.5s ease;
+  user-select: none;
+  will-change: transform, opacity;
+  cursor: pointer !important;
+}
+
+body.dark-theme .star-sticker,
+html.dark-theme .star-sticker {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: scale(1) rotate(var(--rot, 0deg));
+}
+
+/* Playful springy hover wobble */
+.star-sticker:hover {
+  transform: scale(1.22) rotate(calc(var(--rot, 0deg) + 12deg)) !important;
+  filter: drop-shadow(0 0 16px rgba(192, 132, 252, 0.85)) !important;
+}
+
+/* Floating animation */
+.star-sticker.floating-slow {
+  animation: stickerFloatSlow 6s ease-in-out infinite alternate;
+}
+
+.star-sticker.floating-medium {
+  animation: stickerFloatMed 4.5s ease-in-out infinite alternate;
+}
+
+.star-sticker.floating-fast {
+  animation: stickerFloatFast 3.4s ease-in-out infinite alternate;
+}
+
+@keyframes stickerFloatSlow {
+  0% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
+  100% { transform: translateY(-12px) rotate(calc(var(--rot, 0deg) + 5deg)); }
+}
+
+@keyframes stickerFloatMed {
+  0% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
+  100% { transform: translateY(-8px) rotate(calc(var(--rot, 0deg) - 5deg)); }
+}
+
+@keyframes stickerFloatFast {
+  0% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
+  100% { transform: translateY(-6px) rotate(calc(var(--rot, 0deg) + 7deg)); }
+}
+
+/* Tactile Holographic Designer Badge Sticker */
+.sticker-badge {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(167, 139, 250, 0.32) 45%, rgba(99, 102, 241, 0.25) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.88);
+  border-radius: 999px;
+  padding: 6px 14px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5),
+              0 0 18px rgba(167, 139, 250, 0.42),
+              inset 0 1px 2px rgba(255, 255, 255, 0.65);
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.sticker-badge .badge-icon {
+  color: #facc15;
+  filter: drop-shadow(0 0 6px #fde047);
+  font-size: 0.88rem;
+}
+
+/* SVG Star Sparkle Styles */
+.sparkle-svg {
+  display: block;
+  filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.7));
+  transition: filter 0.3s ease;
+}
+
+.sparkle-svg-gold {
+  filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.8));
+}
+
+.sparkle-svg-cyan {
+  filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8));
+}
+
+@media (max-width: 900px) {
+  .star-sticker {
+    display: none !important;
+  }
+}
+
