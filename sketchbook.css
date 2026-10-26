@@ -1,0 +1,750 @@
+/* =========================================================
+   RUSHABH PORTFOLIO — CLOSED-SKETCHBOOK LANDING PAGE
+   Design tokens, CSS variables, container queries, typography
+   ========================================================= */
+
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/Inter-variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Caveat';
+  src: url('fonts/Caveat-variable.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Brand Palette */
+  --color-blue: #0647fa;
+  --color-lime: #bdff00;
+  --color-paper: #fff0d7;
+  --color-ink: #080807;
+  --color-white: #fffefa;
+
+  /* Layout Tuning Variables (Editable) */
+  --book-width: min(655px, 69svh, 74vw);
+  --book-aspect-ratio: 640 / 800;
+  --book-rotation: -4deg;
+
+  /* Book Component Anchor Positions (% of book width/height) */
+  --id-tag-right: -10.5%;
+  --id-tag-top: -3.5%;
+  --id-tag-width: 25.5%;
+  --id-tag-rotation: 18deg;
+
+  --role-left: 12%;
+  --role-top: 7%;
+  --role-width: 30%;
+  --role-rotation: -9deg;
+
+  --portrait-left: 68%;
+  --portrait-top: 7%;
+  --portrait-width: 26%;
+  --portrait-rotation: 5deg;
+
+  --intro-left: 13%;
+  --intro-top: 33%;
+  --intro-width: 82%;
+
+  --cursor-left: 11%;
+  --cursor-bottom: 8%;
+  --cursor-width: 36%;
+  --cursor-rotation: 1deg;
+
+  --grid-right: 3.8%;
+  --grid-bottom: 4%;
+  --grid-width: 58%;
+  --grid-height: 35%;
+  --grid-cell-size: 4.6cqw;
+
+  --open-right: 6%;
+  --open-bottom: 10%;
+  --open-width: 44%;
+
+  /* Shadow Depths */
+  --book-shadow: 16px 28px 20px rgba(0, 21, 84, 0.52);
+  --id-shadow: 6px 10px 6px rgba(0, 17, 59, 0.38);
+  --sticker-shadow: 0 4px 6px rgba(103, 95, 75, 0.22);
+}
+
+/* Reset & Box Sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--color-ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--color-blue);
+  background-image: url('assets/sketchbook/4k/background.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  min-height: 100svh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Interactive elements base */
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--color-lime);
+  outline-offset: 5px;
+}
+
+/* =========================================================
+   HEADER & NAVIGATION
+   ========================================================= */
+
+.site-header {
+  position: relative;
+  z-index: 20;
+  padding: clamp(20px, 3.2vh, 32px) clamp(24px, 4.8vw, 64px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  color: var(--color-white);
+}
+
+.wordmark {
+  font-size: clamp(26px, 2.2vw, 32px);
+  font-weight: 750;
+  letter-spacing: -0.055em;
+  color: var(--color-white);
+  text-decoration: none;
+  line-height: 1;
+  user-select: none;
+}
+
+.wordmark span {
+  color: var(--color-lime);
+  margin-left: 0.5px;
+}
+
+.site-header nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(20px, 2.6vw, 38px);
+}
+
+.nav-item {
+  position: relative;
+  padding: 8px 0;
+  color: var(--color-white);
+  font-size: clamp(14px, 1.05vw, 17px);
+  font-weight: 480;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.nav-item:hover {
+  opacity: 0.88;
+}
+
+/* Thin lime underline strictly on active item (Home) */
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-lime);
+  border-radius: 1px;
+}
+
+/* =========================================================
+   MAIN STAGE & SKETCHBOOK CONTAINER
+   ========================================================= */
+
+.main-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px clamp(16px, 3.5vw, 48px) clamp(30px, 5vh, 60px);
+  min-height: calc(100svh - 96px);
+  position: relative;
+}
+
+.book-stage {
+  position: relative;
+  width: var(--book-width);
+  aspect-ratio: var(--book-aspect-ratio);
+  transform: rotate(var(--book-rotation));
+  container-type: inline-size;
+  opacity: 0;
+  transform-origin: center center;
+  animation: coverReveal 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.08s forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes coverReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) rotate(var(--book-rotation));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--book-rotation));
+  }
+}
+
+.book {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  user-select: none;
+}
+
+/* Blank Cream Book Base */
+.book-base {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(var(--book-shadow));
+  border-radius: 4px;
+}
+
+/* Hanging ID Tag behind upper-right book corner */
+.id-tag-wrapper {
+  position: absolute;
+  z-index: 0;
+  width: var(--id-tag-width);
+  right: var(--id-tag-right);
+  top: var(--id-tag-top);
+  transform: rotate(var(--id-tag-rotation));
+  transform-origin: 28% 8%;
+  filter: drop-shadow(var(--id-shadow));
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: auto;
+  cursor: default;
+}
+
+.id-tag-wrapper:hover {
+  transform: rotate(calc(var(--id-tag-rotation) + 3.5deg)) scale(1.02);
+}
+
+.id-tag-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* =========================================================
+   STICKERS & BADGES
+   ========================================================= */
+
+/* Role Badge: Clean HTML/CSS with crisp lime top & Caveat text */
+.sticker-role {
+  position: absolute;
+  left: var(--role-left);
+  top: var(--role-top);
+  width: var(--role-width);
+  border: 4.5px solid #fffdf7;
+  border-radius: 14px;
+  outline: 1px solid #b7ab94;
+  background-color: #ffffff;
+  transform: rotate(var(--role-rotation));
+  box-shadow: var(--sticker-shadow);
+  overflow: hidden;
+  text-align: center;
+  z-index: 5;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sticker-role:hover {
+  transform: rotate(calc(var(--role-rotation) - 2deg)) scale(1.03);
+}
+
+.role-header {
+  display: block;
+  background-color: var(--color-lime);
+  border: 2px solid var(--color-ink);
+  border-radius: 8px 8px 0 0;
+  padding: 4.5px 0 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 3.8cqw;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.role-body {
+  display: block;
+  border: 2px solid var(--color-ink);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  font-family: 'Caveat', cursive;
+  font-weight: 500;
+  font-size: 5.2cqw;
+  line-height: 0.94;
+  color: var(--color-ink);
+  padding: 5px 0 9px;
+  white-space: pre-line;
+}
+
+/* Portrait Sticker */
+.sticker-portrait {
+  position: absolute;
+  width: var(--portrait-width);
+  left: var(--portrait-left);
+  top: var(--portrait-top);
+  transform: rotate(var(--portrait-rotation));
+  filter: drop-shadow(2px 4px 3px rgba(103, 95, 75, 0.28));
+  z-index: 5;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: auto;
+  cursor: default;
+}
+
+.sticker-portrait:hover {
+  transform: rotate(calc(var(--portrait-rotation) + 2deg)) scale(1.03);
+}
+
+/* Cursor Sticker ("Make it useful") */
+.sticker-cursor {
+  position: absolute;
+  width: var(--cursor-width);
+  left: var(--cursor-left);
+  bottom: var(--cursor-bottom);
+  transform: rotate(var(--cursor-rotation));
+  filter: drop-shadow(2px 5px 3px rgba(103, 95, 75, 0.25));
+  z-index: 5;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: auto;
+  cursor: default;
+}
+
+.sticker-cursor:hover {
+  transform: rotate(calc(var(--cursor-rotation) - 1.5deg)) scale(1.03);
+}
+
+/* =========================================================
+   INTRO BLOCK TYPOGRAPHY (Real Selectable Text)
+   ========================================================= */
+
+.intro-block {
+  position: absolute;
+  left: var(--intro-left);
+  top: var(--intro-top);
+  width: var(--intro-width);
+  z-index: 4;
+  pointer-events: auto;
+  user-select: text;
+}
+
+.intro-greeting {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 8.6cqw;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  color: var(--color-ink);
+  line-height: 1.15;
+}
+
+.intro-name {
+  margin: -0.04em 0 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 17.3cqw;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.075em;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.intro-underline {
+  position: absolute;
+  width: 44%;
+  right: 5%;
+  top: 67%;
+  pointer-events: none;
+  user-select: none;
+}
+
+.intro-tagline {
+  margin: 4.8cqw 0 0;
+  font-family: 'Caveat', cursive;
+  font-weight: 500;
+  font-size: 5.1cqw;
+  line-height: 1.2;
+  color: var(--color-ink);
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: 0;
+}
+
+/* =========================================================
+   ARCHITECTURAL BLUEPRINT GRID
+   ========================================================= */
+
+.book-grid {
+  position: absolute;
+  right: var(--grid-right);
+  bottom: var(--grid-bottom);
+  width: var(--grid-width);
+  height: var(--grid-height);
+  z-index: 2;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(126, 145, 180, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(126, 145, 180, 0.22) 1px, transparent 1px);
+  background-size: var(--grid-cell-size) var(--grid-cell-size);
+  mask-image: linear-gradient(135deg, transparent 20%, #000000 95%);
+  -webkit-mask-image: linear-gradient(135deg, transparent 20%, #000000 95%);
+  border-bottom-right-radius: 20px;
+}
+
+/* =========================================================
+   OPEN BOOK CONTROL (Interactive Button)
+   ========================================================= */
+
+.open-book-btn {
+  position: absolute;
+  right: var(--open-right);
+  bottom: var(--open-bottom);
+  width: var(--open-width);
+  display: flex;
+  align-items: center;
+  gap: 2%;
+  color: var(--color-ink);
+  z-index: 6;
+  text-decoration: none;
+  outline: none;
+}
+
+.open-book-btn:focus-visible {
+  outline: 3px solid var(--color-lime);
+  outline-offset: 6px;
+  border-radius: 8px;
+}
+
+.open-book-label {
+  font-family: 'Caveat', cursive;
+  font-weight: 500;
+  font-size: 3.7cqw;
+  line-height: 1;
+  white-space: nowrap;
+  transform: rotate(-6deg);
+  border-bottom: 1.5px solid var(--color-ink);
+  padding-bottom: 5px;
+  color: var(--color-ink);
+}
+
+.curved-arrow-img {
+  width: 21%;
+  height: auto;
+  margin-left: -1%;
+  pointer-events: none;
+}
+
+.lime-circle {
+  flex: none;
+  display: grid;
+  place-items: center;
+  background-color: var(--color-lime);
+  width: 10.4cqw;
+  height: 10.4cqw;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.arrow-right-img {
+  width: 50%;
+  height: auto;
+  display: block;
+}
+
+.open-book-btn:hover .lime-circle {
+  transform: translateX(3px) rotate(-5deg);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.22);
+}
+
+/* =========================================================
+   DIALOG / CHAPTER PLACEHOLDER MODAL
+   ========================================================= */
+
+.chapter-dialog {
+  border: none;
+  border-radius: 20px;
+  background-color: var(--color-paper);
+  padding: 40px;
+  max-width: 520px;
+  width: calc(100% - 40px);
+  color: var(--color-ink);
+  box-shadow: 0 24px 80px rgba(0, 22, 71, 0.55);
+}
+
+.chapter-dialog::backdrop {
+  background-color: rgba(0, 27, 79, 0.58);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.dialog-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-close-btn {
+  position: absolute;
+  top: -12px;
+  right: -8px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  line-height: 1;
+  color: #64748b;
+  border-radius: 50%;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.dialog-close-btn:hover {
+  color: var(--color-ink);
+  transform: scale(1.1);
+}
+
+.dialog-eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #693bfe;
+}
+
+.dialog-title {
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin: 8px 0 14px;
+  line-height: 1.15;
+}
+
+.dialog-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #334155;
+  margin: 0 0 20px;
+}
+
+.dialog-project-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.dialog-project-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.dialog-project-item:hover {
+  background: #ffffff;
+  border-color: var(--color-blue);
+  transform: translateX(3px);
+}
+
+.proj-text strong {
+  display: block;
+  font-size: 15px;
+  color: var(--color-ink);
+}
+
+.proj-text span {
+  display: block;
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.proj-arrow {
+  font-size: 18px;
+  color: var(--color-blue);
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dialog-back-btn {
+  background-color: var(--color-lime);
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: 15px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.dialog-back-btn:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN (Desktop 1542x1018, Tablet, Mobile)
+   ========================================================= */
+
+/* Desktop high-res target: 1542 × 1018 */
+@media (min-width: 1400px) and (min-height: 940px) {
+  :root {
+    --book-width: 665px;
+  }
+}
+
+/* Tablet (768px – 1024px) */
+@media (max-width: 1024px) {
+  .site-header {
+    padding: 22px 32px;
+  }
+  .main-stage {
+    padding: 10px 24px 40px;
+  }
+  :root {
+    --book-width: min(580px, 68svh, 82vw);
+  }
+}
+
+/* Mobile Devices (390x844, 320x568) */
+@media (max-width: 768px) {
+  .site-header {
+    padding: 18px 20px 8px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .wordmark {
+    font-size: 25px;
+  }
+
+  .site-header nav {
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .site-header nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-item {
+    font-size: 13px;
+    padding: 4px 0;
+  }
+
+  .main-stage {
+    padding: 30px 20px 60px;
+    min-height: calc(100svh - 110px);
+  }
+
+  :root {
+    --book-width: min(77vw, 460px);
+    --book-rotation: -3deg;
+  }
+
+  .sticker-role {
+    border-width: 3px;
+    border-radius: 10px;
+  }
+
+  .role-header,
+  .role-body {
+    border-width: 1.5px;
+  }
+
+  .open-book-btn {
+    width: 46%;
+    right: 5%;
+  }
+
+  .lime-circle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* High Browser Zoom (200%) & Small Screens */
+@media (max-height: 640px) {
+  .main-stage {
+    min-height: 600px;
+    padding-bottom: 80px;
+  }
+}
+
+/* Reduced Motion Mode */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .book-stage {
+    animation: none;
+    opacity: 1;
+  }
+}
