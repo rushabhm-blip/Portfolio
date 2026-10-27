@@ -19,7 +19,7 @@ export function createBookScene({ coverData, openBookData, onSelectChapter, onOp
 
   // Perspective stage
   const stage = document.createElement('div');
-  stage.className = 'book-stage is-closed';
+  stage.className = 'book-stage is-closed is-loading';
   stage.id = 'bookStage';
 
   // 2. The 3D Book Assembly
@@ -52,6 +52,26 @@ export function createBookScene({ coverData, openBookData, onSelectChapter, onOp
   spreadImg.draggable = false;
   spreadBase.appendChild(spreadImg);
   bookSpread.appendChild(spreadBase);
+
+  // Layered 3-slice paper frame for mobile single-page browsing
+  const mobilePaperFrame = document.createElement('div');
+  mobilePaperFrame.className = 'mobile-paper-frame';
+  mobilePaperFrame.id = 'mobilePaperFrame';
+  mobilePaperFrame.setAttribute('aria-hidden', 'true');
+
+  const paperCapTop = document.createElement('div');
+  paperCapTop.className = 'mobile-paper-cap mobile-paper-cap-top';
+
+  const paperBody = document.createElement('div');
+  paperBody.className = 'mobile-paper-body';
+
+  const paperCapBottom = document.createElement('div');
+  paperCapBottom.className = 'mobile-paper-cap mobile-paper-cap-bottom';
+
+  mobilePaperFrame.appendChild(paperCapTop);
+  mobilePaperFrame.appendChild(paperBody);
+  mobilePaperFrame.appendChild(paperCapBottom);
+  bookSpread.appendChild(mobilePaperFrame);
 
   let singlePageIndex = 1;
 

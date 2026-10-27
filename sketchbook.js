@@ -49,8 +49,8 @@ function fitBookComposition(headerEl, stageEl) {
     // Fits mobile width cleanly with perimeter clearance, and provides comfortable vertical reading space
     pageW = Math.min(availW, 460);
     pageW = Math.max(pageW, 310);
-    const minSinglePageH = 610;
-    pageH = Math.max(minSinglePageH, Math.round(pageW / 0.65));
+    const minSinglePageH = 640;
+    pageH = Math.max(minSinglePageH, Math.round(pageW / 0.58));
     // Allow document to scroll vertically if page is taller than viewport
     spreadW = pageW;
     spreadH = pageH;
@@ -219,6 +219,43 @@ function initPortfolio() {
     ro.observe(document.body);
     if (header) ro.observe(header);
   }
+
+  // Bounded hero asset readiness coordinator (avoids disjointed elements or floating text on cold loads)
+  async function waitForHeroAssets(stageEl, videoEl) {
+    const promises = [];
+    const bookBaseImg = stageEl.querySelector('.book-base');
+    if (bookBaseImg) {
+      if (bookBaseImg.complete && bookBaseImg.naturalWidth > 0) {
+        // already decoded
+      } else if (typeof bookBaseImg.decode === 'function') {
+        promises.push(bookBaseImg.decode().catch(() => {}));
+      } else {
+        promises.push(new Promise(res => {
+          bookBaseImg.onload = res;
+          bookBaseImg.onerror = res;
+        }));
+      }
+    }
+
+    if (document.fonts && document.fonts.ready) {
+      promises.push(document.fonts.ready.catch(() => {}));
+    }
+
+    // Bounded wait (max 1200ms) ensuring the interface never hangs
+    const timeout = new Promise(res => setTimeout(res, 1200));
+    await Promise.race([Promise.all(promises), timeout]);
+
+    runLayout();
+    stageEl.classList.remove('is-loading');
+    stageEl.classList.add('is-ready');
+
+    if (videoEl && typeof videoEl.play === 'function') {
+      try { videoEl.currentTime = 0; } catch (e) {}
+      videoEl.play().catch(() => {});
+    }
+  }
+
+  waitForHeroAssets(bookStage, video);
 }
 
 // Initialize when DOM is ready

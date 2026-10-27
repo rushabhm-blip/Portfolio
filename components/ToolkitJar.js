@@ -270,44 +270,67 @@ function initJarAnimation(scene) {
     });
 
     if (isMobile) {
-      // Mobile / narrow screens: arrange in an airy, curated constellation above and flanking the jar mouth & shoulders
-      // All slots have ty <= jarNeckSceneY + 35px so every single icon bursts UPWARD out of the jar neck!
+      // Mobile / narrow screens: arrange in an airy, curated constellation in the reserved band and flanking the jar
+      // Note heading, paragraph, and signature are strict EXCLUSION ZONES!
+      const noteRect = noteAssembly ? noteAssembly.getBoundingClientRect() : null;
+      let noteBottom = 0;
+      let noteLeft = 0;
+      let noteRight = 0;
+      if (noteRect && noteRect.width > 0) {
+        noteBottom = noteRect.bottom - sceneRect.top;
+        noteLeft = noteRect.left - sceneRect.left;
+        noteRight = noteRect.right - sceneRect.left;
+      }
+      const safeNoteBottom = noteBottom > 0 ? noteBottom + 16 : (jarNeckSceneY - 95);
+
       const mobileSlotsLeft = [
-        { dx: -55,  dy: -145, rot: -8 },  // Slot 0: Top left center (between note and jar)
-        { dx: -105, dy: -135, rot: 12 },  // Slot 1: Top left outer
-        { dx: -150, dy: -95,  rot: -10 }, // Slot 2: High left flank
-        { dx: -68,  dy: -90,  rot: 8 },   // Slot 3: Mid left inner
-        { dx: -120, dy: -60,  rot: -12 }, // Slot 4: Mid left outer
-        { dx: -45,  dy: -45,  rot: 6 },   // Slot 5: Left shoulder inner
-        { dx: -145, dy: -20,  rot: -7 },  // Slot 6: Left shoulder outer
-        { dx: -90,  dy: -10,  rot: 10 },  // Slot 7: Left neck flank
-        { dx: -138, dy: 35,   rot: -5 }   // Slot 8: Left body flank
+        { dx: -55,  dy: -65, rot: -8 },   // Slot 0: Reserved band inner left
+        { dx: -110, dy: -60, rot: 12 },   // Slot 1: Reserved band outer left
+        { dx: -25,  dy: -70, rot: -6 },   // Slot 2: Reserved band center left
+        { dx: -140, dy: -20, rot: -10 },  // Slot 3: High left flank
+        { dx: -90,  dy: 10,  rot: 8 },    // Slot 4: Left shoulder
+        { dx: -140, dy: 35,  rot: -12 },  // Slot 5: Left flank mid
+        { dx: -85,  dy: 65,  rot: 6 },    // Slot 6: Left body inner
+        { dx: -135, dy: 90,  rot: -7 },   // Slot 7: Left flank lower
+        { dx: -80,  dy: 125, rot: 10 }    // Slot 8: Left bottom
       ];
 
       const mobileSlotsRight = [
-        { dx: 55,   dy: -145, rot: 9 },   // Slot 9: Top right center
-        { dx: 105,  dy: -135, rot: -11 }, // Slot 10: Top right outer
-        { dx: 150,  dy: -95,  rot: 8 },   // Slot 11: High right flank
-        { dx: 68,   dy: -90,  rot: -7 },  // Slot 12: Mid right inner
-        { dx: 120,  dy: -60,  rot: 14 },  // Slot 13: Mid right outer
-        { dx: 45,   dy: -45,  rot: -6 },  // Slot 14: Right shoulder inner
-        { dx: 148,  dy: -15,  rot: 10 },  // Slot 15: Right shoulder outer
-        { dx: 85,   dy: -10,  rot: -9 },  // Slot 16: Right neck flank
-        { dx: 142,  dy: 35,   rot: 7 }    // Slot 17: Right body flank
+        { dx: 55,   dy: -65, rot: 9 },    // Slot 9: Reserved band inner right
+        { dx: 110,  dy: -60, rot: -11 },  // Slot 10: Reserved band outer right
+        { dx: 25,   dy: -70, rot: 6 },    // Slot 11: Reserved band center right
+        { dx: 140,  dy: -30, rot: 8 },    // Slot 12: High right flank (well above annotation)
+        { dx: 70,   dy: 5,   rot: -7 },   // Slot 13: Right shoulder
+        { dx: 140,  dy: 55,  rot: 14 },   // Slot 14: Right flank mid (well below annotation)
+        { dx: 65,   dy: 75,  rot: -6 },   // Slot 15: Right body inner
+        { dx: 135,  dy: 110, rot: 10 },   // Slot 16: Right flank lower (outside jar)
+        { dx: 55,   dy: 135, rot: -9 }    // Slot 17: Right bottom inside
       ];
 
       // Dynamically constrain dx to available screen width so no horizontal overflow occurs
-      const maxDx = Math.min(150, (sceneW - iconFinalSize - 24) / 2);
-      const xRatio = Math.max(0.65, Math.min(1.0, maxDx / 150));
+      const maxDx = Math.min(145, (sceneW - iconFinalSize - 20) / 2);
+      const xRatio = Math.max(0.65, Math.min(1.0, maxDx / 145));
 
       iconNodes.forEach(node => {
         const isLeft = node.spec.side === 'left';
         const slots = isLeft ? mobileSlotsLeft : mobileSlotsRight;
-        const slotIdx = node.spec.index % slots.length;
+        const slotIdx = isLeft ? node.index : (node.index - 9);
         const slot = slots[slotIdx] || slots[0];
 
-        node.tx = jarNeckSceneX + slot.dx * xRatio;
-        node.ty = jarNeckSceneY + slot.dy;
+        let targetX = jarNeckSceneX + slot.dx * xRatio;
+        let targetY = jarNeckSceneY + slot.dy;
+
+        // Strict Exclusion Zone check: Never overlap the note paper, text, or signature!
+        if (targetY < safeNoteBottom && targetX >= noteLeft - 8 && targetX <= noteRight + 8) {
+          targetY = safeNoteBottom + ((node.index % 3) * 14);
+        }
+
+        // Viewport padding bounds
+        const pad = iconFinalSize / 2 + 12;
+        targetX = Math.max(pad, Math.min(sceneW - pad, targetX));
+
+        node.tx = targetX;
+        node.ty = targetY;
         node.rot = slot.rot;
       });
     } else {
@@ -376,6 +399,8 @@ function initJarAnimation(scene) {
   }
 
   function setLidState(mode) {
+    const isMob = window.innerWidth <= 640;
+    const isNarrow = window.innerWidth <= 380;
     if (mode === 'closed') {
       lid.style.transform = 'translate(0px, 0px) rotate(0deg)';
       if (lidShadow) lidShadow.style.opacity = '0';
@@ -383,11 +408,24 @@ function initJarAnimation(scene) {
       lid.style.transform = 'translate(0px, -2px) rotate(0deg)';
       if (lidShadow) lidShadow.style.opacity = '0';
     } else if (mode === 'popping') {
-      lid.style.transform = 'translate(55px, -70px) rotate(-16deg)';
+      const popX = isMob ? (isNarrow ? 26 : 38) : 55;
+      const popY = isMob ? -60 : -70;
+      lid.style.transform = `translate(${popX}px, ${popY}px) rotate(-16deg)`;
       if (lidShadow) lidShadow.style.opacity = '0';
     } else if (mode === 'resting') {
-      lid.style.transform = 'translate(145px, 220px) rotate(42deg)';
-      if (lidShadow) lidShadow.style.opacity = '1';
+      // Safe resting coordinates on mobile keeping the detached lid fully on screen with comfortable margin
+      const restX = isNarrow ? 76 : (isMob ? 95 : 145);
+      const restY = isMob ? 210 : 220;
+      const restRot = isNarrow ? 20 : (isMob ? 28 : 42);
+      lid.style.transform = `translate(${restX}px, ${restY}px) rotate(${restRot}deg)`;
+      if (lidShadow) {
+        lidShadow.style.opacity = '1';
+        if (isMob) {
+          lidShadow.style.transform = `translate(${restX}px, 250px) scale(0.85)`;
+        } else {
+          lidShadow.style.transform = 'translate(145px, 260px)';
+        }
+      }
     }
   }
 
@@ -563,9 +601,14 @@ function initJarAnimation(scene) {
 
       // Silver cap pops up, arcs through the air, and lands beside jar
       const isMobile = window.innerWidth < 820;
-      const lidX = (isMobile ? 120 : 145) * lidEase;
-      const lidArcY = ((isMobile ? 85 : 220) * lidEase) - Math.sin(lidP * Math.PI) * (isMobile ? 95 : 90);
-      const lidRot = lidP * 42;
+      const isNarrow = window.innerWidth <= 380;
+      const targetLidX = isNarrow ? 76 : (isMobile ? 95 : 145);
+      const targetLidY = isMobile ? 210 : 220;
+      const targetLidRot = isNarrow ? 20 : (isMobile ? 28 : 42);
+
+      const lidX = targetLidX * lidEase;
+      const lidArcY = (targetLidY * lidEase) - Math.sin(lidP * Math.PI) * (isMobile ? 90 : 90);
+      const lidRot = lidP * targetLidRot;
 
       lid.style.transform = `translate(${lidX}px, ${lidArcY}px) rotate(${lidRot}deg)`;
       if (lidShadow) {
@@ -762,17 +805,18 @@ function initJarAnimation(scene) {
     }
   });
 
-  // Window resize observer
-  let resizeTimeout = null;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      updateTargetCoordinates();
-      if (animState === 'complete') {
-        renderFinalState();
-      }
-    }, 100);
-  });
+  // Window resize & orientation change handler
+  function handleViewportChange() {
+    updateTargetCoordinates();
+    if (animState === 'complete') {
+      renderFinalState();
+    } else if (animState === 'settling' || animState === 'idle') {
+      setLidState(animState === 'idle' ? 'closed' : 'resting');
+    }
+  }
+
+  window.addEventListener('resize', handleViewportChange);
+  window.addEventListener('orientationchange', handleViewportChange);
 
   const controller = {
     play: playAnimation,

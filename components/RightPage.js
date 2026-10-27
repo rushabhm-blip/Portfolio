@@ -54,6 +54,56 @@ export const DEFAULT_HOBBY_POSITIONS = {
   cruiser: { cx: 100, cy: 830, rotation: 3 }
 };
 
+export const DEFAULT_MOBILE_TRAVEL_STAMPS = [
+  {
+    id: 'ooty',
+    name: 'Ooty',
+    src: 'assets/ooty.png',
+    alt: 'Ooty travel stamp with toy train and Nilgiri tea hills',
+    cx: 820,
+    cy: 230,
+    width: 290,
+    rotation: -6
+  },
+  {
+    id: 'chikkamagaluru',
+    name: 'Chikkamagaluru',
+    src: 'assets/chikkamagaluru.png',
+    alt: 'Chikkamagaluru travel stamp with coffee plantation and rolling hills',
+    cx: 830,
+    cy: 520,
+    width: 290,
+    rotation: 5
+  },
+  {
+    id: 'coorg',
+    name: 'Coorg',
+    src: 'assets/coorg.png',
+    alt: 'Coorg travel stamp with waterfalls and coffee berries',
+    cx: 740,
+    cy: 780,
+    width: 290,
+    rotation: -5
+  },
+  {
+    id: 'kodaikanal',
+    name: 'Kodaikanal',
+    src: 'assets/kodaikanal.png',
+    alt: 'Kodaikanal travel stamp with misty lake, boat, and pine trees',
+    cx: 460,
+    cy: 940,
+    width: 290,
+    rotation: 6
+  }
+];
+
+export const DEFAULT_MOBILE_HOBBY_POSITIONS = {
+  badminton: { cx: 85, cy: 190, rotation: -3 },
+  flute: { cx: 85, cy: 340, rotation: 2 },
+  reading: { cx: 85, cy: 490, rotation: -2 },
+  cruiser: { cx: 95, cy: 660, rotation: 3 }
+};
+
 const STAMP_OFFSETS = {
   ooty: { exit: { ox: 30, oy: 105 } },
   chikkamagaluru: { enter: { ox: -4, oy: -100 }, exit: { ox: 20, oy: 100 } },
@@ -63,6 +113,8 @@ const STAMP_OFFSETS = {
 
 const STAMPS_STORAGE_KEY = 'rushabh_travel_stamps_kit_v2';
 const HOBBIES_STORAGE_KEY = 'rushabh_hobbies_stickers_v2';
+const MOBILE_STAMPS_STORAGE_KEY = 'rushabh_mobile_stamps_v1';
+const MOBILE_HOBBIES_STORAGE_KEY = 'rushabh_mobile_hobbies_v1';
 
 function getRotatedPoint(cx, cy, ox, oy, deg = 0) {
   const rad = (deg * Math.PI) / 180;
@@ -154,12 +206,16 @@ export function createRightPage({ rightData, onSelectChapter, onPrevPage }) {
     { id: 'cruiser', label: 'Cruiser rides', src: 'assets/sketchbook/sticker-cruiser.png', alt: 'Purple blob riding cruiser motorcycle' }
   ];
 
+  const isMobileInitial = typeof window !== 'undefined' && (window.innerWidth < 768 || !!document.querySelector('.book-stage.is-single-page'));
+  const activeHobbyStorageKey = isMobileInitial ? MOBILE_HOBBIES_STORAGE_KEY : HOBBIES_STORAGE_KEY;
+  const activeDefaultHobbies = isMobileInitial ? DEFAULT_MOBILE_HOBBY_POSITIONS : DEFAULT_HOBBY_POSITIONS;
+
   const hobbyPositions = {};
   try {
-    const saved = localStorage.getItem(HOBBIES_STORAGE_KEY);
+    const saved = localStorage.getItem(activeHobbyStorageKey);
     const parsed = saved ? JSON.parse(saved) : null;
     hobbiesList.forEach(h => {
-      const def = DEFAULT_HOBBY_POSITIONS[h.id];
+      const def = activeDefaultHobbies[h.id] || DEFAULT_HOBBY_POSITIONS[h.id];
       const p = parsed && parsed[h.id];
       hobbyPositions[h.id] = {
         cx: p && typeof p.cx === 'number' ? p.cx : def.cx,
@@ -169,7 +225,7 @@ export function createRightPage({ rightData, onSelectChapter, onPrevPage }) {
     });
   } catch (e) {
     hobbiesList.forEach(h => {
-      const def = DEFAULT_HOBBY_POSITIONS[h.id];
+      const def = activeDefaultHobbies[h.id] || DEFAULT_HOBBY_POSITIONS[h.id];
       hobbyPositions[h.id] = { cx: def.cx, cy: def.cy, rotation: def.rotation };
     });
   }
@@ -310,7 +366,8 @@ export function createRightPage({ rightData, onSelectChapter, onPrevPage }) {
 
   function saveHobbiesState() {
     try {
-      localStorage.setItem(HOBBIES_STORAGE_KEY, JSON.stringify(hobbyPositions));
+      const isMob = typeof window !== 'undefined' && (window.innerWidth < 768 || !!document.querySelector('.book-stage.is-single-page'));
+      localStorage.setItem(isMob ? MOBILE_HOBBIES_STORAGE_KEY : HOBBIES_STORAGE_KEY, JSON.stringify(hobbyPositions));
     } catch (e) {}
   }
 
@@ -368,11 +425,13 @@ export function createRightPage({ rightData, onSelectChapter, onPrevPage }) {
   content.appendChild(svg);
 
   // 5. Travel Stamps setup & state
-  const stampConfig = rightData?.stamps || DEFAULT_TRAVEL_STAMPS;
+  const isMobileStamps = typeof window !== 'undefined' && (window.innerWidth < 768 || !!document.querySelector('.book-stage.is-single-page'));
+  const activeStampStorageKey = isMobileStamps ? MOBILE_STAMPS_STORAGE_KEY : STAMPS_STORAGE_KEY;
+  const stampConfig = isMobileStamps ? DEFAULT_MOBILE_TRAVEL_STAMPS : (rightData?.stamps || DEFAULT_TRAVEL_STAMPS);
   const stampPositions = {};
 
   try {
-    const savedRaw = localStorage.getItem(STAMPS_STORAGE_KEY);
+    const savedRaw = localStorage.getItem(activeStampStorageKey);
     const saved = savedRaw ? JSON.parse(savedRaw) : null;
     stampConfig.forEach(s => {
       const sp = saved && saved[s.id];
@@ -533,7 +592,8 @@ export function createRightPage({ rightData, onSelectChapter, onPrevPage }) {
 
   function saveStampsState() {
     try {
-      localStorage.setItem(STAMPS_STORAGE_KEY, JSON.stringify(stampPositions));
+      const isMob = typeof window !== 'undefined' && (window.innerWidth < 768 || !!document.querySelector('.book-stage.is-single-page'));
+      localStorage.setItem(isMob ? MOBILE_STAMPS_STORAGE_KEY : STAMPS_STORAGE_KEY, JSON.stringify(stampPositions));
     } catch (e) {}
   }
 
@@ -544,12 +604,18 @@ export function createRightPage({ rightData, onSelectChapter, onPrevPage }) {
 
   // Reset method for both stamps and hobbies
   function resetStamps() {
+    const isMobileNow = typeof window !== 'undefined' && (window.innerWidth < 768 || !!document.querySelector('.book-stage.is-single-page'));
+    const targetStamps = isMobileNow ? DEFAULT_MOBILE_TRAVEL_STAMPS : DEFAULT_TRAVEL_STAMPS;
+    const targetHobbies = isMobileNow ? DEFAULT_MOBILE_HOBBY_POSITIONS : DEFAULT_HOBBY_POSITIONS;
+
     // 1. Reset travel stamps
-    stampConfig.forEach(s => {
+    targetStamps.forEach(s => {
       const pos = stampPositions[s.id];
-      pos.cx = s.cx;
-      pos.cy = s.cy;
-      pos.rotation = s.rotation;
+      if (pos) {
+        pos.cx = s.cx;
+        pos.cy = s.cy;
+        pos.rotation = s.rotation;
+      }
 
       const el = stampElements[s.id];
       if (el) {
@@ -563,10 +629,12 @@ export function createRightPage({ rightData, onSelectChapter, onPrevPage }) {
 
     // 2. Reset hobbies
     hobbiesList.forEach(h => {
-      const def = DEFAULT_HOBBY_POSITIONS[h.id];
+      const def = targetHobbies[h.id] || DEFAULT_HOBBY_POSITIONS[h.id];
       const pos = hobbyPositions[h.id];
-      pos.cx = def.cx;
-      pos.cy = def.cy;
+      if (pos) {
+        pos.cx = def.cx;
+        pos.cy = def.cy;
+      }
 
       const el = hobbyElements[h.id];
       if (el) {
@@ -581,6 +649,8 @@ export function createRightPage({ rightData, onSelectChapter, onPrevPage }) {
     try {
       localStorage.removeItem(STAMPS_STORAGE_KEY);
       localStorage.removeItem(HOBBIES_STORAGE_KEY);
+      localStorage.removeItem(MOBILE_STAMPS_STORAGE_KEY);
+      localStorage.removeItem(MOBILE_HOBBIES_STORAGE_KEY);
     } catch (e) {}
 
     let startTime = null;
