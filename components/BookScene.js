@@ -9,7 +9,7 @@ import { setupDraggableStickers } from './DraggableStickers.js?v=41';
  * Coordinates the 3D hinged book assembly, front cover, inside spread (left & right pages),
  * hanging ID tag, audio/visual cues, draggable stickers, and state machine.
  */
-export function createBookScene({ coverData, openBookData, onSelectChapter }) {
+export function createBookScene({ coverData, openBookData, onSelectChapter, onOpenChange }) {
   // Current state: 'closed' | 'opening' | 'open' | 'closing'
   let state = 'closed';
 
@@ -75,6 +75,9 @@ export function createBookScene({ coverData, openBookData, onSelectChapter }) {
       if (rightPageObj && typeof rightPageObj.updateSvgConnectors === 'function') {
         setTimeout(rightPageObj.updateSvgConnectors, 50);
       }
+    }
+    if (typeof onOpenChange === 'function') {
+      onOpenChange(true);
     }
   }
 
@@ -278,6 +281,10 @@ export function createBookScene({ coverData, openBookData, onSelectChapter }) {
     document.body.classList.add('is-book-open');
     liveAnnouncer.textContent = 'Opening sketchbook.';
 
+    if (typeof onOpenChange === 'function') {
+      onOpenChange(true);
+    }
+
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const duration = prefersReducedMotion ? 200 : 1100;
 
@@ -285,6 +292,10 @@ export function createBookScene({ coverData, openBookData, onSelectChapter }) {
       state = 'open';
       stage.classList.remove('is-opening');
       stage.classList.add('is-open');
+
+      if (typeof onOpenChange === 'function') {
+        onOpenChange(true);
+      }
 
       // Start animated WebP walking cutout
       rightPageObj.walkingCutout.startAnimation();
@@ -310,6 +321,10 @@ export function createBookScene({ coverData, openBookData, onSelectChapter }) {
     document.body.classList.remove('is-book-open');
     liveAnnouncer.textContent = 'Closing sketchbook.';
 
+    if (typeof onOpenChange === 'function') {
+      onOpenChange(false);
+    }
+
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const duration = prefersReducedMotion ? 200 : 1100;
 
@@ -317,6 +332,10 @@ export function createBookScene({ coverData, openBookData, onSelectChapter }) {
       state = 'closed';
       stage.classList.remove('is-closing');
       stage.classList.add('is-closed');
+
+      if (typeof onOpenChange === 'function') {
+        onOpenChange(false);
+      }
 
       // Return focus to the open button
       const openBtn = frontCoverObj.openButton;

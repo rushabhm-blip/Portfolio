@@ -1,9 +1,9 @@
-import { sketchbookData } from './data.js?v=41';
-import { createHeader } from './components/Header.js?v=41';
-import { createBookScene } from './components/BookScene.js?v=41';
-import { createChapterDialog } from './components/ChapterDialog.js?v=41';
-import { createExperimentNote } from './components/ExperimentNote.js?v=41';
-import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=43';
+import { sketchbookData } from './data.js?v=46';
+import { createHeader } from './components/Header.js?v=46';
+import { createBookScene } from './components/BookScene.js?v=46';
+import { createChapterDialog } from './components/ChapterDialog.js?v=46';
+import { createExperimentNote } from './components/ExperimentNote.js?v=46';
+import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=46';
 
 /**
  * Fits the book composition (both closed and open spread) to available viewport space below header.
@@ -39,16 +39,18 @@ function fitBookComposition(headerEl, stageEl) {
       stageEl.classList.add('show-page-1');
     }
   } else {
-    stageEl.classList.remove('is-single-page');
+    stageEl.classList.remove('is-single-page', 'show-page-1', 'show-page-2');
   }
 
   let spreadW, spreadH, pageW, pageH;
 
   if (needsSinglePage) {
-    // Single page close-up of the physical book (aspect ratio ~0.8)
-    pageW = Math.min(availW - 16, 520);
-    pageW = Math.max(pageW, 340);
-    pageH = Math.round(pageW / 0.8);
+    // Single page close-up of the physical book:
+    // Fits mobile width cleanly with perimeter clearance, and provides comfortable vertical reading space
+    pageW = Math.min(availW, 460);
+    pageW = Math.max(pageW, 310);
+    const minSinglePageH = 610;
+    pageH = Math.max(minSinglePageH, Math.round(pageW / 0.65));
     // Allow document to scroll vertically if page is taller than viewport
     spreadW = pageW;
     spreadH = pageH;
@@ -135,29 +137,57 @@ function initPortfolio() {
   main.className = 'main-stage';
 
   // 3D Book Scene Component
+  let runLayout;
   const bookScene = createBookScene({
     coverData: sketchbookData.cover,
     openBookData: sketchbookData.openBook,
-    onSelectChapter: handleSelectChapter
+    onSelectChapter: handleSelectChapter,
+    onOpenChange: () => {
+      if (typeof runLayout === 'function') {
+        runLayout();
+      }
+    }
   });
 
   main.appendChild(bookScene.element);
 
-  // Background crawler video (dark stroke webm)
+  // Background crawler video (dark stroke webm for Chrome/Firefox, precomposited cobalt-blue MP4 for Safari/iPadOS)
+  const isAppleOrSafari = (() => {
+    const ua = navigator.userAgent || '';
+    const isIOSorIPad = /iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isSafariUA = /^((?!chrome|android).)*safari/i.test(ua);
+    return isIOSorIPad || isSafariUA;
+  })();
+
   const video = document.createElement('video');
   video.className = 'crawler-video';
   video.autoplay = true;
   video.muted = true;
   video.playsInline = true;
   video.loop = true;
+  video.poster = 'assets/sketchbook/character-crawler-poster.png';
   video.setAttribute('muted', '');
   video.setAttribute('playsinline', '');
   video.setAttribute('aria-hidden', 'true');
 
-  const sourceWebm = document.createElement('source');
-  sourceWebm.src = 'IMG_0122_dark.webm?v=28';
-  sourceWebm.type = 'video/webm';
-  video.appendChild(sourceWebm);
+  if (isAppleOrSafari) {
+    // Safari on iPad/iPhone does not support WebM alpha; use precomposited cobalt-blue MP4
+    const sourceMp4 = document.createElement('source');
+    sourceMp4.src = 'IMG_0122_blue.mp4?v=35';
+    sourceMp4.type = 'video/mp4';
+    video.appendChild(sourceMp4);
+  } else {
+    // Chrome, Firefox, Edge, Android: native transparent WebM with MP4 fallback
+    const sourceWebm = document.createElement('source');
+    sourceWebm.src = 'IMG_0122_dark.webm?v=35';
+    sourceWebm.type = 'video/webm';
+    video.appendChild(sourceWebm);
+
+    const sourceMp4 = document.createElement('source');
+    sourceMp4.src = 'IMG_0122_blue.mp4?v=35';
+    sourceMp4.type = 'video/mp4';
+    video.appendChild(sourceMp4);
+  }
 
   // Reusable "Keep calm. Experiment on." Section Component
   const experimentNote = createExperimentNote();
@@ -177,7 +207,7 @@ function initPortfolio() {
 
   // Setup layout fitting with ResizeObserver
   const bookStage = bookScene.stage;
-  const runLayout = () => fitBookComposition(header, bookStage);
+  runLayout = () => fitBookComposition(header, bookStage);
 
   runLayout();
   window.addEventListener('resize', runLayout);

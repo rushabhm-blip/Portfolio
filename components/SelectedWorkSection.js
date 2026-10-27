@@ -82,11 +82,18 @@ export function createSelectedWorkSection() {
           <p class="project-desc">Helping people raise civic concerns, find support, and stay informed about what happens next.</p>
           <div class="project-meta-details">
             <span class="project-meta-item">2026 · Individual project</span>
-            <span class="project-meta-item">Interaction design · UX design</span>
+          </div>
+          <div class="project-discipline-capsules" aria-label="Project disciplines">
+            <span class="discipline-capsule capsule-lavender">Interaction design</span>
+            <span class="discipline-capsule capsule-peach">UX design</span>
           </div>
           <div class="project-link-wrapper">
             <a href="/projects/sajag/" class="project-case-study-link" id="sajagExploreLink">
               <span>Explore case study</span>
+              <span class="link-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="/projects/sajag/#sec-interactive-demo" class="project-case-study-link" id="sajagDemoLink">
+              <span>Interactive demo</span>
               <span class="link-arrow" aria-hidden="true">↗</span>
             </a>
           </div>
@@ -99,12 +106,17 @@ export function createSelectedWorkSection() {
           <h3 class="project-name">The Fear<br>Between Us</h3>
           <p class="project-subheading">Understanding <span class="marker-highlight marker-peach">beyond fear.</span></p>
           <p class="project-desc">An interactive data story exploring snakebite and our relationship with snakes in India.</p>
-          <div class="project-meta-details">
-            <span class="project-meta-item">Data visualisation · Scrollytelling</span>
+          <div class="project-discipline-capsules" aria-label="Project disciplines">
+            <span class="discipline-capsule capsule-lavender">Data visualisation</span>
+            <span class="discipline-capsule capsule-mint">Scrollytelling</span>
           </div>
           <div class="project-link-wrapper">
             <a href="/projects/snakbite/" class="project-case-study-link" id="fearBetweenUsExploreLink">
               <span>Explore project</span>
+              <span class="link-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="/projects/snakbite/#snakes-neighbourhood-component" class="project-case-study-link" id="fearBetweenUsDemoLink">
+              <span>Interactive demo</span>
               <span class="link-arrow" aria-hidden="true">↗</span>
             </a>
           </div>
@@ -180,7 +192,10 @@ export function createSelectedWorkSection() {
           <p class="project-desc">A digital companion helping small business owners track expenses, understand cash flow, and make informed choices.</p>
           <div class="project-meta-details">
             <span class="project-meta-item">2026 · Academic project</span>
-            <span class="project-meta-item">Interaction design · UX design</span>
+          </div>
+          <div class="project-discipline-capsules" aria-label="Project disciplines">
+            <span class="discipline-capsule capsule-lavender">Interaction design</span>
+            <span class="discipline-capsule capsule-peach">UX design</span>
           </div>
           <div class="project-link-wrapper">
             <a href="/projects/munshiji/" class="project-case-study-link" id="munshijiExploreLink">

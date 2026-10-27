@@ -270,20 +270,45 @@ function initJarAnimation(scene) {
     });
 
     if (isMobile) {
-      // Mobile / narrow screens: arrange in airy 4-column cloud below the replay button
-      const cols = 4;
-      const btnRect = replayBtn.getBoundingClientRect();
-      const startY = (btnRect.bottom > 0) ? (btnRect.bottom - sceneRect.top + 28) : (stageRect.bottom - sceneRect.top + 200);
-      const colSpacing = 52;
-      const rowSpacing = 50;
-      const totalGridW = (cols * colSpacing);
-      const startX = Math.max(16, (sceneW - totalGridW) / 2);
+      // Mobile / narrow screens: arrange in an airy, curated constellation above and flanking the jar mouth & shoulders
+      // All slots have ty <= jarNeckSceneY + 35px so every single icon bursts UPWARD out of the jar neck!
+      const mobileSlotsLeft = [
+        { dx: -55,  dy: -145, rot: -8 },  // Slot 0: Top left center (between note and jar)
+        { dx: -105, dy: -135, rot: 12 },  // Slot 1: Top left outer
+        { dx: -150, dy: -95,  rot: -10 }, // Slot 2: High left flank
+        { dx: -68,  dy: -90,  rot: 8 },   // Slot 3: Mid left inner
+        { dx: -120, dy: -60,  rot: -12 }, // Slot 4: Mid left outer
+        { dx: -45,  dy: -45,  rot: 6 },   // Slot 5: Left shoulder inner
+        { dx: -145, dy: -20,  rot: -7 },  // Slot 6: Left shoulder outer
+        { dx: -90,  dy: -10,  rot: 10 },  // Slot 7: Left neck flank
+        { dx: -138, dy: 35,   rot: -5 }   // Slot 8: Left body flank
+      ];
 
-      iconNodes.forEach((node, i) => {
-        const c = i % cols;
-        const r = Math.floor(i / cols);
-        node.tx = startX + c * colSpacing + (r % 2 === 1 ? 12 : 0);
-        node.ty = startY + r * rowSpacing;
+      const mobileSlotsRight = [
+        { dx: 55,   dy: -145, rot: 9 },   // Slot 9: Top right center
+        { dx: 105,  dy: -135, rot: -11 }, // Slot 10: Top right outer
+        { dx: 150,  dy: -95,  rot: 8 },   // Slot 11: High right flank
+        { dx: 68,   dy: -90,  rot: -7 },  // Slot 12: Mid right inner
+        { dx: 120,  dy: -60,  rot: 14 },  // Slot 13: Mid right outer
+        { dx: 45,   dy: -45,  rot: -6 },  // Slot 14: Right shoulder inner
+        { dx: 148,  dy: -15,  rot: 10 },  // Slot 15: Right shoulder outer
+        { dx: 85,   dy: -10,  rot: -9 },  // Slot 16: Right neck flank
+        { dx: 142,  dy: 35,   rot: 7 }    // Slot 17: Right body flank
+      ];
+
+      // Dynamically constrain dx to available screen width so no horizontal overflow occurs
+      const maxDx = Math.min(150, (sceneW - iconFinalSize - 24) / 2);
+      const xRatio = Math.max(0.65, Math.min(1.0, maxDx / 150));
+
+      iconNodes.forEach(node => {
+        const isLeft = node.spec.side === 'left';
+        const slots = isLeft ? mobileSlotsLeft : mobileSlotsRight;
+        const slotIdx = node.spec.index % slots.length;
+        const slot = slots[slotIdx] || slots[0];
+
+        node.tx = jarNeckSceneX + slot.dx * xRatio;
+        node.ty = jarNeckSceneY + slot.dy;
+        node.rot = slot.rot;
       });
     } else {
       // Desktop: 9 Left and 9 Right flanking the note, away from note text, tape, and stickers
@@ -537,8 +562,9 @@ function initJarAnimation(scene) {
       const lidEase = Math.sin((lidP * Math.PI) / 2);
 
       // Silver cap pops up, arcs through the air, and lands beside jar
-      const lidX = 145 * lidEase;
-      const lidArcY = (220 * lidEase) - Math.sin(lidP * Math.PI) * 90;
+      const isMobile = window.innerWidth < 820;
+      const lidX = (isMobile ? 120 : 145) * lidEase;
+      const lidArcY = ((isMobile ? 85 : 220) * lidEase) - Math.sin(lidP * Math.PI) * (isMobile ? 95 : 90);
       const lidRot = lidP * 42;
 
       lid.style.transform = `translate(${lidX}px, ${lidArcY}px) rotate(${lidRot}deg)`;
@@ -591,8 +617,8 @@ function initJarAnimation(scene) {
           const p2y = node.ty;
 
           const isLeft = node.spec.side === 'left';
-          const p1x = isLeft ? Math.min(p0x - 85, p2x + 40) : Math.max(p0x + 85, p2x - 40);
-          const p1y = Math.min(p0y - 95, p2y - 35);
+          const p1x = isLeft ? Math.min(p0x - 65, p2x + 25) : Math.max(p0x + 65, p2x - 25);
+          const p1y = Math.min(p0y, p2y) - (isMobile ? 120 : 95);
 
           const curX = (1 - easeOut) * (1 - easeOut) * p0x + 2 * (1 - easeOut) * easeOut * p1x + easeOut * easeOut * p2x;
           const curY = (1 - easeOut) * (1 - easeOut) * p0y + 2 * (1 - easeOut) * easeOut * p1y + easeOut * easeOut * p2y;
