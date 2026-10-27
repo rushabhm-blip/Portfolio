@@ -3,7 +3,7 @@ import { createHeader } from './components/Header.js?v=41';
 import { createBookScene } from './components/BookScene.js?v=41';
 import { createChapterDialog } from './components/ChapterDialog.js?v=41';
 import { createExperimentNote } from './components/ExperimentNote.js?v=41';
-import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=42';
+import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=43';
 
 /**
  * Fits the book composition (both closed and open spread) to available viewport space below header.

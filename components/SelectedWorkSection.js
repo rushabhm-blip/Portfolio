@@ -23,6 +23,11 @@ export function createSelectedWorkSection() {
 
   headerSection.innerHTML = `
     <div class="selected-work-header-container">
+      <div class="selected-work-plane-wrapper" aria-hidden="true">
+        <video class="selected-work-plane-video" autoplay muted loop playsinline aria-hidden="true">
+          <source src="IMG_0135_dark.webm?v=31" type="video/webm">
+        </video>
+      </div>
       <h2 class="selected-work-title">Selected work</h2>
       <p class="selected-work-subtitle">Explorations in systems, stories, and everyday experiences.</p>
     </div>
@@ -187,6 +192,33 @@ export function createSelectedWorkSection() {
       </article>
     </div>
   `;
+
+  // Ensure paper airplane doodle video autoplays reliably
+  const planeVideo = headerSection.querySelector('.selected-work-plane-video');
+  if (planeVideo) {
+    planeVideo.muted = true;
+    const tryPlay = () => {
+      const playPromise = planeVideo.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay policy fallback: re-try on first user interaction
+          window.addEventListener('click', () => planeVideo.play().catch(() => {}), { once: true });
+          window.addEventListener('scroll', () => planeVideo.play().catch(() => {}), { once: true });
+        });
+      }
+    };
+    tryPlay();
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            tryPlay();
+          }
+        });
+      }, { threshold: 0.15 });
+      observer.observe(planeVideo);
+    }
+  }
 
   return {
     headerElement: headerSection,

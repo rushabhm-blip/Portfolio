@@ -2310,7 +2310,7 @@ body.is-book-open .crawler-video,
   z-index: 20;
   width: 100%;
   background-color: #ffffff;
-  padding-top: clamp(64px, 9vh, 104px);
+  padding-top: clamp(24px, 4vh, 44px);
   padding-bottom: clamp(32px, 4.5vh, 48px);
   text-align: center;
   box-sizing: border-box;
@@ -2323,6 +2323,25 @@ body.is-book-open .crawler-video,
   margin: 0 auto;
   padding: 0 clamp(20px, 4vw, 40px);
   box-sizing: border-box;
+}
+
+.selected-work-plane-wrapper {
+  position: relative;
+  width: clamp(340px, 52vw, 640px);
+  max-width: 100%;
+  margin: 0 auto clamp(36px, 5.5vh, 56px);
+  opacity: 1;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selected-work-plane-video {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
 }
 
 .selected-work-title {
