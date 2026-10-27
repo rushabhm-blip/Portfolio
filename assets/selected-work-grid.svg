@@ -1,0 +1,12 @@
+<svg width="144" height="144" viewBox="0 0 144 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="#dce7f6" stroke-width="1" stroke-linecap="round" opacity="0.85">
+    <path d="M0,0 Q36,0.3 72,0 T144,0" />
+    <path d="M0,48 Q36,47.6 72,48.2 T144,48" />
+    <path d="M0,96 Q36,96.4 72,95.8 T144,96" />
+    <path d="M0,144 Q36,144.3 72,144 T144,144" />
+    <path d="M0,0 Q0.3,36 0,72 T0,144" />
+    <path d="M48,0 Q47.7,36 48.3,72 T48,144" />
+    <path d="M96,0 Q96.4,36 95.7,72 T96,144" />
+    <path d="M144,0 Q144.3,36 144,72 T144,144" />
+  </g>
+</svg>

@@ -9,8 +9,8 @@ export function createIdTag({ alt = 'Design school ID tag' } = {}) {
 
   const img = document.createElement('img');
   img.className = 'id-tag-img';
-  img.src = 'assets/sketchbook/4k/id-tag.png';
-  img.srcset = 'assets/sketchbook/native/id-tag.png 1x, assets/sketchbook/4k/id-tag.png 2x';
+  img.src = 'assets/sketchbook/4k/id-tag.png?v=10';
+  img.srcset = 'assets/sketchbook/native/id-tag.png?v=10 1x, assets/sketchbook/4k/id-tag.png?v=10 2x';
   img.alt = alt;
   img.loading = 'eager';
   img.decoding = 'async';

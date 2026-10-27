@@ -6,11 +6,19 @@
   <title>Rushabh — Portfolio</title>
   <script src="password-gate.js"></script>
 
-  <!-- Preload fonts -->
+  <!-- Preload fonts & core assets -->
   <link rel="preload" href="fonts/Inter-variable.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="fonts/Caveat-variable.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/sketchbook/cobalt-soft-paper-4k.png" as="image">
+  <link rel="preload" href="assets/sketchbook/open-book-blank.png" as="image">
+  <link rel="preload" href="assets/sketchbook/nid-card-logo.png" as="image">
+  <link rel="preload" href="assets/sketchbook/rushabh-walking.webp" as="image">
+  <link rel="preload" href="assets/note/note-paper.png" as="image">
 
-  <link rel="stylesheet" href="sketchbook.css?v=4">
+  <link rel="stylesheet" href="sketchbook.css?v=43">
 </head>
 <body>
   <div id="appRoot">
@@ -25,33 +33,14 @@
       </nav>
     </header>
 
+    <video class="crawler-video" autoplay muted playsinline loop aria-hidden="true">
+      <source src="IMG_0122_dark.webm?v=28" type="video/webm">
+    </video>
+
     <main class="main-stage">
-      <div class="book-stage">
-        <div class="id-tag-wrapper" aria-hidden="true">
-          <img class="id-tag-img" src="assets/sketchbook/4k/id-tag.png" srcset="assets/sketchbook/native/id-tag.png 1x, assets/sketchbook/4k/id-tag.png 2x" alt="Design school ID tag" loading="eager" decoding="async">
-        </div>
-        <div class="book">
-          <img class="book-base" src="assets/sketchbook/4k/blank-book.png" srcset="assets/sketchbook/native/blank-book.png 1x, assets/sketchbook/4k/blank-book.png 2x" alt="" loading="eager" decoding="async">
-          <div class="book-grid" aria-hidden="true"></div>
-          <div class="sticker-role" aria-label="HELLO, I’M Interaction Designer">
-            <strong class="role-header">HELLO, I’M</strong>
-            <span class="role-body">Interaction<br>Designer</span>
-          </div>
-          <img class="sticker-portrait" src="assets/sketchbook/4k/portrait-sticker.png" srcset="assets/sketchbook/native/portrait-sticker.png 1x, assets/sketchbook/4k/portrait-sticker.png 2x" alt="Illustrated smiling portrait of Rushabh" loading="eager" decoding="async">
-          <div class="intro-block">
-            <p class="intro-greeting">Hi, I’m</p>
-            <h1 class="intro-name">Rushabh.</h1>
-            <img class="intro-underline" src="assets/sketchbook/underline.svg" alt="" aria-hidden="true">
-            <p class="intro-tagline">Things I notice. Things I make.</p>
-          </div>
-          <img class="sticker-cursor" src="assets/sketchbook/4k/cursor-sticker.png" srcset="assets/sketchbook/native/cursor-sticker.png 1x, assets/sketchbook/4k/cursor-sticker.png 2x" alt="Make it useful sticker with blue cursor" loading="eager" decoding="async">
-          <button type="button" class="open-book-btn" aria-label="Open my sketchbook" data-chapter="Sketchbook">
-            <span class="open-book-label">Open my sketchbook</span>
-            <img class="curved-arrow-img" src="assets/sketchbook/curved-arrow.svg" alt="" aria-hidden="true">
-            <b class="lime-circle" aria-hidden="true">
-              <img class="arrow-right-img" src="assets/sketchbook/arrow-right.svg" alt="">
-            </b>
-          </button>
+      <div class="scene-wrapper book-scene-wrapper">
+        <div class="book-stage is-closed">
+          <!-- Loaded dynamically via sketchbook.js -->
         </div>
       </div>
     </main>
@@ -70,6 +59,6 @@
     </dialog>
   </div>
 
-  <script type="module" src="sketchbook.js?v=2"></script>
+  <script type="module" src="sketchbook.js?v=42"></script>
 </body>
 </html>

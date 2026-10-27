@@ -1,0 +1,35 @@
+{
+  "revision": "balanced jar; supersedes old numeric dimensions in the earlier prompt",
+  "jarCanvas": [
+    1098,
+    1433
+  ],
+  "jarVisibleBounds": [
+    128,
+    118,
+    970,
+    1339
+  ],
+  "lidCanvas": [
+    2172,
+    724
+  ],
+  "lidVisibleBounds": [
+    81,
+    128,
+    2091,
+    605
+  ],
+  "closedCapTarget": {
+    "visibleLeft": 223,
+    "visibleBottom": 278,
+    "visibleWidth": 650
+  },
+  "lidImageInJarCoordinates": {
+    "width": 702.3880597014926,
+    "height": 234.12935323383087,
+    "left": 196.80597014925374,
+    "top": 82.35323383084577
+  },
+  "note": "Use this asset geometry instead of the old hardcoded 959x1640 dimensions. Preserve current jar intrinsic proportions. Starting cap fit is measured, not browser verified."
+}

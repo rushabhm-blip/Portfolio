@@ -12,3 +12,32 @@ projects/sajag/app/dist/
 *.zip
 **/*.zip
 .DS_Store
+
+# Scratch scripts and test captures
+capture_*.js
+process_*.js
+test_*.js
+/*.png
+/*.webp
+scratch_video_frames/
+**/scratch/
+
+# Temporary video assets
+Untitled video*.mp4
+new animation.MP4
+IMG_0119.*
+IMG_0122.MP4
+IMG_0122.webm
+IMG_0122_white.webm
+IMG_0122_keyed.webp
+IMG_0135*
+new_animation_*
+problem_solution*
+
+# Developer prompt kits
+rushabh-kit/
+rushabh-open-book-kit/
+rushabh-toolkit-jar-v2/
+rushabh-travel-stamps-kit/
+toolkit-jar-kit/
+

@@ -1,17 +1,22 @@
 import { createIdTag } from './IdTag.js';
 import { createSticker } from './Sticker.js';
 import { createOpenBookButton } from './OpenBookButton.js';
+import { setupDraggableStickers } from './DraggableStickers.js';
 
 /**
  * Reusable SketchbookCover Component
- * Renders the cream hardcover sketchbook, ID tag, stickers, blueprint grid,
- * selectable typography, and open control anchored in one container query coordinate space.
+ * Renders the cream hardcover sketchbook, hanging ID tag, draggable stickers, blueprint grid,
+ * selectable typography, open control, and discreet reset/hint controls.
  */
 export function createSketchbookCover({ coverData, onOpenSketchbook }) {
+  // Scene container that wraps stage and floating controls
+  const sceneWrapper = document.createElement('div');
+  sceneWrapper.className = 'scene-wrapper';
+
   const stage = document.createElement('div');
   stage.className = 'book-stage';
 
-  // Hanging ID tag (behind book)
+  // Hanging ID tag (outside book at upper right)
   const idTag = createIdTag({ alt: coverData.idTag?.alt });
   stage.appendChild(idTag);
 
@@ -35,14 +40,14 @@ export function createSketchbookCover({ coverData, onOpenSketchbook }) {
   grid.setAttribute('aria-hidden', 'true');
   book.appendChild(grid);
 
-  // Role Badge Sticker
+  // Role Badge Sticker (draggable wrapper)
   const roleBadge = createSticker({
     type: 'role',
     data: coverData.roleBadge
   });
   book.appendChild(roleBadge);
 
-  // Portrait Sticker
+  // Portrait Sticker (draggable wrapper)
   const portrait = createSticker({
     type: 'portrait',
     alt: coverData.portraitSticker?.alt
@@ -77,7 +82,7 @@ export function createSketchbookCover({ coverData, onOpenSketchbook }) {
   intro.appendChild(tagline);
   book.appendChild(intro);
 
-  // Cursor Sticker ("Make it useful")
+  // Cursor Sticker ("Make it useful" draggable wrapper)
   const cursor = createSticker({
     type: 'cursor',
     alt: coverData.cursorSticker?.alt
@@ -92,5 +97,50 @@ export function createSketchbookCover({ coverData, onOpenSketchbook }) {
   book.appendChild(openBtn);
 
   stage.appendChild(book);
-  return stage;
+  sceneWrapper.appendChild(stage);
+
+  // Screen reader live region for accessible move announcements
+  const liveAnnouncer = document.createElement('div');
+  liveAnnouncer.className = 'sr-only';
+  liveAnnouncer.setAttribute('aria-live', 'polite');
+  liveAnnouncer.setAttribute('aria-atomic', 'true');
+  sceneWrapper.appendChild(liveAnnouncer);
+
+  // Discreet Cover Controls: One-time hint + Reset Stickers button
+  const controls = document.createElement('div');
+  controls.className = 'cover-controls';
+  controls.setAttribute('aria-label', 'Sticker controls');
+
+  const hint = document.createElement('span');
+  hint.className = 'sticker-drag-hint';
+  hint.id = 'stickerDragHint';
+  hint.textContent = 'Drag the stickers around ✦';
+  hint.setAttribute('aria-hidden', 'true');
+
+  const isHintDismissed = localStorage.getItem('rushabh_sticker_hint_dismissed') === 'true';
+  if (isHintDismissed) {
+    hint.classList.add('is-hidden');
+  }
+
+  controls.appendChild(hint);
+  sceneWrapper.appendChild(controls);
+
+  // Initialize Draggable Stickers system
+  // Runs after microtask so dimensions are laid out
+  setTimeout(() => {
+    setupDraggableStickers({
+      bookStage: stage,
+      bookEl: book,
+      liveAnnouncer,
+      onFirstDrag: () => {
+        hint.classList.add('is-hidden');
+        try {
+          localStorage.setItem('rushabh_sticker_hint_dismissed', 'true');
+        } catch (e) {}
+      }
+    });
+  }, 0);
+
+  return sceneWrapper;
 }
+
