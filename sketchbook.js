@@ -4,7 +4,7 @@ import { createBookScene } from './components/BookScene.js?v=46';
 import { createChapterDialog } from './components/ChapterDialog.js?v=46';
 import { createExperimentNote } from './components/ExperimentNote.js?v=46';
 import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=46';
-import { createMemoryMachine } from './components/MemoryMachine.js?v=54';
+import { createMemoryMachine } from './components/MemoryMachine.js?v=56';
 
 /**
  * Fits the book composition (both closed and open spread) to available viewport space below header.
@@ -207,15 +207,43 @@ function initPortfolio() {
   // Personal Photos Section ("A LITTLE MORE ME" Memory Machine)
   const memoryMachine = createMemoryMachine();
 
+  // Unified Showcase & About Container (Single continuous seamless hand-drawn grid background across Selected Work + Still That Kid)
+  const showcaseWrapper = document.createElement('div');
+  showcaseWrapper.className = 'works-and-about-wrapper';
+
+  // Dedicated background grid layer matching Keep Calm notebook tile
+  const gridBackground = document.createElement('div');
+  gridBackground.className = 'works-and-about-grid-bg';
+  gridBackground.setAttribute('aria-hidden', 'true');
+  showcaseWrapper.appendChild(gridBackground);
+
+  showcaseWrapper.appendChild(selectedWork.headerElement);
+  showcaseWrapper.appendChild(selectedWork.projectsElement);
+  showcaseWrapper.appendChild(memoryMachine.element);
+
+  // Update boundary height for background grid mask transition
+  function updateGridTransition() {
+    if (selectedWork.headerElement && selectedWork.projectsElement) {
+      const h = selectedWork.headerElement.offsetHeight + selectedWork.projectsElement.offsetHeight;
+      showcaseWrapper.style.setProperty('--selected-works-height', `${h}px`);
+    }
+  }
+
+  updateGridTransition();
+  window.addEventListener('resize', updateGridTransition);
+  if ('ResizeObserver' in window) {
+    const gridRo = new ResizeObserver(updateGridTransition);
+    if (selectedWork.headerElement) gridRo.observe(selectedWork.headerElement);
+    if (selectedWork.projectsElement) gridRo.observe(selectedWork.projectsElement);
+  }
+
   // Mount components in natural document flow
   root.innerHTML = '';
   root.appendChild(header);
   root.appendChild(video);
   root.appendChild(main);
   root.appendChild(experimentNote.element);
-  root.appendChild(selectedWork.headerElement);
-  root.appendChild(selectedWork.projectsElement);
-  root.appendChild(memoryMachine.element);
+  root.appendChild(showcaseWrapper);
   root.appendChild(dialogManager.element);
 
   // Setup layout fitting with ResizeObserver

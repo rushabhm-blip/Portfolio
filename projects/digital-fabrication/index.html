@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Fabrication · CoolDice Marble Candy Machine · Rushabh Mahore</title>
+  <meta name="description" content="A physical computing and digital fabrication case study exploring tangible interaction, touchless gesture sensing, marble runs, and automated candy dispensing. Designed by Rushabh Mahore.">
+  <script>
+    try {
+      if (sessionStorage.getItem('portfolio_case_study_enter') === 'true') {
+        document.documentElement.classList.add('is-entering-transition');
+      }
+    } catch (e) {}
+  </script>
+  <script src="../../password-gate.js"></script>
+  <link rel="stylesheet" href="/projects/digital-fabrication/case-study.css?v=exact_figma_v2">
+</head>
+<body>
+
+  <!-- Transition Curtain -->
+  <div id="portfolioTransitionCurtain" class="portfolio-transition-curtain" aria-hidden="true"></div>
+
+  <!-- Top Sticky Navigation -->
+  <header class="cs-header" id="csHeader">
+    <div class="cs-header-inner">
+      <div class="cs-header-left">
+        <a href="/#home" class="cs-nav-logo" aria-label="Rushabh Home">rushabh<span class="logo-dot">.</span></a>
+        <a href="/#projects" class="cs-back-link" id="headerBackLink" aria-label="Back to projects">
+          <span aria-hidden="true">←</span>
+          <span>Back to projects</span>
+        </a>
+      </div>
+      <nav class="cs-nav-links" aria-label="Portfolio Navigation">
+        <a href="/#home" class="cs-nav-link">Home</a>
+        <a href="/#projects" class="cs-nav-link">Works</a>
+        <a href="/#about" class="cs-nav-link">About</a>
+        <a href="/#playground" class="cs-nav-link">Playground</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Minimal Dot Section Navigator -->
+  <nav class="cs-dot-nav" id="csDotNav" aria-label="Section Navigation">
+    <ul class="cs-dot-list" role="list">
+      <li class="cs-dot-item is-active" data-index="0">
+        <a href="#sec-hero" class="cs-dot-link" aria-label="Overview" aria-current="true">
+          <span class="cs-dot-label">Overview</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="1">
+        <a href="#sec-gesture-hook" class="cs-dot-link" aria-label="Gesture in Space">
+          <span class="cs-dot-label">Gesture in Space</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="2">
+        <a href="#sec-meet-cooldice" class="cs-dot-link" aria-label="Meet CoolDice">
+          <span class="cs-dot-label">Meet CoolDice</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="3">
+        <a href="#sec-interaction-sequence" class="cs-dot-link" aria-label="Interaction Sequence">
+          <span class="cs-dot-label">Interaction Sequence</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="4">
+        <a href="#sec-design-intent" class="cs-dot-link" aria-label="The Design Intent">
+          <span class="cs-dot-label">The Design Intent</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="5">
+        <a href="#sec-system-loop" class="cs-dot-link" aria-label="System Architecture">
+          <span class="cs-dot-label">System Architecture</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="6">
+        <a href="#sec-making-sequence" class="cs-dot-link" aria-label="Making the Sequence Work">
+          <span class="cs-dot-label">Making It Work</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="7">
+        <a href="#sec-wiring-diagram" class="cs-dot-link" aria-label="Hardware & Wiring">
+          <span class="cs-dot-label">Hardware & Wiring</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="8">
+        <a href="#sec-closing-thought" class="cs-dot-link" aria-label="Closing Thought">
+          <span class="cs-dot-label">Closing Thought</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Case Study Editorial Canvas -->
+  <main id="mainContent" class="case-study-canvas">
+
+    <!-- Screen Reader & Search Engine Accessibility Semantic Landmarks -->
+    <div class="sr-only">
+      <h1>Digital Fabrication · CoolDice Gesture-Controlled Marble Candy Machine</h1>
+      <p>Course duration: 2 weeks · Guide: Allwin Williams, Prof. Athul Dinesh · 2026</p>
+      
+      <section>
+        <h2>a small gesture. a little magic.</h2>
+        <p>Touch screen is fine. Controlling digital media by gesture is fine. But What if a Gesture could set the physical world in motion? So i tried making one....</p>
+      </section>
+
+      <section>
+        <h2>Meet CoolDice</h2>
+        <p>CoolDice explores how a small gesture can set a playful experience in motion. A leftward palm swipe releases a marble into a physical track. When it reaches the end, a digital dice rolls, and a solenoid-operated dispenser releases the corresponding number of candies. Built using Arduino, sensors and digital fabrication, the project connects physical movement, digital feedback and a tangible reward.</p>
+      </section>
+
+      <section>
+        <h2>One gesture starts the story.</h2>
+        <p>Before starting, the visitor places a marble at START. A leftward swipe of the right palm then sets the sequence in motion.</p>
+        <ol>
+          <li>A visitor places the marble at START</li>
+          <li>swipes their right palm left</li>
+          <li>follow the marble</li>
+          <li>marble run ends</li>
+          <li>watches the dice roll</li>
+          <li>collects their candies</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>03 — The Design Intent: Make the cause feel personal. Make the effect visible.</h2>
+        <p>The "magic" sits in the gap between the hand and the object. The rest of the experience is designed to make that connection readable, then stretch it into anticipation.</p>
+        <ul>
+          <li><strong>01 Distance creates surprise:</strong> A touchless gesture separates the action from its physical effect. The intended feeling is direct influence without contact.</li>
+          <li><strong>02 The marble makes it tangible:</strong> The moving ball gives the visitor something real to follow. It carries the sequence forward and makes the wait part of the experience.</li>
+          <li><strong>03 The dice holds back the answer:</strong> The roll adds uncertainty after the physical journey. The visitor can start the experience, but cannot choose its outcome.</li>
+          <li><strong>04 Candy gives it a physical ending:</strong> The number on screen becomes something countable in the hand, returning the digital moment to the physical world.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>A physical–digital–physical loop</h2>
+        <p>The interaction combines Arduino, p5.js, sensing, a marble track, an on-screen dice, and a solenoid-operated candy dispenser.</p>
+        <p><strong>Physical Input:</strong> Palm gesture → marble release → track journey. The visitor starts the sequence. The marble provides visible motion.</p>
+        <p><strong>Digital Decision:</strong> Arrival sensor → on-screen dice roll → number. The arrival event triggers the roll. Its result determines the quantity.</p>
+        <p><strong>Physical Output:</strong> Dispensing command → solenoid action → candies. The dispenser translates the digital result into a tangible reward.</p>
+        <p><strong>Hardware Roles:</strong> 01 / SENSING: IR sensing registers physical events. 02 / COORDINATION: Arduino UNO R4 Minima, p5.js coordinates the sequence. 03 / ACTUATION: Motor and solenoid create physical output.</p>
+        <p>The visitor controls the beginning. Chance controls the ending.</p>
+      </section>
+
+      <section>
+        <h2>Making the sequence work</h2>
+        <p>Iterative fabrication and physical testing of the acrylic frame, gravity marble run rails, and dispensing mechanism.</p>
+      </section>
+
+      <section>
+        <h2>Hardware & Wiring Diagram</h2>
+        <p>Comprehensive schematic showing connections for 12V Power Supply, DC Motor, L298N Motor Driver, Arduino Uno, Relay Module, Solenoid, IR Sensors (Top and Bottom), and I2C LCD Display.</p>
+      </section>
+
+      <section>
+        <h2>Closing Thought</h2>
+        <p>A wave becomes motion. Motion becomes anticipation. A number becomes a reward. An exploration of how a distant gesture can feel connected to a physical consequence. Rushabh Mahore / Interaction design</p>
+      </section>
+    </div>
+
+    <!-- Section Anchors for Seamless Dot Navigation & ScrollSpy -->
+    <div class="cs-artboard-wrapper" id="csArtboardWrapper">
+      <div id="sec-hero" class="cs-section-anchor" style="top: 0%;" data-section-index="0" data-section-id="sec-hero"></div>
+      <div id="sec-gesture-hook" class="cs-section-anchor" style="top: 13.26%;" data-section-index="1" data-section-id="sec-gesture-hook"></div>
+      <div id="sec-meet-cooldice" class="cs-section-anchor" style="top: 25.58%;" data-section-index="2" data-section-id="sec-meet-cooldice"></div>
+      <div id="sec-interaction-sequence" class="cs-section-anchor" style="top: 31.26%;" data-section-index="3" data-section-id="sec-interaction-sequence"></div>
+      <div id="sec-design-intent" class="cs-section-anchor" style="top: 42.00%;" data-section-index="4" data-section-id="sec-design-intent"></div>
+      <div id="sec-system-loop" class="cs-section-anchor" style="top: 55.47%;" data-section-index="5" data-section-id="sec-system-loop"></div>
+      <div id="sec-making-sequence" class="cs-section-anchor" style="top: 74.63%;" data-section-index="6" data-section-id="sec-making-sequence"></div>
+      <div id="sec-wiring-diagram" class="cs-section-anchor" style="top: 79.37%;" data-section-index="7" data-section-id="sec-wiring-diagram"></div>
+      <div id="sec-closing-thought" class="cs-section-anchor" style="top: 86.63%;" data-section-index="8" data-section-id="sec-closing-thought"></div>
+
+      <!-- Pure Native Vector SVG Artboard Directly from Figma (Frame 301:13) -->
+      <img src="/assets/projects/cooldice/digital_fabrication.svg"
+           alt="Digital Fabrication · CoolDice Gesture-Controlled Marble Candy Machine by Rushabh Mahore"
+           width="1138"
+           height="9500"
+           class="cs-artboard-svg"
+           id="cooldiceArtboardSvg"
+           loading="eager"
+           decoding="async">
+    </div>
+
+  </main>
+
+  <script src="/projects/digital-fabrication/case-study.js?v=exact_figma_v2"></script>
+</body>
+</html>

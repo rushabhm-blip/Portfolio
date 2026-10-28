@@ -205,6 +205,53 @@ export function createSelectedWorkSection() {
           </div>
         </div>
       </article>
+
+      <!-- Project 4: Digital Fabrication (Text Left, Thumbnail Right on Desktop) -->
+      <article class="project-row project-row-cooldice" id="project-cooldice" data-project-id="cooldice">
+        <div class="project-text-col">
+          <h3 class="project-name">Digital Fabrication</h3>
+          <p class="project-subheading">A small gesture. <span class="marker-highlight marker-peach">A little magic.</span></p>
+          <p class="project-desc">CoolDice explores how a touchless palm gesture sets a physical marble run in motion, rolls a digital dice, and dispenses a tangible candy reward.</p>
+          <div class="project-meta-details">
+            <span class="project-meta-item">2026 · 2 weeks · Physical Computing & Digital Fabrication</span>
+          </div>
+          <div class="project-discipline-capsules" aria-label="Project disciplines">
+            <span class="discipline-capsule capsule-lavender">Physical computing</span>
+            <span class="discipline-capsule capsule-mint">Digital fabrication</span>
+          </div>
+          <div class="project-link-wrapper">
+            <a href="/projects/digital-fabrication/" class="project-case-study-link" id="cooldiceExploreLink">
+              <span>Explore case study</span>
+              <span class="link-arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="project-media-col">
+          <div class="project-index-label" aria-hidden="true">04 / DIGITAL FABRICATION</div>
+          
+          <div class="project-paper-frame">
+            <!-- Decorative Yellow Tape (Upper-Right, ~ +18deg) -->
+            <img class="tape-strip tape-upper-right" src="assets/yellow-tape.png" alt="" aria-hidden="true" loading="lazy" />
+
+            <!-- 3:2 Media Aperture -->
+            <a href="/projects/digital-fabrication/" class="project-aperture-link" aria-label="Explore Digital Fabrication case study">
+              <div class="project-video-aperture" style="background-color: #F8F0E3;">
+                <img class="project-thumbnail-img"
+                     src="assets/projects/cooldice/hero_thumbnail.png"
+                     alt="CoolDice gesture-controlled marble candy machine"
+                     loading="lazy"
+                     style="width: 100%; height: 100%; object-fit: cover; display: block; mix-blend-mode: multiply;" />
+              </div>
+            </a>
+
+            <!-- Category Tab (Lower-Right overhang) -->
+            <div class="category-tab tab-lavender" aria-hidden="true">
+              <span>Tangible interaction</span>
+            </div>
+          </div>
+        </div>
+      </article>
     </div>
   `;
 

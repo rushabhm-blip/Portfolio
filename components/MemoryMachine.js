@@ -9,10 +9,23 @@
  *     yellow tape, orange sparkles, handwritten "Little me." with underline.
  * - Center column: Heading "Still that kid.", short paragraphs with lime marker on "trying something new.",
  *     VR cutout sticker with cobalt callout badge "Still figuring things out."
- * - Right column: "THE MEMORY MACHINE" printer housing with continuous downward-emerging photographic receipt.
- * - Automatic printing loop (4s hold, 1.2s downward feed, fading bottom panel, modulo 6 recycling).
- * - Accessible controls: Quiet Pause/Resume memories, counter (e.g. 01 / 06), manual next/prev, reduced-motion fallback.
- * - Responsive breakpoints: Desktop 3-column, Tablet 2-row/centered printer, Mobile content-driven single column.
+ * - Right column: "THE MEMORY MACHINE" stationary printer housing with physical paper feed:
+ *     - Layer 1: Base housing (stationary, drop shadow).
+ *     - Layer 2: Moving photographic paper viewport emerging from black slit line at top: 71.33%.
+ *                Passes in front of lower casing of the printer housing.
+ *     - Layer 3: Upper housing mask (clip-path: inset(0 0 28.67% 0)) covering upper casing.
+ * - Authentic roll feed motion:
+ *     - Each photo preserves intrinsic aspect ratio (portrait prints taller, landscape shorter).
+ *     - Downward feed reveals leading edge (bottom of upright photo) first.
+ *     - Consistent feed speed (~240px/sec).
+ *     - 4-second hold on completed photo.
+ *     - Stable reserved viewport room prevents layout jumps.
+ *     - Outgoing photos fade smoothly as they exit; old panels recycled from DOM.
+ * - Accessible controls:
+ *     - Pause / Resume button, counter (e.g. 01 / 06), Next & Previous manual buttons.
+ *     - Navigation during active print is queued and executed smoothly.
+ *     - Auto-pauses offscreen (IntersectionObserver), on hover/focus, and when tab is hidden.
+ *     - Reduced-motion mode displays static photo with manual navigation.
  */
 
 const DEFAULT_MEMORIES = [
@@ -22,9 +35,7 @@ const DEFAULT_MEMORIES = [
     caption: "Taking the scenic route.",
     alt: "Rushabh seated on a motorcycle in the hills.",
     width: 1536,
-    height: 2048,
-    objectFit: "cover",
-    objectPosition: "center 28%"
+    height: 2048
   },
   {
     id: "kayaking",
@@ -32,9 +43,7 @@ const DEFAULT_MEMORIES = [
     caption: "Good company. New directions.",
     alt: "Two friends kayaking on a forest-lined river.",
     width: 2048,
-    height: 1153,
-    objectFit: "cover",
-    objectPosition: "center center"
+    height: 1153
   },
   {
     id: "vr-work",
@@ -42,9 +51,7 @@ const DEFAULT_MEMORIES = [
     caption: "Still figuring things out.",
     alt: "Rushabh trying a VR headset and controllers.",
     width: 1153,
-    height: 2048,
-    objectFit: "contain",
-    objectPosition: "center center"
+    height: 2048
   },
   {
     id: "mountains",
@@ -52,9 +59,7 @@ const DEFAULT_MEMORIES = [
     caption: "A little further from the everyday.",
     alt: "Rushabh facing the hills with arms outstretched.",
     width: 1536,
-    height: 2048,
-    objectFit: "cover",
-    objectPosition: "center 30%"
+    height: 2048
   },
   {
     id: "coast",
@@ -62,9 +67,7 @@ const DEFAULT_MEMORIES = [
     caption: "Some days, this is enough.",
     alt: "Palm trees overlooking the sea.",
     width: 1536,
-    height: 2048,
-    objectFit: "cover",
-    objectPosition: "center 40%"
+    height: 2048
   },
   {
     id: "forest",
@@ -72,12 +75,9 @@ const DEFAULT_MEMORIES = [
     caption: "Taking a moment to look around.",
     alt: "Rushabh on a sunlit forest path.",
     width: 1536,
-    height: 2048,
-    objectFit: "cover",
-    objectPosition: "center 25%"
+    height: 2048
   }
 ];
-
 
 export function createMemoryMachine(options = {}) {
   const memories = options.memories && options.memories.length > 0 ? options.memories : DEFAULT_MEMORIES;
@@ -123,7 +123,6 @@ export function createMemoryMachine(options = {}) {
               <img src="assets/memory-machine/assets/childhood-birthday.svg" alt="Little Rushabh on his birthday with cake" width="550" height="710" />
             </div>
           </div>
-
 
           <!-- Orange Sparkle (Bottom-Right) -->
           <img src="assets/memory-machine/assets/sparkle.svg" class="childhood-sparkle childhood-sparkle-bottom" alt="" aria-hidden="true" />
@@ -175,27 +174,36 @@ export function createMemoryMachine(options = {}) {
             <div class="placeholder-spinner"></div>
           </div>
 
-          <!-- The Printer Housing & Ejection Assembly -->
+          <!-- The Printer Assembly: 3-Layer Architecture -->
           <div class="printer-container">
             <!-- Label on the printer -->
             <div class="printer-label-text" aria-hidden="true">THE MEMORY MACHINE</div>
             <!-- Power Indicator LED -->
             <div class="printer-power-led" aria-hidden="true"></div>
 
-            <!-- Stationary Printer Housing -->
-            <img src="assets/memory-machine/assets/printer-housing.png" class="printer-housing-img" alt="" aria-hidden="true" width="2135" height="736" />
+            <!-- LAYER 1: Stationary Printer Housing Base (Back) -->
+            <img src="assets/memory-machine/assets/printer-housing.png" 
+                 class="printer-housing-base" 
+                 alt="" 
+                 aria-hidden="true" 
+                 width="2135" 
+                 height="736" />
 
-            <!-- Foreground Slot Lip Occlusion (ensures emerging paper emerges from inside slot) -->
-            <div class="printer-slot-lip" aria-hidden="true"></div>
-
-            <!-- Receipt Viewport (Local clipping starting precisely at outlet mouth) -->
+            <!-- LAYER 2: Moving Photographic Receipt Viewport (Middle) -->
             <div class="receipt-viewport" id="receiptViewport" aria-label="Photographic memory receipt">
-              <!-- Continuous Receipt Paper Strip (moving downward) -->
               <div class="receipt-paper" id="receiptPaper">
-                <!-- Panels populated dynamically by state machine -->
+                <!-- Dynamically fed panels -->
               </div>
-              <!-- Subtle soft fade mask at bottom of receipt viewport -->
               <div class="receipt-bottom-fade" aria-hidden="true"></div>
+            </div>
+
+            <!-- LAYER 3: Foreground Housing Upper Mask (Front) -->
+            <div class="printer-housing-upper-clip" aria-hidden="true">
+              <img src="assets/memory-machine/assets/printer-housing.png" 
+                   class="printer-housing-upper-img" 
+                   alt="" 
+                   width="2135" 
+                   height="736" />
             </div>
           </div>
 
@@ -228,7 +236,7 @@ export function createMemoryMachine(options = {}) {
   </section>
   `;
 
-  // Internal State Machine
+  // Internal State
   const assemblyEl = section.querySelector('#memoryPrinterAssembly');
   const viewportEl = section.querySelector('#receiptViewport');
   const paperEl = section.querySelector('#receiptPaper');
@@ -239,17 +247,17 @@ export function createMemoryMachine(options = {}) {
   const prevBtn = section.querySelector('#memoryPrevBtn');
   const nextBtn = section.querySelector('#memoryNextBtn');
 
-  let currentTopIndex = 0; // Starts with motorcycle (0)
-  let currentBottomIndex = 1; // Starts with kayaking (1)
+  let currentIndex = 0; // Starts with motorcycle (0)
   let isUserPaused = false;
   let isAutoPaused = false;
   let isAnimating = false;
   let holdTimer = null;
   let isVisible = false;
   let isReady = false;
+  let queuedTargetIndex = null;
   let prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Watch for reduced-motion changes
+  // Watch for system reduced-motion preference changes
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (motionQuery.addEventListener) {
     motionQuery.addEventListener('change', (e) => {
@@ -263,20 +271,20 @@ export function createMemoryMachine(options = {}) {
   }
 
   function createPanelHTML(memory) {
-    const objFit = memory.objectFit || 'contain';
-    const objPos = memory.objectPosition || 'center center';
     return `
       <article class="receipt-panel" data-id="${memory.id}">
         <div class="panel-photo-frame">
           <img src="${memory.src}" 
                alt="${memory.alt}" 
                class="panel-photo-img" 
-               style="object-fit: ${objFit}; object-position: ${objPos};" 
-               loading="lazy" 
                width="${memory.width}" 
-               height="${memory.height}" />
+               height="${memory.height}"
+               loading="eager" />
         </div>
-        <p class="panel-caption">${memory.caption}</p>
+        <div class="panel-caption-band">
+          <p class="panel-caption">${memory.caption}</p>
+        </div>
+        <div class="panel-tear-separator" aria-hidden="true"></div>
       </article>
     `;
   }
@@ -287,12 +295,16 @@ export function createMemoryMachine(options = {}) {
     counterEl.textContent = `${formatted} / ${total}`;
   }
 
-  function renderInitialPanels() {
+  function renderStaticState(index) {
+    // Current memory at top, previous memory in outgoing position
+    const prevIndex = (index - 1 + memories.length) % memories.length;
     paperEl.innerHTML = `
-      ${createPanelHTML(memories[currentTopIndex])}
-      ${createPanelHTML(memories[currentBottomIndex])}
+      ${createPanelHTML(memories[index])}
+      ${createPanelHTML(memories[prevIndex])}
     `;
-    updateCounter(currentTopIndex);
+    paperEl.style.transition = 'none';
+    paperEl.style.transform = 'none';
+    updateCounter(index);
   }
 
   function clearHoldTimer() {
@@ -307,140 +319,169 @@ export function createMemoryMachine(options = {}) {
     if (isUserPaused || isAutoPaused || !isVisible || !isReady || prefersReducedMotion) {
       return;
     }
-    // Hold visible pair for approx 4000ms
+    // Hold visible photo for ~4000ms
     holdTimer = setTimeout(() => {
       feedNext();
     }, 4000);
   }
 
   /**
-   * Automatic feed:
-   * 1. Next photo enters from inside the printer slot at the top.
-   * 2. Existing top photo moves into the lower position.
-   * 3. Existing bottom photo moves down and fades away during final 450ms.
-   * Modulo 6 recycling.
+   * Calculate responsive layout geometry based on slot coordinates:
+   * Printer housing PNG: 2135 x 736
+   * Slit exit line: Y = 525 (71.33% of printer container height)
+   * Slit usable width: 66.8% of printer container width
+   * Viewport height: Tallest panel (vr-work 9:16) + outgoing buffer (~130px)
+   * Controls margin: Distance from container top to bottom of paper viewport + 24px gap
    */
-  async function feedNext() {
+  function updateLayoutDimensions() {
+    if (!assemblyEl || !viewportEl) return;
+    const containerWidth = assemblyEl.clientWidth || 440;
+    const paperWidth = containerWidth * 0.668;
+    const innerPhotoWidth = Math.max(120, paperWidth - 20); // 10px side borders
+
+    // Maximum photo aspect ratio: vr-work is 1153 x 2048 -> ratio = 1.7762
+    const maxRatio = 1.7762;
+    const tallestPhotoHeight = innerPhotoWidth * maxRatio;
+    const captionAndPadding = 75; // caption band, paddings & tear line
+    const tallestPanelHeight = Math.round(tallestPhotoHeight + captionAndPadding);
+
+    // Reserved outgoing area to view previous memory comfortably
+    const outgoingAreaHeight = Math.round(Math.min(150, Math.max(90, innerPhotoWidth * 0.45)));
+    const reservedViewportHeight = tallestPanelHeight + outgoingAreaHeight;
+
+    viewportEl.style.setProperty('--measured-viewport-height', `${reservedViewportHeight}px`);
+
+    // Printer height is containerWidth * (736 / 2135)
+    // Slit exit line is at 71.3315% of printer height
+    const printerHeight = containerWidth * (736 / 2135);
+    const slitExitPx = printerHeight * 0.7133;
+
+    // Controls placed below the paper with 24px clearance
+    const controlsMarginTop = Math.round(slitExitPx + reservedViewportHeight + 24);
+    assemblyEl.style.setProperty('--controls-margin-top', `${controlsMarginTop}px`);
+  }
+
+  /**
+   * Physical roll feed animation:
+   * 1. Decodes incoming photograph before feed starts.
+   * 2. Inserts incoming panel at the top of the strip.
+   * 3. Measures exact rendered panel height.
+   * 4. Offsets paper strip upward by panel height so incoming panel is hidden above the slit mouth.
+   * 5. Smoothly translates strip downward: leading edge emerges from slit line first,
+   *    passes in front of lower casing, and existing panel moves down by same distance.
+   * 6. Fades outgoing panel at bottom and prunes excess panels from DOM.
+   */
+  async function executePrint(nextIndex) {
     if (isAnimating) return;
     isAnimating = true;
     clearHoldTimer();
 
-    // Next memory to emerge from the printer slot
-    // Sequence: 0 (Motorcycle) -> 2 (VR) -> 3 (Mountains) -> 4 (Coast) -> 5 (Forest) -> 0 (Motorcycle) -> 1 (Kayaking)...
-    // In general, if bottom is currentBottomIndex, the next incoming memory is (currentBottomIndex + 1) % memories.length
-    let nextIndex;
-    if (currentTopIndex === 0 && currentBottomIndex === 1) {
-      nextIndex = 2; // VR
-    } else {
-      nextIndex = (currentTopIndex + 1) % memories.length;
-    }
-
     const nextMemory = memories[nextIndex];
 
-    // Preload & decode next image before transitioning to prevent blank flashes
+    // 1. Preload & decode incoming image
     const imgLoader = new Image();
     imgLoader.src = nextMemory.src;
     if (typeof imgLoader.decode === 'function') {
       try {
         await imgLoader.decode();
       } catch (e) {
-        // Continue even if decode rejects
+        // Continue even if decode fails
       }
     }
 
-    // Measure current panel pitch (height + gap)
-    const existingPanels = paperEl.querySelectorAll('.receipt-panel');
-    let panelPitch = 260; // fallback
-    if (existingPanels.length >= 2) {
-      const topRect = existingPanels[0].getBoundingClientRect();
-      const bottomRect = existingPanels[1].getBoundingClientRect();
-      panelPitch = bottomRect.top - topRect.top;
-      if (panelPitch <= 0) panelPitch = existingPanels[0].offsetHeight + 24;
-    } else if (existingPanels.length === 1) {
-      panelPitch = existingPanels[0].offsetHeight + 24;
-    }
-
+    // 2. Reduced-motion instant path
     if (prefersReducedMotion) {
-      // Instant transition for reduced motion
-      currentBottomIndex = currentTopIndex;
-      currentTopIndex = nextIndex;
-      renderInitialPanels();
+      currentIndex = nextIndex;
+      renderStaticState(currentIndex);
       isAnimating = false;
+      if (queuedTargetIndex !== null) {
+        const next = queuedTargetIndex;
+        queuedTargetIndex = null;
+        executePrint(next);
+      }
       return;
     }
 
-    // Create the entering panel node and insert at the top of the paper strip
+    // 3. Create and insert incoming panel node
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = createPanelHTML(nextMemory);
-    const enteringPanel = tempDiv.firstElementChild;
-    enteringPanel.classList.add('is-entering');
+    const incomingPanel = tempDiv.firstElementChild;
+    incomingPanel.classList.add('is-printing');
 
-    paperEl.insertBefore(enteringPanel, paperEl.firstElementChild);
+    paperEl.insertBefore(incomingPanel, paperEl.firstElementChild);
 
-    // Position paper offset upwards by panelPitch so the entering panel is hidden inside the printer slot mouth
+    // 4. Measure exact rendered panel height
     paperEl.style.transition = 'none';
-    paperEl.style.transform = `translateY(-${panelPitch}px)`;
+    const panelHeight = incomingPanel.offsetHeight;
+
+    // Position paper offset upward so incoming panel is inside the slit cavity
+    paperEl.style.transform = `translateY(-${panelHeight}px)`;
 
     // Force reflow
     void paperEl.offsetHeight;
 
-    // Start 1.2s downward translate
-    const transitionDurationMs = 1200;
-    const fadeOutDurationMs = 450;
-    const fadeOutStartMs = transitionDurationMs - fadeOutDurationMs; // 750ms
+    // 5. Calculate feed duration proportional to panel height (~240px / sec)
+    const durationMs = Math.round(Math.max(900, Math.min(2600, (panelHeight / 240) * 1000)));
 
-    paperEl.style.transition = `transform ${transitionDurationMs}ms cubic-bezier(0.25, 1, 0.5, 1)`;
+    // Update counter as new photo emerges
+    updateCounter(nextIndex);
+
+    // 6. Animate downward feed: mostly linear with subtle start/end ease
+    paperEl.style.transition = `transform ${durationMs}ms cubic-bezier(0.35, 0.05, 0.25, 1)`;
     paperEl.style.transform = 'translateY(0px)';
 
-    // Existing bottom panel (now 3rd item in paperEl) fades out during final 450ms
+    // 7. Fade outgoing panel (3rd child in paperEl) as it exits downward
     const exitingPanel = paperEl.children[2];
-    let fadeTimer = null;
     if (exitingPanel) {
-      fadeTimer = setTimeout(() => {
-        exitingPanel.style.transition = `opacity ${fadeOutDurationMs}ms ease-out`;
-        exitingPanel.style.opacity = '0';
-      }, fadeOutStartMs);
+      exitingPanel.style.transition = `opacity ${durationMs}ms ease-out`;
+      exitingPanel.style.opacity = '0';
     }
 
-    // When downward feed completes
+    // 8. On feed completion
     setTimeout(() => {
-      if (fadeTimer) clearTimeout(fadeTimer);
-
-      // Clean up exited panel(s): strictly maintain exactly 2 panels at rest
+      // Recycle exited panel(s): keep exactly 2 panels at rest
       while (paperEl.children.length > 2) {
         paperEl.removeChild(paperEl.lastElementChild);
       }
-      if (enteringPanel) {
-        enteringPanel.classList.remove('is-entering');
+
+      if (incomingPanel) {
+        incomingPanel.classList.remove('is-printing');
       }
 
-      // Reset transform
+      // Reset transform cleanly
       paperEl.style.transition = 'none';
       paperEl.style.transform = 'none';
 
-      // Update state indices
-      currentBottomIndex = currentTopIndex;
-      currentTopIndex = nextIndex;
-      updateCounter(currentTopIndex);
-
+      currentIndex = nextIndex;
       isAnimating = false;
 
-      // Schedule next hold
-      if (!isUserPaused && !isAutoPaused && isVisible) {
+      // Process any queued manual navigation
+      if (queuedTargetIndex !== null) {
+        const nextTarget = queuedTargetIndex;
+        queuedTargetIndex = null;
+        executePrint(nextTarget);
+      } else if (!isUserPaused && !isAutoPaused && isVisible && !prefersReducedMotion) {
         scheduleNextCycle();
       }
-    }, transitionDurationMs);
-
+    }, durationMs);
   }
 
-  function stepPrevious() {
-    if (isAnimating) return;
-    clearHoldTimer();
-    // Step backwards
-    const prevIndex = (currentTopIndex - 1 + memories.length) % memories.length;
-    currentBottomIndex = currentTopIndex;
-    currentTopIndex = prevIndex;
-    renderInitialPanels();
+  function feedNext() {
+    const nextIndex = (currentIndex + 1) % memories.length;
+    if (isAnimating) {
+      queuedTargetIndex = nextIndex;
+      return;
+    }
+    executePrint(nextIndex);
+  }
+
+  function feedPrevious() {
+    const prevIndex = (currentIndex - 1 + memories.length) % memories.length;
+    if (isAnimating) {
+      queuedTargetIndex = prevIndex;
+      return;
+    }
+    executePrint(prevIndex);
   }
 
   function setPauseState(paused, isManualUserAction = false) {
@@ -464,24 +505,20 @@ export function createMemoryMachine(options = {}) {
     }
   }
 
-  // User manual controls
+  // Controls event listeners
   pauseBtn.addEventListener('click', () => {
     setPauseState(!isUserPaused, true);
   });
 
   prevBtn.addEventListener('click', () => {
-    stepPrevious();
+    feedPrevious();
   });
 
   nextBtn.addEventListener('click', () => {
-    if (prefersReducedMotion) {
-      feedNext();
-    } else {
-      feedNext();
-    }
+    feedNext();
   });
 
-  // Automatic pause triggers
+  // Autoplay pause triggers (hover, focus, tab visibility)
   viewportEl.addEventListener('mouseenter', () => setPauseState(true, false));
   viewportEl.addEventListener('mouseleave', () => setPauseState(false, false));
   viewportEl.addEventListener('focusin', () => setPauseState(true, false));
@@ -495,38 +532,38 @@ export function createMemoryMachine(options = {}) {
     }
   });
 
-  // IntersectionObserver to start/pause only when meaningfully visible
+  // IntersectionObserver to pause when offscreen
   let observer = null;
   if ('IntersectionObserver' in window) {
     observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.25;
+        isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.2;
         if (isVisible) {
-          if (!isUserPaused && isReady) {
+          if (!isUserPaused && isReady && !prefersReducedMotion) {
             scheduleNextCycle();
           }
         } else {
           clearHoldTimer();
         }
       });
-    }, { threshold: [0, 0.25, 0.5, 0.75] });
+    }, { threshold: [0, 0.2, 0.5] });
     observer.observe(section);
   } else {
     isVisible = true;
   }
 
-  // Asset readiness coordinator:
-  // Shows quiet ivory placeholder until printer housing and initial 2 photos are decoded
+  // Asset readiness coordinator: shows placeholder until base assets are loaded
   async function waitForInitialAssets() {
-    renderInitialPanels();
+    renderStaticState(currentIndex);
+    updateLayoutDimensions();
 
     const promises = [];
 
-    // Housing image
-    const housingImg = assemblyEl.querySelector('.printer-housing-img');
+    // Base housing image
+    const housingImg = assemblyEl.querySelector('.printer-housing-base');
     if (housingImg) {
       if (housingImg.complete && housingImg.naturalWidth > 0) {
-        // already loaded
+        // already cached
       } else if (typeof housingImg.decode === 'function') {
         promises.push(housingImg.decode().catch(() => {}));
       } else {
@@ -537,12 +574,6 @@ export function createMemoryMachine(options = {}) {
       }
     }
 
-    // VR sticker
-    const vrImg = section.querySelector('.vr-sticker-img');
-    if (vrImg && typeof vrImg.decode === 'function') {
-      promises.push(vrImg.decode().catch(() => {}));
-    }
-
     // Childhood photos
     const childhoodImgs = section.querySelectorAll('.childhood-img-frame img');
     childhoodImgs.forEach(img => {
@@ -551,9 +582,8 @@ export function createMemoryMachine(options = {}) {
       }
     });
 
-    // First two photos
+    // Initial 2 photos in paper strip
     const firstImgs = paperEl.querySelectorAll('.panel-photo-img');
-
     firstImgs.forEach(img => {
       if (typeof img.decode === 'function') {
         promises.push(img.decode().catch(() => {}));
@@ -564,11 +594,12 @@ export function createMemoryMachine(options = {}) {
       promises.push(document.fonts.ready.catch(() => {}));
     }
 
-    // Bounded wait (max 1000ms)
+    // Bounded timeout (max 1000ms)
     const timeout = new Promise(res => setTimeout(res, 1000));
     await Promise.race([Promise.all(promises), timeout]);
 
     isReady = true;
+    updateLayoutDimensions();
     assemblyEl.classList.remove('is-loading');
     assemblyEl.classList.add('is-ready');
 
@@ -576,7 +607,7 @@ export function createMemoryMachine(options = {}) {
       scheduleNextCycle();
     }
 
-    // Preload remaining memories in background for instant feed transitions
+    // Preload remaining photos in background
     setTimeout(() => {
       memories.forEach(m => {
         const img = new Image();
@@ -586,22 +617,17 @@ export function createMemoryMachine(options = {}) {
     }, 200);
   }
 
-  // Initialize assets when DOM connects
   setTimeout(() => {
     waitForInitialAssets();
   }, 10);
 
-  // Resize handler to re-measure pitch and adjust viewport height cleanly
+  // Resize handler to recalculate geometry proportionally
+  let resizeTimer = null;
   const handleResize = () => {
-    // When viewport or fonts change, ensure paper height and panels are seated
-    if (paperEl.children.length >= 2) {
-      const topPanel = paperEl.children[0];
-      const bottomPanel = paperEl.children[1];
-      if (topPanel && bottomPanel) {
-        const h = topPanel.offsetHeight + bottomPanel.offsetHeight + 24;
-        viewportEl.style.setProperty('--measured-receipt-height', `${h}px`);
-      }
-    }
+    if (resizeTimer) cancelAnimationFrame(resizeTimer);
+    resizeTimer = requestAnimationFrame(() => {
+      updateLayoutDimensions();
+    });
   };
   window.addEventListener('resize', handleResize);
 
