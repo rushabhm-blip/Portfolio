@@ -4,6 +4,7 @@ import { createBookScene } from './components/BookScene.js?v=46';
 import { createChapterDialog } from './components/ChapterDialog.js?v=46';
 import { createExperimentNote } from './components/ExperimentNote.js?v=46';
 import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=46';
+import { createMemoryMachine } from './components/MemoryMachine.js?v=54';
 
 /**
  * Fits the book composition (both closed and open spread) to available viewport space below header.
@@ -122,6 +123,14 @@ function initPortfolio() {
       }
       return;
     }
+    if (chapterId === 'About') {
+      dialogManager.closeDialog();
+      const aboutSection = document.getElementById('about');
+      if (aboutSection) {
+        aboutSection.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
     dialogManager.openChapter(chapterId, triggerEl);
   }
 
@@ -195,6 +204,9 @@ function initPortfolio() {
   // "Selected work" Section Component (Header area + Projects showcase grid)
   const selectedWork = createSelectedWorkSection();
 
+  // Personal Photos Section ("A LITTLE MORE ME" Memory Machine)
+  const memoryMachine = createMemoryMachine();
+
   // Mount components in natural document flow
   root.innerHTML = '';
   root.appendChild(header);
@@ -203,6 +215,7 @@ function initPortfolio() {
   root.appendChild(experimentNote.element);
   root.appendChild(selectedWork.headerElement);
   root.appendChild(selectedWork.projectsElement);
+  root.appendChild(memoryMachine.element);
   root.appendChild(dialogManager.element);
 
   // Setup layout fitting with ResizeObserver

@@ -17,6 +17,8 @@ projects/sajag/app/dist/
 capture_*.js
 process_*.js
 test_*.js
+validate_*.js
+validation_*.json
 /*.png
 /*.webp
 scratch_video_frames/
@@ -40,4 +42,5 @@ rushabh-open-book-kit/
 rushabh-toolkit-jar-v2/
 rushabh-travel-stamps-kit/
 toolkit-jar-kit/
-
+Rushabh-Memory-Machine-Kit/
+rushabh-memory-machine-kit/

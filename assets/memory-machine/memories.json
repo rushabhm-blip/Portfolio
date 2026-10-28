@@ -1,0 +1,56 @@
+[
+  {
+    "id": "motorcycle",
+    "src": "photos/motorcycle.jpg",
+    "caption": "Taking the scenic route.",
+    "alt": "Rushabh seated on a motorcycle in the hills.",
+    "width": 1536,
+    "height": 2048,
+    "objectFit": "contain"
+  },
+  {
+    "id": "kayaking",
+    "src": "photos/kayaking.jpg",
+    "caption": "Good company. New directions.",
+    "alt": "Two friends kayaking on a forest-lined river.",
+    "width": 2048,
+    "height": 1153,
+    "objectFit": "contain"
+  },
+  {
+    "id": "vr-work",
+    "src": "photos/vr-work.jpg",
+    "caption": "Still figuring things out.",
+    "alt": "Rushabh trying a VR headset and controllers.",
+    "width": 1153,
+    "height": 2048,
+    "objectFit": "contain"
+  },
+  {
+    "id": "mountains",
+    "src": "photos/mountains.jpg",
+    "caption": "A little further from the everyday.",
+    "alt": "Rushabh facing the hills with arms outstretched.",
+    "width": 1536,
+    "height": 2048,
+    "objectFit": "contain"
+  },
+  {
+    "id": "coast",
+    "src": "photos/coast.jpg",
+    "caption": "Some days, this is enough.",
+    "alt": "Palm trees overlooking the sea.",
+    "width": 1536,
+    "height": 2048,
+    "objectFit": "contain"
+  },
+  {
+    "id": "forest",
+    "src": "photos/forest.jpg",
+    "caption": "Taking a moment to look around.",
+    "alt": "Rushabh on a sunlit forest path.",
+    "width": 1536,
+    "height": 2048,
+    "objectFit": "contain"
+  }
+]
