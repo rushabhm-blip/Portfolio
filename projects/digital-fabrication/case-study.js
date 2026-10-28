@@ -21,8 +21,17 @@
     });
   }
 
-  // Scroll restoration to top on fresh visit without hash
-  if (!window.location.hash) {
+  // Scroll position handling
+  const urlParams = new URLSearchParams(window.location.search);
+  const scrollParam = urlParams.get('scroll');
+  if (scrollParam) {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    const targetY = parseInt(scrollParam, 10);
+    window.scrollTo(0, targetY);
+    setTimeout(() => window.scrollTo(0, targetY), 50);
+  } else if (!window.location.hash) {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
