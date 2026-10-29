@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Time Wanderers · Multimodal Museum Experience · Rushabh Mahore</title>
+  <meta name="description" content="A multimodal spatial museum experience exploring Indus Valley civilization through touchless gesture interaction, physical proximity, and contextual storytelling. Designed by Rushabh Mahore, Sharvani, and Ankit at NID Bengaluru.">
+  <script>
+    try {
+      if (sessionStorage.getItem('portfolio_case_study_enter') === 'true') {
+        document.documentElement.classList.add('is-entering-transition');
+      }
+    } catch (e) {}
+  </script>
+  <script src="../../password-gate.js"></script>
+  <link rel="stylesheet" href="/projects/time-wanderers/case-study.css?v=exact_deck_v1">
+</head>
+<body>
+
+  <!-- Transition Curtain -->
+  <div id="portfolioTransitionCurtain" class="portfolio-transition-curtain" aria-hidden="true"></div>
+
+  <!-- Top Sticky Navigation -->
+  <header class="cs-header" id="csHeader">
+    <div class="cs-header-inner">
+      <div class="cs-header-left">
+        <a href="/#home" class="cs-nav-logo" aria-label="Rushabh Home">rushabh<span class="logo-dot">.</span></a>
+        <a href="/#projects" class="cs-back-link" id="headerBackLink" aria-label="Back to projects">
+          <span aria-hidden="true">←</span>
+          <span>Back to projects</span>
+        </a>
+      </div>
+      <nav class="cs-nav-links" aria-label="Portfolio Navigation">
+        <a href="/#home" class="cs-nav-link">Home</a>
+        <a href="/#projects" class="cs-nav-link">Works</a>
+        <a href="/#about" class="cs-nav-link">About</a>
+        <a href="/#playground" class="cs-nav-link">Playground</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Minimal Dot Section Navigator -->
+  <nav class="cs-dot-nav" id="csDotNav" aria-label="Section Navigation">
+    <ul class="cs-dot-list" role="list">
+
+      <li class="cs-dot-item is-active" data-index="0">
+        <a href="#sec-overview" class="cs-dot-link" aria-label="Overview" aria-current="true">
+          <span class="cs-dot-label">Overview</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="1">
+        <a href="#sec-the-question" class="cs-dot-link" aria-label="The Inception">
+          <span class="cs-dot-label">The Inception</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="2">
+        <a href="#sec-the-problem" class="cs-dot-link" aria-label="Problem & Opportunity">
+          <span class="cs-dot-label">Problem & Opportunity</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="3">
+        <a href="#sec-research" class="cs-dot-link" aria-label="Museum Research">
+          <span class="cs-dot-label">Museum Research</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="4">
+        <a href="#sec-introducing" class="cs-dot-link" aria-label="Meet Time Wanderers">
+          <span class="cs-dot-label">Meet Time Wanderers</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="5">
+        <a href="#sec-audience" class="cs-dot-link" aria-label="Target Audience">
+          <span class="cs-dot-label">Target Audience</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="6">
+        <a href="#sec-spatial-flow" class="cs-dot-link" aria-label="Spatial Setup & Flow">
+          <span class="cs-dot-label">Spatial Setup & Flow</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="7">
+        <a href="#sec-storyboard" class="cs-dot-link" aria-label="User Storyboard">
+          <span class="cs-dot-label">User Storyboard</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="8">
+        <a href="#sec-modalities" class="cs-dot-link" aria-label="Interaction Modalities">
+          <span class="cs-dot-label">Interaction Modalities</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="9">
+        <a href="#sec-gestures" class="cs-dot-link" aria-label="Gesture Mapping">
+          <span class="cs-dot-label">Gesture Mapping</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="10">
+        <a href="#sec-testing" class="cs-dot-link" aria-label="Visual System & Testing">
+          <span class="cs-dot-label">Visual System & Testing</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="11">
+        <a href="#sec-learnings" class="cs-dot-link" aria-label="Reflections & Future">
+          <span class="cs-dot-label">Reflections & Future</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+
+      <li class="cs-dot-item" data-index="12">
+        <a href="#sec-prototype-video" class="cs-dot-link" aria-label="Prototype Video">
+          <span class="cs-dot-label">Prototype Video</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Case Study Editorial Canvas -->
+  <main id="mainContent" class="case-study-canvas">
+
+    <!-- Screen Reader & Search Engine Accessibility Semantic Landmarks -->
+    <div class="sr-only">
+
+      <h1>Time Wanderers · Multimodal Spatial Museum Experience</h1>
+      <p>Course: Multimodal Interactions · NID Bengaluru · Group Members: Rushabh Mahore, Sharvani, Ankit · Guided By: Prof. Mamata Rao, Prof. Athul Dinesh · 2026</p>
+
+      <section>
+        <h2>Slide 1: 1</h2>
+        <p>Multimodal Interactions Group Members : Rushabh, Sharvani, Ankit Guided By : Prof. Mamta, Athul Dinesh</p>
+      </section>
+      <section>
+        <h2>Slide 2: 3</h2>
+        <p>What if history could be experienced & not just studied? Today, we learn about history through the things that survived them. What if we could experience the world that existed around those things? Ref. Delhi National Museum Ref. NCERT history books</p>
+      </section>
+      <section>
+        <h2>Slide 3: Slide 16:9 - 3</h2>
+        <p>PROBLEM Children often encounter history as isolated facts, images and artifacts. They may learn what an object is, but have limited opportunity to connect it with: The people who created and used it The environment they lived in Their everyday life and culture How societies developed and interacted How different civilizations connect to the world we live in today The gap is not information. The gap is context.</p>
+      </section>
+      <section>
+        <h2>Slide 4: Slide 16:9 - 24</h2>
+        <p>WHY Understanding history is more than remembering dates and objects. It can help children gradually develop: The goal is not to teach children more facts. It is to help them see the bigger picture behind the facts. CULTURAL AWARENESS Where do different cultures come from? CONNECTIONS How does the past connect to the world I see today? WORLD AWARENESS How have different societies lived and evolved? CONTEXTUAL THINKING Why did people create things in the way they did?</p>
+      </section>
+      <section>
+        <h2>Slide 5: Slide 16:9 - 25</h2>
+        <p>OPPORTUNITY INTERVENTION An artifact becomes an entry point into understanding a larger world. Time Wanderers uses historical artifacts as gateways to help children explore cultures, societies and the wider world OBJECT OBJECT PEOPLE PLACE CULTURE SOCIETY WORLD FACT</p>
+      </section>
+      <section>
+        <h2>Slide 6: Experience</h2>
+        <p>How do we experience history today? We can see the artifact. National Museum, Delhi Read about the artifact Ask the museum guide Ask Internet ! But where is its world? What is dancing girl wearing ?</p>
+      </section>
+      <section>
+        <h2>Slide 7: SR</h2>
+        <p>Secondary Research What does museum-learning research tell us? CUriosity Smithsonian’s early-learning research specifically emphasizes active observation and questioning as ways to build curiosity and critical thinking. DEEPER THINKING Research with 8–9-year-olds in virtual museums found that children's involvement during and after an exhibit predicted learning. Conversation during the experience was particularly linked to inference and integrating information</p>
+      </section>
+      <section>
+        <h2>Slide 8: SR</h2>
+        <p>Secondary Research What does museum-learning research tell us? STRENGTHEN MEMORY A study of children aged 4–9 interacting with a dinosaur exhibit found that museum interaction increased curiosity, and higher curiosity was associated with better recall of prominently displayed facts. Exploration A review of children’s museum learning found that curiosity, excitement, discussion and exploration commonly support learning across museum settings.</p>
+      </section>
+      <section>
+        <h2>Slide 9: SR</h2>
+        <p>Field Research We spoke with children about how they like to explore and interact with history and museums “I want to explore myself about the artifact” “I search on youtube when I want to know more about it” “When I go to museums, I want to touch it” “I sleep when I listen my teacher saying about history in class”</p>
+      </section>
+      <section>
+        <h2>Slide 10: SR</h2>
+        <p>Learning isn't only about receiving information. It is also about observing, exploring, connecting and questioning.</p>
+      </section>
+      <section>
+        <h2>Slide 11: SR</h2>
+        <p>So what does this mean for our design?</p>
+      </section>
+      <section>
+        <h2>Slide 12: 2</h2>
+        <p>How might we make learning about civilisations and artifacts more immersive, engaging and contextual for children? Without replacing Teacher Historical information Museum Instead add an experiential layer</p>
+      </section>
+      <section>
+        <h2>Slide 13: SR</h2>
+        <p>Introducing Discover the object. Travel through its history.</p>
+      </section>
+      <section>
+        <h2>Slide 14: Chap 4</h2>
+        <p>OPPORTUNITY SPACES Where can Time Wanderers exist?</p>
+      </section>
+      <section>
+        <h2>Slide 15: Chap 5</h2>
+        <p>TARGET AUDIENCE Who are the Time Wanderers? 8–16 years School students Museum visitors History / culture learners 16+ College students Parents General museum visitors Teachers Museum educators Cultural institutions</p>
+      </section>
+      <section>
+        <h2>Slide 16: SR</h2>
+        <p>POSITIONING What are we actually making? LEARNING ROLEPLAY EXPLORATION INTERACTION AN IMMERSIVE HISTORICAL EXPLORATION EXPERIENCE</p>
+      </section>
+      <section>
+        <h2>Slide 17: SR</h2>
+        <p>Experience Design Time Wanderers “I found something. What is it?” Experience metaphor:</p>
+      </section>
+      <section>
+        <h2>Slide 18: SR</h2>
+        <p>Spatial set up</p>
+      </section>
+      <section>
+        <h2>Slide 19: SR</h2>
+        <p>USES FLOW Start End Choose the civilisation Explore the civilisation Reached the visual cue Back in the timeline to Indus Valley civilisation Ask the questions Yes No Redirect them to Idle screen Clean the Artifact Now the artifact will automatically reveal and the archeologist will tell about it How to play Stepwise Instructions Idle state UI Project Title Introduction How to start the experience Whenever I put my step on to the circle it should start ambient music Map consisting of three civilisations Instruction upfront how to select particular civilisation Ruins video of mohen jo daro with one visual cue for the artifact. Instructions for How to walk in ruins to find artifact Zoom in to get that particular spot video on screen Video of cleaning artifact Instructions how to clean with gestures CTA of next task “lets go back in the timeline” disabled till voice explaination is going on then user will go to next frame of timeline video of transitioning from ruins to that time just before the end of the video it will show some 3-4 facts about that civilisation by text and audio UI have half black tone screen in which an chat will be open where system is giving and audio and text as a output if user want they can ask more question they can. If user want to ask questions</p>
+      </section>
+      <section>
+        <h2>Slide 20: SR</h2>
+        <p>Story Board The child approaches the interactive screen as the experience invites them to begin. The child uses a clenched-fist gesture to select a civilization as the map responds with a visual highlight. The child walks through the experience as the screen reveals the selected historical environment.</p>
+      </section>
+      <section>
+        <h2>Slide 21: SR</h2>
+        <p>Story Board The child spreads both open palms to zoom into an area as the screen follows the gesture. The child pauses to listen as the screen reveals the artifact and introduces its story. The child rolls both hands to move backwards through time as the archaeological site transforms into its original world. The child asks a question through gesture as the screen responds with a short contextual answer.</p>
+      </section>
+      <section>
+        <h2>Slide 22: SR</h2>
+        <p>Modalities of Interaction Modality : Hover & clench User Intent : “I want this” System Output : Select Modality : Zoom User Intent : “I want to look closer” System Output : Environment enlarges Modality : Roll back User Intent : “Take me back” System Output : Enter Past Modality : Walk User Intent : “I want to explore” System Output : Walk through Modality : Blow User Intent : “I want to uncover this” System Output : Soil disappears Modality : Back User Intent : “I want to go back” System Output : Previous screen Modality : Voice & mic gesture User Intent : “I want to know more” System Output : Answers</p>
+      </section>
+      <section>
+        <h2>Slide 23: SR</h2>
+        <p>Gesture Mapping Use your palm to hover over the screen and clench your fist to select the place Hover & Clench Gesture To choose a civilization</p>
+      </section>
+      <section>
+        <h2>Slide 24: SR</h2>
+        <p>Gesture Mapping Zoom In To take closer look Move both hands apart to zoom into the city</p>
+      </section>
+      <section>
+        <h2>Slide 25: SR</h2>
+        <p>Gesture Mapping Blow the screen to clean the artifact Blow Away To remove the dirt</p>
+      </section>
+      <section>
+        <h2>Slide 26: SR</h2>
+        <p>Gesture Mapping Clockwise for present, anticlockwise for past. Roll your hands To go back in time (past), (present)</p>
+      </section>
+      <section>
+        <h2>Slide 27: SR</h2>
+        <p>Gesture Mapping Ask a Question To know more about the artifact Make a mic holding gesture with clenched fist</p>
+      </section>
+      <section>
+        <h2>Slide 28: SR</h2>
+        <p>VISUAL & GRAPHIC SYSTEM Pseudo-realistic historical reconstruction Earth / sand / stone / bronze Minimal + contextual Immersive + atmospheric World transformation instead of screen switching The interface should disappear into the world. Ask QUES</p>
+      </section>
+      <section>
+        <h2>Slide 29: SR</h2>
+        <p>TOOLS USED Asset generation Vibe coding and stitching whole flow Asset generation Audio Generation Asset generation Initial prototyping Ideation</p>
+      </section>
+      <section>
+        <h2>Slide 30: SR</h2>
+        <p>User Testing Age : 26 Age : 23 Age : 25 Age : 12</p>
+      </section>
+      <section>
+        <h2>Slide 31: SR</h2>
+        <p>FUTURE SCOPE What if a history chapter wasn't a chapter anymore - but a world you could enter?</p>
+      </section>
+      <section>
+        <h2>Slide 32: SR</h2>
+        <p>Learning & Takeaways Transitioned from standard design mockups to a fully code-based prototype in VS Code, learning to systematically build out flows by layering assets, video, audio, and interactions. Realized that designing intuitive interactions requires rigorous iteration. Overcoming technical constraints and observing real users taught us to strip back complex inputs in favor of natural, everyday movements paired with clear visual signifiers. Managed a tight timeline by dividing specialised roles- asset creation, flow design, and technical assembly while learning to navigate the tension of divergence and prioritise collective group decisions.</p>
+      </section>
+      <section>
+        <h2>Slide 33: SR</h2>
+        <p>“ Just as a historic site can feel static until a guide shares its history, this project reinforced that every artifact holds a narrative. By building this experience, we realized that uncovering and connecting users to these hidden stories is what transforms a simple museum visit into something truly special.</p>
+      </section>
+    </div>
+
+
+    <!-- Slide 01 -->
+    <div class="cs-slide-frame" id="slide-01">
+      <div id="sec-overview" class="cs-section-anchor" data-section-index="0" data-section-id="sec-overview"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_01.png"
+           alt="Multimodal Interactions - Group Members : Rushabh, Sharvani, Ankit"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="eager"
+           decoding="async">
+    </div>
+
+    <!-- Slide 02 -->
+    <div class="cs-slide-frame" id="slide-02">
+      <div id="sec-the-question" class="cs-section-anchor" data-section-index="1" data-section-id="sec-the-question"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_02.png"
+           alt="What if history could be experienced & not just studied? - Today, we learn about history through the things that survived them. What if we could experience the world that existed around those things?"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="eager"
+           decoding="async">
+    </div>
+
+    <!-- Slide 03 -->
+    <div class="cs-slide-frame" id="slide-03">
+      <div id="sec-the-problem" class="cs-section-anchor" data-section-index="2" data-section-id="sec-the-problem"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_03.png"
+           alt="PROBLEM - Children often encounter history as isolated facts, images and artifacts."
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 04 -->
+    <div class="cs-slide-frame" id="slide-04">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_04.png"
+           alt="WHY - Understanding history is more than remembering dates and objects. It can help children gradually develop:"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 05 -->
+    <div class="cs-slide-frame" id="slide-05">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_05.png"
+           alt="OPPORTUNITY - INTERVENTION"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 06 -->
+    <div class="cs-slide-frame" id="slide-06">
+      <div id="sec-research" class="cs-section-anchor" data-section-index="3" data-section-id="sec-research"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_06.png"
+           alt="How do we experience history today? - We can see the artifact."
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 07 -->
+    <div class="cs-slide-frame" id="slide-07">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_07.png"
+           alt="Secondary Research - What does museum-learning research tell us?"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 08 -->
+    <div class="cs-slide-frame" id="slide-08">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_08.png"
+           alt="Secondary Research - What does museum-learning research tell us?"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 09 -->
+    <div class="cs-slide-frame" id="slide-09">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_09.png"
+           alt="Field Research - We spoke with children about how they like to explore and interact with history and museums"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 10 -->
+    <div class="cs-slide-frame" id="slide-10">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_10.png"
+           alt="Learning isn't only about receiving information. - It is also about observing, exploring, connecting and questioning."
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 11 -->
+    <div class="cs-slide-frame" id="slide-11">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_11.png"
+           alt="So what does this mean for our design?"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 12 -->
+    <div class="cs-slide-frame" id="slide-12">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_12.png"
+           alt="How might we make learning about civilisations and artifacts more immersive, engaging and contextual for children? - Without replacing"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 13 -->
+    <div class="cs-slide-frame" id="slide-13">
+      <div id="sec-introducing" class="cs-section-anchor" data-section-index="4" data-section-id="sec-introducing"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_13.png"
+           alt="Introducing - Discover the object. Travel through its history."
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 14 -->
+    <div class="cs-slide-frame" id="slide-14">
+      <div id="sec-audience" class="cs-section-anchor" data-section-index="5" data-section-id="sec-audience"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_14.png"
+           alt="OPPORTUNITY SPACES - Where can Time Wanderers exist?"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 15 -->
+    <div class="cs-slide-frame" id="slide-15">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_15.png"
+           alt="TARGET AUDIENCE - Who are the Time Wanderers?"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 16 -->
+    <div class="cs-slide-frame" id="slide-16">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_16.png"
+           alt="POSITIONING - What are we actually making?"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 17 -->
+    <div class="cs-slide-frame" id="slide-17">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_17.png"
+           alt="Experience Design - Time Wanderers “I found something. What is it?”"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 18 -->
+    <div class="cs-slide-frame" id="slide-18">
+      <div id="sec-spatial-flow" class="cs-section-anchor" data-section-index="6" data-section-id="sec-spatial-flow"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_18.png"
+           alt="Spatial set up"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 19 -->
+    <div class="cs-slide-frame" id="slide-19">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_19.png"
+           alt="USES FLOW - Start"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 20 -->
+    <div class="cs-slide-frame" id="slide-20">
+      <div id="sec-storyboard" class="cs-section-anchor" data-section-index="7" data-section-id="sec-storyboard"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_20.png"
+           alt="Story Board - The child approaches the interactive screen as the experience invites them to begin."
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 21 -->
+    <div class="cs-slide-frame" id="slide-21">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_21.png"
+           alt="Story Board - The child spreads both open palms to zoom into an area as the screen follows the gesture."
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 22 -->
+    <div class="cs-slide-frame" id="slide-22">
+      <div id="sec-modalities" class="cs-section-anchor" data-section-index="8" data-section-id="sec-modalities"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_22.png"
+           alt="Modalities of Interaction - Modality : Hover & clench User Intent : “I want this” System Output : Select"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 23 -->
+    <div class="cs-slide-frame" id="slide-23">
+      <div id="sec-gestures" class="cs-section-anchor" data-section-index="9" data-section-id="sec-gestures"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_23.png"
+           alt="Gesture Mapping - Use your palm to hover over the screen and clench your fist to select the place"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 24 -->
+    <div class="cs-slide-frame" id="slide-24">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_24.png"
+           alt="Gesture Mapping - Zoom In"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 25 -->
+    <div class="cs-slide-frame" id="slide-25">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_25.png"
+           alt="Gesture Mapping - Blow the screen to clean the artifact"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 26 -->
+    <div class="cs-slide-frame" id="slide-26">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_26.png"
+           alt="Gesture Mapping - Clockwise for present, anticlockwise for past."
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 27 -->
+    <div class="cs-slide-frame" id="slide-27">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_27.png"
+           alt="Gesture Mapping - Ask a Question"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 28 -->
+    <div class="cs-slide-frame" id="slide-28">
+      <div id="sec-testing" class="cs-section-anchor" data-section-index="10" data-section-id="sec-testing"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_28.png"
+           alt="VISUAL & GRAPHIC SYSTEM - Pseudo-realistic historical reconstruction"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 29 -->
+    <div class="cs-slide-frame" id="slide-29">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_29.png"
+           alt="TOOLS USED - Asset generation"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 30 -->
+    <div class="cs-slide-frame" id="slide-30">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_30.png"
+           alt="User Testing - Age : 26"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 31 -->
+    <div class="cs-slide-frame" id="slide-31">
+      <div id="sec-learnings" class="cs-section-anchor" data-section-index="11" data-section-id="sec-learnings"></div>
+      <img src="/assets/projects/time-wanderers/slides/slide_31.png"
+           alt="FUTURE SCOPE - What if a history chapter wasn't a chapter anymore - but a world you could enter?"
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 32 -->
+    <div class="cs-slide-frame" id="slide-32">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_32.png"
+           alt="Learning & Takeaways - Transitioned from standard design mockups to a fully code-based prototype in VS Code, learning to systematically build out flows by layering assets, video, audio, and interactions."
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Slide 33 -->
+    <div class="cs-slide-frame" id="slide-33">
+      
+      <img src="/assets/projects/time-wanderers/slides/slide_33.png"
+           alt="“ - Just as a historic site can feel static until a guide shares its history, this project reinforced that every artifact holds a narrative. By building this experience, we realized that uncovering and connecting users to these hidden stories is what transforms a simple museum visit into something truly special."
+           width="1920"
+           height="1080"
+           class="cs-slide-img"
+           loading="lazy"
+           decoding="async">
+    </div>
+
+    <!-- Prototype Video Spotlight Section (Directly after the final slide) -->
+    <section class="cs-video-spotlight-section" id="sec-prototype-video-section" aria-label="Prototype in Action Video">
+      <div id="sec-prototype-video" class="cs-section-anchor" data-section-index="12" data-section-id="sec-prototype-video"></div>
+      <div class="cs-video-container">
+        <div class="cs-video-badge-wrapper">
+          <span class="cs-video-badge">PROTOTYPE IN ACTION</span>
+        </div>
+        <div class="cs-video-aspect-box">
+          <iframe class="cs-video-iframe"
+                  src="https://www.youtube-nocookie.com/embed/Yj909EQGlDs?rel=0&playsinline=1"
+                  title="Time Wanderers · Multimodal Museum Experience · Prototype in Action"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                  loading="lazy">
+          </iframe>
+        </div>
+        <p class="cs-video-caption">Multimodal prototype demonstration · Touchless gesture sensing, clench selection, spatial zoom, artifact interaction, and real-time narrative exploration.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer / Next Project Banner -->
+  <footer class="cs-footer">
+    <div class="cs-footer-inner">
+      <div class="cs-footer-left">
+        <span class="cs-footer-title">Next Project in Selected Works</span>
+        <span class="cs-footer-desc">04 / Munshiji · Financial learning & decision companion</span>
+      </div>
+      <a href="/projects/munshiji/" class="cs-next-project-link">
+        <span>Explore Munshiji</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </footer>
+
+  <script src="/projects/time-wanderers/case-study.js?v=exact_deck_v1"></script>
+</body>
+</html>

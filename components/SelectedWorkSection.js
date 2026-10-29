@@ -155,14 +155,85 @@ export function createSelectedWorkSection() {
         </div>
       </article>
 
-      <!-- Project 3: Munshiji (Thumbnail Left, Text Right) -->
-      <article class="project-row project-row-munshiji" id="project-munshiji" data-project-id="munshiji">
+      <!-- Project 3: Time Wanderers (Thumbnail Left, Text Right) -->
+      <article class="project-row project-row-time-wanderers" id="project-time-wanderers" data-project-id="time-wanderers">
         <div class="project-media-col">
-          <div class="project-index-label" aria-hidden="true">03 / MUNSHIJI</div>
+          <div class="project-index-label" aria-hidden="true">03 / TIME WANDERERS</div>
           
           <div class="project-paper-frame">
             <!-- Decorative Yellow Tape (Upper-Left, ~ -16deg) -->
             <img class="tape-strip tape-upper-left" src="assets/yellow-tape.png" alt="" aria-hidden="true" loading="lazy" />
+
+            <!-- 3:2 Media Aperture -->
+            <a href="/projects/time-wanderers/" class="project-aperture-link" aria-label="Explore Time Wanderers case study">
+              <div class="project-video-aperture" style="background-color: #0b0b0d;">
+                <img class="project-thumbnail-img"
+                     src="assets/projects/time-wanderers/slide_introducing.png"
+                     alt="Time Wanderers multimodal spatial museum experience"
+                     loading="lazy"
+                     style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+              </div>
+            </a>
+
+            <!-- Category Tab (Lower-Right overhang) -->
+            <div class="category-tab tab-mint" aria-hidden="true">
+              <span>Multimodal interaction</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-text-col">
+          <h3 class="project-name">Time Wanderers</h3>
+          <p class="project-subheading">Discover the object.<br><span class="marker-highlight marker-lime">Travel through its history.</span></p>
+          <p class="project-desc">A multimodal spatial museum experience exploring Indus Valley civilization through touchless gesture interaction, physical proximity, and contextual storytelling.</p>
+          <div class="project-meta-details">
+            <span class="project-meta-item">2026 · Group project · Multimodal & Spatial Experience</span>
+          </div>
+          <div class="project-discipline-capsules" aria-label="Project disciplines">
+            <span class="discipline-capsule capsule-lavender">Multimodal interaction</span>
+            <span class="discipline-capsule capsule-peach">Spatial computing</span>
+            <span class="discipline-capsule capsule-mint">Museum experience</span>
+          </div>
+          <div class="project-link-wrapper">
+            <a href="/projects/time-wanderers/" class="project-case-study-link" id="timeWanderersExploreLink">
+              <span>Explore case study</span>
+              <span class="link-arrow" aria-hidden="true">↗</span>
+            </a>
+            <a href="https://youtu.be/Yj909EQGlDs" target="_blank" rel="noopener noreferrer" class="project-case-study-link" id="timeWanderersVideoLink">
+              <span>Watch video</span>
+              <span class="link-arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Project 4: Munshiji (Text Left, Thumbnail Right on Desktop) -->
+      <article class="project-row project-row-munshiji" id="project-munshiji" data-project-id="munshiji">
+        <div class="project-text-col">
+          <h3 class="project-name">Munshiji</h3>
+          <p class="project-subheading">Financial confidence for everyday decisions.</p>
+          <p class="project-desc">A digital companion helping small business owners track expenses, understand cash flow, and make informed choices.</p>
+          <div class="project-meta-details">
+            <span class="project-meta-item">2026 · Academic project</span>
+          </div>
+          <div class="project-discipline-capsules" aria-label="Project disciplines">
+            <span class="discipline-capsule capsule-lavender">Interaction design</span>
+            <span class="discipline-capsule capsule-peach">UX design</span>
+          </div>
+          <div class="project-link-wrapper">
+            <a href="/projects/munshiji/" class="project-case-study-link" id="munshijiExploreLink">
+              <span>Explore case study</span>
+              <span class="link-arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="project-media-col">
+          <div class="project-index-label" aria-hidden="true">04 / MUNSHIJI</div>
+          
+          <div class="project-paper-frame">
+            <!-- Decorative Yellow Tape (Upper-Right, ~ +18deg) -->
+            <img class="tape-strip tape-upper-right" src="assets/yellow-tape.png" alt="" aria-hidden="true" loading="lazy" />
 
             <!-- 3:2 Video Aperture -->
             <a href="/projects/munshiji/" class="project-aperture-link" aria-label="Explore Munshiji case study">
@@ -185,54 +256,16 @@ export function createSelectedWorkSection() {
             </div>
           </div>
         </div>
-
-        <div class="project-text-col">
-          <h3 class="project-name">Munshiji</h3>
-          <p class="project-subheading">Financial confidence for everyday decisions.</p>
-          <p class="project-desc">A digital companion helping small business owners track expenses, understand cash flow, and make informed choices.</p>
-          <div class="project-meta-details">
-            <span class="project-meta-item">2026 · Academic project</span>
-          </div>
-          <div class="project-discipline-capsules" aria-label="Project disciplines">
-            <span class="discipline-capsule capsule-lavender">Interaction design</span>
-            <span class="discipline-capsule capsule-peach">UX design</span>
-          </div>
-          <div class="project-link-wrapper">
-            <a href="/projects/munshiji/" class="project-case-study-link" id="munshijiExploreLink">
-              <span>Explore case study</span>
-              <span class="link-arrow" aria-hidden="true">↗</span>
-            </a>
-          </div>
-        </div>
       </article>
 
-      <!-- Project 4: Digital Fabrication (Text Left, Thumbnail Right on Desktop) -->
+      <!-- Project 5: Digital Fabrication (Thumbnail Left, Text Right on Desktop) -->
       <article class="project-row project-row-cooldice" id="project-cooldice" data-project-id="cooldice">
-        <div class="project-text-col">
-          <h3 class="project-name">Digital Fabrication</h3>
-          <p class="project-subheading">A small gesture. <span class="marker-highlight marker-peach">A little magic.</span></p>
-          <p class="project-desc">CoolDice explores how a touchless palm gesture sets a physical marble run in motion, rolls a digital dice, and dispenses a tangible candy reward.</p>
-          <div class="project-meta-details">
-            <span class="project-meta-item">2026 · 2 weeks · Physical Computing & Digital Fabrication</span>
-          </div>
-          <div class="project-discipline-capsules" aria-label="Project disciplines">
-            <span class="discipline-capsule capsule-lavender">Physical computing</span>
-            <span class="discipline-capsule capsule-mint">Digital fabrication</span>
-          </div>
-          <div class="project-link-wrapper">
-            <a href="/projects/digital-fabrication/" class="project-case-study-link" id="cooldiceExploreLink">
-              <span>Explore case study</span>
-              <span class="link-arrow" aria-hidden="true">↗</span>
-            </a>
-          </div>
-        </div>
-
         <div class="project-media-col">
-          <div class="project-index-label" aria-hidden="true">04 / DIGITAL FABRICATION</div>
+          <div class="project-index-label" aria-hidden="true">05 / DIGITAL FABRICATION</div>
           
           <div class="project-paper-frame">
-            <!-- Decorative Yellow Tape (Upper-Right, ~ +18deg) -->
-            <img class="tape-strip tape-upper-right" src="assets/yellow-tape.png" alt="" aria-hidden="true" loading="lazy" />
+            <!-- Decorative Yellow Tape (Upper-Left, ~ -16deg) -->
+            <img class="tape-strip tape-upper-left" src="assets/yellow-tape.png" alt="" aria-hidden="true" loading="lazy" />
 
             <!-- 3:2 Media Aperture -->
             <a href="/projects/digital-fabrication/" class="project-aperture-link" aria-label="Explore Digital Fabrication case study">
@@ -249,6 +282,25 @@ export function createSelectedWorkSection() {
             <div class="category-tab tab-lavender" aria-hidden="true">
               <span>Tangible interaction</span>
             </div>
+          </div>
+        </div>
+
+        <div class="project-text-col">
+          <h3 class="project-name">Digital Fabrication</h3>
+          <p class="project-subheading">A small gesture. <span class="marker-highlight marker-peach">A little magic.</span></p>
+          <p class="project-desc">CoolDice explores how a touchless palm gesture sets a physical marble run in motion, rolls a digital dice, and dispenses a tangible candy reward.</p>
+          <div class="project-meta-details">
+            <span class="project-meta-item">2026 · 2 weeks · Physical Computing & Digital Fabrication</span>
+          </div>
+          <div class="project-discipline-capsules" aria-label="Project disciplines">
+            <span class="discipline-capsule capsule-lavender">Physical computing</span>
+            <span class="discipline-capsule capsule-mint">Digital fabrication</span>
+          </div>
+          <div class="project-link-wrapper">
+            <a href="/projects/digital-fabrication/" class="project-case-study-link" id="cooldiceExploreLink">
+              <span>Explore case study</span>
+              <span class="link-arrow" aria-hidden="true">↗</span>
+            </a>
           </div>
         </div>
       </article>
