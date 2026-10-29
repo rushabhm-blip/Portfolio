@@ -12,8 +12,9 @@ export const sketchbookData = {
     { id: 'Home', label: 'Home', active: true },
     { id: 'Works', label: 'Works', route: '/#works' },
     { id: 'About', label: 'About', route: '/#about' },
-    { id: 'Playground', label: 'Playground', route: '/#playground' },
-    { id: 'Architecture', label: 'Architecture', route: '/#architecture' }
+    { id: 'Resume', label: 'Resume', route: '/assets/Rushabh_Mahore_Resume.pdf', url: '/assets/Rushabh_Mahore_Resume.pdf' },
+    { id: 'Architecture', label: 'Architecture', route: '/#architecture' },
+    { id: 'Playground', label: 'Playground', route: '/#playground' }
   ],
   cover: {
     greeting: "Hi, I’m",
@@ -54,6 +55,13 @@ export const sketchbookData = {
       eyebrow: "BACKGROUND & ROOTS",
       title: "About",
       description: "Architect by training, explorer at heart. I observe daily human friction, urban patterns, and physical movements to design calm, intuitive digital experiences."
+    },
+    Resume: {
+      eyebrow: "CURRICULUM VITAE",
+      title: "Resume",
+      description: "Interaction designer & architect exploring systems, spatial experiences, and physical computing.",
+      actionUrl: "/assets/Rushabh_Mahore_Resume.pdf",
+      actionLabel: "View Resume (PDF)"
     },
     Playground: {
       eyebrow: "EXPERIMENTS & LAB",

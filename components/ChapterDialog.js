@@ -92,6 +92,25 @@ export function createChapterDialog({ chaptersData }) {
       });
 
       projectsEl.appendChild(list);
+    } else if (data.actionUrl) {
+      const actionLink = document.createElement('a');
+      actionLink.href = data.actionUrl;
+      actionLink.target = '_blank';
+      actionLink.rel = 'noopener noreferrer';
+      actionLink.className = 'dialog-project-item';
+      actionLink.style.display = 'flex';
+      actionLink.style.justifyContent = 'space-between';
+      actionLink.style.alignItems = 'center';
+      actionLink.style.padding = '14px 18px';
+      actionLink.style.marginTop = '16px';
+      actionLink.innerHTML = `
+        <div class="proj-text">
+          <strong>${data.actionLabel || 'View / Download'}</strong>
+          <span>Open PDF document in a new tab</span>
+        </div>
+        <span class="proj-arrow">↗</span>
+      `;
+      projectsEl.appendChild(actionLink);
     }
 
     dialog.showModal();

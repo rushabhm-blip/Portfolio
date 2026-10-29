@@ -1,7 +1,7 @@
-import { sketchbookData } from './data.js?v=47';
-import { createHeader } from './components/Header.js?v=46';
+import { sketchbookData } from './data.js?v=48';
+import { createHeader } from './components/Header.js?v=48';
 import { createBookScene } from './components/BookScene.js?v=46';
-import { createChapterDialog } from './components/ChapterDialog.js?v=46';
+import { createChapterDialog } from './components/ChapterDialog.js?v=48';
 import { createExperimentNote } from './components/ExperimentNote.js?v=46';
 import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=47';
 import { createMemoryMachine } from './components/MemoryMachine.js?v=56';
@@ -129,6 +129,11 @@ function initPortfolio() {
       if (aboutSection) {
         aboutSection.scrollIntoView({ behavior: 'smooth' });
       }
+      return;
+    }
+    if (chapterId === 'Resume') {
+      dialogManager.closeDialog();
+      window.open('/assets/Rushabh_Mahore_Resume.pdf', '_blank');
       return;
     }
     dialogManager.openChapter(chapterId, triggerEl);

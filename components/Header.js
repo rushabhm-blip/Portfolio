@@ -21,15 +21,23 @@ export function createHeader({ brand, navigation, onSelectChapter }) {
   nav.setAttribute('aria-label', 'Main navigation');
 
   navigation.forEach((item) => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = `nav-item ${item.active ? 'active' : ''}`;
-    btn.setAttribute('data-chapter', item.id);
-    btn.textContent = item.label;
-    btn.addEventListener('click', () => {
-      onSelectChapter(item.id);
-    });
-    nav.appendChild(btn);
+    let el;
+    if (item.url) {
+      el = document.createElement('a');
+      el.href = item.url;
+      el.target = '_blank';
+      el.rel = 'noopener noreferrer';
+    } else {
+      el = document.createElement('button');
+      el.type = 'button';
+      el.addEventListener('click', () => {
+        onSelectChapter(item.id);
+      });
+    }
+    el.className = `nav-item ${item.active ? 'active' : ''}`;
+    el.setAttribute('data-chapter', item.id);
+    el.textContent = item.label;
+    nav.appendChild(el);
   });
 
   header.appendChild(wordmark);
