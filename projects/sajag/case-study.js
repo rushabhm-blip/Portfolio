@@ -337,6 +337,286 @@
         setActiveSection(0, true);
       });
     }
+
+    // Initialize interactive Design Process section
+    initDesignProcessSection();
+  }
+
+  // ==========================================================================
+  // Design Process Interactive Sticky Transition & Mobile Pan-Zoom
+  // ==========================================================================
+  function initDesignProcessSection() {
+    const section = document.getElementById('sec-process');
+    const container = document.getElementById('processInteractiveContainer');
+    const stickyStage = document.getElementById('processStickyStage');
+    const mediaStage = document.getElementById('processMediaStage');
+    const video = document.getElementById('processVideo');
+    const playBtn = document.getElementById('processPlayBtn');
+    const videoLayer = document.getElementById('processVideoLayer');
+    const previewLayer = document.getElementById('processDiagramPreviewLayer');
+    const diagramFlow = document.getElementById('processDiagramFlow');
+    const headingBlock = document.getElementById('processHeadingBlock');
+    const captionBar = document.getElementById('processCaptionBar');
+    const captionHint = document.getElementById('processCaptionHint');
+    const exploreBtn = document.getElementById('processExploreBtn');
+    const zoomBtn = document.getElementById('processZoomBtn');
+    const zoomDialog = document.getElementById('processZoomDialog');
+
+    if (!section || !container || !video) return;
+
+    let currentProgress = 0;
+    let isIntersecting = false;
+    let videoHeight = 674;
+    let transitionDist = window.innerHeight * 0.55;
+    const headerStickyOffset = 76; // header height (70px) + 6px breathing room
+
+    // 1. Responsive video-height & transition distance updater
+    function updateDimensions() {
+      const containerWidth = container.clientWidth || 1198;
+      // 16:9 ratio
+      videoHeight = containerWidth / (16 / 9);
+      transitionDist = Math.max(260, window.innerHeight * 0.55);
+      container.style.setProperty('--video-height', `${videoHeight.toFixed(2)}px`);
+      container.style.setProperty('--transition-distance', `${transitionDist.toFixed(2)}px`);
+    }
+
+    updateDimensions();
+    window.addEventListener('resize', () => {
+      updateDimensions();
+      onScroll();
+    }, { passive: true });
+
+    // 2. Video playback & Autoplay failure fallback
+    function attemptPlay() {
+      if (!video) return;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            if (playBtn) playBtn.style.display = 'none';
+          })
+          .catch((err) => {
+            console.log('Video autoplay blocked or pending:', err);
+            if (playBtn) playBtn.style.display = 'inline-flex';
+          });
+      }
+    }
+
+    if (playBtn) {
+      playBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        video.muted = true;
+        video.play().then(() => {
+          playBtn.style.display = 'none';
+        });
+      });
+    }
+
+    // Video viewport intersection observer (pause when offscreen to save resources)
+    if ('IntersectionObserver' in window) {
+      const videoObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            isIntersecting = entry.isIntersecting;
+            if (isIntersecting && currentProgress < 0.95) {
+              attemptPlay();
+            } else if (!isIntersecting) {
+              if (!video.paused) video.pause();
+            }
+          });
+        },
+        { threshold: [0, 0.1, 0.5] }
+      );
+      videoObserver.observe(section);
+    } else {
+      attemptPlay();
+    }
+
+    // 3. Hover preview on desktop
+    const hasHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (captionHint) {
+      captionHint.textContent = hasHover ? 'Scroll or hover to explore' : 'Scroll to explore the process';
+    }
+    if (hasHover && mediaStage) {
+      mediaStage.addEventListener('mouseenter', () => {
+        if (currentProgress < 0.08) {
+          mediaStage.classList.add('is-hover-previewing');
+        }
+      });
+      mediaStage.addEventListener('mouseleave', () => {
+        mediaStage.classList.remove('is-hover-previewing');
+      });
+    }
+
+    // 4. Scroll Transition Engine
+    function onScroll() {
+      if (reducedMotion) return;
+
+      const rect = container.getBoundingClientRect();
+      const scrollInside = headerStickyOffset - rect.top;
+
+      let progress = 0;
+      if (scrollInside <= 0) {
+        progress = 0;
+      } else if (scrollInside >= transitionDist) {
+        progress = 1;
+      } else {
+        progress = scrollInside / transitionDist;
+      }
+
+      currentProgress = progress;
+
+      // When user starts scrolling down, cancel any desktop hover preview override
+      if (progress > 0.05 && mediaStage && mediaStage.classList.contains('is-hover-previewing')) {
+        mediaStage.classList.remove('is-hover-previewing');
+      }
+
+      // Smooth Crossfade:
+      // Video layer fades from 1 -> 0
+      if (videoLayer) {
+        videoLayer.style.opacity = (1 - progress).toFixed(3);
+      }
+
+      // Diagram preview fades in from 0 -> 1 and rises by 16px -> 0px
+      if (previewLayer) {
+        previewLayer.style.opacity = progress.toFixed(3);
+        const translateY = ((1 - progress) * 16).toFixed(1);
+        previewLayer.style.transform = `translateY(${translateY}px)`;
+      }
+
+      // Section heading block above video fades out gently so it doesn't collide with the diagram's internal heading
+      if (headingBlock) {
+        headingBlock.style.opacity = Math.max(0, 1 - progress * 1.5).toFixed(3);
+      }
+
+      // Caption bar fades out quickly
+      if (captionBar) {
+        const captionOpacity = Math.max(0, 1 - progress * 2.5);
+        captionBar.style.opacity = captionOpacity.toFixed(3);
+        captionBar.style.pointerEvents = progress > 0.2 ? 'none' : 'auto';
+      }
+
+      // Pause/resume video and toggle flow handoff based on progress
+      if (progress >= 0.98) {
+        if (!video.paused) video.pause();
+        if (diagramFlow) diagramFlow.classList.add('is-flow-active');
+        if (stickyStage) stickyStage.style.visibility = 'hidden';
+      } else {
+        if (diagramFlow) diagramFlow.classList.remove('is-flow-active');
+        if (stickyStage) stickyStage.style.visibility = 'visible';
+        if (previewLayer) {
+          previewLayer.style.opacity = progress.toFixed(3);
+        }
+        if (isIntersecting && video.paused) {
+          attemptPlay();
+        }
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // Run once on init
+    onScroll();
+
+    // 5. "Explore full process" button smooth scroll
+    if (exploreBtn) {
+      exploreBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const rect = container.getBoundingClientRect();
+        const targetScrollTop = window.pageYOffset + rect.top - headerStickyOffset + transitionDist + 6;
+        window.scrollTo({
+          top: targetScrollTop,
+          behavior: reducedMotion ? 'auto' : 'smooth'
+        });
+      });
+    }
+
+    // 6. Mobile & Accessible Pan-Zoom Dialog
+    if (zoomBtn && zoomDialog) {
+      const zoomImg = document.getElementById('zoomDialogImg');
+      const zoomBody = document.getElementById('zoomDialogBody');
+      const closeBtn = document.getElementById('zoomCloseBtn');
+      const inBtn = document.getElementById('zoomInBtn');
+      const outBtn = document.getElementById('zoomOutBtn');
+      const resetBtn = document.getElementById('zoomResetBtn');
+
+      let currentScale = 1;
+      const minScale = 0.8;
+      const maxScale = 3.5;
+      const scaleStep = 0.35;
+
+      function updateZoomTransform() {
+        if (zoomImg) {
+          zoomImg.style.transform = `scale(${currentScale})`;
+        }
+      }
+
+      function openZoom() {
+        currentScale = 1;
+        updateZoomTransform();
+        if (typeof zoomDialog.showModal === 'function') {
+          zoomDialog.showModal();
+        } else {
+          zoomDialog.setAttribute('open', '');
+        }
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeZoom() {
+        if (typeof zoomDialog.close === 'function') {
+          zoomDialog.close();
+        } else {
+          zoomDialog.removeAttribute('open');
+        }
+        document.body.style.overflow = '';
+      }
+
+      zoomBtn.addEventListener('click', openZoom);
+      if (closeBtn) closeBtn.addEventListener('click', closeZoom);
+
+      zoomDialog.addEventListener('click', (e) => {
+        if (e.target === zoomDialog) {
+          closeZoom();
+        }
+      });
+
+      if (inBtn) {
+        inBtn.addEventListener('click', () => {
+          currentScale = Math.min(maxScale, currentScale + scaleStep);
+          updateZoomTransform();
+        });
+      }
+
+      if (outBtn) {
+        outBtn.addEventListener('click', () => {
+          currentScale = Math.max(minScale, currentScale - scaleStep);
+          updateZoomTransform();
+        });
+      }
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          currentScale = 1;
+          updateZoomTransform();
+          if (zoomBody) {
+            zoomBody.scrollTop = 0;
+            zoomBody.scrollLeft = 0;
+          }
+        });
+      }
+
+      // Wheel zoom inside dialog body
+      if (zoomBody) {
+        zoomBody.addEventListener('wheel', (e) => {
+          if (e.ctrlKey || e.metaKey || Math.abs(e.deltaY) > 20) {
+            e.preventDefault();
+            const delta = e.deltaY < 0 ? scaleStep : -scaleStep;
+            currentScale = Math.min(maxScale, Math.max(minScale, currentScale + delta));
+            updateZoomTransform();
+          }
+        }, { passive: false });
+      }
+    }
   }
 
   window.initSajagCaseStudy = initCaseStudy;

@@ -173,16 +173,99 @@
     </section>
 
     <!-- Section 2: Design Process · Double Diamond Framework -->
-    <section class="case-section" id="sec-process" data-section="sec-process">
+    <section class="case-section process-section" id="sec-process" data-section="sec-process">
       <div class="sr-only">
         <h2>Design Process · Double Diamond Framework</h2>
-        <p>01 Discover, 02 Define, 03 Develop, 04 Deliever. Reimagining How We Care for Our Cities.</p>
+        <p>01 Discover, 02 Define, 03 Develop, 04 Deliver. Reimagining How We Care for Our Cities.</p>
       </div>
-      <div class="cs-heading-block">
-        <img src="/assets/projects/sajag/sections_2x/02_design_process_head.png" alt="Design Process · Double Diamond Framework" width="1198" height="120" loading="lazy" decoding="async">
+
+      <!-- Section Heading Block (displayed above video, fades out as user crossfades to diagram which already has Design Process title) -->
+      <div class="cs-heading-block process-heading-block" id="processHeadingBlock">
+        <img class="process-heading-img" src="/assets/projects/sajag/sections_2x/02_design_process_head.png" alt="Design Process · Double Diamond Framework" width="1198" height="120" loading="lazy" decoding="async">
       </div>
-      <div class="cs-body-block">
-        <img src="/assets/projects/sajag/sections_2x/02_design_process_body.png" alt="01 Discover, 02 Define, 03 Develop, 04 Deliever. Reimagining How We Care for Our Cities." width="1198" height="1980" loading="lazy" decoding="async">
+
+      <!-- Interactive Container: sticky video to diagram transition -->
+      <div class="process-interactive-container" id="processInteractiveContainer">
+        <!-- Scroll Track providing scroll distance for sticky crossfade -->
+        <div class="process-transition-track" id="processTransitionTrack">
+          <!-- Sticky Stage -->
+          <div class="process-sticky-stage" id="processStickyStage">
+            <div class="process-media-stage" id="processMediaStage" role="region" aria-label="Design process interactive demonstration and diagram preview" tabindex="0">
+              <!-- Video Layer -->
+              <div class="process-video-layer" id="processVideoLayer">
+                <video
+                  class="process-video"
+                  id="processVideo"
+                  src="/assets/projects/sajag/design_process.mp4"
+                  poster="/assets/projects/sajag/design_process_poster.png"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  preload="auto"
+                  aria-label="Looping animation showing Sajag double-diamond design process"></video>
+                <!-- Small fallback play button if browser blocks autoplay -->
+                <button type="button" class="process-play-btn" id="processPlayBtn" style="display: none;" aria-label="Play design process video">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                  <span>Play Video</span>
+                </button>
+              </div>
+
+              <!-- Sticky Diagram Preview Layer -->
+              <div class="process-diagram-preview-layer" id="processDiagramPreviewLayer" aria-hidden="true">
+                <img
+                  class="process-diagram-preview-img"
+                  src="/assets/projects/sajag/design_process_full_diagram.png"
+                  alt=""
+                  width="1198"
+                  height="1520"
+                  loading="eager"
+                  decoding="async">
+              </div>
+
+              <!-- Caption & Explore Hint Bar -->
+              <div class="process-caption-bar" id="processCaptionBar">
+                <span class="process-caption-hint" id="processCaptionHint">Scroll to explore the process</span>
+                <button type="button" class="process-explore-btn" id="processExploreBtn" aria-label="Jump to explore full design process diagram">
+                  <span>Explore full process</span>
+                  <svg class="explore-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <polyline points="19 12 12 19 5 12"></polyline>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Diagram Flow (Scrolls normally after sticky release) -->
+        <div class="process-diagram-flow" id="processDiagramFlow">
+          <div class="process-diagram-flow-inner">
+            <img
+              class="process-full-diagram-img"
+              id="processFullDiagramImg"
+              src="/assets/projects/sajag/design_process_full_diagram.png"
+              alt="Complete Sajag Double Diamond Design Process diagram: Discover, Define, Develop, Deliver across 11 key methodology phases"
+              width="1198"
+              height="1520"
+              loading="lazy"
+              decoding="async">
+          </div>
+          <!-- Zoom Action for Mobile & Accessible Inspection -->
+          <div class="process-zoom-action-wrapper">
+            <button type="button" class="process-zoom-btn" id="processZoomBtn" aria-haspopup="dialog" aria-controls="processZoomDialog">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <line x1="11" y1="8" x2="11" y2="14"></line>
+                <line x1="8" y1="11" x2="14" y2="11"></line>
+              </svg>
+              <span>Zoom &amp; Pan Diagram</span>
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -487,6 +570,29 @@
     </div>
   </footer>
 
-  <script src="/projects/sajag/case-study.js?v=14"></script>
+  <!-- Modal Dialog for Mobile Pan & Zoom of Full Design Process Diagram -->
+  <dialog id="processZoomDialog" class="process-zoom-dialog" aria-labelledby="processZoomTitle">
+    <div class="zoom-dialog-header">
+      <h3 id="processZoomTitle" class="zoom-dialog-title">Design Process Diagram</h3>
+      <div class="zoom-dialog-actions">
+        <button type="button" class="zoom-tool-btn" id="zoomOutBtn" aria-label="Zoom out">−</button>
+        <button type="button" class="zoom-tool-btn" id="zoomInBtn" aria-label="Zoom in">+</button>
+        <button type="button" class="zoom-tool-btn" id="zoomResetBtn" aria-label="Reset zoom">Reset</button>
+        <button type="button" class="zoom-close-btn" id="zoomCloseBtn" aria-label="Close dialog">✕</button>
+      </div>
+    </div>
+    <div class="zoom-dialog-body" id="zoomDialogBody">
+      <img
+        class="zoom-dialog-img"
+        id="zoomDialogImg"
+        src="/assets/projects/sajag/design_process_full_diagram.png"
+        alt="Sajag Double Diamond Design Process diagram full view">
+    </div>
+    <div class="zoom-dialog-hint">
+      <span>Drag to pan &bull; Pinch or use buttons to zoom &bull; Press Esc to close</span>
+    </div>
+  </dialog>
+
+  <script src="/projects/sajag/case-study.js?v=15"></script>
 </body>
 </html>
