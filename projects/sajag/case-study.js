@@ -432,20 +432,9 @@
       attemptPlay();
     }
 
-    // 3. Hover preview on desktop
-    const hasHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    // 3. Caption Hint
     if (captionHint) {
-      captionHint.textContent = hasHover ? 'Scroll or hover to explore' : 'Scroll to explore the process';
-    }
-    if (hasHover && mediaStage) {
-      mediaStage.addEventListener('mouseenter', () => {
-        if (currentProgress < 0.08) {
-          mediaStage.classList.add('is-hover-previewing');
-        }
-      });
-      mediaStage.addEventListener('mouseleave', () => {
-        mediaStage.classList.remove('is-hover-previewing');
-      });
+      captionHint.textContent = 'Scroll to explore the process';
     }
 
     // 4. Scroll Transition Engine
@@ -465,11 +454,6 @@
       }
 
       currentProgress = progress;
-
-      // When user starts scrolling down, cancel any desktop hover preview override
-      if (progress > 0.05 && mediaStage && mediaStage.classList.contains('is-hover-previewing')) {
-        mediaStage.classList.remove('is-hover-previewing');
-      }
 
       // Smooth Crossfade:
       // Video layer fades from 1 -> 0

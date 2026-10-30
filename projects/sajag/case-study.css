@@ -1003,7 +1003,7 @@ html.is-entering-transition .portfolio-transition-curtain {
   height: 100%;
   background: #ffffff;
   overflow: hidden;
-  cursor: pointer;
+  cursor: default;
   user-select: none;
 }
 
@@ -1082,16 +1082,7 @@ html.is-entering-transition .portfolio-transition-curtain {
   background: #ffffff;
 }
 
-/* Hover Previewing State */
-@media (hover: hover) and (pointer: fine) {
-  .process-media-stage.is-hover-previewing .process-video-layer {
-    opacity: 0 !important;
-  }
-  .process-media-stage.is-hover-previewing .process-diagram-preview-layer {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-  }
-}
+
 
 /* Caption / Hint Bar */
 .process-caption-bar {
