@@ -364,6 +364,15 @@
 
     if (!section || !container || !video) return;
 
+    // Defensively ensure no lingering hover classes or handlers
+    if (mediaStage) {
+      mediaStage.classList.remove('is-hover-previewing');
+      mediaStage.onmouseenter = null;
+      mediaStage.onmouseleave = null;
+      mediaStage.onmouseover = null;
+      mediaStage.onmouseout = null;
+    }
+
     let currentProgress = 0;
     let isIntersecting = false;
     let videoHeight = 674;

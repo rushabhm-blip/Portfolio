@@ -13,7 +13,17 @@
     } catch (e) {}
   </script>
   <script src="../../password-gate.js"></script>
-  <link rel="stylesheet" href="/projects/sajag/case-study.css?v=18">
+  <link rel="stylesheet" href="/projects/sajag/case-study.css?v=21">
+  <style>
+    /* Absolute defense against stale cached hover-preview rules */
+    .process-media-stage.is-hover-previewing .process-video-layer {
+      opacity: 1 !important;
+    }
+    .process-media-stage.is-hover-previewing .process-diagram-preview-layer {
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -190,7 +200,7 @@
         <div class="process-transition-track" id="processTransitionTrack">
           <!-- Sticky Stage -->
           <div class="process-sticky-stage" id="processStickyStage">
-            <div class="process-media-stage" id="processMediaStage" role="region" aria-label="Design process interactive demonstration and diagram preview" tabindex="0">
+            <div class="process-media-stage" id="processMediaStage" role="region" aria-label="Design process interactive demonstration">
               <!-- Video Layer -->
               <div class="process-video-layer" id="processVideoLayer">
                 <video
@@ -593,6 +603,6 @@
     </div>
   </dialog>
 
-  <script src="/projects/sajag/case-study.js?v=16"></script>
+  <script src="/projects/sajag/case-study.js?v=21"></script>
 </body>
 </html>

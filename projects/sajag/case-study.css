@@ -1084,6 +1084,17 @@ html.is-entering-transition .portfolio-transition-curtain {
 
 
 
+/* Ensure hover never reveals diagram preview */
+.process-media-stage.is-hover-previewing .process-video-layer {
+  opacity: 1 !important;
+}
+
+.process-media-stage.is-hover-previewing .process-diagram-preview-layer {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 /* Caption / Hint Bar */
 .process-caption-bar {
   position: absolute;
