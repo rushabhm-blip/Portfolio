@@ -47,11 +47,18 @@ function fitBookComposition(headerEl, stageEl) {
 
   if (needsSinglePage) {
     // Single page close-up of the physical book:
-    // Fits mobile width cleanly with perimeter clearance, and provides comfortable vertical reading space
     pageW = Math.min(availW, 460);
     pageW = Math.max(pageW, 310);
-    const minSinglePageH = 640;
-    pageH = Math.max(minSinglePageH, Math.round(pageW / 0.58));
+    if (vw < 768) {
+      // Phone layout only: proportionate, balanced page shape matching natural sketchbook aspect ratio (~0.67)
+      // Eliminates excessive height and large empty areas while maintaining clean readability
+      const phonePageRatio = 0.67;
+      pageH = Math.round(pageW / phonePageRatio);
+    } else {
+      // Tablet / high zoom fallback (preserve existing behavior)
+      const minSinglePageH = 640;
+      pageH = Math.max(minSinglePageH, Math.round(pageW / 0.58));
+    }
     // Allow document to scroll vertically if page is taller than viewport
     spreadW = pageW;
     spreadH = pageH;

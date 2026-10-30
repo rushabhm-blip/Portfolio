@@ -249,12 +249,13 @@ function initJarAnimation(scene) {
     const sceneW = sceneRect.width || window.innerWidth || 1200;
     const isMobile = window.innerWidth < 820;
 
-    // Jar neck center in scene coordinates (neck opening of tall jar)
-    const jarNeckSceneX = (stageRect.left - sceneRect.left) + 134;
-    const jarNeckSceneY = (stageRect.top - sceneRect.top) + 65;
+    // Jar neck center in scene coordinates (calculated dynamically from actual rendered stageRect)
+    const jarNeckSceneX = (stageRect.left - sceneRect.left) + (stageRect.width / 2);
+    const jarNeckSceneY = (stageRect.top - sceneRect.top) + (stageRect.height * 0.185);
+    const jarHalfW = stageRect.width / 2;
 
-    // Sizing: settled icons ~25-30% larger than before (62px desktop, 44px mobile)
-    const iconFinalSize = isMobile ? 44 : 62;
+    // Sizing: 38px on mobile, 62px desktop
+    const iconFinalSize = isMobile ? 38 : 62;
 
     // Update icon node crop & image sizing
     iconNodes.forEach(node => {
@@ -270,8 +271,8 @@ function initJarAnimation(scene) {
     });
 
     if (isMobile) {
-      // Mobile / narrow screens: arrange in an airy, curated constellation in the reserved band and flanking the jar
-      // Note heading, paragraph, and signature are strict EXCLUSION ZONES!
+      // Mobile / narrow screens: arrange in an airy, curated constellation above the rim and flanking the jar
+      // Strict requirement: Icons must sit outside the jar's silhouette with breathing room between the icons and the glass!
       const noteRect = noteAssembly ? noteAssembly.getBoundingClientRect() : null;
       let noteBottom = 0;
       let noteLeft = 0;
@@ -281,35 +282,43 @@ function initJarAnimation(scene) {
         noteLeft = noteRect.left - sceneRect.left;
         noteRight = noteRect.right - sceneRect.left;
       }
-      const safeNoteBottom = noteBottom > 0 ? noteBottom + 16 : (jarNeckSceneY - 95);
+      const safeNoteBottom = noteBottom > 0 ? noteBottom + 12 : (jarNeckSceneY - 110);
+
+      // Flank clearance: full icon radius + glass half-width + breathing room
+      const minFlankDx = Math.round(jarHalfW + (iconFinalSize / 2) + 15);
+      const outerFlankDx = minFlankDx + 8;
 
       const mobileSlotsLeft = [
-        { dx: -55,  dy: -65, rot: -8 },   // Slot 0: Reserved band inner left
-        { dx: -110, dy: -60, rot: 12 },   // Slot 1: Reserved band outer left
-        { dx: -25,  dy: -70, rot: -6 },   // Slot 2: Reserved band center left
-        { dx: -140, dy: -20, rot: -10 },  // Slot 3: High left flank
-        { dx: -90,  dy: 10,  rot: 8 },    // Slot 4: Left shoulder
-        { dx: -140, dy: 35,  rot: -12 },  // Slot 5: Left flank mid
-        { dx: -85,  dy: 65,  rot: 6 },    // Slot 6: Left body inner
-        { dx: -135, dy: 90,  rot: -7 },   // Slot 7: Left flank lower
-        { dx: -80,  dy: 125, rot: 10 }    // Slot 8: Left bottom
+        // Upper constellation above the jar rim (dy <= -55)
+        { dx: -38,  dy: -85, rot: -8 },   // Slot 0: Inner left above rim
+        { dx: -88,  dy: -95, rot: 10 },   // Slot 1: Mid left above rim
+        { dx: -138, dy: -75, rot: -6 },   // Slot 2: Outer left above shoulder
+        { dx: -60,  dy: -135, rot: 8 },   // Slot 3: High left arc below note card
+        // Flanking the left glass body (all strictly outside glass silhouette)
+        { dx: -minFlankDx, dy: -20, rot: -10 }, // Slot 4: High left flank beside neck
+        { dx: -outerFlankDx, dy: 45,  rot: 8 },   // Slot 5: Mid left flank
+        { dx: -minFlankDx, dy: 110, rot: -8 },  // Slot 6: Lower mid left flank
+        { dx: -outerFlankDx, dy: 175, rot: 11 },  // Slot 7: Lower left flank
+        { dx: -minFlankDx, dy: 240, rot: -7 }   // Slot 8: Bottom left flank beside jar base
       ];
 
       const mobileSlotsRight = [
-        { dx: 55,   dy: -65, rot: 9 },    // Slot 9: Reserved band inner right
-        { dx: 110,  dy: -60, rot: -11 },  // Slot 10: Reserved band outer right
-        { dx: 25,   dy: -70, rot: 6 },    // Slot 11: Reserved band center right
-        { dx: 140,  dy: -30, rot: 8 },    // Slot 12: High right flank (well above annotation)
-        { dx: 70,   dy: 5,   rot: -7 },   // Slot 13: Right shoulder
-        { dx: 140,  dy: 55,  rot: 14 },   // Slot 14: Right flank mid (well below annotation)
-        { dx: 65,   dy: 75,  rot: -6 },   // Slot 15: Right body inner
-        { dx: 135,  dy: 110, rot: 10 },   // Slot 16: Right flank lower (outside jar)
-        { dx: 55,   dy: 135, rot: -9 }    // Slot 17: Right bottom inside
+        // Upper constellation above the jar rim (dy <= -55)
+        { dx: 38,   dy: -85, rot: 7 },    // Slot 9: Inner right above rim
+        { dx: 88,   dy: -95, rot: -9 },   // Slot 10: Mid right above rim
+        { dx: 138,  dy: -75, rot: 10 },   // Slot 11: Outer right above shoulder
+        { dx: 60,   dy: -135, rot: -8 },  // Slot 12: High right arc below note card
+        // Flanking the right glass body (all strictly outside glass silhouette)
+        { dx: minFlankDx, dy: -25, rot: 9 },    // Slot 13: High right flank above annotation
+        { dx: outerFlankDx, dy: 50,  rot: -7 },   // Slot 14: Mid right flank below annotation
+        { dx: outerFlankDx, dy: 115, rot: 12 },   // Slot 15: Lower mid right flank
+        { dx: minFlankDx + 2, dy: 180, rot: -6 }, // Slot 16: Lower right flank above lid
+        { dx: minFlankDx, dy: 245, rot: 10 }    // Slot 17: Bottom right flank beside jar base
       ];
 
-      // Dynamically constrain dx to available screen width so no horizontal overflow occurs
-      const maxDx = Math.min(145, (sceneW - iconFinalSize - 20) / 2);
-      const xRatio = Math.max(0.65, Math.min(1.0, maxDx / 145));
+      // Dynamically ensure no horizontal overflow off-screen on narrow phones
+      const maxAllowedDx = (sceneW - iconFinalSize - 16) / 2;
+      const xRatio = outerFlankDx > maxAllowedDx ? Math.max(0.85, maxAllowedDx / outerFlankDx) : 1.0;
 
       iconNodes.forEach(node => {
         const isLeft = node.spec.side === 'left';
@@ -326,7 +335,7 @@ function initJarAnimation(scene) {
         }
 
         // Viewport padding bounds
-        const pad = iconFinalSize / 2 + 12;
+        const pad = iconFinalSize / 2 + 10;
         targetX = Math.max(pad, Math.min(sceneW - pad, targetX));
 
         node.tx = targetX;
@@ -413,10 +422,10 @@ function initJarAnimation(scene) {
       lid.style.transform = `translate(${popX}px, ${popY}px) rotate(-16deg)`;
       if (lidShadow) lidShadow.style.opacity = '0';
     } else if (mode === 'resting') {
-      // Safe resting coordinates on mobile keeping the detached lid fully on screen with comfortable margin
-      const restX = isNarrow ? 76 : (isMob ? 95 : 145);
-      const restY = isMob ? 210 : 220;
-      const restRot = isNarrow ? 20 : (isMob ? 28 : 42);
+      // Safe resting coordinates on mobile: sits beside the base outside the jar silhouette
+      const restX = isNarrow ? 115 : (isMob ? 132 : 145);
+      const restY = isMob ? 215 : 220;
+      const restRot = isNarrow ? 28 : (isMob ? 35 : 42);
       lid.style.transform = `translate(${restX}px, ${restY}px) rotate(${restRot}deg)`;
       if (lidShadow) {
         lidShadow.style.opacity = '1';
@@ -602,12 +611,12 @@ function initJarAnimation(scene) {
       // Silver cap pops up, arcs through the air, and lands beside jar
       const isMobile = window.innerWidth < 820;
       const isNarrow = window.innerWidth <= 380;
-      const targetLidX = isNarrow ? 76 : (isMobile ? 95 : 145);
-      const targetLidY = isMobile ? 210 : 220;
-      const targetLidRot = isNarrow ? 20 : (isMobile ? 28 : 42);
+      const targetLidX = isNarrow ? 115 : (isMobile ? 130 : 145);
+      const targetLidY = isMobile ? 215 : 220;
+      const targetLidRot = isNarrow ? 28 : (isMobile ? 35 : 42);
 
       const lidX = targetLidX * lidEase;
-      const lidArcY = (targetLidY * lidEase) - Math.sin(lidP * Math.PI) * (isMobile ? 90 : 90);
+      const lidArcY = (targetLidY * lidEase) - Math.sin(lidP * Math.PI) * (isMobile ? 80 : 90);
       const lidRot = lidP * targetLidRot;
 
       lid.style.transform = `translate(${lidX}px, ${lidArcY}px) rotate(${lidRot}deg)`;
@@ -659,12 +668,31 @@ function initJarAnimation(scene) {
           const p2x = node.tx;
           const p2y = node.ty;
 
-          const isLeft = node.spec.side === 'left';
-          const p1x = isLeft ? Math.min(p0x - 65, p2x + 25) : Math.max(p0x + 65, p2x - 25);
-          const p1y = Math.min(p0y, p2y) - (isMobile ? 120 : 95);
+          let curX, curY;
+          if (isMobile) {
+            // Mobile:
+            // 1. First rise straight UP through jar opening to clear the rim with a visible gap
+            // 2. Then fan out smoothly along curved paths outside the jar silhouette
+            // Cubic Bézier curve with strictly vertical tangent at t=0 (p1x = p0x, p1y = p0y - 65)
+            const p1x = p0x;
+            const p1y = p0y - 65;
 
-          const curX = (1 - easeOut) * (1 - easeOut) * p0x + 2 * (1 - easeOut) * easeOut * p1x + easeOut * easeOut * p2x;
-          const curY = (1 - easeOut) * (1 - easeOut) * p0y + 2 * (1 - easeOut) * easeOut * p1y + easeOut * easeOut * p2y;
+            const isLeft = node.spec.side === 'left';
+            const p2xOut = isLeft ? Math.min(p0x - 45, p2x + 20) : Math.max(p0x + 45, p2x - 20);
+            const p2yOut = Math.min(p1y, p2y) - 15;
+
+            const u = 1 - easeOut;
+            curX = u * u * u * p0x + 3 * u * u * easeOut * p1x + 3 * u * easeOut * easeOut * p2xOut + easeOut * easeOut * easeOut * p2x;
+            curY = u * u * u * p0y + 3 * u * u * easeOut * p1y + 3 * u * easeOut * easeOut * p2yOut + easeOut * easeOut * easeOut * p2y;
+          } else {
+            // Desktop: preserve original quadratic bezier
+            const isLeft = node.spec.side === 'left';
+            const p1x = isLeft ? Math.min(p0x - 65, p2x + 25) : Math.max(p0x + 65, p2x - 25);
+            const p1y = Math.min(p0y, p2y) - 95;
+
+            curX = (1 - easeOut) * (1 - easeOut) * p0x + 2 * (1 - easeOut) * easeOut * p1x + easeOut * easeOut * p2x;
+            curY = (1 - easeOut) * (1 - easeOut) * p0y + 2 * (1 - easeOut) * easeOut * p1y + easeOut * easeOut * p2y;
+          }
 
           // Continuous scale interpolation from packed (1.48) to settled (1.0)
           const curScale = PACKED_SCALE + (1.0 - PACKED_SCALE) * easeOut;

@@ -140,7 +140,34 @@ export function createMemoryMachine(options = {}) {
       <!-- CENTER COLUMN: Introduction & Copy & VR Sticker -->
       <div class="memory-col memory-col-center">
         <div class="memory-intro-block">
-          <h2 class="memory-main-heading">Still<br>that kid.</h2>
+          <div class="memory-mobile-heading-row">
+            <div class="memory-mobile-childhood-slot" aria-hidden="true">
+              <div class="childhood-collage-wrap childhood-collage-mobile">
+                <!-- Orange Sparkle (Upper-Left) -->
+                <img src="assets/memory-machine/assets/sparkle.svg" class="childhood-sparkle childhood-sparkle-top" alt="" aria-hidden="true" />
+
+                <!-- Turban Photo Card (Behind, rotated ~ -3.5deg) -->
+                <div class="childhood-photo-card childhood-turban-card">
+                  <!-- Yellow Tape strip across top edge -->
+                  <img src="assets/memory-machine/assets/tape.svg" class="childhood-tape" alt="" aria-hidden="true" />
+                  <div class="childhood-img-frame">
+                    <img src="assets/memory-machine/assets/childhood-turban.svg" alt="Little Rushabh wearing a red turban" width="945" height="1260" />
+                  </div>
+                </div>
+
+                <!-- Birthday Photo Card (In front, rotated ~ +3.5deg) -->
+                <div class="childhood-photo-card childhood-birthday-card">
+                  <div class="childhood-img-frame">
+                    <img src="assets/memory-machine/assets/childhood-birthday.svg" alt="Little Rushabh on his birthday with cake" width="550" height="710" />
+                  </div>
+                </div>
+
+                <!-- Orange Sparkle (Bottom-Right) -->
+                <img src="assets/memory-machine/assets/sparkle.svg" class="childhood-sparkle childhood-sparkle-bottom" alt="" aria-hidden="true" />
+              </div>
+            </div>
+            <h2 class="memory-main-heading">Still<br>that kid.</h2>
+          </div>
           <p class="memory-main-para">
             A little older. A few more tools.<br>
             The same joy in <mark class="lime-marker">trying something new.</mark>

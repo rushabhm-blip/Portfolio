@@ -60,9 +60,9 @@ export const DEFAULT_MOBILE_TRAVEL_STAMPS = [
     name: 'Ooty',
     src: 'assets/ooty.png',
     alt: 'Ooty travel stamp with toy train and Nilgiri tea hills',
-    cx: 820,
+    cx: 810,
     cy: 230,
-    width: 290,
+    width: 260,
     rotation: -6
   },
   {
@@ -70,9 +70,9 @@ export const DEFAULT_MOBILE_TRAVEL_STAMPS = [
     name: 'Chikkamagaluru',
     src: 'assets/chikkamagaluru.png',
     alt: 'Chikkamagaluru travel stamp with coffee plantation and rolling hills',
-    cx: 830,
-    cy: 520,
-    width: 290,
+    cx: 810,
+    cy: 480,
+    width: 260,
     rotation: 5
   },
   {
@@ -80,9 +80,9 @@ export const DEFAULT_MOBILE_TRAVEL_STAMPS = [
     name: 'Coorg',
     src: 'assets/coorg.png',
     alt: 'Coorg travel stamp with waterfalls and coffee berries',
-    cx: 740,
-    cy: 780,
-    width: 290,
+    cx: 730,
+    cy: 740,
+    width: 260,
     rotation: -5
   },
   {
@@ -91,17 +91,17 @@ export const DEFAULT_MOBILE_TRAVEL_STAMPS = [
     src: 'assets/kodaikanal.png',
     alt: 'Kodaikanal travel stamp with misty lake, boat, and pine trees',
     cx: 460,
-    cy: 940,
-    width: 290,
+    cy: 960,
+    width: 260,
     rotation: 6
   }
 ];
 
 export const DEFAULT_MOBILE_HOBBY_POSITIONS = {
-  badminton: { cx: 85, cy: 190, rotation: -3 },
-  flute: { cx: 85, cy: 340, rotation: 2 },
-  reading: { cx: 85, cy: 490, rotation: -2 },
-  cruiser: { cx: 95, cy: 660, rotation: 3 }
+  badminton: { cx: 95, cy: 220, rotation: -3 },
+  flute: { cx: 95, cy: 400, rotation: 2 },
+  reading: { cx: 95, cy: 590, rotation: -2 },
+  cruiser: { cx: 100, cy: 780, rotation: 3 }
 };
 
 const STAMP_OFFSETS = {
@@ -113,8 +113,8 @@ const STAMP_OFFSETS = {
 
 const STAMPS_STORAGE_KEY = 'rushabh_travel_stamps_kit_v2';
 const HOBBIES_STORAGE_KEY = 'rushabh_hobbies_stickers_v2';
-const MOBILE_STAMPS_STORAGE_KEY = 'rushabh_mobile_stamps_v1';
-const MOBILE_HOBBIES_STORAGE_KEY = 'rushabh_mobile_hobbies_v1';
+const MOBILE_STAMPS_STORAGE_KEY = 'rushabh_mobile_stamps_v2';
+const MOBILE_HOBBIES_STORAGE_KEY = 'rushabh_mobile_hobbies_v2';
 
 function getRotatedPoint(cx, cy, ox, oy, deg = 0) {
   const rad = (deg * Math.PI) / 180;
