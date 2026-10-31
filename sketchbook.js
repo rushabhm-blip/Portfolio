@@ -29,9 +29,9 @@ function fitBookComposition(headerEl, stageEl) {
 
   const isOpen = stageEl.classList.contains('is-open') || stageEl.classList.contains('is-opening');
 
-  // When increased zoom or a narrow viewport leaves insufficient space for a readable two-page spread,
-  // switch to a physical-book ONE-PAGE-AT-A-TIME view retaining paper textures, edges, and spine shadows.
-  const needsSinglePage = isOpen && (availW < 960 || availH < 520);
+  // Phone layout only: single page physical-book view
+  // On desktop / laptop (vw >= 1024) and tablet (vw >= 768), always maintain the two-page spread.
+  const needsSinglePage = (vw < 768) && isOpen;
 
   if (needsSinglePage) {
     stageEl.classList.add('is-single-page');
@@ -46,31 +46,24 @@ function fitBookComposition(headerEl, stageEl) {
   let spreadW, spreadH, pageW, pageH;
 
   if (needsSinglePage) {
-    // Single page close-up of the physical book:
+    // Single page close-up of the physical book (phone layout):
     pageW = Math.min(availW, 460);
     pageW = Math.max(pageW, 310);
-    if (vw < 768) {
-      // Phone layout only: proportionate, balanced page shape matching natural sketchbook aspect ratio (~0.67)
-      // Eliminates excessive height and large empty areas while maintaining clean readability
-      const phonePageRatio = 0.67;
-      pageH = Math.round(pageW / phonePageRatio);
-    } else {
-      // Tablet / high zoom fallback (preserve existing behavior)
-      const minSinglePageH = 640;
-      pageH = Math.max(minSinglePageH, Math.round(pageW / 0.58));
-    }
-    // Allow document to scroll vertically if page is taller than viewport
+    const phonePageRatio = 0.67;
+    pageH = Math.round(pageW / phonePageRatio);
     spreadW = pageW;
     spreadH = pageH;
   } else if (vw >= 1024) {
     // Desktop 2-page spread: reserve ~120px on the right for the hanging ID tag
     const maxSpreadW = availW - 120;
     const maxHFromW = Math.floor(maxSpreadW / spreadRatio);
-    // Allow vertical scrolling; do not compress book height below 540px
-    const maxHFromAvail = Math.floor(availH * 0.94);
+    // Fit comfortably below header without stretching height to fill viewport.
+    // Use the closed book's natural aspect ratio for each page (~0.8) and spread (~1.6).
+    // Cap height at 570px to preserve compact, balanced book proportions and eliminate dead space.
+    const maxHFromAvail = Math.floor(availH * 0.86);
+    const targetH = Math.min(maxHFromW, maxHFromAvail, 570);
 
-    spreadH = Math.min(Math.max(maxHFromAvail, 540), maxHFromW, 740);
-    spreadH = Math.max(spreadH, 540);
+    spreadH = Math.max(targetH, 470);
     spreadW = Math.round(spreadH * spreadRatio);
     pageW = Math.round(spreadW / 2);
     pageH = spreadH;
@@ -78,10 +71,10 @@ function fitBookComposition(headerEl, stageEl) {
     // Tablet 2-page spread:
     const maxSpreadW = availW - 80;
     const maxHFromW = Math.floor(maxSpreadW / spreadRatio);
-    const maxHFromAvail = Math.floor(availH * 0.92);
+    const maxHFromAvail = Math.floor(availH * 0.86);
+    const targetH = Math.min(maxHFromW, maxHFromAvail, 530);
 
-    spreadH = Math.min(Math.max(maxHFromAvail, 520), maxHFromW, 680);
-    spreadH = Math.max(spreadH, 520);
+    spreadH = Math.max(targetH, 440);
     spreadW = Math.round(spreadH * spreadRatio);
     pageW = Math.round(spreadW / 2);
     pageH = spreadH;

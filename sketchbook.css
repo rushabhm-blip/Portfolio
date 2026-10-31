@@ -413,7 +413,7 @@ body.is-book-open .crawler-video,
 
 .right-page-content {
   position: absolute;
-  inset: 5% 6% 5% 4%;
+  inset: 4% 5% 5% 3.5%;
   container-type: inline-size;
   user-select: none;
 }
@@ -422,7 +422,7 @@ body.is-book-open .crawler-video,
 .right-heading-block {
   position: absolute;
   left: 44%;
-  top: 4.2%;
+  top: 3.8%;
   transform: translateX(-50%);
   width: auto;
   z-index: 10;
@@ -433,7 +433,7 @@ body.is-book-open .crawler-video,
 .right-sans-title {
   margin: 0;
   font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
-  font-size: clamp(22px, 4.2cqw, 33px);
+  font-size: clamp(18px, 3.6cqw, 25px);
   font-weight: 800;
   color: #080807;
   letter-spacing: -0.025em;
@@ -484,7 +484,7 @@ body.is-book-open .crawler-video,
 }
 
 .hobby-sticker-img {
-  width: clamp(75px, 15cqw, 95px);
+  width: clamp(55px, 11.5cqw, 72px);
   height: auto;
   display: block;
   pointer-events: none;
@@ -495,7 +495,7 @@ body.is-book-open .crawler-video,
 
 .hobby-sticker-label {
   font-family: 'Inter', -apple-system, sans-serif;
-  font-size: clamp(14px, 2.6cqw, 16.5px);
+  font-size: clamp(11.5px, 2cqw, 13px);
   font-weight: 600;
   color: #080807;
   letter-spacing: -0.01em;
@@ -503,12 +503,12 @@ body.is-book-open .crawler-video,
   margin-top: 1px;
 }
 
-/* Central Walking Cutout & Starburst (Enlarged by ~45%) */
+/* Central Walking Cutout & Starburst */
 .walking-portrait-wrapper {
   position: absolute;
   left: 45%;
-  top: 43%;
-  width: 52%;
+  top: 40%;
+  width: 44%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
@@ -539,9 +539,9 @@ body.is-book-open .crawler-video,
 
 /* Caption beneath portrait */
 .portrait-travel-caption {
-  margin: 6px 0 0;
+  margin: 4px 0 0;
   font-family: 'Inter', -apple-system, sans-serif;
-  font-size: clamp(13.5px, 2.5cqw, 17px);
+  font-size: clamp(11px, 2cqw, 13.5px);
   font-weight: 600;
   color: #23396A;
   letter-spacing: -0.015em;
@@ -573,7 +573,7 @@ body.is-book-open .crawler-video,
 /* Travel Stamp Items */
 .travel-stamp-item {
   position: absolute;
-  width: 31%;
+  width: 29%;
   aspect-ratio: 1536 / 1024;
   z-index: 10;
   cursor: grab;
@@ -622,10 +622,10 @@ body.is-book-open .crawler-video,
   position: absolute;
   right: 12px;
   bottom: 12px;
-  width: clamp(38px, 6.8cqw, 46px);
-  height: clamp(38px, 6.8cqw, 46px);
-  min-width: 44px;
-  min-height: 44px;
+  width: clamp(34px, 5.5cqw, 42px);
+  height: clamp(34px, 5.5cqw, 42px);
+  min-width: 36px;
+  min-height: 36px;
   border-radius: 50%;
   background: none;
   border: none;
@@ -1062,13 +1062,14 @@ body.is-book-open .crawler-video,
 
 .left-page-content {
   position: absolute;
-  top: 8.5%;
-  bottom: 12%;
-  left: 16.5%;
-  right: 10%;
+  top: 7.5%;
+  bottom: 8%;
+  left: 14%;
+  right: 8%;
   width: auto;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: flex-start;
   text-align: left;
   container-type: inline-size;
@@ -1100,7 +1101,7 @@ body.is-book-open .crawler-video,
   line-height: 1.05;
   letter-spacing: -0.035em;
   color: var(--color-ink);
-  font-size: clamp(28px, 6.8cqw, 34px);
+  font-size: clamp(21px, 4.8cqw, 27px);
   outline: none;
   text-align: left;
 }
@@ -1150,7 +1151,7 @@ body.is-book-open .crawler-video,
 .architecture-sticker-wrapper {
   flex: 0 0 auto;
   position: relative;
-  width: clamp(82px, 18cqw, 100px);
+  width: clamp(66px, 14.5cqw, 80px);
   cursor: grab;
   touch-action: none;
   user-select: none;
@@ -1200,7 +1201,7 @@ body.is-book-open .crawler-video,
 
 /* Bio Paragraph Container with Marker Highlights & Lightweight Accents */
 .left-paragraph-container {
-  margin-top: clamp(16px, 4.2cqw, 24px);
+  margin-top: 0;
   position: relative;
   width: 100%;
   text-align: left;
@@ -1221,8 +1222,8 @@ body.is-book-open .crawler-video,
   margin: 0;
   font-family: 'Inter', -apple-system, sans-serif;
   font-weight: 400;
-  font-size: clamp(14px, 3.1cqw, 15.5px);
-  line-height: 1.45;
+  font-size: clamp(12.5px, 2.5cqw, 14px);
+  line-height: 1.38;
   letter-spacing: -0.015em;
   color: #1a1a18;
   max-width: 100%;
@@ -1277,7 +1278,7 @@ body.is-book-open .crawler-video,
 
 /* 4-Stop Timeline */
 .left-timeline-block {
-  margin-top: clamp(16px, 4.2cqw, 24px);
+  margin-top: 0;
   position: relative;
   width: 100%;
   text-align: left;
@@ -1290,12 +1291,12 @@ body.is-book-open .crawler-video,
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: clamp(9px, 2.2cqw, 12px);
+  gap: clamp(4px, 1.2cqw, 7px);
 }
 
 .timeline-continuous-line {
   position: absolute;
-  left: 3.5px;
+  left: 2.75px;
   width: 2px;
   background-color: var(--color-blue);
   z-index: 1;
@@ -1315,9 +1316,9 @@ body.is-book-open .crawler-video,
 
 .timeline-bullet {
   flex: none;
-  width: 9px;
-  height: 9px;
-  margin-top: 5px;
+  width: 7.5px;
+  height: 7.5px;
+  margin-top: 4px;
   border-radius: 50%;
   background-color: var(--color-blue);
   box-shadow: 0 0 0 2px #fff0d7;
@@ -1327,26 +1328,26 @@ body.is-book-open .crawler-video,
 .timeline-item-content {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   text-align: left;
 }
 
 .timeline-institution {
   font-family: 'Inter', sans-serif;
   font-weight: 600;
-  font-size: clamp(15px, 3.3cqw, 17px);
+  font-size: clamp(12.5px, 2.5cqw, 14.5px);
   color: var(--color-ink);
   letter-spacing: -0.015em;
-  line-height: 1.2;
+  line-height: 1.18;
 }
 
 .timeline-type {
   font-family: 'Inter', sans-serif;
   font-weight: 500;
-  font-size: clamp(12px, 2.5cqw, 13px);
+  font-size: clamp(10.5px, 2cqw, 11.5px);
   color: #0647fa;
   letter-spacing: -0.01em;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 /* Page Numbers 01 and 02 aligned at same distance from bottom */
@@ -1361,13 +1362,13 @@ body.is-book-open .crawler-video,
 }
 
 .page-number-left {
-  left: 16.5%;
-  bottom: 6.5%;
+  left: 14%;
+  bottom: 4%;
 }
 
 .page-number-right {
   right: 14%;
-  bottom: 8.5%;
+  bottom: 4%;
 }
 
 .reset-stickers-btn {

@@ -11,18 +11,18 @@ export const DEFAULT_TRAVEL_STAMPS = [
     src: 'assets/ooty.png',
     alt: 'Ooty travel stamp with toy train and Nilgiri tea hills',
     cx: 780,
-    cy: 260,
-    width: 330,
-    rotation: -7
+    cy: 230,
+    width: 290,
+    rotation: -6
   },
   {
     id: 'chikkamagaluru',
     name: 'Chikkamagaluru',
     src: 'assets/chikkamagaluru.png',
     alt: 'Chikkamagaluru travel stamp with coffee plantation and rolling hills',
-    cx: 830,
-    cy: 550,
-    width: 330,
+    cx: 810,
+    cy: 480,
+    width: 290,
     rotation: 5
   },
   {
@@ -30,28 +30,28 @@ export const DEFAULT_TRAVEL_STAMPS = [
     name: 'Coorg',
     src: 'assets/coorg.png',
     alt: 'Coorg travel stamp with waterfalls and coffee berries',
-    cx: 790,
-    cy: 880,
-    width: 330,
-    rotation: -6
+    cx: 760,
+    cy: 740,
+    width: 290,
+    rotation: -5
   },
   {
     id: 'kodaikanal',
     name: 'Kodaikanal',
     src: 'assets/kodaikanal.png',
     alt: 'Kodaikanal travel stamp with misty lake, boat, and pine trees',
-    cx: 460,
-    cy: 990,
-    width: 330,
-    rotation: 7
+    cx: 470,
+    cy: 910,
+    width: 290,
+    rotation: 6
   }
 ];
 
 export const DEFAULT_HOBBY_POSITIONS = {
-  badminton: { cx: 100, cy: 210, rotation: -3 },
-  flute: { cx: 100, cy: 410, rotation: 2 },
-  reading: { cx: 100, cy: 620, rotation: -2 },
-  cruiser: { cx: 100, cy: 830, rotation: 3 }
+  badminton: { cx: 95, cy: 190, rotation: -3 },
+  flute: { cx: 95, cy: 380, rotation: 2 },
+  reading: { cx: 95, cy: 570, rotation: -2 },
+  cruiser: { cx: 95, cy: 760, rotation: 3 }
 };
 
 export const DEFAULT_MOBILE_TRAVEL_STAMPS = [
@@ -111,8 +111,8 @@ const STAMP_OFFSETS = {
   kodaikanal: { enter: { ox: 85, oy: -105 } }
 };
 
-const STAMPS_STORAGE_KEY = 'rushabh_travel_stamps_kit_v2';
-const HOBBIES_STORAGE_KEY = 'rushabh_hobbies_stickers_v2';
+const STAMPS_STORAGE_KEY = 'rushabh_travel_stamps_kit_v3';
+const HOBBIES_STORAGE_KEY = 'rushabh_hobbies_stickers_v3';
 const MOBILE_STAMPS_STORAGE_KEY = 'rushabh_mobile_stamps_v2';
 const MOBILE_HOBBIES_STORAGE_KEY = 'rushabh_mobile_hobbies_v2';
 
