@@ -57,11 +57,12 @@ function fitBookComposition(headerEl, stageEl) {
     // Desktop 2-page spread: reserve ~120px on the right for the hanging ID tag
     const maxSpreadW = availW - 120;
     const maxHFromW = Math.floor(maxSpreadW / spreadRatio);
-    // Fit comfortably below header without stretching height to fill viewport.
-    // Use the closed book's natural aspect ratio for each page (~0.8) and spread (~1.6).
-    // Cap height at 570px to preserve compact, balanced book proportions and eliminate dead space.
-    const maxHFromAvail = Math.floor(availH * 0.86);
-    const targetH = Math.min(maxHFromW, maxHFromAvail, 570);
+    // Fit comfortably below header using available height.
+    // Use 88% of available height as the cap, but impose a firm ceiling so the
+    // book never grows taller than the closed cover's proportions warrant.
+    // At 1920×1080 this yields ~620px; at 1366×768 ~530px; at 2560×1440 capped at 680.
+    const maxHFromAvail = Math.floor(availH * 0.88);
+    const targetH = Math.min(maxHFromW, maxHFromAvail, 680);
 
     spreadH = Math.max(targetH, 470);
     spreadW = Math.round(spreadH * spreadRatio);
@@ -71,8 +72,8 @@ function fitBookComposition(headerEl, stageEl) {
     // Tablet 2-page spread:
     const maxSpreadW = availW - 80;
     const maxHFromW = Math.floor(maxSpreadW / spreadRatio);
-    const maxHFromAvail = Math.floor(availH * 0.86);
-    const targetH = Math.min(maxHFromW, maxHFromAvail, 530);
+    const maxHFromAvail = Math.floor(availH * 0.88);
+    const targetH = Math.min(maxHFromW, maxHFromAvail, 580);
 
     spreadH = Math.max(targetH, 440);
     spreadW = Math.round(spreadH * spreadRatio);

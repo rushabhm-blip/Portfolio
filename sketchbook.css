@@ -1062,14 +1062,14 @@ body.is-book-open .crawler-video,
 
 .left-page-content {
   position: absolute;
-  top: 7.5%;
-  bottom: 8%;
+  top: 8%;
+  bottom: 10%;
   left: 14%;
   right: 8%;
   width: auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   text-align: left;
   container-type: inline-size;
@@ -1101,7 +1101,7 @@ body.is-book-open .crawler-video,
   line-height: 1.05;
   letter-spacing: -0.035em;
   color: var(--color-ink);
-  font-size: clamp(21px, 4.8cqw, 27px);
+  font-size: clamp(24px, 5.8cqw, 32px);
   outline: none;
   text-align: left;
 }
@@ -1151,7 +1151,7 @@ body.is-book-open .crawler-video,
 .architecture-sticker-wrapper {
   flex: 0 0 auto;
   position: relative;
-  width: clamp(66px, 14.5cqw, 80px);
+  width: clamp(72px, 16cqw, 92px);
   cursor: grab;
   touch-action: none;
   user-select: none;
@@ -1201,7 +1201,7 @@ body.is-book-open .crawler-video,
 
 /* Bio Paragraph Container with Marker Highlights & Lightweight Accents */
 .left-paragraph-container {
-  margin-top: 0;
+  margin-top: clamp(14px, 3.5cqw, 22px);
   position: relative;
   width: 100%;
   text-align: left;
@@ -1222,7 +1222,7 @@ body.is-book-open .crawler-video,
   margin: 0;
   font-family: 'Inter', -apple-system, sans-serif;
   font-weight: 400;
-  font-size: clamp(12.5px, 2.5cqw, 14px);
+  font-size: clamp(13px, 2.8cqw, 15px);
   line-height: 1.38;
   letter-spacing: -0.015em;
   color: #1a1a18;
@@ -1278,7 +1278,7 @@ body.is-book-open .crawler-video,
 
 /* 4-Stop Timeline */
 .left-timeline-block {
-  margin-top: 0;
+  margin-top: clamp(14px, 3.5cqw, 22px);
   position: relative;
   width: 100%;
   text-align: left;
@@ -1291,7 +1291,7 @@ body.is-book-open .crawler-video,
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: clamp(4px, 1.2cqw, 7px);
+  gap: clamp(6px, 1.6cqw, 10px);
 }
 
 .timeline-continuous-line {
@@ -1335,7 +1335,7 @@ body.is-book-open .crawler-video,
 .timeline-institution {
   font-family: 'Inter', sans-serif;
   font-weight: 600;
-  font-size: clamp(12.5px, 2.5cqw, 14.5px);
+  font-size: clamp(13.5px, 2.8cqw, 16px);
   color: var(--color-ink);
   letter-spacing: -0.015em;
   line-height: 1.18;
@@ -1344,7 +1344,7 @@ body.is-book-open .crawler-video,
 .timeline-type {
   font-family: 'Inter', sans-serif;
   font-weight: 500;
-  font-size: clamp(10.5px, 2cqw, 11.5px);
+  font-size: clamp(11px, 2.2cqw, 12.5px);
   color: #0647fa;
   letter-spacing: -0.01em;
   line-height: 1.15;
