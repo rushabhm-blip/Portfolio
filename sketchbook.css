@@ -2339,21 +2339,21 @@ body.is-book-open .crawler-video,
   background-repeat: repeat;
   background-position: center top;
   background-size: 1200px auto; /* 50px square grid cells on desktop, matches Keep Calm */
-  /* Same grid as Keep Calm with subtle opacity (~0.42), fading out before About Me */
+  /* Hand-drawn blue grid matching Keep Calm with visible opacity (~0.78), fading out before About Me */
   mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0px,
-    rgba(0, 0, 0, 0.42) 100px,
-    rgba(0, 0, 0, 0.42) calc(var(--selected-works-height, 2600px) - 140px),
-    rgba(0, 0, 0, 0.15) calc(var(--selected-works-height, 2600px) - 50px),
+    rgba(0, 0, 0, 0.78) 120px,
+    rgba(0, 0, 0, 0.78) calc(var(--selected-works-height, 2600px) - 140px),
+    rgba(0, 0, 0, 0.35) calc(var(--selected-works-height, 2600px) - 50px),
     transparent var(--selected-works-height, 2600px)
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0px,
-    rgba(0, 0, 0, 0.42) 100px,
-    rgba(0, 0, 0, 0.42) calc(var(--selected-works-height, 2600px) - 140px),
-    rgba(0, 0, 0, 0.15) calc(var(--selected-works-height, 2600px) - 50px),
+    rgba(0, 0, 0, 0.78) 120px,
+    rgba(0, 0, 0, 0.78) calc(var(--selected-works-height, 2600px) - 140px),
+    rgba(0, 0, 0, 0.35) calc(var(--selected-works-height, 2600px) - 50px),
     transparent var(--selected-works-height, 2600px)
   );
 }
