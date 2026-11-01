@@ -240,30 +240,6 @@ export function createMemoryMachine(options = {}) {
                    height="736" />
             </div>
           </div>
-
-          <!-- Quiet Memory Controls beneath the receipt -->
-          <div class="memory-controls" aria-label="Memory machine controls">
-            <button type="button" class="memory-nav-btn memory-prev-btn" id="memoryPrevBtn" aria-label="Previous memory">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
-              </svg>
-            </button>
-
-            <span class="memory-counter" id="memoryCounter" aria-live="polite">01 / 06</span>
-
-            <button type="button" class="memory-pause-btn" id="memoryPauseBtn" aria-label="Pause memories">
-              <span class="pause-icon" aria-hidden="true">⏸</span>
-              <span class="pause-label">Pause memories</span>
-            </button>
-
-            <button type="button" class="memory-nav-btn memory-next-btn" id="memoryNextBtn" aria-label="Next memory">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -276,8 +252,8 @@ export function createMemoryMachine(options = {}) {
   const paperEl = section.querySelector('#receiptPaper');
   const counterEl = section.querySelector('#memoryCounter');
   const pauseBtn = section.querySelector('#memoryPauseBtn');
-  const pauseIcon = pauseBtn.querySelector('.pause-icon');
-  const pauseLabel = pauseBtn.querySelector('.pause-label');
+  const pauseIcon = pauseBtn ? pauseBtn.querySelector('.pause-icon') : null;
+  const pauseLabel = pauseBtn ? pauseBtn.querySelector('.pause-label') : null;
   const prevBtn = section.querySelector('#memoryPrevBtn');
   const nextBtn = section.querySelector('#memoryNextBtn');
 
@@ -324,6 +300,7 @@ export function createMemoryMachine(options = {}) {
   }
 
   function updateCounter(index) {
+    if (!counterEl) return;
     const formatted = String(index + 1).padStart(2, '0');
     const total = String(memories.length).padStart(2, '0');
     counterEl.textContent = `${formatted} / ${total}`;
@@ -390,9 +367,10 @@ export function createMemoryMachine(options = {}) {
     const printerHeight = containerWidth * (736 / 2135);
     const slitExitPx = printerHeight * 0.7133;
 
-    // Controls placed below the paper with 24px clearance
-    const controlsMarginTop = Math.round(slitExitPx + reservedViewportHeight + 24);
-    assemblyEl.style.setProperty('--controls-margin-top', `${controlsMarginTop}px`);
+    // Assembly height to fit exiting paper viewport and photos
+    const assemblyHeight = Math.round(slitExitPx + reservedViewportHeight + 20);
+    assemblyEl.style.setProperty('--assembly-height', `${assemblyHeight}px`);
+    assemblyEl.style.setProperty('--controls-margin-top', `${assemblyHeight}px`);
   }
 
   /**
@@ -528,29 +506,52 @@ export function createMemoryMachine(options = {}) {
     const effectivePaused = isUserPaused || isAutoPaused;
     if (effectivePaused) {
       clearHoldTimer();
-      pauseIcon.textContent = '▶';
-      pauseLabel.textContent = 'Resume memories';
-      pauseBtn.setAttribute('aria-label', 'Resume memories');
+      if (pauseIcon) pauseIcon.textContent = '▶';
+      if (pauseLabel) pauseLabel.textContent = 'Resume memories';
+      if (pauseBtn) pauseBtn.setAttribute('aria-label', 'Resume memories');
     } else {
-      pauseIcon.textContent = '⏸';
-      pauseLabel.textContent = 'Pause memories';
-      pauseBtn.setAttribute('aria-label', 'Pause memories');
+      if (pauseIcon) pauseIcon.textContent = '⏸';
+      if (pauseLabel) pauseLabel.textContent = 'Pause memories';
+      if (pauseBtn) pauseBtn.setAttribute('aria-label', 'Pause memories');
       scheduleNextCycle();
     }
   }
 
-  // Controls event listeners
-  pauseBtn.addEventListener('click', () => {
-    setPauseState(!isUserPaused, true);
-  });
+  // Controls event listeners (if controls present)
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', () => {
+      setPauseState(!isUserPaused, true);
+    });
+  }
 
-  prevBtn.addEventListener('click', () => {
-    feedPrevious();
-  });
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      feedPrevious();
+    });
+  }
 
-  nextBtn.addEventListener('click', () => {
-    feedNext();
-  });
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      feedNext();
+    });
+  }
+
+  // Allow clicking / tapping the printed paper viewport directly to advance
+  if (viewportEl) {
+    viewportEl.style.cursor = 'pointer';
+    viewportEl.setAttribute('role', 'button');
+    viewportEl.setAttribute('tabindex', '0');
+    viewportEl.setAttribute('aria-label', 'Memory photos roll: click or press Enter to advance');
+    viewportEl.addEventListener('click', () => {
+      feedNext();
+    });
+    viewportEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        feedNext();
+      }
+    });
+  }
 
   // Autoplay pause triggers (hover, focus, tab visibility)
   viewportEl.addEventListener('mouseenter', () => setPauseState(true, false));

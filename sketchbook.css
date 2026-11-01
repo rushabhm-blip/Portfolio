@@ -3791,6 +3791,7 @@ body:has(.book-stage.is-loading) .crawler-video {
   position: relative;
   width: 100%;
   max-width: 440px;
+  min-height: var(--assembly-height, 820px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -4033,14 +4034,7 @@ body:has(.book-stage.is-loading) .crawler-video {
    ========================================================= */
 
 .memory-controls {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-top: var(--controls-margin-top, 820px);
-  z-index: 5;
-  width: 100%;
+  display: none !important;
 }
 
 .memory-nav-btn {
