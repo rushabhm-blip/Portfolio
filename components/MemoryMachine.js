@@ -84,10 +84,22 @@ export function createMemoryMachine(options = {}) {
   const section = document.createElement('section');
   section.className = 'memory-machine-section';
   section.id = 'about';
-  section.setAttribute('aria-label', 'A little more me');
+  section.setAttribute('aria-label', 'About: Behind the work');
 
   section.innerHTML = `
-    <div class="memory-machine-bg-texture" aria-hidden="true"></div>
+    <!-- Decorative Full-Bleed Torn Paper Background -->
+    <div class="about-paper-bg" aria-hidden="true">
+      <div class="about-paper-torn-layer">
+        <img src="assets/about-torn-paper.png" class="about-paper-torn-img" alt="" loading="eager" decoding="async" />
+      </div>
+      <div class="about-paper-fill"></div>
+    </div>
+
+    <!-- Section Introduction Header with Blue "ABOUT ME" Tab & Heading -->
+    <div class="about-intro-header">
+      <div class="about-section-tab">ABOUT ME</div>
+      <h2 class="about-section-heading">Behind the work.</h2>
+    </div>
 
     <div class="memory-machine-container">
       <!-- Decorative Trail SVG (connecting free space across columns on desktop) -->
@@ -97,13 +109,8 @@ export function createMemoryMachine(options = {}) {
         </svg>
       </div>
 
-      <!-- LEFT COLUMN: Childhood Collage -->
+      <!-- LEFT COLUMN: Childhood Collage (Old redundant eyebrow replaced) -->
       <div class="memory-col memory-col-left">
-        <div class="memory-eyebrow-container">
-          <span class="memory-eyebrow-text">A LITTLE MORE ME</span>
-          <span class="memory-eyebrow-line" aria-hidden="true"></span>
-        </div>
-
         <div class="childhood-collage-wrap">
           <!-- Orange Sparkle (Upper-Left) -->
           <img src="assets/memory-machine/assets/sparkle.svg" class="childhood-sparkle childhood-sparkle-top" alt="" aria-hidden="true" />

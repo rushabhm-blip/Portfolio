@@ -2326,35 +2326,33 @@ body.is-book-open .crawler-video,
   overflow: visible;
 }
 
-/* Positioned seamless hand-drawn blue grid background layer matching Keep Calm */
+/* Positioned seamless hand-drawn blue grid background layer matching Keep Calm (only behind Projects) */
 .works-and-about-grid-bg {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(var(--selected-works-height, 2600px) + 50px);
   pointer-events: none;
   z-index: 0;
   background-image: url('assets/note/pale-blue-grid-tile-2x.png');
   background-repeat: repeat;
   background-position: center top;
   background-size: 1200px auto; /* 50px square grid cells on desktop, matches Keep Calm */
-  /* Smooth independent opacity transition:
-     - ~35-38% visual strength over Selected Works (faint & quiet for reading descriptions)
-     - ~70-72% visual strength over Still That Kid (gentle but clearly visible) */
+  /* Pale blue grid visible over Selected Works (~38%), fading to transparent right where About begins */
   mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.38) 0px,
-    rgba(0, 0, 0, 0.38) calc(var(--selected-works-height, 2600px) - 60px),
-    rgba(0, 0, 0, 0.72) calc(var(--selected-works-height, 2600px) + 40px),
-    rgba(0, 0, 0, 0.72) 100%
+    rgba(0, 0, 0, 0.38) calc(var(--selected-works-height, 2600px) - 40px),
+    rgba(0, 0, 0, 0.38) var(--selected-works-height, 2600px),
+    transparent calc(var(--selected-works-height, 2600px) + 50px)
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.38) 0px,
-    rgba(0, 0, 0, 0.38) calc(var(--selected-works-height, 2600px) - 60px),
-    rgba(0, 0, 0, 0.72) calc(var(--selected-works-height, 2600px) + 40px),
-    rgba(0, 0, 0, 0.72) 100%
+    rgba(0, 0, 0, 0.38) calc(var(--selected-works-height, 2600px) - 40px),
+    rgba(0, 0, 0, 0.38) var(--selected-works-height, 2600px),
+    transparent calc(var(--selected-works-height, 2600px) + 50px)
   );
 }
 
@@ -3370,21 +3368,111 @@ body:has(.book-stage.is-loading) .crawler-video {
    graph grid background with Selected Work
    ========================================================= */
 
+/* =========================================================
+   ABOUT SECTION ("BEHIND THE WORK" / STILL THAT KID)
+   Full-width decorative torn paper top edge & solid near-white continuation
+   ========================================================= */
+
 .memory-machine-section {
   position: relative;
-  z-index: 1;
+  z-index: 10;
   width: 100%;
   background-color: transparent;
   color: #1a1917;
-  padding: clamp(60px, 7vw, 100px) clamp(20px, 4vw, 48px) clamp(90px, 10vw, 140px);
+  padding: 0 0 clamp(90px, 10vw, 140px) 0;
   margin-top: 0;
   overflow: visible;
   box-sizing: border-box;
 }
 
-/* Subtle, very light paper grain texture (disabled for unified grid) */
-.memory-machine-bg-texture {
-  display: none;
+/* Full-bleed decorative paper backdrop layer */
+.about-paper-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Torn paper decorative image anchored top-center */
+.about-paper-torn-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.about-paper-torn-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  /* Gentle gradient blend over the lower edge to eliminate any visible seam with #fdfdfa */
+  -webkit-mask-image: linear-gradient(to bottom, #000000 0%, #000000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000000 0%, #000000 78%, transparent 100%);
+}
+
+/* Solid near-white continuation sampled from paper image (#fdfdfa) */
+.about-paper-fill {
+  position: absolute;
+  top: calc(4.6vw + 1px);
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fdfdfa;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Section Introduction Header */
+.about-intro-header {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(24px, 2.6vw, 42px) clamp(20px, 4vw, 48px) 0;
+  margin-bottom: clamp(48px, 5.5vw, 64px);
+  box-sizing: border-box;
+}
+
+/* Compact Blue "ABOUT ME" Tab overlapping the torn edge */
+.about-section-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-blue, #0647fa);
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  font-size: clamp(10.5px, 1.1vw, 12px);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(6, 71, 250, 0.35);
+  user-select: none;
+  pointer-events: auto;
+  transform: translateY(-50%) rotate(-0.5deg);
+  line-height: 1.2;
+}
+
+/* "Behind the work." Section Heading */
+.about-section-heading {
+  margin: clamp(10px, 1.5vw, 18px) 0 0 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(34px, 4vw, 52px);
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  color: #080807;
+  line-height: 1.08;
 }
 
 .memory-machine-container {
@@ -3392,11 +3480,13 @@ body:has(.book-stage.is-loading) .crawler-video {
   max-width: 1440px;
   margin: 0 auto;
   width: 100%;
+  padding: 0 clamp(20px, 4vw, 48px);
   display: grid;
   grid-template-columns: 31% 36% 33%;
   gap: clamp(24px, 3vw, 48px);
   align-items: start;
-  z-index: 1;
+  z-index: 2;
+  box-sizing: border-box;
 }
 
 /* Connecting decorative dashed trail across empty space */
@@ -4051,11 +4141,27 @@ body:has(.book-stage.is-loading) .crawler-video {
 
 @media (max-width: 640px) {
   .memory-machine-section {
-    padding: 48px 20px 80px;
+    padding: 0 0 60px 0;
     margin-top: 0;
   }
 
+  .about-intro-header {
+    margin-bottom: 32px;
+    padding: 0 20px;
+  }
+
+  .about-section-tab {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  .about-section-heading {
+    font-size: 28px;
+    margin-top: 10px;
+  }
+
   .memory-machine-container {
+    padding: 0 20px;
     grid-template-columns: 1fr;
     gap: 0;
   }
