@@ -3416,19 +3416,19 @@ body:has(.book-stage.is-loading) .crawler-video {
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
-  /* Gentle gradient blend over the lower edge to eliminate any visible seam with #fdfdfa */
+  /* Gentle gradient blend over the lower edge to eliminate any visible seam with #f3eae2 */
   -webkit-mask-image: linear-gradient(to bottom, #000000 0%, #000000 78%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000000 0%, #000000 78%, transparent 100%);
 }
 
-/* Solid near-white continuation sampled from paper image (#fdfdfa) */
+/* Solid beige continuation sampled from paper image (#f3eae2) */
 .about-paper-fill {
   position: absolute;
   top: 6vw;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #ced7c7;
+  background-color: #f3eae2;
   z-index: 0;
   pointer-events: none;
 }
@@ -3959,12 +3959,12 @@ body:has(.book-stage.is-loading) .crawler-video {
 
 .receipt-paper::before {
   left: -4px;
-  background-image: radial-gradient(circle at 0px 8px, #ced7c7 3.5px, transparent 4px);
+  background-image: radial-gradient(circle at 0px 8px, #f3eae2 3.5px, transparent 4px);
 }
 
 .receipt-paper::after {
   right: -4px;
-  background-image: radial-gradient(circle at 8px 8px, #ced7c7 3.5px, transparent 4px);
+  background-image: radial-gradient(circle at 8px 8px, #f3eae2 3.5px, transparent 4px);
 }
 
 /* Bottom fade mask on receipt viewport */
@@ -3974,7 +3974,7 @@ body:has(.book-stage.is-loading) .crawler-video {
   left: 0;
   width: 100%;
   height: 60px;
-  background: linear-gradient(to bottom, rgba(255, 254, 249, 0) 0%, rgba(206, 215, 199, 0.98) 100%);
+  background: linear-gradient(to bottom, rgba(255, 254, 249, 0) 0%, rgba(243, 234, 226, 0.98) 100%);
   pointer-events: none;
   z-index: 5;
 }
