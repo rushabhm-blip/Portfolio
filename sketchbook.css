@@ -3397,7 +3397,7 @@ body:has(.book-stage.is-loading) .crawler-video {
   z-index: 0;
   overflow: hidden;
   background-color: #fefdf9;
-  background-image: url('assets/about-bg.jpg');
+  background-image: url('assets/about-bg.jpg?v=2');
   background-position: center top;
   background-repeat: no-repeat;
   background-size: 100% 100%;
