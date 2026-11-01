@@ -137,6 +137,11 @@ function initPortfolio() {
       window.open('/assets/Rushabh_Mahore_Resume.pdf', '_blank');
       return;
     }
+    if (chapterId === 'Architecture') {
+      dialogManager.closeDialog();
+      window.open('/assets/Architectural_Portfolio_2019-24_Rushabh.pdf', '_blank');
+      return;
+    }
     dialogManager.openChapter(chapterId, triggerEl);
   }
 

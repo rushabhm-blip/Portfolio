@@ -13,7 +13,7 @@ export const sketchbookData = {
     { id: 'Works', label: 'Works', route: '/#works' },
     { id: 'About', label: 'About', route: '/#about' },
     { id: 'Resume', label: 'Resume', route: '/assets/Rushabh_Mahore_Resume.pdf', url: '/assets/Rushabh_Mahore_Resume.pdf' },
-    { id: 'Architecture', label: 'Architecture', route: '/#architecture' },
+    { id: 'Architecture', label: 'Architecture', route: '/assets/Architectural_Portfolio_2019-24_Rushabh.pdf', url: '/assets/Architectural_Portfolio_2019-24_Rushabh.pdf' },
     { id: 'Playground', label: 'Playground', route: '/#playground' }
   ],
   cover: {
@@ -71,7 +71,9 @@ export const sketchbookData = {
     Architecture: {
       eyebrow: "SPATIAL SYSTEMS",
       title: "Architecture",
-      description: "Building envelope investigations, facade details, environmental engineering, and spatial inquiries from architectural practice."
+      description: "Building envelope investigations, facade details, environmental engineering, and spatial inquiries from architectural practice (2019–2024).",
+      actionUrl: "/assets/Architectural_Portfolio_2019-24_Rushabh.pdf",
+      actionLabel: "View Architectural Portfolio (PDF)"
     },
     Sketchbook: {
       eyebrow: "INSIDE THE SKETCHBOOK",
