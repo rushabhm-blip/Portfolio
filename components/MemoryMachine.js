@@ -87,13 +87,8 @@ export function createMemoryMachine(options = {}) {
   section.setAttribute('aria-label', 'About: Behind the work');
 
   section.innerHTML = `
-    <!-- Decorative Full-Bleed Torn Paper Background -->
-    <div class="about-paper-bg" aria-hidden="true">
-      <div class="about-paper-torn-layer">
-        <img src="assets/about-torn-paper.png" class="about-paper-torn-img" alt="" loading="eager" decoding="async" />
-      </div>
-      <div class="about-paper-fill"></div>
-    </div>
+    <!-- Decorative Full-Bleed Doodle Grid Background -->
+    <div class="about-paper-bg" aria-hidden="true"></div>
 
     <!-- Section Introduction Header with Blue "ABOUT ME" Tab & Heading -->
     <div class="about-intro-header">

@@ -3387,7 +3387,7 @@ body:has(.book-stage.is-loading) .crawler-video {
   box-sizing: border-box;
 }
 
-/* Full-bleed decorative paper backdrop layer */
+/* Full-bleed decorative paper backdrop layer with doodle grid background */
 .about-paper-bg {
   position: absolute;
   inset: 0;
@@ -3396,41 +3396,24 @@ body:has(.book-stage.is-loading) .crawler-video {
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+  background-color: #fefdf9;
+  background-image: url('assets/about-bg.jpg');
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 
-/* Torn paper decorative image anchored top-center */
-.about-paper-torn-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: visible;
-  pointer-events: none;
-  z-index: 1;
+@media (max-width: 768px) {
+  .about-paper-bg {
+    background-size: cover;
+    background-position: center top;
+  }
 }
 
+.about-paper-torn-layer,
+.about-paper-fill,
 .about-paper-torn-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-drag: none;
-  /* Gentle gradient blend over the lower edge to eliminate any visible seam with #f3eae2 */
-  -webkit-mask-image: linear-gradient(to bottom, #000000 0%, #000000 78%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000000 0%, #000000 78%, transparent 100%);
-}
-
-/* Solid beige continuation sampled from paper image (#f3eae2) */
-.about-paper-fill {
-  position: absolute;
-  top: 6vw;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #f3eae2;
-  z-index: 0;
-  pointer-events: none;
+  display: none !important;
 }
 
 /* Section Introduction Header */
@@ -3959,12 +3942,12 @@ body:has(.book-stage.is-loading) .crawler-video {
 
 .receipt-paper::before {
   left: -4px;
-  background-image: radial-gradient(circle at 0px 8px, #f3eae2 3.5px, transparent 4px);
+  background-image: radial-gradient(circle at 0px 8px, #fefdf9 3.5px, transparent 4px);
 }
 
 .receipt-paper::after {
   right: -4px;
-  background-image: radial-gradient(circle at 8px 8px, #f3eae2 3.5px, transparent 4px);
+  background-image: radial-gradient(circle at 8px 8px, #fefdf9 3.5px, transparent 4px);
 }
 
 /* Bottom fade mask on receipt viewport */
@@ -3974,7 +3957,7 @@ body:has(.book-stage.is-loading) .crawler-video {
   left: 0;
   width: 100%;
   height: 60px;
-  background: linear-gradient(to bottom, rgba(255, 254, 249, 0) 0%, rgba(243, 234, 226, 0.98) 100%);
+  background: linear-gradient(to bottom, rgba(255, 254, 249, 0) 0%, rgba(254, 253, 249, 0.98) 100%);
   pointer-events: none;
   z-index: 5;
 }
