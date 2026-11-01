@@ -2326,33 +2326,35 @@ body.is-book-open .crawler-video,
   overflow: visible;
 }
 
-/* Positioned seamless hand-drawn blue grid background layer matching Keep Calm (only behind Projects) */
+/* Positioned subtle hand-drawn blue grid background layer matching Keep Calm (behind Projects) */
 .works-and-about-grid-bg {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(var(--selected-works-height, 2600px) + 50px);
+  height: var(--selected-works-height, 2600px);
   pointer-events: none;
   z-index: 0;
   background-image: url('assets/note/pale-blue-grid-tile-2x.png');
   background-repeat: repeat;
   background-position: center top;
   background-size: 1200px auto; /* 50px square grid cells on desktop, matches Keep Calm */
-  /* Pale blue grid visible over Selected Works (~38%), fading to transparent right where About begins */
+  /* Subtle grid with gentle fade-in at top and smooth opacity-down fade at bottom before torn paper */
   mask-image: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.38) 0px,
-    rgba(0, 0, 0, 0.38) calc(var(--selected-works-height, 2600px) - 40px),
-    rgba(0, 0, 0, 0.38) var(--selected-works-height, 2600px),
-    transparent calc(var(--selected-works-height, 2600px) + 50px)
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0.22) 80px,
+    rgba(0, 0, 0, 0.22) calc(var(--selected-works-height, 2600px) - 220px),
+    rgba(0, 0, 0, 0.08) calc(var(--selected-works-height, 2600px) - 90px),
+    transparent calc(var(--selected-works-height, 2600px) - 20px)
   );
   -webkit-mask-image: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0.38) 0px,
-    rgba(0, 0, 0, 0.38) calc(var(--selected-works-height, 2600px) - 40px),
-    rgba(0, 0, 0, 0.38) var(--selected-works-height, 2600px),
-    transparent calc(var(--selected-works-height, 2600px) + 50px)
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0.22) 80px,
+    rgba(0, 0, 0, 0.22) calc(var(--selected-works-height, 2600px) - 220px),
+    rgba(0, 0, 0, 0.08) calc(var(--selected-works-height, 2600px) - 90px),
+    transparent calc(var(--selected-works-height, 2600px) - 20px)
   );
 }
 
