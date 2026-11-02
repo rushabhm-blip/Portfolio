@@ -134,7 +134,7 @@ export function createLeftPage({ leftData, onNextPage }) {
   const bio = document.createElement('p');
   bio.className = 'left-page-bio';
   // Use HTML with inline marker spans
-  bio.innerHTML = `I’m Rushabh. <span class="marker-peach">Architecture</span> taught me to notice how people move through spaces. <span class="marker-lavender">Interaction design</span> has me noticing the <span class="marker-underline">smaller moments</span> too—where someone pauses, what feels confusing, and what could <span class="marker-lime">feel easier</span>.`;
+  bio.innerHTML = `I’m Rushabh. <span class="marker-peach">Architecture</span> taught me to notice how people move through spaces. <span class="marker-lavender">Interaction design</span> has taught me noticing the <span class="marker-underline">smaller moments</span> too—where someone pauses, what feels confusing, and what could <span class="marker-lime">feel easier</span>.`;
   paragraphContainer.appendChild(bio);
 
   // Small purple cursor accent near bottom right of paragraph

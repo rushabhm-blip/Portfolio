@@ -96,7 +96,7 @@ export const sketchbookData = {
         { text: "Explorer", isBold: true, highlight: true },
         { text: "at heart.", isBold: false }
       ],
-      paragraph: "I’m Rushabh. Architecture taught me to notice how people move through spaces. Interaction design has me noticing the smaller moments too—where someone pauses, what feels confusing, and what could feel easier.",
+      paragraph: "I’m Rushabh. Architecture taught me to notice how people move through spaces. Interaction design has taught me noticing the smaller moments too—where someone pauses, what feels confusing, and what could feel easier.",
       timeline: [
         { institution: "VNIT Nagpur", type: "Education" },
         { institution: "AtkinsRéalis", type: "Practice" },
