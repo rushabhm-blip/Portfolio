@@ -8,13 +8,12 @@
  * - Illustration plays once when its tab opens (or first scrolls into view) and replays on
  *   hover, keyboard focus or tap, then rests on frame 1. Reduced motion shows frame 1 only.
  * - All panels share one grid cell so the folder keeps the same size across tabs.
+ * - Scroll-driven: when the folder fits the viewport it pins (sticky) inside a taller track and
+ *   the chapters advance as the page scrolls; picking a tab scrolls to that chapter's spot.
+ *   Viewports too short for the folder keep plain tabs.
  * - Accessible tabs (roving tabindex, arrow keys, Home/End).
- * - Footer: "Let's connect" (LinkedIn), email, LinkedIn and résumé links.
+ * - Contact and footer links live in SiteFooter.js.
  */
-
-const LINKEDIN_URL = 'https://www.linkedin.com/in/rushabh-mahore-834425207/';
-const RESUME_URL = '/assets/Rushabh_Mahore_Resume.pdf';
-const EMAIL = 'rushabh_m@nid.edu';
 
 const FRAME_SEQUENCE = [1, 2, 3, 4, 3, 2, 1];
 const FRAME_MS = 150;
@@ -103,6 +102,7 @@ export function createServicesSection() {
         </h2>
       </header>
 
+      <div class="services-scroll">
       <div class="services-folder" style="--folder-color: ${CHAPTERS[0].color}">
         <div class="services-tabs-row">
           <span class="services-pick" aria-hidden="true">
@@ -117,22 +117,6 @@ export function createServicesSection() {
         <div class="services-card">${panels}
         </div>
       </div>
-
-      <div class="services-cta">
-        <div class="services-cta-start">
-          <p class="services-cta-text">Have something in mind?</p>
-          <a class="services-cta-hand" href="${LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">
-            Let's connect <span aria-hidden="true">↗</span>
-            <svg class="services-cta-underline" viewBox="0 0 200 12" fill="none" aria-hidden="true">
-              <path d="M3 9 C 60 3, 130 2, 197 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </a>
-        </div>
-        <div class="services-cta-links">
-          <a class="services-cta-link" href="mailto:${EMAIL}">${EMAIL}</a>
-          <a class="services-cta-link" href="${LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
-          <a class="services-cta-link" href="${RESUME_URL}" target="_blank" rel="noopener noreferrer">My résumé <span aria-hidden="true">↗</span></a>
-        </div>
       </div>
     </div>
   `;
@@ -164,7 +148,40 @@ export function createServicesSection() {
     ['mouseenter', 'focus', 'click'].forEach(evt => art.addEventListener(evt, () => play(art)));
   });
 
-  const select = (index, focus = false) => {
+  const track = section.querySelector('.services-scroll');
+  let activeIndex = 0;
+
+  // Scroll-driven chapters: the folder pins once it is centred and each chapter gets `step`
+  // pixels of scroll. Recomputed on resize; off when the folder is taller than the viewport.
+  const pin = { on: false, top: 0, step: 0, lockUntil: 0 };
+  const layout = () => {
+    const folderH = folder.offsetHeight;
+    const vh = window.innerHeight;
+    pin.on = folderH + 48 <= vh;
+    section.classList.toggle('is-pinned', pin.on);
+    if (!pin.on) {
+      track.style.height = '';
+      return;
+    }
+    pin.top = Math.round((vh - folderH) / 2);
+    pin.step = Math.round(vh * 0.6);
+    folder.style.setProperty('--services-pin-top', `${pin.top}px`);
+    track.style.height = `${folderH + (CHAPTERS.length - 1) * pin.step}px`;
+  };
+  // How far the folder has travelled while pinned (0 → (chapters - 1) * step)
+  const pinnedDistance = () => pin.top - track.getBoundingClientRect().top;
+
+  const scrollToChapter = (index) => {
+    const delta = index * pin.step - pinnedDistance();
+    if (Math.abs(delta) < 2) return;
+    pin.lockUntil = performance.now() + 1000;
+    window.scrollBy({ top: delta, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+  };
+
+  const select = (index, focus = false, fromScroll = false) => {
+    if (pin.on && !fromScroll) scrollToChapter(index);
+    if (index === activeIndex && fromScroll) return;
+    activeIndex = index;
     tabButtons.forEach((btn, i) => {
       const active = i === index;
       btn.classList.toggle('is-active', active);
@@ -190,6 +207,30 @@ export function createServicesSection() {
       select(next, true);
     });
   });
+
+  // Scroll events already fire at most once per frame, and this only reads one rect
+  const onScroll = () => {
+    // A tab pick is smooth-scrolling to its chapter: don't flicker through the ones in between
+    if (!pin.on || performance.now() < pin.lockUntil) return;
+    const index = Math.min(CHAPTERS.length - 1, Math.max(0, Math.round(pinnedDistance() / pin.step)));
+    select(index, false, true);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('scrollend', () => { pin.lockUntil = 0; onScroll(); });
+  // Ignore small height-only resizes (mobile address bar showing/hiding) so the track doesn't
+  // change length mid-scroll
+  let lastW = window.innerWidth;
+  let lastH = window.innerHeight;
+  window.addEventListener('resize', () => {
+    if (window.innerWidth === lastW && Math.abs(window.innerHeight - lastH) < 150) return;
+    lastW = window.innerWidth;
+    lastH = window.innerHeight;
+    layout();
+    onScroll();
+  });
+  // Re-measure whenever the folder's size settles (fonts, art loading, breakpoints)
+  if ('ResizeObserver' in window) new ResizeObserver(() => { layout(); onScroll(); }).observe(folder);
+  else requestAnimationFrame(layout);
 
   // Preload every frame once the folder is near the viewport, then play the opening tab once
   // when it first comes into view.

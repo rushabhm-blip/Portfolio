@@ -6,7 +6,8 @@ import { createExperimentNote } from './components/ExperimentNote.js?v=50';
 import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=52';
 import { createMemoryMachine } from './components/MemoryMachine.js?v=64';
 import { initScrollReveal } from './components/ScrollReveal.js?v=5';
-import { createServicesSection } from './components/ServicesSection.js?v=10';
+import { createServicesSection } from './components/ServicesSection.js?v=14';
+import { createContactSection, createSiteFooter } from './components/SiteFooter.js?v=1';
 
 /**
  * Fits the book composition (both closed and open spread) to available viewport space below header.
@@ -240,6 +241,10 @@ function initPortfolio() {
   // "What can I do for you?" services section (follows About me on the same paper)
   const servicesSection = createServicesSection();
 
+  // Contact (on the same paper, after services) and the cobalt footer band closing the page
+  const contactSection = createContactSection();
+  const siteFooter = createSiteFooter({ onSelectChapter: handleSelectChapter });
+
   // Unified Showcase & About Container (Single continuous seamless hand-drawn grid background across Selected Work + Still That Kid)
   const showcaseWrapper = document.createElement('div');
   showcaseWrapper.className = 'works-and-about-wrapper';
@@ -257,6 +262,7 @@ function initPortfolio() {
   aboutPaperGroup.className = 'about-paper-group';
   aboutPaperGroup.appendChild(memoryMachine.element);
   aboutPaperGroup.appendChild(servicesSection.element);
+  aboutPaperGroup.appendChild(contactSection.element);
   showcaseWrapper.appendChild(aboutPaperGroup);
 
   // Update boundary height for background grid mask transition
@@ -286,6 +292,7 @@ function initPortfolio() {
 
   root.appendChild(experimentNote.element);
   root.appendChild(showcaseWrapper);
+  root.appendChild(siteFooter.element);
 
   const existingDialog = root.querySelector('#chapterDialog');
   if (existingDialog) {

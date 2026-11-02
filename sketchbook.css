@@ -111,8 +111,8 @@ body {
   background-size: cover;
   background-attachment: fixed;
   min-height: 100svh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  /* clip (not hidden/auto) so body isn't a scroll container and position: sticky follows the page */
+  overflow-x: clip;
   max-width: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -4971,8 +4971,15 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 }
 
 /* Folder */
-.services-folder {
+.services-scroll {
   margin-top: clamp(28px, 4vw, 48px);
+}
+
+/* Scroll-driven chapters: the folder holds still, centred, while the track scrolls past
+   (track height and pin offset are set from ServicesSection.js) */
+.services-section.is-pinned .services-folder {
+  position: sticky;
+  top: var(--services-pin-top, 24px);
 }
 
 .services-tabs-row {
@@ -5202,63 +5209,6 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   opacity: 1;
 }
 
-/* Footer */
-.services-cta {
-  margin-top: clamp(40px, 5vw, 64px);
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 20px 32px;
-  flex-wrap: wrap;
-}
-
-.services-cta-text {
-  margin: 0 0 4px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 15px;
-  color: #475569;
-}
-
-.services-cta-hand {
-  position: relative;
-  display: inline-block;
-  /* Bold geometric sans (Plus Jakarta Sans, already loaded) for a confident call to action */
-  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
-  font-style: normal;
-  font-size: clamp(24px, 2vw, 30px);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #0647fa;
-  text-decoration: none;
-  transform-origin: left center;
-}
-
-.services-cta-underline {
-  position: absolute;
-  left: 0;
-  bottom: -8px;
-  width: 92%;
-  height: 12px;
-}
-
-.services-cta-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 28px;
-}
-
-.services-cta-link {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  color: #0f172a;
-  text-decoration: underline;
-  text-underline-offset: 5px;
-  text-decoration-thickness: 1px;
-  text-decoration-color: rgba(15, 23, 42, 0.35);
-}
-
-.services-cta-link:hover,
 .services-panel-link:hover {
   color: #0035c4;
 }
@@ -5360,15 +5310,6 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
     max-width: 320px;
     margin-top: 6px;
   }
-
-  .services-cta {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .services-cta-hand {
-    font-size: 24px;
-  }
 }
 
 /* =========================================================
@@ -5392,5 +5333,394 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
     --frame-pad: 8px;
     left: calc(var(--frame-pad) + (100% - 2 * var(--frame-pad)) * 0.906);
     width: 78px;
+  }
+}
+
+/* =========================================================
+   CONTACT (graph paper, after the services folder)
+   60/40: pitch + email on the left, envelope illustration on the right
+   ========================================================= */
+.contact-section {
+  position: relative;
+  z-index: 10;
+  padding: 0 0 clamp(80px, 9vw, 128px);
+  color: #080807;
+}
+
+.contact-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 48px);
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+.contact-kicker {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(17px, 1.4vw, 20px);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: #4b5262;
+}
+
+.contact-heading {
+  margin: 14px 0 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(36px, 4.4vw, 60px);
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  line-height: 1.04;
+  color: #080807;
+}
+
+.contact-heading-accent {
+  display: block;
+  color: #0647fa;
+}
+
+.contact-text {
+  margin: 18px 0 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(17px, 1.4vw, 20px);
+  line-height: 1.45;
+  color: #5b6474;
+}
+
+/* Same hand-drawn underline as the services CTA it replaces */
+.contact-email {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 26px;
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+  font-size: clamp(20px, 1.8vw, 26px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #0647fa;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.contact-email .footer-icon {
+  width: 0.8em;
+  height: 0.8em;
+  flex-shrink: 0;
+}
+
+.contact-email-underline {
+  position: absolute;
+  left: 0;
+  bottom: -9px;
+  width: 92%;
+  height: 12px;
+}
+
+.contact-email:hover {
+  color: #0035c4;
+}
+
+.contact-email:focus-visible {
+  outline: 2px solid #0647fa;
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+
+/* Illustration with a handwritten note pointing at it */
+.contact-art {
+  position: relative;
+  margin: 0;
+  justify-self: center;
+  width: min(320px, 100%);
+  padding-top: 24px;
+}
+
+.contact-envelope {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 18px 22px rgba(20, 30, 60, 0.12));
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-art:hover .contact-envelope {
+  transform: translateY(-8px) rotate(-1.5deg);
+}
+
+.contact-note {
+  position: absolute;
+  top: -6px;
+  left: -26%;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(24px, 2vw, 30px);
+  font-weight: 600;
+  line-height: 1;
+  color: #0647fa;
+  transform: rotate(-9deg);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.contact-note-arrow {
+  width: 54px;
+  height: 50px;
+  margin: 4px 0 0 34px;
+  transform: rotate(9deg);
+}
+
+/* =========================================================
+   SITE FOOTER (cobalt paper band closing the page)
+   ========================================================= */
+.site-footer {
+  position: relative;
+  z-index: 20;
+  background-color: var(--color-blue);
+  background-image: url('assets/sketchbook/cobalt-soft-paper-4k.webp');
+  background-size: cover;
+  background-position: center;
+  color: var(--color-white);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.site-footer-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: clamp(48px, 5.5vw, 76px) clamp(20px, 4vw, 48px) clamp(28px, 3vw, 40px);
+  box-sizing: border-box;
+}
+
+.site-footer-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 32px 48px;
+}
+
+/* Same wordmark as the header, set larger */
+.site-footer-wordmark {
+  display: inline-block;
+  font-size: clamp(48px, 5.4vw, 76px);
+  font-weight: 750;
+  letter-spacing: -0.055em;
+  line-height: 1;
+  color: var(--color-white);
+  text-decoration: none;
+}
+
+.site-footer-wordmark span {
+  color: var(--color-lime);
+  margin-left: 0.5px;
+}
+
+.site-footer-tagline {
+  margin: 12px 0 0;
+  font-size: clamp(16px, 1.3vw, 19px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-white);
+}
+
+/* Work, About, Playground on the first row; LinkedIn and My résumé under the last two */
+.site-footer-links {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: end;
+  gap: 18px clamp(28px, 3.6vw, 56px);
+}
+
+.site-footer-links li:nth-child(4) {
+  grid-column: 2;
+}
+
+.site-footer-links li:nth-child(5) {
+  grid-column: 3;
+}
+
+.site-footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(17px, 1.4vw, 20px);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--color-white);
+  text-decoration: none;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--color-lime);
+}
+
+.site-footer-link .footer-icon {
+  width: 0.85em;
+  height: 0.85em;
+}
+
+.site-footer-link:hover {
+  text-decoration-line: underline;
+}
+
+.site-footer-bottom {
+  margin-top: clamp(36px, 4vw, 52px);
+  padding-top: clamp(20px, 2vw, 26px);
+  border-top: 1px solid rgba(255, 254, 250, 0.32);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px 24px;
+}
+
+.site-footer-copy {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(255, 254, 250, 0.9);
+}
+
+.site-footer-motto {
+  margin: 0;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(24px, 2vw, 30px);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-white);
+  transform: rotate(-2deg);
+}
+
+.site-footer-top-btn {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-white);
+}
+
+.site-footer-top-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-lime);
+  color: var(--color-blue);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.site-footer-top-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.site-footer-top-btn:hover .site-footer-top-icon {
+  transform: translateY(-3px);
+}
+
+.site-footer a:focus-visible,
+.site-footer button:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 6px;
+  border-radius: 6px;
+}
+
+@media (max-width: 960px) {
+  .contact-art {
+    width: min(260px, 100%);
+  }
+
+  .contact-note {
+    left: -18%;
+  }
+}
+
+@media (max-width: 640px) {
+  .contact-section {
+    padding-bottom: 72px;
+  }
+
+  .contact-inner {
+    padding: 0 20px;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .contact-heading {
+    font-size: 34px;
+  }
+
+  .contact-art {
+    width: 200px;
+    padding-top: 30px;
+  }
+
+  .contact-note {
+    left: -30%;
+    font-size: 23px;
+  }
+
+  .contact-note-arrow {
+    width: 44px;
+    height: 40px;
+    margin-left: 26px;
+  }
+
+  .site-footer-inner {
+    padding: 44px 20px 28px;
+  }
+
+  .site-footer-top {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 14px 28px;
+  }
+
+  .site-footer-bottom {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .site-footer-motto {
+    white-space: nowrap;
+  }
+
+  .site-footer-top-btn {
+    justify-self: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-envelope,
+  .site-footer-top-icon {
+    transition: none;
+  }
+
+  .contact-art:hover .contact-envelope,
+  .site-footer-top-btn:hover .site-footer-top-icon {
+    transform: none;
   }
 }
