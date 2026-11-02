@@ -1,8 +1,8 @@
 import { sketchbookData } from './data.js?v=49';
 import { createHeader } from './components/Header.js?v=49';
-import { createBookScene } from './components/BookScene.js?v=47';
+import { createBookScene } from './components/BookScene.js?v=48';
 import { createChapterDialog } from './components/ChapterDialog.js?v=49';
-import { createExperimentNote } from './components/ExperimentNote.js?v=49';
+import { createExperimentNote } from './components/ExperimentNote.js?v=50';
 import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=49';
 import { createMemoryMachine } from './components/MemoryMachine.js?v=59';
 import { initScrollReveal } from './components/ScrollReveal.js?v=4';

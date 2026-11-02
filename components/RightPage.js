@@ -1,4 +1,4 @@
-import { createWalkingCutout } from './WalkingCutout.js?v=41';
+import { createWalkingCutout } from './WalkingCutout.js?v=42';
 
 /**
  * Default travel stamp configuration from placement.json

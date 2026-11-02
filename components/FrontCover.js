@@ -1,4 +1,4 @@
-import { createSticker } from './Sticker.js';
+import { createSticker } from './Sticker.js?v=2';
 import { createOpenBookButton } from './OpenBookButton.js';
 
 /**
