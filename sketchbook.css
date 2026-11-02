@@ -149,15 +149,44 @@ a:focus-visible {
    HEADER & NAVIGATION
    ========================================================= */
 
+/* Sticky (not fixed) so it keeps its place in the hero layout; Header.js toggles the states below */
 .site-header {
-  position: relative;
-  z-index: 40;
+  position: sticky;
+  top: 0;
+  z-index: 60;
   padding: clamp(16px, 2.8vh, 28px) clamp(24px, 4.8vw, 64px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
   color: var(--color-white);
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    padding 0.3s ease;
+}
+
+/* Past the hero: a slimmer cobalt band so the white links read over the light sections */
+.site-header.is-floating {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: var(--color-blue);
+  background-image: url('assets/sketchbook/cobalt-soft-paper-4k.webp');
+  background-size: cover;
+  background-position: center top;
+  box-shadow: 0 6px 20px rgba(6, 30, 110, 0.18);
+}
+
+/* Scrolling down: slide fully out of view (including the shadow) */
+.site-header.is-hidden {
+  transform: translateY(calc(-100% - 24px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header {
+    transition: none;
+  }
 }
 
 .wordmark {

@@ -1,5 +1,5 @@
 import { sketchbookData } from './data.js?v=49';
-import { createHeader } from './components/Header.js?v=49';
+import { createHeader, enableHeaderAutoHide } from './components/Header.js?v=51';
 import { createBookScene } from './components/BookScene.js?v=48';
 import { createChapterDialog } from './components/ChapterDialog.js?v=49';
 import { createExperimentNote } from './components/ExperimentNote.js?v=50';
@@ -304,6 +304,9 @@ function initPortfolio() {
   // Setup layout fitting with ResizeObserver
   const bookStage = bookScene.stage;
   runLayout = () => fitBookComposition(header, bookStage);
+
+  // Header slides away on scroll down and back on scroll up, so navigation is reachable mid-page
+  enableHeaderAutoHide(header);
 
   runLayout();
   window.addEventListener('resize', runLayout);

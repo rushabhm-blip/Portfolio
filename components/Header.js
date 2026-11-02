@@ -45,3 +45,32 @@ export function createHeader({ brand, navigation, onSelectChapter }) {
 
   return header;
 }
+
+/**
+ * Keeps the header reachable from anywhere on the page: it slides away while scrolling down and
+ * slides back on any scroll up. Past the hero it floats on a cobalt band so the white links stay
+ * readable over the light sections. Stays visible while it holds keyboard focus.
+ */
+export function enableHeaderAutoHide(header) {
+  if (!header) return;
+  const THRESHOLD = 6; // px of travel before changing state, so tiny jitters don't flicker it
+  let lastY = window.scrollY;
+
+  // Scroll events already arrive at most once per frame, and this only reads scrollY and one height
+  const update = () => {
+    const y = Math.max(0, window.scrollY);
+    const floating = y > header.offsetHeight;
+    header.classList.toggle('is-floating', floating);
+
+    const delta = y - lastY;
+    if (Math.abs(delta) < THRESHOLD) return;
+    const hide = floating && delta > 0 && !header.contains(document.activeElement);
+    header.classList.toggle('is-hidden', hide);
+    lastY = y;
+  };
+
+  window.addEventListener('scroll', update, { passive: true });
+
+  header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
+  update();
+}
