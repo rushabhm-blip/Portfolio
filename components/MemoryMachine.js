@@ -9,7 +9,7 @@
  *     yellow tape, orange sparkles, handwritten "Little me." with underline.
  * - Center column: Heading "Still that kid.", short paragraphs with lime marker on "trying something new.",
  *     VR cutout sticker with cobalt callout badge "Still figuring things out."
- * - Right column: "THE MEMORY MACHINE" stationary printer housing with physical paper feed:
+ * - Right column: "VIBE CHECK" stationary printer housing with physical paper feed:
  *     - Layer 1: Base housing (stationary, drop shadow).
  *     - Layer 2: Moving photographic paper viewport emerging from black slit line at top: 71.33%.
  *                Passes in front of lower casing of the printer housing.
@@ -267,7 +267,7 @@ export function createMemoryMachine(options = {}) {
           <!-- The Printer Assembly: 3-Layer Architecture -->
           <div class="printer-container">
             <!-- Label on the printer -->
-            <div class="printer-label-text" aria-hidden="true">THE MEMORY MACHINE</div>
+            <div class="printer-label-text" aria-hidden="true">VIBE CHECK</div>
             <!-- Power Indicator LED -->
             <div class="printer-power-led" aria-hidden="true"></div>
 
