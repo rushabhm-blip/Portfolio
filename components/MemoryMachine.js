@@ -5,11 +5,15 @@
  * Features:
  * - Visual style matching layout-reference.png:
  *     Warm ivory paper background, cobalt blue accents, subtle lime marker highlight.
- * - Left column: Rotated childhood photos (turban behind, birthday in front with cake visible),
+ * - Centred "ABOUT ME" pill and "Behind the work." heading, then a four-column grid
+ *   (childhood photos / copy / VR figure / printer) that becomes two columns on tablets and
+ *   one stacked column on phones.
+ * - Childhood column: Rotated childhood photos (turban behind, birthday in front with cake visible),
  *     yellow tape, orange sparkles, handwritten "Little me." with underline.
- * - Center column: Heading "Still that kid.", short paragraphs with lime marker on "trying something new.",
- *     VR cutout sticker with cobalt callout badge "Still figuring things out."
- * - Right column: "VIBE CHECK" stationary printer housing with physical paper feed:
+ * - Copy column: Heading "Still that kid.", lime marker on "trying something new.", three short
+ *     paragraphs, a divider and a handwritten closing line.
+ * - VR column: Cutout sticker with a dashed trail and handwritten "Still exploring." note.
+ * - Printer column: "VIBE CHECK" stationary printer housing with physical paper feed:
  *     - Layer 1: Base housing (stationary, drop shadow).
  *     - Layer 2: Moving photographic paper viewport emerging from black slit line at top: 71.33%.
  *                Passes in front of lower casing of the printer housing.
@@ -28,7 +32,26 @@
  *     - Reduced-motion mode displays static photo with manual navigation.
  */
 
+// The roll opens on the forest print with the sunset print below it; the rest feed in after
 const DEFAULT_MEMORIES = [
+  {
+    id: "lake-sunrise",
+    focusY: "70%",
+    src: "assets/memory-machine/photos/lake-sunrise.jpg",
+    caption: "Quiet mornings count too.",
+    alt: "Sunrise over a still lake between forested hills.",
+    width: 1500,
+    height: 2000
+  },
+  {
+    id: "forest",
+    focusY: "80%",
+    src: "assets/memory-machine/photos/forest.jpg",
+    caption: "Taking a moment to look around.",
+    alt: "Rushabh on a sunlit forest path.",
+    width: 1536,
+    height: 2048
+  },
   {
     id: "motorcycle",
     focusY: "100%",
@@ -119,24 +142,6 @@ const DEFAULT_MEMORIES = [
     alt: "Palm trees overlooking the sea.",
     width: 1536,
     height: 2048
-  },
-  {
-    id: "lake-sunrise",
-    focusY: "70%",
-    src: "assets/memory-machine/photos/lake-sunrise.jpg",
-    caption: "Quiet mornings count too.",
-    alt: "Sunrise over a still lake between forested hills.",
-    width: 1500,
-    height: 2000
-  },
-  {
-    id: "forest",
-    focusY: "80%",
-    src: "assets/memory-machine/photos/forest.jpg",
-    caption: "Taking a moment to look around.",
-    alt: "Rushabh on a sunlit forest path.",
-    width: 1536,
-    height: 2048
   }
 ];
 
@@ -151,21 +156,15 @@ export function createMemoryMachine(options = {}) {
     <!-- Decorative Full-Bleed Doodle Grid Background -->
     <div class="about-paper-bg" aria-hidden="true"></div>
 
-    <!-- Section Introduction Header with Blue "ABOUT ME" Tab & Heading -->
+    <!-- Section Introduction Header: centred "ABOUT ME" pill above the heading -->
     <div class="about-intro-header">
       <div class="about-section-tab">ABOUT ME</div>
       <h2 class="about-section-heading">Behind the work.</h2>
     </div>
 
+    <!-- Four areas, left to right: childhood photos, copy, VR figure, Vibe Check printer -->
     <div class="memory-machine-container">
-      <!-- Decorative Trail SVG (connecting free space across columns on desktop) -->
-      <div class="memory-machine-trail-wrapper" aria-hidden="true">
-        <svg class="memory-machine-trail-svg" viewBox="0 0 800 170" fill="none" preserveAspectRatio="none">
-          <path d="M5 140C170 35 355 15 445 65S490 170 440 135S600 5 795 25" stroke="#1744ef" stroke-width="2" stroke-dasharray="10 12"/>
-        </svg>
-      </div>
-
-      <!-- LEFT COLUMN: Childhood Collage (Old redundant eyebrow replaced) -->
+      <!-- LEFT COLUMN: Childhood Collage -->
       <div class="memory-col memory-col-left">
         <div class="childhood-collage-wrap">
           <!-- Orange Sparkle (Upper-Left) -->
@@ -176,83 +175,62 @@ export function createMemoryMachine(options = {}) {
             <!-- Yellow Tape strip across top edge -->
             <img src="assets/memory-machine/assets/tape.svg" class="childhood-tape" alt="" aria-hidden="true" />
             <div class="childhood-img-frame">
-              <img src="assets/memory-machine/assets/childhood-turban.svg" alt="Little Rushabh wearing a red turban" width="945" height="1260" />
+              <img src="assets/memory-machine/assets/childhood-turban.svg" alt="Rushabh as a toddler in a red turban, looking at the camera" width="945" height="1260" />
             </div>
           </div>
 
           <!-- Birthday Photo Card (In front, rotated ~ +3.5deg) -->
           <div class="childhood-photo-card childhood-birthday-card">
             <div class="childhood-img-frame">
-              <img src="assets/memory-machine/assets/childhood-birthday.svg" alt="Little Rushabh on his birthday with cake" width="550" height="710" />
+              <img src="assets/memory-machine/assets/childhood-birthday.svg" alt="Rushabh as a baby in a yellow sweater, sitting behind a birthday cake" width="550" height="710" />
             </div>
           </div>
 
           <!-- Orange Sparkle (Bottom-Right) -->
           <img src="assets/memory-machine/assets/sparkle.svg" class="childhood-sparkle childhood-sparkle-bottom" alt="" aria-hidden="true" />
-
-          <!-- Handwritten Caption: "Little me." with underline -->
-          <div class="childhood-caption-wrap" aria-label="Little me.">
-            <span class="childhood-caption-text">Little me.</span>
-            <svg class="childhood-caption-underline" viewBox="0 0 130 18" fill="none" aria-hidden="true">
-              <path d="M4 14C32 5 76 4 126 12" stroke="#0647fa" stroke-width="2.5" stroke-linecap="round"/>
-            </svg>
-          </div>
         </div>
+
+        <!-- Handwritten Caption: "Little me." with underline -->
+        <p class="childhood-caption-wrap">
+          <span class="childhood-caption-text">Little me.</span>
+          <svg class="childhood-caption-underline" viewBox="0 0 130 18" fill="none" aria-hidden="true">
+            <path d="M4 14C32 5 76 4 126 12" stroke="#0647fa" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </p>
       </div>
 
-      <!-- CENTER COLUMN: Introduction & Copy & VR Sticker -->
+      <!-- SECOND COLUMN: Copy -->
       <div class="memory-col memory-col-center">
         <div class="memory-intro-block">
-          <div class="memory-mobile-heading-row">
-            <div class="memory-mobile-childhood-slot" aria-hidden="true">
-              <div class="childhood-collage-wrap childhood-collage-mobile">
-                <!-- Orange Sparkle (Upper-Left) -->
-                <img src="assets/memory-machine/assets/sparkle.svg" class="childhood-sparkle childhood-sparkle-top" alt="" aria-hidden="true" />
-
-                <!-- Turban Photo Card (Behind, rotated ~ -3.5deg) -->
-                <div class="childhood-photo-card childhood-turban-card">
-                  <!-- Yellow Tape strip across top edge -->
-                  <img src="assets/memory-machine/assets/tape.svg" class="childhood-tape" alt="" aria-hidden="true" />
-                  <div class="childhood-img-frame">
-                    <img src="assets/memory-machine/assets/childhood-turban.svg" alt="Little Rushabh wearing a red turban" width="945" height="1260" />
-                  </div>
-                </div>
-
-                <!-- Birthday Photo Card (In front, rotated ~ +3.5deg) -->
-                <div class="childhood-photo-card childhood-birthday-card">
-                  <div class="childhood-img-frame">
-                    <img src="assets/memory-machine/assets/childhood-birthday.svg" alt="Little Rushabh on his birthday with cake" width="550" height="710" />
-                  </div>
-                </div>
-
-                <!-- Orange Sparkle (Bottom-Right) -->
-                <img src="assets/memory-machine/assets/sparkle.svg" class="childhood-sparkle childhood-sparkle-bottom" alt="" aria-hidden="true" />
-              </div>
-            </div>
-            <h2 class="memory-main-heading">Still<br>that kid.</h2>
-          </div>
+          <h3 class="memory-main-heading">Still<br>that kid.</h3>
           <p class="memory-main-para">
             A little older. A few more tools.<br>
             The same joy in <mark class="lime-marker">trying something new.</mark>
           </p>
+          <div class="memory-body">
+            <p>I’m Rushabh, studying Interaction Design at NID Bangalore.</p>
+            <p>I turn curiosity into interactive stories, playful objects, and ideas to explore.</p>
+            <p>Off-screen: riding, photography, and trying something unfamiliar.</p>
+          </div>
+          <hr class="memory-divider" />
           <p class="memory-secondary-para">
             Some of it becomes design.<br>
-            The rest becomes a good story.
+            <span class="memory-closing-accent">The rest becomes a good story.</span>
           </p>
         </div>
+      </div>
 
+      <!-- THIRD COLUMN: VR figure with a "Still exploring." note and one dashed arrow to the headset -->
+      <div class="memory-col memory-col-vr">
         <div class="vr-sticker-wrapper">
-          <!-- Callout Badge: "Still figuring things out." in handwritten style with arrow -->
-          <div class="vr-callout-badge" aria-hidden="true">
-            <span class="vr-callout-text">Still figuring<br>things out.</span>
-            <svg class="vr-callout-arrow" viewBox="0 0 32 24" fill="none">
-              <path d="M4 4C10 16 22 18 28 14" stroke="#0647fa" stroke-width="2" stroke-linecap="round" fill="none"/>
-              <path d="M22 12L28 14L26 20" stroke="#0647fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
+          <span class="vr-callout-text" aria-hidden="true">Still<br>exploring.</span>
+          <!-- Drawn in the cutout's own 2:3 space so the arrow stays on the headset at every size -->
+          <svg class="vr-callout-arrow" viewBox="0 0 200 300" fill="none" aria-hidden="true">
+            <path d="M24 84C14 63 34 47 65 47" stroke="#0647fa" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5"/>
+            <path d="M58 41.5L66 47L58.5 53" stroke="#0647fa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
 
-          <!-- VR sticker cutout image -->
-          <img src="assets/memory-machine/assets/vr-sticker.webp" class="vr-sticker-img" alt="Rushabh trying a VR headset and controllers" width="1024" height="1536" loading="lazy" />
+          <img src="assets/memory-machine/assets/vr-sticker.webp" class="vr-sticker-img" alt="Rushabh today, wearing a VR headset and holding a controller in each hand" width="1024" height="1536" loading="lazy" decoding="async" />
         </div>
       </div>
 
@@ -313,7 +291,7 @@ export function createMemoryMachine(options = {}) {
   const prevBtn = section.querySelector('#memoryPrevBtn');
   const nextBtn = section.querySelector('#memoryNextBtn');
 
-  let currentIndex = 0; // Starts with motorcycle (0)
+  let currentIndex = Math.min(1, memories.length - 1); // Opens on the forest print, sunset below
   let isUserPaused = false;
   let isAutoPaused = false;
   let isAnimating = false;
@@ -436,7 +414,8 @@ export function createMemoryMachine(options = {}) {
     const tallestPanelHeight = Math.round(tallestPhotoHeight + captionAndPadding);
 
     // Reserved outgoing area to view previous memory comfortably
-    const outgoingAreaHeight = Math.round(Math.min(150, Math.max(90, innerPhotoWidth * 0.45)));
+    // Enough of the previous print shows that it reads as a photo, not just an edge
+    const outgoingAreaHeight = Math.round(Math.min(280, Math.max(120, innerPhotoWidth * 0.68)));
     const reservedViewportHeight = tallestPanelHeight + outgoingAreaHeight;
 
     viewportEl.style.setProperty('--measured-viewport-height', `${reservedViewportHeight}px`);

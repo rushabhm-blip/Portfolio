@@ -1,8 +1,8 @@
 /**
  * SiteFooter.js
  * Closing of the page, after the services folder.
- * - Contact section on the shared graph paper: 60/40 grid with the pitch, email link and the
- *   envelope illustration with a handwritten "say hello" note and curved arrow.
+ * - Contact section on the shared graph paper: narrow 60/40 grid with the pitch, email link
+ *   and the envelope illustration.
  * - Footer band on the cobalt paper texture: wordmark + tagline, site links, then copyright,
  *   "Keep calm. Experiment on." and a Back to top button.
  * Work and About jump to their sections; Playground opens its chapter like the header does.
@@ -38,13 +38,6 @@ export function createContactSection() {
       </div>
 
       <figure class="contact-art">
-        <span class="contact-note" aria-hidden="true">
-          say hello
-          <svg class="contact-note-arrow" viewBox="0 0 60 56" fill="none">
-            <path d="M8 4 C 2 22, 14 40, 46 46" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M36 37 L 47 46 L 35 52" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </span>
         <img class="contact-envelope" src="assets/footer/envelope.webp" width="640" height="640"
              alt="An open clay envelope holding a letter, with a speech bubble and a lime star."
              loading="lazy" decoding="async" draggable="false" />

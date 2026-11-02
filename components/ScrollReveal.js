@@ -24,6 +24,7 @@ const TEXT_TARGETS = [
   '.about-section-heading',
   '.memory-main-heading',
   '.memory-main-para',
+  '.memory-body',
   '.memory-secondary-para',
   '.services-kicker',
   '.services-heading',

@@ -2445,7 +2445,7 @@ body.is-book-open .crawler-video,
   background-repeat: repeat;
   background-position: center top;
   background-size: 1200px auto; /* 50px square grid cells on desktop, matches Keep Calm */
-  opacity: 0.3; /* Softer than the Keep Calm grid so project cards stand out */
+  opacity: 0.5; /* Softer than the Keep Calm grid so project cards stand out, but still clearly visible */
   /* Hand-drawn blue grid matching Keep Calm with visible opacity (~0.78), fading out before About Me */
   mask-image: linear-gradient(
     to bottom,
@@ -2790,6 +2790,8 @@ body.is-book-open .crawler-video,
   border-radius: 3px;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+  /* The highlighted phrase moves as one piece rather than splitting across lines */
+  white-space: nowrap;
 }
 
 .marker-highlight.marker-lime {
@@ -3646,19 +3648,22 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   display: none !important;
 }
 
-/* Section Introduction Header */
+/* Section Introduction Header: centred pill above the heading */
 .about-intro-header {
   position: relative;
   z-index: 5;
   width: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: clamp(24px, 2.6vw, 42px) clamp(20px, 4vw, 48px) 0;
-  margin-bottom: clamp(48px, 5.5vw, 64px);
+  max-width: 1600px;
+  margin: 0 auto clamp(40px, 4.5vw, 68px);
+  padding: clamp(28px, 3vw, 48px) clamp(20px, 4vw, 64px) 0;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-/* Compact Blue "ABOUT ME" Tab overlapping the torn edge */
+/* Cobalt "ABOUT ME" pill */
 .about-section-tab {
   display: inline-flex;
   align-items: center;
@@ -3666,95 +3671,57 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   background-color: var(--color-blue, #0647fa);
   color: #ffffff;
   font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
-  font-size: clamp(10.5px, 1.1vw, 12px);
+  font-size: clamp(12px, 1vw, 14px);
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 5px 14px;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(6, 71, 250, 0.35);
+  padding: 7px 20px;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(6, 71, 250, 0.25);
   user-select: none;
-  pointer-events: auto;
-  transform: translateY(-50%) rotate(-0.5deg);
   line-height: 1.2;
 }
 
 /* "Behind the work." Section Heading */
 .about-section-heading {
-  margin: clamp(10px, 1.5vw, 18px) 0 0 0;
+  margin: clamp(12px, 1.4vw, 18px) 0 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: clamp(34px, 4vw, 52px);
+  font-size: clamp(36px, 4.2vw, 64px);
   font-weight: 850;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.045em;
   color: #080807;
-  line-height: 1.08;
+  line-height: 1.04;
 }
 
+/* Childhood photos / copy / VR figure / printer, about 20 / 28 / 25 / 27 */
 .memory-machine-container {
   position: relative;
-  max-width: 1440px;
+  max-width: 1600px;
   margin: 0 auto;
   width: 100%;
-  padding: 0 clamp(20px, 4vw, 48px);
+  padding: 0 clamp(20px, 4vw, 64px);
   display: grid;
-  grid-template-columns: 31% 36% 33%;
-  gap: clamp(24px, 3vw, 48px);
+  grid-template-columns: minmax(0, 20fr) minmax(0, 28fr) minmax(0, 25fr) minmax(0, 27fr);
+  column-gap: clamp(20px, 2.4vw, 44px);
   align-items: start;
   z-index: 2;
   box-sizing: border-box;
 }
 
-/* Connecting decorative dashed trail across empty space */
-.memory-machine-trail-wrapper {
-  position: absolute;
-  top: 15px;
-  left: 20%;
-  width: 58%;
-  height: 140px;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.85;
-}
-
-.memory-machine-trail-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-/* =========================================================
-   COLUMN 1: CHILDHOOD COLLAGE (LEFT)
-   ========================================================= */
-
-.memory-col-left {
+.memory-col {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  min-width: 0;
   z-index: 2;
 }
 
-.memory-eyebrow-container {
+/* =========================================================
+   COLUMN 1: CHILDHOOD COLLAGE
+   ========================================================= */
+
+.memory-col-left {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  margin-bottom: clamp(28px, 4vw, 42px);
-}
-
-.memory-eyebrow-text {
-  font-family: 'Plus Jakarta Sans', var(--font-sans), sans-serif;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #0647fa;
-  text-transform: uppercase;
-}
-
-.memory-eyebrow-line {
-  display: inline-block;
-  width: 44px;
-  height: 2px;
-  background-color: #0647fa;
-  border-radius: 1px;
 }
 
 .childhood-collage-wrap {
@@ -3770,7 +3737,7 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   background: #ffffff;
   padding: 12px 12px 18px 12px;
   border-radius: 2px;
-  box-shadow: 
+  box-shadow:
     0 12px 30px rgba(35, 25, 15, 0.12),
     0 2px 8px rgba(35, 25, 15, 0.08);
   box-sizing: border-box;
@@ -3794,7 +3761,6 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 .childhood-turban-card {
   z-index: 1;
   width: 86%;
-  max-width: 264px;
   transform: rotate(-3.5deg);
   transition: transform 0.25s ease-out;
 }
@@ -3809,7 +3775,8 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   position: absolute;
   top: -14px;
   left: 28%;
-  width: 105px;
+  width: 38%;
+  max-width: 105px;
   height: auto;
   transform: rotate(-6deg);
   z-index: 5;
@@ -3817,12 +3784,11 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   pointer-events: none;
 }
 
-/* Birthday Photo (in front, with cake visible) */
+/* Birthday Photo (in front, overlapping only the turban photo's lower edge so both faces show) */
 .childhood-birthday-card {
   z-index: 2;
-  width: 90%;
-  max-width: 280px;
-  margin-top: -72px;
+  width: 88%;
+  margin-top: -16%;
   margin-left: auto;
   transform: rotate(3.5deg);
   transition: transform 0.25s ease-out;
@@ -3841,15 +3807,15 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 }
 
 .childhood-sparkle-top {
-  top: 110px;
+  top: 30%;
   left: -24px;
-  width: 28px;
+  width: 26px;
   height: auto;
 }
 
 .childhood-sparkle-bottom {
-  bottom: 0px;
-  right: 18px;
+  bottom: -34px;
+  right: 10%;
   width: 26px;
   height: auto;
 }
@@ -3858,8 +3824,9 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 .childhood-caption-wrap {
   position: relative;
   z-index: 3;
-  margin-top: 24px;
-  margin-left: 20px;
+  margin: 26px 0 0;
+  align-self: flex-start;
+  padding-left: 8%;
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
@@ -3868,7 +3835,7 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 
 .childhood-caption-text {
   font-family: 'Caveat', cursive;
-  font-size: 2.2rem;
+  font-size: clamp(30px, 2.3vw, 36px);
   font-weight: 700;
   color: #0647fa;
   line-height: 1.05;
@@ -3882,43 +3849,35 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 }
 
 /* =========================================================
-   COLUMN 2: INTRO & COPY & VR STICKER (CENTER)
+   COLUMN 2: COPY
    ========================================================= */
 
 .memory-col-center {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  z-index: 2;
-  padding-top: clamp(8px, 2vw, 24px);
+  padding-top: clamp(12px, 2vw, 32px);
 }
 
 .memory-intro-block {
   width: 100%;
-  max-width: 440px;
-}
-
-.memory-mobile-childhood-slot {
-  display: none;
+  max-width: 470px;
 }
 
 .memory-main-heading {
   font-family: 'Plus Jakarta Sans', var(--font-sans), sans-serif;
-  font-size: clamp(3.2rem, 5.2vw, 4.6rem);
+  font-size: clamp(46px, 4.6vw, 78px);
   font-weight: 900;
   line-height: 0.95;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.045em;
   color: #080807;
-  margin: 0 0 28px 0;
+  margin: 0 0 clamp(20px, 2vw, 30px);
 }
 
 .memory-main-para {
   font-family: 'Plus Jakarta Sans', var(--font-sans), sans-serif;
-  font-size: clamp(1.15rem, 1.4vw, 1.35rem);
+  font-size: clamp(18px, 1.25vw, 20px);
   font-weight: 600;
-  line-height: 1.45;
+  line-height: 1.5;
   color: #1f1e1c;
-  margin: 0 0 20px 0;
+  margin: 0 0 clamp(20px, 2vw, 28px);
 }
 
 /* Lime marker highlight */
@@ -3931,81 +3890,114 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   -webkit-box-decoration-break: clone;
 }
 
-.memory-secondary-para {
-  font-family: 'Plus Jakarta Sans', var(--font-sans), sans-serif;
-  font-size: clamp(0.95rem, 1.15vw, 1.1rem);
-  font-weight: 500;
+.memory-body p {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(17px, 1.2vw, 19px);
   line-height: 1.55;
-  color: #6b665c;
-  margin: 0 0 32px 0;
+  color: #3b3833;
+  margin: 0 0 clamp(12px, 1.1vw, 16px);
 }
 
-/* VR Sticker Cutout & Cobalt Callout Badge */
-.vr-sticker-wrapper {
-  position: relative;
+.memory-body p:last-child {
+  margin-bottom: 0;
+}
+
+.memory-divider {
   width: 100%;
-  max-width: 330px;
-  margin-top: 10px;
-  margin-left: 20px;
+  max-width: 360px;
+  height: 0;
+  margin: clamp(22px, 2.4vw, 34px) 0;
+  border: 0;
+  border-top: 1px solid rgba(26, 25, 23, 0.22);
 }
 
-.vr-sticker-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.12));
-  transform: rotate(-1deg);
-  user-select: none;
+.memory-secondary-para {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(17px, 1.2vw, 19px);
+  line-height: 1.5;
+  color: #3b3833;
+  margin: 0;
 }
 
-.vr-callout-badge {
-  position: absolute;
-  top: 24%;
-  left: -50px;
-  background: #0647fa;
-  color: #ffffff;
-  padding: 10px 16px 8px;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(6, 71, 250, 0.28);
-  transform: rotate(-6deg);
-  z-index: 3;
-  pointer-events: none;
-}
-
-.vr-callout-text {
-  display: block;
-  font-family: 'Caveat', cursive;
-  font-size: 1.25rem;
+/* Closing line in cobalt */
+.memory-closing-accent {
+  display: inline-block;
+  margin-top: 4px;
   font-weight: 600;
-  line-height: 1.15;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.vr-callout-arrow {
-  position: absolute;
-  bottom: -16px;
-  right: 12px;
-  width: 28px;
-  height: 22px;
+  color: #0647fa;
 }
 
 /* =========================================================
-   COLUMN 3: MEMORY PRINTER & RECEIPT (RIGHT)
+   COLUMN 3: VR FIGURE
+   ========================================================= */
+
+.memory-col-vr {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}
+
+.vr-sticker-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* The cutout already carries a white sticker border; add a hairline edge and a soft shadow */
+.vr-sticker-img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: auto;
+  display: block;
+  filter:
+    drop-shadow(0 0 0.75px rgba(26, 25, 23, 0.28))
+    drop-shadow(0 18px 30px rgba(35, 25, 15, 0.16));
+  user-select: none;
+}
+
+/* "Still exploring." sits in the empty space left of the torso; one dashed arrow leads up to the headset */
+.vr-callout-text {
+  position: absolute;
+  top: 29%;
+  left: 0;
+  z-index: 3;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(22px, 1.8vw, 28px);
+  font-weight: 600;
+  line-height: 0.95;
+  color: #0647fa;
+  transform: rotate(-8deg);
+  transform-origin: left top;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Same 2:3 box as the cutout, so the arrow end stays on the headset at any width */
+.vr-callout-arrow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* =========================================================
+   COLUMN 4: VIBE CHECK PRINTER & RECEIPT
    ========================================================= */
 
 .memory-col-right {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 2;
 }
 
 .memory-printer-assembly {
   position: relative;
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
   min-height: var(--assembly-height, 820px);
   display: flex;
   flex-direction: column;
@@ -4186,7 +4178,8 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 60px;
+  /* Short fade so the print below the current one stays clearly visible */
+  height: 28px;
   background: linear-gradient(to bottom, rgba(255, 254, 249, 0) 0%, rgba(254, 253, 249, 0.98) 100%);
   pointer-events: none;
   z-index: 5;
@@ -4322,32 +4315,33 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
    RESPONSIVE LAYOUTS: TABLET & MOBILE
    ========================================================= */
 
-@media (max-width: 1080px) {
+/* Tablet: two balanced columns, childhood photos + copy, then VR figure + printer */
+@media (max-width: 1180px) {
   .memory-machine-container {
-    grid-template-columns: 1fr 1fr;
-    gap: 36px;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    column-gap: clamp(28px, 4vw, 48px);
+    row-gap: 64px;
   }
 
-  .memory-machine-trail-wrapper {
-    display: none;
-  }
-
-  .memory-col-left {
-    order: 1;
+  .childhood-collage-wrap {
+    max-width: 270px;
   }
 
   .memory-col-center {
-    order: 2;
+    align-self: center;
+    padding-top: 0;
   }
 
-  .memory-col-right {
-    grid-column: 1 / -1;
-    order: 3;
-    max-width: 460px;
-    margin-top: 24px;
+  .vr-sticker-wrapper {
+    max-width: 340px;
+  }
+
+  .memory-printer-assembly {
+    max-width: 420px;
   }
 }
 
+/* Phone: heading, childhood photos, copy, VR figure, printer, stacked */
 @media (max-width: 640px) {
   .memory-machine-section {
     padding: 0 0 60px 0;
@@ -4355,127 +4349,52 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   }
 
   .about-intro-header {
-    margin-bottom: 32px;
-    padding: 0 20px;
-  }
-
-  .about-section-tab {
-    font-size: 10px;
-    padding: 4px 10px;
+    margin-bottom: 36px;
+    padding: 8px 20px 0;
   }
 
   .about-section-heading {
-    font-size: 28px;
-    margin-top: 10px;
+    font-size: 34px;
   }
 
   .memory-machine-container {
     padding: 0 20px;
-    grid-template-columns: 1fr;
-    gap: 0;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 48px;
   }
 
-  /* Mobile document flow:
-     1. Heading row with Childhood photos (left) beside "Still that kid." (right)
-     2. Supporting text paragraphs underneath
-     3. Present-day VR-headset image
-     4. Printer and receipt below
-     (Duplicate old childhood column below VR is hidden)
-  */
-  .memory-col-left {
-    display: none !important;
+  .childhood-collage-wrap {
+    max-width: 270px;
+  }
+
+  .childhood-caption-wrap {
+    align-self: center;
+    padding-left: 0;
   }
 
   .memory-col-center {
-    order: 1;
     padding-top: 0;
-    width: 100%;
   }
 
   .memory-intro-block {
     max-width: 100%;
   }
 
-  /* 2-Column row on phone: Childhood photos on left, "Still that kid." on right */
-  .memory-mobile-heading-row {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 16px !important;
-    margin-bottom: 22px !important;
+  .memory-main-heading {
+    font-size: clamp(42px, 12vw, 52px);
   }
 
-  .memory-mobile-childhood-slot {
-    display: block !important;
-    flex: 0 0 115px !important;
-    max-width: 120px !important;
+  .memory-main-para {
+    font-size: 18px;
   }
 
-  .childhood-collage-mobile {
-    position: relative !important;
-    width: 110px !important;
-    height: 150px !important;
-    margin: 0 !important;
-  }
-
-  .childhood-collage-mobile .childhood-turban-card {
-    position: absolute !important;
-    top: 6px !important;
-    left: 2px !important;
-    width: 80px !important;
-    transform: rotate(-3.5deg) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
-    z-index: 1 !important;
-  }
-
-  .childhood-collage-mobile .childhood-tape {
-    top: -9px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 32px !important;
-  }
-
-  .childhood-collage-mobile .childhood-birthday-card {
-    position: absolute !important;
-    top: 54px !important;
-    left: 24px !important;
-    width: 82px !important;
-    transform: rotate(3.5deg) !important;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16) !important;
-    z-index: 2 !important;
-    margin-top: 0 !important;
-  }
-
-  .childhood-collage-mobile .childhood-sparkle-top {
-    width: 14px !important;
-    top: -4px !important;
-    left: -6px !important;
-  }
-
-  .childhood-collage-mobile .childhood-sparkle-bottom {
-    width: 14px !important;
-    bottom: 2px !important;
-    right: -4px !important;
-  }
-
-  .memory-mobile-heading-row .memory-main-heading {
-    flex: 1 1 auto !important;
-    margin: 0 !important;
-    font-size: clamp(34px, 8.8vw, 42px) !important;
-    line-height: 1.05 !important;
+  .memory-body p,
+  .memory-secondary-para {
+    font-size: 17px;
   }
 
   .vr-sticker-wrapper {
-    margin: 28px auto 0;
     max-width: 280px;
-  }
-
-  .memory-col-right {
-    order: 3;
-    margin-top: 48px;
-    width: 100%;
-    max-width: 100%;
   }
 
   .memory-printer-assembly {
@@ -4501,10 +4420,6 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
     font-size: 0.78rem;
   }
 }
-
-
-
-
 
 /* Scroll reveal: hidden until ScrollReveal.js animates each block in on first view */
 .sr-pending {
@@ -4561,19 +4476,6 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 
   .printer-label-text {
     font-size: 11px;
-  }
-
-  .memory-mobile-heading-row .memory-main-heading {
-    font-size: clamp(30px, 8vw, 34px) !important;
-  }
-
-  .memory-main-para {
-    font-size: 17px;
-  }
-
-  /* Present-day VR cut-out was taller than the screen; keep it a supporting image */
-  .vr-sticker-wrapper {
-    max-width: 210px;
   }
 
   /* About paper: keep the doodle grid at a natural phone scale instead of stretching one tile */
@@ -5347,8 +5249,9 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   color: #080807;
 }
 
+/* Narrower than the page content so the pitch and envelope read as one group */
 .contact-inner {
-  max-width: 1240px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 clamp(20px, 4vw, 48px);
   box-sizing: border-box;
@@ -5430,13 +5333,12 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   border-radius: 4px;
 }
 
-/* Illustration with a handwritten note pointing at it */
+/* Illustration */
 .contact-art {
   position: relative;
   margin: 0;
   justify-self: center;
   width: min(320px, 100%);
-  padding-top: 24px;
 }
 
 .contact-envelope {
@@ -5449,30 +5351,6 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 
 .contact-art:hover .contact-envelope {
   transform: translateY(-8px) rotate(-1.5deg);
-}
-
-.contact-note {
-  position: absolute;
-  top: -6px;
-  left: -26%;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: 'Caveat', cursive;
-  font-size: clamp(24px, 2vw, 30px);
-  font-weight: 600;
-  line-height: 1;
-  color: #0647fa;
-  transform: rotate(-9deg);
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-.contact-note-arrow {
-  width: 54px;
-  height: 50px;
-  margin: 4px 0 0 34px;
-  transform: rotate(9deg);
 }
 
 /* =========================================================
@@ -5527,23 +5405,15 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   color: var(--color-white);
 }
 
-/* Work, About, Playground on the first row; LinkedIn and My résumé under the last two */
+/* All five links on one line, wrapping only when the band gets narrow */
 .site-footer-links {
   list-style: none;
   margin: 6px 0 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  justify-content: end;
-  gap: 18px clamp(28px, 3.6vw, 56px);
-}
-
-.site-footer-links li:nth-child(4) {
-  grid-column: 2;
-}
-
-.site-footer-links li:nth-child(5) {
-  grid-column: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 14px clamp(22px, 2.6vw, 40px);
 }
 
 .site-footer-link {
@@ -5647,10 +5517,6 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   .contact-art {
     width: min(260px, 100%);
   }
-
-  .contact-note {
-    left: -18%;
-  }
 }
 
 @media (max-width: 640px) {
@@ -5670,18 +5536,6 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 
   .contact-art {
     width: 200px;
-    padding-top: 30px;
-  }
-
-  .contact-note {
-    left: -30%;
-    font-size: 23px;
-  }
-
-  .contact-note-arrow {
-    width: 44px;
-    height: 40px;
-    margin-left: 26px;
   }
 
   .site-footer-inner {

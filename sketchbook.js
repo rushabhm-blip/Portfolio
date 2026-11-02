@@ -3,11 +3,11 @@ import { createHeader } from './components/Header.js?v=49';
 import { createBookScene } from './components/BookScene.js?v=48';
 import { createChapterDialog } from './components/ChapterDialog.js?v=49';
 import { createExperimentNote } from './components/ExperimentNote.js?v=50';
-import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=52';
-import { createMemoryMachine } from './components/MemoryMachine.js?v=64';
-import { initScrollReveal } from './components/ScrollReveal.js?v=5';
+import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=53';
+import { createMemoryMachine } from './components/MemoryMachine.js?v=66';
+import { initScrollReveal } from './components/ScrollReveal.js?v=6';
 import { createServicesSection } from './components/ServicesSection.js?v=14';
-import { createContactSection, createSiteFooter } from './components/SiteFooter.js?v=1';
+import { createContactSection, createSiteFooter } from './components/SiteFooter.js?v=2';
 
 /**
  * Fits the book composition (both closed and open spread) to available viewport space below header.

@@ -274,7 +274,7 @@ export function createSelectedWorkSection() {
                      src="assets/projects/cooldice/hero_thumbnail.webp"
                      alt="CoolDice gesture-controlled marble candy machine"
                      loading="lazy"
-                     style="width: 100%; height: 100%; object-fit: cover; display: block; mix-blend-mode: multiply;" />
+                     style="width: 100%; height: 100%; object-fit: contain; display: block; mix-blend-mode: multiply;" />
               </div>
             </a>
 
