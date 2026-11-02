@@ -4913,8 +4913,9 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 
 /* =========================================================
    SERVICES: "What can I do for you?" (chapter folder)
-   Header, three folder tabs (Understand / Design / Make) over one
-   card, hand-drawn sketch per chapter, footer with LinkedIn + résumé.
+   Header, three folder tabs (Understand / Design / Make) over one card.
+   The folder and active tab take the chapter colour (--folder-color /
+   --chapter-color); inactive tabs stay ivory. Stop-motion art per chapter.
    ========================================================= */
 
 .services-section {
@@ -4989,10 +4990,11 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   display: inline-flex;
   align-items: flex-start;
   gap: 2px;
-  font-family: 'Caveat', cursive;
-  font-size: 1.35rem;
+  font-family: 'Lora', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 15px;
   color: #475569;
-  transform: rotate(-7deg);
+  transform: rotate(-4deg);
   pointer-events: none;
   white-space: nowrap;
 }
@@ -5020,17 +5022,17 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   border: 1px solid rgba(15, 23, 42, 0.07);
   border-bottom: 0;
   border-radius: 12px 12px 0 0;
-  background: #f1efe7;
+  background: #f7f3e8;
   color: #0f172a;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, padding 0.2s ease;
+  transition: background-color 0.5s ease, color 0.3s ease, padding 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   -webkit-tap-highlight-color: transparent;
 }
 
 .services-tab-btn:hover:not(.is-active) {
-  background: #ebe8de;
+  background: #efeadc;
 }
 
 .services-tab-btn:focus-visible {
@@ -5048,19 +5050,20 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 }
 
 .services-tab-btn.is-active {
-  background: #0647fa;
-  border-color: #0647fa;
-  color: #ffffff;
+  background: var(--chapter-color);
+  border-color: transparent;
   padding-top: 16px;
 }
 
 .services-tab-btn.is-active .services-tab-num {
-  color: rgba(255, 255, 255, 0.8);
+  color: #475569;
 }
 
 .services-card {
   position: relative;
-  background: #f7f5ef;
+  display: grid;
+  background: var(--folder-color, #f7f5ef);
+  transition: background-color 0.5s ease;
   border: 1px solid rgba(15, 23, 42, 0.07);
   border-radius: 14px;
   box-shadow: 0 18px 40px rgba(20, 30, 60, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
@@ -5068,6 +5071,7 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 }
 
 .services-panel {
+  grid-area: 1 / 1;
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   gap: clamp(24px, 4vw, 56px);
@@ -5075,26 +5079,38 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   outline: none;
 }
 
-.services-panel[hidden] {
-  display: none;
+/* Tab change: outgoing chapter fades out while the incoming one fades and settles in,
+   in step with the folder colour easing between chapters */
+.services-panel {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    visibility 0s linear 0.3s;
 }
 
 .services-panel.is-active {
-  animation: servicesPanelIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 0.45s ease 0.1s,
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s,
+    visibility 0s;
 }
 
-@keyframes servicesPanelIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: none; }
-}
-
+/* Chapter tagline: refined serif italic (Lora, already loaded for body copy) */
 .services-panel-eyebrow {
   margin: 0;
-  font-family: 'Caveat', cursive;
-  font-size: 1.75rem;
-  font-weight: 600;
+  font-family: 'Lora', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: clamp(17px, 1.35vw, 20px);
+  font-weight: 400;
   color: #0647fa;
-  line-height: 1.1;
+  line-height: 1.35;
+  letter-spacing: 0;
 }
 
 .services-panel-title {
@@ -5153,17 +5169,37 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   text-decoration-thickness: 1.5px;
 }
 
-.services-panel-art {
+/* Fixed-size stage; one frame visible at a time (hard swaps, no crossfade) */
+.services-art {
+  position: relative;
   justify-self: end;
   width: 100%;
-  max-width: 420px;
+  max-width: 470px;
+  aspect-ratio: 4 / 3;
+  cursor: pointer;
+  border-radius: 12px;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.services-panel-art svg {
-  display: block;
+.services-art:focus-visible {
+  outline: 2px solid #0647fa;
+  outline-offset: 6px;
+}
+
+.services-art-frame {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  height: auto;
-  overflow: visible;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.services-art-frame.is-current {
+  opacity: 1;
 }
 
 /* Footer */
@@ -5186,12 +5222,13 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 .services-cta-hand {
   position: relative;
   display: inline-block;
-  font-family: 'Caveat', cursive;
-  font-size: 2rem;
-  font-weight: 600;
+  font-family: 'Lora', Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-size: clamp(20px, 1.6vw, 24px);
+  font-weight: 400;
   color: #0647fa;
   text-decoration: none;
-  transform: rotate(-3deg);
+  transform: rotate(-2deg);
   transform-origin: left center;
 }
 
@@ -5290,7 +5327,7 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   }
 
   .services-panel-eyebrow {
-    font-size: 1.45rem;
+    font-size: 16.5px;
   }
 
   .services-panel-title {
@@ -5310,9 +5347,10 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
     font-size: 15px;
   }
 
-  .services-panel-art {
+  .services-art {
     justify-self: center;
-    max-width: 240px;
+    max-width: 320px;
+    margin-top: 6px;
   }
 
   .services-cta {
@@ -5321,6 +5359,6 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   }
 
   .services-cta-hand {
-    font-size: 1.75rem;
+    font-size: 20px;
   }
 }
