@@ -1,7 +1,7 @@
 /**
  * ServicesSection.js
  * "What can I do for you?" section that follows About me.
- * One interactive folder with three chapter tabs (Understand / Design / Make):
+ * One interactive folder with three chapter tabs (UX research / Design / Prototype):
  * - The whole folder and the active tab take the chapter colour; inactive tabs stay ivory.
  * - Each chapter: handwritten line, heading, services, related-work link and a
  *   four-frame stop-motion illustration (1→2→3→4→3→2→1, hard frame swaps, ~150ms).
@@ -20,7 +20,7 @@ const FRAME_MS = 150;
 const CHAPTERS = [
   {
     id: 'understand',
-    label: 'Understand',
+    label: 'UX research',
     color: '#E7DDF7',
     eyebrow: 'Listen closely. Connect the dots.',
     title: 'Find the right problem.',
@@ -47,7 +47,7 @@ const CHAPTERS = [
   },
   {
     id: 'make',
-    label: 'Make',
+    label: 'Prototype',
     color: '#D5EEDC',
     eyebrow: 'Build it. Play with it. Make it work.',
     title: 'Bring ideas to life.',
@@ -103,7 +103,6 @@ export function createServicesSection() {
         <h2 class="services-heading" id="servicesHeading">
           What can I do <span class="services-heading-accent">for you?</span>
         </h2>
-        <p class="services-intro">From the first question to something you can try.</p>
       </header>
 
       <div class="services-folder" style="--folder-color: ${CHAPTERS[0].color}">

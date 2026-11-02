@@ -5316,6 +5316,12 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
     font-size: 12px;
   }
 
+  /* Keep every tab label on one line so the three tabs stay the same height */
+  .services-tab-label {
+    white-space: nowrap;
+    font-size: clamp(12.5px, 3.6vw, 14px);
+  }
+
   .services-card {
     border-radius: 0 0 14px 14px;
     padding: 26px 20px 24px;
@@ -5360,5 +5366,29 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 
   .services-cta-hand {
     font-size: 20px;
+  }
+}
+
+/* =========================================================
+   FEAR BETWEEN US: snake sticker over the video's corner watermark
+   The mark sits at 90.6% x / 83.3% y of the 16:9 video. Laptop frames
+   crop the video to 3:2 (mark at 98.1% x of the visible image); phones
+   show the full 16:9 frame. The sticker is centred on that point.
+   ========================================================= */
+
+.project-row-fear .sticker-snake {
+  --frame-pad: clamp(12px, 1.3vw, 16px);
+  left: calc(var(--frame-pad) + (100% - 2 * var(--frame-pad)) * 0.981);
+  top: calc(var(--frame-pad) + (100% - 2 * var(--frame-pad)) * 0.833);
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%) rotate(8deg);
+}
+
+@media (max-width: 640px) {
+  .project-row-fear .sticker-snake {
+    --frame-pad: 8px;
+    left: calc(var(--frame-pad) + (100% - 2 * var(--frame-pad)) * 0.906);
+    width: 78px;
   }
 }
