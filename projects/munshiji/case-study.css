@@ -415,3 +415,230 @@ html.is-entering-transition .portfolio-transition-curtain {
     justify-content: space-between;
   }
 }
+
+/* ==========================================================================
+   Interactive Live App Demo Section
+   ========================================================================== */
+
+.sec-interactive-demo {
+  line-height: normal;
+  font-size: 1rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f7fe 40%, #f1effc 100%);
+  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 5rem 1.5rem 6rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.sec-interactive-demo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  max-width: 100%;
+  height: 500px;
+  background: radial-gradient(circle, rgba(108, 92, 231, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cs-demo-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.cs-demo-intro {
+  text-align: center;
+  max-width: 640px;
+  margin-bottom: 3rem;
+}
+
+.cs-demo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.95rem;
+  border-radius: 9999px;
+  background: var(--color-brand-accent-subtle);
+  border: 1px solid rgba(108, 92, 231, 0.22);
+  color: var(--color-brand-accent);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.cs-demo-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--color-text-main);
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+
+.cs-demo-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.8vw, 1.075rem);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cs-device-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 2.75rem;
+}
+
+.cs-device-iphone {
+  position: relative;
+  width: 385px;
+  max-width: 100%;
+  height: 820px;
+  background: #ffffff;
+  border-radius: 52px;
+  border: 12px solid #16181f;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 30px 80px -15px rgba(0, 0, 0, 0.35),
+    0 15px 35px -10px rgba(108, 92, 231, 0.16);
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Overlay that only carries the camera island; the app draws its own status bar */
+.cs-device-status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 44px;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.cs-device-island {
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 26px;
+  background: #000000;
+  border-radius: 20px;
+  z-index: 31;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.cs-island-camera {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #0d1117;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: block;
+}
+
+.cs-island-speaker {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #11141c;
+  display: block;
+}
+
+.cs-device-screen {
+  width: 100%;
+  flex: 1;
+  border: none;
+  border-radius: 40px;
+  background: #ffffff;
+  display: block;
+}
+
+.cs-demo-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+.cs-demo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.65rem;
+  border-radius: 9999px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.cs-demo-btn-primary {
+  background: var(--color-brand-accent);
+  color: #ffffff;
+  border: 1px solid var(--color-brand-accent);
+  box-shadow: 0 4px 16px rgba(108, 92, 231, 0.28);
+}
+
+.cs-demo-btn-primary:hover {
+  background: var(--color-brand-accent-hover);
+  border-color: var(--color-brand-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(108, 92, 231, 0.38);
+}
+
+@media (max-width: 600px) {
+  .sec-interactive-demo {
+    padding: 3.5rem 1rem 4.5rem;
+  }
+
+  .cs-device-iphone {
+    width: 100%;
+    max-width: 350px;
+    height: 700px;
+    border-width: 10px;
+    border-radius: 44px;
+  }
+
+  .cs-device-island {
+    top: 7px;
+  }
+
+  .cs-device-screen {
+    border-radius: 34px;
+  }
+
+  .cs-demo-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+}

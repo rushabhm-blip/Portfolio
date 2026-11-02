@@ -6,6 +6,8 @@ node_modules/
 **/.agents/
 projects/sajag/app/android/
 projects/sajag/app/dist/
+projects/munshiji/app/dist/
+projects/munshiji prototype/
 *.apk
 **/*.apk
 *.log

@@ -13,7 +13,7 @@
     } catch (e) {}
   </script>
   <script src="../../password-gate.js"></script>
-  <link rel="stylesheet" href="/projects/munshiji/case-study.css?v=1">
+  <link rel="stylesheet" href="/projects/munshiji/case-study.css?v=3">
 </head>
 <body>
 
@@ -161,6 +161,12 @@
       <li class="cs-dot-item" data-index="19">
         <a href="#sec-feature-portfolio" class="cs-dot-link" aria-label="Portfolio & Gyroscope">
           <span class="cs-dot-label">Portfolio & Gyroscope</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
+      <li class="cs-dot-item" data-index="20">
+        <a href="#sec-interactive-demo" class="cs-dot-link" aria-label="Live App Demo">
+          <span class="cs-dot-label">Live App Demo</span>
           <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
         </a>
       </li>
@@ -387,6 +393,47 @@
       </div>
       <div class="cs-canvas-block">
         <img src="/assets/projects/munshiji/sections_2x/20_feature_portfolio_gyroscope.png" alt="18. Portfolio Insights, Spatial Gyroscope Navigation, and Voice Assistant" width="1138" height="3954" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <!-- Section 21: Interactive Live Experience -->
+    <section class="case-section sec-interactive-demo" id="sec-interactive-demo" data-section="sec-interactive-demo">
+      <div class="cs-demo-wrapper">
+        <div class="cs-demo-intro">
+          <div class="cs-demo-pill">FUNCTIONAL PROTOTYPE</div>
+          <h2 class="cs-demo-title">Experience Munshiji Live in Action</h2>
+          <p class="cs-demo-subtitle">
+            Explore the complete responsive interface and interactive user flows directly within this sandbox, or open it in fullscreen mode.
+          </p>
+        </div>
+
+        <div class="cs-device-stage">
+          <div class="cs-device-iphone">
+            <!-- Camera island only: the app renders its own status bar -->
+            <div class="cs-device-status-bar">
+              <div class="cs-device-island">
+                <span class="cs-island-camera"></span>
+                <span class="cs-island-speaker"></span>
+              </div>
+            </div>
+
+            <!-- Interactive App Viewport -->
+            <iframe
+              src="./demo/"
+              class="cs-device-screen"
+              title="Munshiji Interactive Experience"
+              loading="lazy"
+              allow="autoplay; accelerometer; gyroscope; microphone">
+            </iframe>
+          </div>
+        </div>
+
+        <div class="cs-demo-actions">
+          <a href="./demo/" target="_blank" rel="noopener" class="cs-demo-btn cs-demo-btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            <span>Open Fullscreen Web App</span>
+          </a>
+        </div>
       </div>
     </section>
 
