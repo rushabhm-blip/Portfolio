@@ -31,6 +31,7 @@
 const DEFAULT_MEMORIES = [
   {
     id: "motorcycle",
+    focusY: "100%",
     src: "assets/memory-machine/photos/motorcycle.jpg",
     caption: "Taking the scenic route.",
     alt: "Rushabh seated on a motorcycle in the hills.",
@@ -39,6 +40,7 @@ const DEFAULT_MEMORIES = [
   },
   {
     id: "misty-road",
+    focusY: "58%",
     src: "assets/memory-machine/photos/misty-road.jpg",
     caption: "Walking into the fog, happily.",
     alt: "Rushabh walking down a misty hill road in a floral shirt.",
@@ -55,6 +57,7 @@ const DEFAULT_MEMORIES = [
   },
   {
     id: "light-wall",
+    focusY: "62%",
     type: "video",
     src: "assets/memory-machine/videos/light-wall.mp4",
     poster: "assets/memory-machine/videos/light-wall-poster.jpg",
@@ -65,6 +68,7 @@ const DEFAULT_MEMORIES = [
   },
   {
     id: "palace-pillar",
+    focusY: "82%",
     src: "assets/memory-machine/photos/palace-pillar.jpg",
     caption: "Old arches, new questions.",
     alt: "Rushabh leaning on a carved marble pillar in a palace courtyard.",
@@ -73,6 +77,7 @@ const DEFAULT_MEMORIES = [
   },
   {
     id: "mountains",
+    focusY: "90%",
     src: "assets/memory-machine/photos/mountains.jpg",
     caption: "A little further from the everyday.",
     alt: "Rushabh facing the hills with arms outstretched.",
@@ -89,6 +94,7 @@ const DEFAULT_MEMORIES = [
   },
   {
     id: "boat",
+    focusY: "90%",
     src: "assets/memory-machine/photos/boat.jpg",
     caption: "Front seat on the backwaters.",
     alt: "Rushabh lounging on the bow of a blue boat on open water.",
@@ -97,6 +103,7 @@ const DEFAULT_MEMORIES = [
   },
   {
     id: "coast",
+    focusY: "100%",
     src: "assets/memory-machine/photos/coast.jpg",
     caption: "Some days, this is enough.",
     alt: "Palm trees overlooking the sea.",
@@ -105,6 +112,7 @@ const DEFAULT_MEMORIES = [
   },
   {
     id: "lake-sunrise",
+    focusY: "70%",
     src: "assets/memory-machine/photos/lake-sunrise.jpg",
     caption: "Quiet mornings count too.",
     alt: "Sunrise over a still lake between forested hills.",
@@ -113,6 +121,7 @@ const DEFAULT_MEMORIES = [
   },
   {
     id: "forest",
+    focusY: "80%",
     src: "assets/memory-machine/photos/forest.jpg",
     caption: "Taking a moment to look around.",
     alt: "Rushabh on a sunlit forest path.",
@@ -323,6 +332,17 @@ export function createMemoryMachine(options = {}) {
     });
   }
 
+  // Portrait memories with a focusY print as squares (mostly sky/ceiling trimmed from the top)
+  function displayRatio(memory) {
+    return memory.focusY ? 1 : memory.height / memory.width;
+  }
+
+  function mediaStyle(memory) {
+    return memory.focusY
+      ? `aspect-ratio: 1 / 1; object-fit: cover; object-position: 50% ${memory.focusY};`
+      : `aspect-ratio: ${memory.width} / ${memory.height};`;
+  }
+
   function createPanelHTML(memory) {
     return `
       <article class="receipt-panel" data-id="${memory.id}">
@@ -332,13 +352,14 @@ export function createMemoryMachine(options = {}) {
                class="panel-photo-img panel-video"
                width="${memory.width}"
                height="${memory.height}"
-               style="aspect-ratio: ${memory.width} / ${memory.height}"
+               style="${mediaStyle(memory)}"
                aria-label="${memory.alt}"
                muted autoplay loop playsinline preload="metadata"></video>` : `<img src="${memory.src}"
                alt="${memory.alt}"
                class="panel-photo-img"
                width="${memory.width}"
                height="${memory.height}"
+               style="${mediaStyle(memory)}"
                loading="eager" />`}
         </div>
         <div class="panel-caption-band">
@@ -402,7 +423,7 @@ export function createMemoryMachine(options = {}) {
     const innerPhotoWidth = Math.max(120, paperWidth - 20); // 10px side borders
 
     // Reserve room for the tallest memory in the roll (height / width)
-    const maxRatio = Math.max(...memories.map(m => m.height / m.width));
+    const maxRatio = Math.max(...memories.map(displayRatio));
     const tallestPhotoHeight = innerPhotoWidth * maxRatio;
     const captionAndPadding = 75; // caption band, paddings & tear line
     const tallestPanelHeight = Math.round(tallestPhotoHeight + captionAndPadding);
