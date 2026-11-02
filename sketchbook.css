@@ -4796,6 +4796,170 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 }
 
 /* =========================================================
+   LAPTOP: TWO PROJECTS PER ROW (.projects-section.is-two-up)
+   Image on top, then title + tagline; description, meta and tags
+   sit behind "See more…" like the phone. Cards in a row line up;
+   an odd last card is centred on its own row.
+   ========================================================= */
+
+@media (min-width: 861px) {
+  .projects-section.is-two-up .projects-container {
+    --two-up-gap: clamp(48px, 5vw, 88px);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--two-up-gap);
+    row-gap: clamp(88px, 8vw, 128px);
+    align-items: start;
+  }
+
+  .projects-section.is-two-up .project-row {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+  }
+
+  .projects-section.is-two-up .project-row:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc((100% - var(--two-up-gap)) / 2);
+  }
+
+  .projects-section.is-two-up .project-media-col,
+  .projects-section.is-two-up .project-text-col {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .projects-section.is-two-up .project-media-col {
+    order: 1;
+  }
+
+  /* Text starts below the stickers that hang off the frame's lower-left corner */
+  .projects-section.is-two-up .project-text-col {
+    order: 2;
+    padding-top: 34px;
+  }
+
+  .projects-section.is-two-up .project-name {
+    font-size: clamp(30px, 2.6vw, 38px);
+    margin-bottom: 8px;
+  }
+
+  .projects-section.is-two-up .project-subheading {
+    font-size: clamp(18px, 1.4vw, 20px);
+    font-weight: 400;
+    line-height: 1.45;
+    margin-bottom: 6px;
+  }
+
+  .projects-section.is-two-up .project-name br,
+  .projects-section.is-two-up .project-subheading br {
+    display: none;
+  }
+
+  /* Tucked-away details */
+  .projects-section.is-two-up .project-row:not(.is-details-open) .project-desc,
+  .projects-section.is-two-up .project-row:not(.is-details-open) .project-meta-details,
+  .projects-section.is-two-up .project-row:not(.is-details-open) .project-discipline-capsules {
+    display: none;
+  }
+
+  .projects-section.is-two-up .project-details-toggle {
+    display: inline-block;
+    margin: 0 0 12px;
+    padding: 6px 0;
+    border: 0;
+    background: none;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #94a3b8;
+    cursor: pointer;
+  }
+
+  .projects-section.is-two-up .project-details-toggle:hover {
+    color: #64748b;
+  }
+
+  .projects-section.is-two-up .project-details-toggle:focus-visible {
+    outline: 2px solid #0647fa;
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .projects-section.is-two-up .project-row.is-details-open .project-desc {
+    margin-bottom: 14px;
+  }
+
+  /* Short blue links: "Case study ↗", "Live demo ↗" */
+  .projects-section.is-two-up .link-label-full {
+    display: none;
+  }
+
+  .projects-section.is-two-up .link-label-short {
+    display: inline;
+  }
+
+  .projects-section.is-two-up .project-link-wrapper {
+    gap: 8px 26px;
+    margin: 0;
+  }
+}
+
+/* Mouse users: details fade in while hovering a card (or tabbing into it). Their space is
+   reserved, so nothing below moves; links sit right under the tagline. Touch keeps "See more…". */
+@media (min-width: 861px) and (hover: hover) and (pointer: fine) {
+  .projects-section.is-two-up .projects-container {
+    row-gap: clamp(40px, 4vw, 64px);
+  }
+
+  .projects-section.is-two-up .project-details-toggle {
+    display: none;
+  }
+
+  .projects-section.is-two-up .project-link-wrapper {
+    margin: 6px 0 18px;
+  }
+
+  .projects-section.is-two-up .project-row:not(.is-details-open) .project-desc,
+  .projects-section.is-two-up .project-row:not(.is-details-open) .project-meta-details,
+  .projects-section.is-two-up .project-row:not(.is-details-open) .project-discipline-capsules {
+    display: flex;
+    order: 5;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .projects-section.is-two-up .project-row:not(.is-details-open) .project-desc {
+    display: block;
+    margin: 0 0 14px;
+  }
+
+  .projects-section.is-two-up .project-row:hover .project-desc,
+  .projects-section.is-two-up .project-row:hover .project-meta-details,
+  .projects-section.is-two-up .project-row:hover .project-discipline-capsules,
+  .projects-section.is-two-up .project-row:focus-within .project-desc,
+  .projects-section.is-two-up .project-row:focus-within .project-meta-details,
+  .projects-section.is-two-up .project-row:focus-within .project-discipline-capsules {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (min-width: 861px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+  .projects-section.is-two-up .project-row:not(.is-details-open) .project-desc,
+  .projects-section.is-two-up .project-row:not(.is-details-open) .project-meta-details,
+  .projects-section.is-two-up .project-row:not(.is-details-open) .project-discipline-capsules {
+    transform: none;
+    transition: opacity 0.2s ease;
+  }
+}
+
+
+/* =========================================================
    PHONE: FULL NOTE PAPER
    Phones need a taller card than the art's aspect, so the paper art is
    drawn as a 9-slice: torn top (punch holes), bottom and side edges keep

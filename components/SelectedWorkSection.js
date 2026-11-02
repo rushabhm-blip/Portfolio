@@ -35,7 +35,8 @@ export function createSelectedWorkSection() {
 
   // 2. Projects Showcase Section (Repeating Pale-Blue Notebook Grid)
   const projectsSection = document.createElement('section');
-  projectsSection.className = 'projects-section';
+  // is-two-up: laptop shows two compact cards per row (phone-style "See more…" details)
+  projectsSection.className = 'projects-section is-two-up';
   projectsSection.id = 'projects';
   projectsSection.setAttribute('aria-label', 'Selected Projects Showcase');
 
