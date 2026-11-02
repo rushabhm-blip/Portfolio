@@ -233,7 +233,7 @@ export function createMemoryMachine(options = {}) {
           </div>
 
           <!-- VR sticker cutout image -->
-          <img src="assets/memory-machine/assets/vr-sticker.png" class="vr-sticker-img" alt="Rushabh trying a VR headset and controllers" width="1024" height="1536" loading="lazy" />
+          <img src="assets/memory-machine/assets/vr-sticker.webp" class="vr-sticker-img" alt="Rushabh trying a VR headset and controllers" width="1024" height="1536" loading="lazy" />
         </div>
       </div>
 
@@ -253,7 +253,7 @@ export function createMemoryMachine(options = {}) {
             <div class="printer-power-led" aria-hidden="true"></div>
 
             <!-- LAYER 1: Stationary Printer Housing Base (Back) -->
-            <img src="assets/memory-machine/assets/printer-housing.png" 
+            <img src="assets/memory-machine/assets/printer-housing.webp" 
                  class="printer-housing-base" 
                  alt="" 
                  aria-hidden="true" 
@@ -270,7 +270,7 @@ export function createMemoryMachine(options = {}) {
 
             <!-- LAYER 3: Foreground Housing Upper Mask (Front) -->
             <div class="printer-housing-upper-clip" aria-hidden="true">
-              <img src="assets/memory-machine/assets/printer-housing.png" 
+              <img src="assets/memory-machine/assets/printer-housing.webp" 
                    class="printer-housing-upper-img" 
                    alt="" 
                    width="2135" 

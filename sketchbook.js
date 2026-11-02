@@ -1,12 +1,12 @@
-import { sketchbookData } from './data.js?v=48';
-import { createHeader } from './components/Header.js?v=48';
-import { createBookScene } from './components/BookScene.js?v=46';
-import { createChapterDialog } from './components/ChapterDialog.js?v=48';
-import { createExperimentNote } from './components/ExperimentNote.js?v=48';
-import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=47';
-import { createMemoryMachine } from './components/MemoryMachine.js?v=58';
-import { initScrollReveal } from './components/ScrollReveal.js?v=3';
-import { createServicesSection } from './components/ServicesSection.js?v=1';
+import { sketchbookData } from './data.js?v=49';
+import { createHeader } from './components/Header.js?v=49';
+import { createBookScene } from './components/BookScene.js?v=47';
+import { createChapterDialog } from './components/ChapterDialog.js?v=49';
+import { createExperimentNote } from './components/ExperimentNote.js?v=49';
+import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=49';
+import { createMemoryMachine } from './components/MemoryMachine.js?v=59';
+import { initScrollReveal } from './components/ScrollReveal.js?v=4';
+import { createServicesSection } from './components/ServicesSection.js?v=2';
 
 /**
  * Fits the book composition (both closed and open spread) to available viewport space below header.
@@ -205,7 +205,7 @@ function initPortfolio() {
     video.muted = true;
     video.playsInline = true;
     video.loop = true;
-    video.poster = 'assets/sketchbook/character-crawler-poster.png';
+    video.poster = 'assets/sketchbook/character-crawler-poster.webp';
     video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
     video.setAttribute('aria-hidden', 'true');

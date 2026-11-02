@@ -49,25 +49,25 @@ export function createSelectedWorkSection() {
           
           <div class="project-paper-frame">
             <!-- Decorative Yellow Tape (Upper-Left, ~ -20deg) -->
-            <img class="tape-strip tape-upper-left" src="assets/yellow-tape.png" alt="" aria-hidden="true" loading="lazy" />
+            <img class="tape-strip tape-upper-left" src="assets/yellow-tape.webp" alt="" aria-hidden="true" loading="lazy" />
 
             <!-- 3:2 Video Aperture -->
             <a href="/projects/sajag/" class="project-aperture-link" aria-label="Explore Sajag case study">
               <div class="project-video-aperture">
                 <video class="project-video"
-                       src="assets/projects/sajag/thumbnail_video.mp4"
+                       src="assets/projects/sajag/thumbnail_video_web.mp4"
                        autoplay
                        muted
                        loop
                        playsinline
                        preload="auto"
-                       poster="assets/sajag_showcase_cover.png">
+                       poster="assets/sajag_showcase_cover.webp">
                 </video>
               </div>
             </a>
 
             <!-- Decorative Location Pin Sticker (Lower-Left edge) -->
-            <img class="sticker-pin" src="assets/location-pin.png" alt="" aria-hidden="true" loading="lazy" />
+            <img class="sticker-pin" src="assets/location-pin.webp" alt="" aria-hidden="true" loading="lazy" />
 
             <!-- Category Tab (Lower-Right overhang) -->
             <div class="category-tab tab-lavender" aria-hidden="true">
@@ -127,25 +127,25 @@ export function createSelectedWorkSection() {
           
           <div class="project-paper-frame">
             <!-- Decorative Yellow Tape (Upper-Right, ~ +18deg) -->
-            <img class="tape-strip tape-upper-right" src="assets/yellow-tape.png" alt="" aria-hidden="true" loading="lazy" />
+            <img class="tape-strip tape-upper-right" src="assets/yellow-tape.webp" alt="" aria-hidden="true" loading="lazy" />
 
             <!-- 3:2 Video Aperture -->
             <a href="/projects/snakbite/" class="project-aperture-link" aria-label="Explore The Fear Between Us case study">
               <div class="project-video-aperture">
                 <video class="project-video"
-                       src="assets/projects/snakbite/thumbnail_video.mp4"
+                       src="assets/projects/snakbite/thumbnail_video_web.mp4"
                        autoplay
                        muted
                        loop
                        playsinline
                        preload="auto"
-                       poster="assets/the_fear_between_us_artwork.png">
+                       poster="assets/the_fear_between_us_artwork.webp">
                 </video>
               </div>
             </a>
 
             <!-- Decorative Snake Sticker (Lower-Left edge) -->
-            <img class="sticker-snake" src="assets/snake-sticker.png" alt="" aria-hidden="true" loading="lazy" />
+            <img class="sticker-snake" src="assets/snake-sticker.webp" alt="" aria-hidden="true" loading="lazy" />
 
             <!-- Category Tab (Lower-Right overhang) -->
             <div class="category-tab tab-peach" aria-hidden="true">
@@ -162,13 +162,13 @@ export function createSelectedWorkSection() {
           
           <div class="project-paper-frame">
             <!-- Decorative Yellow Tape (Upper-Left, ~ -16deg) -->
-            <img class="tape-strip tape-upper-left" src="assets/yellow-tape.png" alt="" aria-hidden="true" loading="lazy" />
+            <img class="tape-strip tape-upper-left" src="assets/yellow-tape.webp" alt="" aria-hidden="true" loading="lazy" />
 
             <!-- 3:2 Media Aperture -->
             <a href="/projects/time-wanderers/" class="project-aperture-link" aria-label="Explore Time Wanderers case study">
               <div class="project-video-aperture" style="background-color: #0b0b0d;">
                 <img class="project-thumbnail-img"
-                     src="assets/projects/time-wanderers/slide_introducing.png"
+                     src="assets/projects/time-wanderers/slide_introducing.webp"
                      alt="Time Wanderers multimodal spatial museum experience"
                      loading="lazy"
                      style="width: 100%; height: 100%; object-fit: cover; display: block;" />
@@ -233,19 +233,19 @@ export function createSelectedWorkSection() {
           
           <div class="project-paper-frame">
             <!-- Decorative Yellow Tape (Upper-Right, ~ +18deg) -->
-            <img class="tape-strip tape-upper-right" src="assets/yellow-tape.png" alt="" aria-hidden="true" loading="lazy" />
+            <img class="tape-strip tape-upper-right" src="assets/yellow-tape.webp" alt="" aria-hidden="true" loading="lazy" />
 
             <!-- 3:2 Video Aperture -->
             <a href="/projects/munshiji/" class="project-aperture-link" aria-label="Explore Munshiji case study">
               <div class="project-video-aperture">
                 <video class="project-video"
-                       src="assets/projects/munshiji/thumbnail_video.mp4"
+                       src="assets/projects/munshiji/thumbnail_video_web.mp4"
                        autoplay
                        muted
                        loop
                        playsinline
                        preload="auto"
-                       poster="assets/projects/munshiji/thumbnail.png">
+                       poster="assets/projects/munshiji/thumbnail.webp">
                 </video>
               </div>
             </a>
@@ -265,13 +265,13 @@ export function createSelectedWorkSection() {
           
           <div class="project-paper-frame">
             <!-- Decorative Yellow Tape (Upper-Left, ~ -16deg) -->
-            <img class="tape-strip tape-upper-left" src="assets/yellow-tape.png" alt="" aria-hidden="true" loading="lazy" />
+            <img class="tape-strip tape-upper-left" src="assets/yellow-tape.webp" alt="" aria-hidden="true" loading="lazy" />
 
             <!-- 3:2 Media Aperture -->
             <a href="/projects/digital-fabrication/" class="project-aperture-link" aria-label="Explore Digital Fabrication case study">
               <div class="project-video-aperture" style="background-color: #F8F0E3;">
                 <img class="project-thumbnail-img"
-                     src="assets/projects/cooldice/hero_thumbnail.png"
+                     src="assets/projects/cooldice/hero_thumbnail.webp"
                      alt="CoolDice gesture-controlled marble candy machine"
                      loading="lazy"
                      style="width: 100%; height: 100%; object-fit: cover; display: block; mix-blend-mode: multiply;" />

@@ -116,25 +116,25 @@ export const sketchbookData = {
         {
           id: "badminton",
           label: "Badminton",
-          src: "assets/sketchbook/sticker-badminton.png",
+          src: "assets/sketchbook/sticker-badminton.webp",
           alt: "Orange blob playing badminton"
         },
         {
           id: "flute",
           label: "Flute",
-          src: "assets/sketchbook/sticker-flute.png",
+          src: "assets/sketchbook/sticker-flute.webp",
           alt: "Lime blob playing flute"
         },
         {
           id: "reading",
           label: "Reading",
-          src: "assets/sketchbook/sticker-reading.png",
+          src: "assets/sketchbook/sticker-reading.webp",
           alt: "Orange blob reading open book"
         },
         {
           id: "cruiser",
           label: "Cruiser rides",
-          src: "assets/sketchbook/sticker-cruiser.png",
+          src: "assets/sketchbook/sticker-cruiser.webp",
           alt: "Purple blob riding cruiser motorcycle"
         }
       ],
@@ -142,7 +142,7 @@ export const sketchbookData = {
         {
           id: "ooty",
           name: "Ooty",
-          src: "assets/ooty.png",
+          src: "assets/ooty.webp",
           alt: "Ooty travel stamp with toy train and Nilgiri tea hills",
           cx: 760,
           cy: 260,
@@ -152,7 +152,7 @@ export const sketchbookData = {
         {
           id: "chikkamagaluru",
           name: "Chikkamagaluru",
-          src: "assets/chikkamagaluru.png",
+          src: "assets/chikkamagaluru.webp",
           alt: "Chikkamagaluru travel stamp with coffee plantation and rolling hills",
           cx: 820,
           cy: 560,
@@ -162,7 +162,7 @@ export const sketchbookData = {
         {
           id: "coorg",
           name: "Coorg",
-          src: "assets/coorg.png",
+          src: "assets/coorg.webp",
           alt: "Coorg travel stamp with waterfalls and coffee berries",
           cx: 780,
           cy: 900,
@@ -172,7 +172,7 @@ export const sketchbookData = {
         {
           id: "kodaikanal",
           name: "Kodaikanal",
-          src: "assets/kodaikanal.png",
+          src: "assets/kodaikanal.webp",
           alt: "Kodaikanal travel stamp with misty lake, boat, and pine trees",
           cx: 440,
           cy: 990,

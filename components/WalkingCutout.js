@@ -12,14 +12,14 @@ export function createWalkingCutout({ alt = 'Rushabh walking with yellow starbur
   const img = document.createElement('img');
   img.className = 'walking-cutout-img';
   img.id = 'walkingCutoutImg';
-  img.src = 'assets/sketchbook/walking-frame-1.png'; // initial / static frame
+  img.src = 'assets/sketchbook/walking-frame-1.webp'; // initial / static frame
   img.alt = alt;
   img.loading = 'eager';
   img.decoding = 'async';
   img.draggable = false;
   img.dataset.animatedWebp = 'assets/sketchbook/rushabh-walking.webp';
   img.dataset.animatedGif = 'assets/sketchbook/rushabh-walking.gif';
-  img.dataset.staticPng = 'assets/sketchbook/walking-frame-1.png';
+  img.dataset.staticPng = 'assets/sketchbook/walking-frame-1.webp';
 
   container.appendChild(img);
 

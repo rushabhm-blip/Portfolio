@@ -104,7 +104,7 @@ export function createLeftPage({ leftData, onNextPage }) {
 
   const archImg = document.createElement('img');
   archImg.className = 'architecture-sticker-img';
-  archImg.src = 'assets/architecture-sticker.png';
+  archImg.src = 'assets/architecture-sticker.webp';
   archImg.alt = 'Floor plan blueprint, triangle ruler and orange pencil sticker';
   archImg.loading = 'eager';
   archImg.decoding = 'async';

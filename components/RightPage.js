@@ -8,7 +8,7 @@ export const DEFAULT_TRAVEL_STAMPS = [
   {
     id: 'ooty',
     name: 'Ooty',
-    src: 'assets/ooty.png',
+    src: 'assets/ooty.webp',
     alt: 'Ooty travel stamp with toy train and Nilgiri tea hills',
     cx: 780,
     cy: 230,
@@ -18,7 +18,7 @@ export const DEFAULT_TRAVEL_STAMPS = [
   {
     id: 'chikkamagaluru',
     name: 'Chikkamagaluru',
-    src: 'assets/chikkamagaluru.png',
+    src: 'assets/chikkamagaluru.webp',
     alt: 'Chikkamagaluru travel stamp with coffee plantation and rolling hills',
     cx: 810,
     cy: 480,
@@ -28,7 +28,7 @@ export const DEFAULT_TRAVEL_STAMPS = [
   {
     id: 'coorg',
     name: 'Coorg',
-    src: 'assets/coorg.png',
+    src: 'assets/coorg.webp',
     alt: 'Coorg travel stamp with waterfalls and coffee berries',
     cx: 760,
     cy: 740,
@@ -38,7 +38,7 @@ export const DEFAULT_TRAVEL_STAMPS = [
   {
     id: 'kodaikanal',
     name: 'Kodaikanal',
-    src: 'assets/kodaikanal.png',
+    src: 'assets/kodaikanal.webp',
     alt: 'Kodaikanal travel stamp with misty lake, boat, and pine trees',
     cx: 470,
     cy: 910,
@@ -58,7 +58,7 @@ export const DEFAULT_MOBILE_TRAVEL_STAMPS = [
   {
     id: 'ooty',
     name: 'Ooty',
-    src: 'assets/ooty.png',
+    src: 'assets/ooty.webp',
     alt: 'Ooty travel stamp with toy train and Nilgiri tea hills',
     cx: 810,
     cy: 230,
@@ -68,7 +68,7 @@ export const DEFAULT_MOBILE_TRAVEL_STAMPS = [
   {
     id: 'chikkamagaluru',
     name: 'Chikkamagaluru',
-    src: 'assets/chikkamagaluru.png',
+    src: 'assets/chikkamagaluru.webp',
     alt: 'Chikkamagaluru travel stamp with coffee plantation and rolling hills',
     cx: 810,
     cy: 480,
@@ -78,7 +78,7 @@ export const DEFAULT_MOBILE_TRAVEL_STAMPS = [
   {
     id: 'coorg',
     name: 'Coorg',
-    src: 'assets/coorg.png',
+    src: 'assets/coorg.webp',
     alt: 'Coorg travel stamp with waterfalls and coffee berries',
     cx: 730,
     cy: 740,
@@ -88,7 +88,7 @@ export const DEFAULT_MOBILE_TRAVEL_STAMPS = [
   {
     id: 'kodaikanal',
     name: 'Kodaikanal',
-    src: 'assets/kodaikanal.png',
+    src: 'assets/kodaikanal.webp',
     alt: 'Kodaikanal travel stamp with misty lake, boat, and pine trees',
     cx: 460,
     cy: 960,
@@ -200,10 +200,10 @@ export function createRightPage({ rightData, onSelectChapter, onPrevPage }) {
   hobbiesContainer.setAttribute('aria-label', 'Personal hobbies. Draggable stickers.');
 
   const hobbiesList = rightData?.hobbies || [
-    { id: 'badminton', label: 'Badminton', src: 'assets/sketchbook/sticker-badminton.png', alt: 'Orange blob playing badminton' },
-    { id: 'flute', label: 'Flute', src: 'assets/sketchbook/sticker-flute.png', alt: 'Lime blob playing flute' },
-    { id: 'reading', label: 'Reading', src: 'assets/sketchbook/sticker-reading.png', alt: 'Orange blob reading open book' },
-    { id: 'cruiser', label: 'Cruiser rides', src: 'assets/sketchbook/sticker-cruiser.png', alt: 'Purple blob riding cruiser motorcycle' }
+    { id: 'badminton', label: 'Badminton', src: 'assets/sketchbook/sticker-badminton.webp', alt: 'Orange blob playing badminton' },
+    { id: 'flute', label: 'Flute', src: 'assets/sketchbook/sticker-flute.webp', alt: 'Lime blob playing flute' },
+    { id: 'reading', label: 'Reading', src: 'assets/sketchbook/sticker-reading.webp', alt: 'Orange blob reading open book' },
+    { id: 'cruiser', label: 'Cruiser rides', src: 'assets/sketchbook/sticker-cruiser.webp', alt: 'Purple blob riding cruiser motorcycle' }
   ];
 
   const isMobileInitial = typeof window !== 'undefined' && (window.innerWidth < 768 || !!document.querySelector('.book-stage.is-single-page'));

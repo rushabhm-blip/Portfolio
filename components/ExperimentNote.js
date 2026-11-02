@@ -83,7 +83,7 @@ export function createExperimentNote() {
     <div class="note-assembly" id="noteAssembly">
       <!-- Layer 1: Layered notebook paper base (cream sheet + orange & cobalt backings) -->
       <img class="note-layer note-paper"
-           src="assets/note/note-paper.png"
+           src="assets/note/note-paper.webp"
            alt=""
            aria-hidden="true"
            draggable="false"
@@ -91,21 +91,21 @@ export function createExperimentNote() {
 
       <!-- Layer 2: Yellow masking tape across top-left corner -->
       <img class="note-layer note-tape"
-           src="assets/note/note-tape.png"
+           src="assets/note/note-tape.webp"
            alt=""
            aria-hidden="true"
            draggable="false" />
 
       <!-- Layer 3: Lavender circular asterisk sticker near upper-right edge -->
       <img class="note-layer note-badge"
-           src="assets/note/note-badge.png"
+           src="assets/note/note-badge.webp"
            alt=""
            aria-hidden="true"
            draggable="false" />
 
       <!-- Layer 4: Lime asterisk sticker overlapping lower-left edge -->
       <img class="note-layer note-asterisk"
-           src="assets/note/note-asterisk.png"
+           src="assets/note/note-asterisk.webp"
            alt=""
            aria-hidden="true"
            draggable="false" />

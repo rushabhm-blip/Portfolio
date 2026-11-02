@@ -66,7 +66,7 @@ export function createServicesSection() {
 
   const cards = SERVICES.map((service, i) => `
       <li class="service-card service-tone-${service.tone}">
-        ${i % 3 === 0 ? `<img class="service-tape ${i % 2 === 0 ? 'service-tape-left' : 'service-tape-right'}" src="assets/yellow-tape.png" alt="" aria-hidden="true" loading="lazy" />` : ''}
+        ${i % 3 === 0 ? `<img class="service-tape ${i % 2 === 0 ? 'service-tape-left' : 'service-tape-right'}" src="assets/yellow-tape.webp" alt="" aria-hidden="true" loading="lazy" />` : ''}
         <span class="service-index">${String(i + 1).padStart(2, '0')}</span>
         <h3 class="service-title">${service.title}</h3>
         <p class="service-desc">${service.desc}</p>

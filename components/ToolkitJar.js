@@ -92,7 +92,7 @@ export function createToolkitJar(sceneWrapper) {
           <div class="jar-back-tint" aria-hidden="true"></div>
           <!-- Question Mark Sticker (Inside the jar) -->
           <img class="jar-question-mark" id="jarQuestionMark"
-               src="assets/jar/question-mark.png"
+               src="assets/jar/question-mark.webp"
                alt=""
                aria-hidden="true"
                draggable="false" />
@@ -100,7 +100,7 @@ export function createToolkitJar(sceneWrapper) {
 
         <!-- Layer 3: Jar Front Glass Overlay (Tall glass container with subtle center mask) -->
         <img class="jar-glass-img"
-             src="assets/jar/jar-tall-glass.png"
+             src="assets/jar/jar-tall-glass.webp"
              alt=""
              aria-hidden="true"
              draggable="false" />
@@ -113,7 +113,7 @@ export function createToolkitJar(sceneWrapper) {
         <!-- Layer 5: Fitted Silver Metal Lid -->
         <div class="jar-lid-carrier" id="jarLidCarrier">
           <img class="jar-lid-img"
-               src="assets/jar/lid-silver-metal.png"
+               src="assets/jar/lid-silver-metal.webp"
                alt=""
                aria-hidden="true"
                draggable="false" />
@@ -180,7 +180,7 @@ function initJarAnimation(scene) {
   const doodlesSvg = scene.querySelector('#jarDoodlesSvg');
   const noteAssembly = scene.querySelector('#noteAssembly');
 
-  const ATLAS_URL = 'assets/jar/software-icons.png';
+  const ATLAS_URL = 'assets/jar/software-icons.webp';
   const ATLAS_W = 1774;
   const ATLAS_H = 887;
 

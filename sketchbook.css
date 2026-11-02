@@ -6,7 +6,7 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('fonts/Inter-variable.ttf') format('truetype');
+  src: url('fonts/Inter-variable.woff2') format('woff2'), url('fonts/Inter-variable.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -14,7 +14,7 @@
 
 @font-face {
   font-family: 'Caveat';
-  src: url('fonts/Caveat-variable.ttf') format('truetype');
+  src: url('fonts/Caveat-variable.woff2') format('woff2'), url('fonts/Caveat-variable.ttf') format('truetype');
   font-weight: 400 700;
   font-style: normal;
   font-display: swap;
@@ -105,7 +105,7 @@ body {
   color: var(--color-ink);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--color-blue);
-  background-image: url('assets/sketchbook/cobalt-soft-paper-4k.png');
+  background-image: url('assets/sketchbook/cobalt-soft-paper-4k.webp');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1084,7 +1084,7 @@ body.is-book-open .crawler-video,
 
 .book-stage.is-opening .cover-face-back,
 .book-stage.is-closing .cover-face-back {
-  background: url('assets/sketchbook/open-book-blank.png') left center / 200% 100% no-repeat;
+  background: url('assets/sketchbook/open-book-blank.webp') left center / 200% 100% no-repeat;
   border-radius: 4px 0 0 4px;
 }
 
@@ -1114,16 +1114,16 @@ body.is-book-open .crawler-video,
   border-radius: 0 4px 4px 0;
   background: linear-gradient(to left, rgba(0, 10, 40, 0.55), rgba(0, 10, 40, 0.25) 70%, rgba(0, 10, 40, 0.15));
   /* Clip shading to the cover's silhouette so it never darkens the blue backdrop */
-  -webkit-mask: url('assets/sketchbook/native/blank-book.png') center / 100% 100% no-repeat;
-  mask: url('assets/sketchbook/native/blank-book.png') center / 100% 100% no-repeat;
+  -webkit-mask: url('assets/sketchbook/native/blank-book.webp') center / 100% 100% no-repeat;
+  mask: url('assets/sketchbook/native/blank-book.webp') center / 100% 100% no-repeat;
 }
 
 .book-stage:not(.is-single-page) .cover-face-back::after {
   border-radius: 4px 0 0 4px;
   background: linear-gradient(to right, rgba(0, 10, 40, 0.5), rgba(0, 10, 40, 0.2) 70%, rgba(0, 10, 40, 0.1));
   /* Clip shading to the left page's silhouette (same slice the face's paper background uses) */
-  -webkit-mask: url('assets/sketchbook/open-book-blank.png') left center / 200% 100% no-repeat;
-  mask: url('assets/sketchbook/open-book-blank.png') left center / 200% 100% no-repeat;
+  -webkit-mask: url('assets/sketchbook/open-book-blank.webp') left center / 200% 100% no-repeat;
+  mask: url('assets/sketchbook/open-book-blank.webp') left center / 200% 100% no-repeat;
 }
 
 .book-stage:not(.is-single-page).is-opening .cover-face-front::after {
@@ -1865,7 +1865,7 @@ body.is-book-open .crawler-video,
   height: 100%;
   pointer-events: none;
   z-index: 1;
-  background-image: url('assets/note/pale-blue-grid-tile-2x.png');
+  background-image: url('assets/note/pale-blue-grid-tile-2x.webp');
   background-repeat: repeat;
   background-position: center top;
   background-size: 1200px auto; /* 50px square grid cells on desktop */
@@ -2441,7 +2441,7 @@ body.is-book-open .crawler-video,
   height: var(--selected-works-height, 2600px);
   pointer-events: none;
   z-index: 0;
-  background-image: url('assets/note/pale-blue-grid-tile-2x.png');
+  background-image: url('assets/note/pale-blue-grid-tile-2x.webp');
   background-repeat: repeat;
   background-position: center top;
   background-size: 1200px auto; /* 50px square grid cells on desktop, matches Keep Calm */
@@ -3156,13 +3156,13 @@ body.is-book-open .crawler-video,
 
 /* Page 1 (Intro): Left Page 3-slice background */
 .book-stage.is-single-page.show-page-1 .mobile-paper-cap-top {
-  background-image: url('assets/sketchbook/mobile-left-top.png');
+  background-image: url('assets/sketchbook/mobile-left-top.webp');
 }
 .book-stage.is-single-page.show-page-1 .mobile-paper-body {
-  background-image: url('assets/sketchbook/mobile-left-mid.png');
+  background-image: url('assets/sketchbook/mobile-left-mid.webp');
 }
 .book-stage.is-single-page.show-page-1 .mobile-paper-cap-bottom {
-  background-image: url('assets/sketchbook/mobile-left-bottom.png');
+  background-image: url('assets/sketchbook/mobile-left-bottom.webp');
 }
 
 /* Page 2 (More me): Right Page 3-slice background */

@@ -42,8 +42,8 @@ export function createSticker({ type, data = {}, alt = '' }) {
 
     const img = document.createElement('img');
     img.className = 'sticker-portrait';
-    img.src = 'assets/sketchbook/4k/portrait-sticker.png';
-    img.srcset = 'assets/sketchbook/native/portrait-sticker.png 1x, assets/sketchbook/4k/portrait-sticker.png 2x';
+    img.src = 'assets/sketchbook/4k/portrait-sticker.webp';
+    img.srcset = 'assets/sketchbook/native/portrait-sticker.png 1x, assets/sketchbook/4k/portrait-sticker.webp 2x';
     img.alt = alt || 'Illustrated smiling portrait of Rushabh';
     img.loading = 'eager';
     img.decoding = 'async';
@@ -58,8 +58,8 @@ export function createSticker({ type, data = {}, alt = '' }) {
 
     const img = document.createElement('img');
     img.className = 'sticker-cursor';
-    img.src = 'assets/sketchbook/4k/cursor-sticker.png';
-    img.srcset = 'assets/sketchbook/native/cursor-sticker.png 1x, assets/sketchbook/4k/cursor-sticker.png 2x';
+    img.src = 'assets/sketchbook/4k/cursor-sticker.webp';
+    img.srcset = 'assets/sketchbook/native/cursor-sticker.png 1x, assets/sketchbook/4k/cursor-sticker.webp 2x';
     img.alt = alt || 'Make it useful sticker with blue cursor';
     img.loading = 'eager';
     img.decoding = 'async';

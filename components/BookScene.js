@@ -45,7 +45,7 @@ export function createBookScene({ coverData, openBookData, onSelectChapter, onOp
 
   const spreadImg = document.createElement('img');
   spreadImg.className = 'spread-base-img';
-  spreadImg.src = 'assets/sketchbook/open-book-blank.png';
+  spreadImg.src = 'assets/sketchbook/open-book-blank.webp';
   spreadImg.alt = '';
   spreadImg.loading = 'eager';
   spreadImg.decoding = 'async';
