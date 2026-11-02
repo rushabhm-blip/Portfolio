@@ -138,6 +138,10 @@ export function createBookScene({ coverData, openBookData, onSelectChapter, onOp
   faceBack.appendChild(leftPageObj.element);
   hingedCover.appendChild(faceBack);
 
+  // Set inner pages as inert while closed to prevent keyboard focus or accidental interaction
+  rightPageObj.element.setAttribute('inert', '');
+  faceBack.setAttribute('inert', '');
+
   bookSpread.appendChild(hingedCover);
   stage.appendChild(bookSpread);
   sceneWrapper.appendChild(stage);
@@ -296,6 +300,10 @@ export function createBookScene({ coverData, openBookData, onSelectChapter, onOp
     if (state !== 'closed') return;
     state = 'opening';
 
+    // Enable inner pages when opening starts
+    rightPageObj.element.removeAttribute('inert');
+    faceBack.removeAttribute('inert');
+
     stage.classList.remove('is-closed');
     stage.classList.add('is-opening');
     document.body.classList.add('is-book-open');
@@ -353,6 +361,10 @@ export function createBookScene({ coverData, openBookData, onSelectChapter, onOp
       stage.classList.remove('is-closing');
       stage.classList.add('is-closed');
 
+      // Re-inert inner pages once book is fully closed
+      rightPageObj.element.setAttribute('inert', '');
+      faceBack.setAttribute('inert', '');
+
       if (typeof onOpenChange === 'function') {
         onOpenChange(false);
       }
@@ -384,6 +396,7 @@ export function createBookScene({ coverData, openBookData, onSelectChapter, onOp
     getState: () => state,
     setSinglePage,
     getSinglePage: () => singlePageIndex,
-    updateTimelineLine: () => leftPageObj?.updateTimelineLine?.()
+    updateTimelineLine: () => leftPageObj?.updateTimelineLine?.(),
+    bookBaseImg: frontCoverObj.bookBaseImg
   };
 }

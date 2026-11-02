@@ -3,7 +3,7 @@
  * "Keep calm. Experiment on." section component with integrated Toolkit Jar animation.
  */
 
-import { createToolkitJar } from './ToolkitJar.js';
+import { createToolkitJar } from './ToolkitJar.js?v=3';
 
 export function createExperimentNote() {
   const section = document.createElement('section');

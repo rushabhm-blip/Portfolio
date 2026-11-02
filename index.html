@@ -6,16 +6,121 @@
   <title>Rushabh — Portfolio</title>
   <script src="password-gate.js"></script>
 
-  <!-- Preload fonts & critical first-frame closed book asset -->
+  <!-- Preload fonts & critical hero closed book asset with high priority -->
   <link rel="preload" href="fonts/Inter-variable.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="preload" href="fonts/Caveat-variable.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="preload" href="assets/sketchbook/native/blank-book.png" as="image">
-  <link rel="preload" href="assets/sketchbook/character-crawler-poster.png" as="image">
+  <link rel="preload" as="image" type="image/webp" href="assets/sketchbook/native/blank-book.webp" imagesrcset="assets/sketchbook/native/blank-book.webp 1x, assets/sketchbook/4k/blank-book.webp 2x" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/sketchbook/native/blank-book.png" imagesrcset="assets/sketchbook/native/blank-book.png 1x, assets/sketchbook/4k/blank-book.png 2x" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="sketchbook.css?v=61">
+  <!-- Immediate critical viewport-responsive geometry calculation before first paint (CLS = 0) -->
+  <script>
+    (function() {
+      try {
+        var vw = window.innerWidth;
+        var vh = window.innerHeight;
+        var spreadRatio = 1586 / 992;
+        var headerH = 68;
+        var availH = Math.max(300, vh - headerH - 40);
+        var safeMarginX = 24;
+        var availW = Math.max(300, vw - safeMarginX * 2);
+        var spreadW, spreadH, pageW, pageH;
+        if (vw >= 1024) {
+          var maxSpreadW = availW - 120;
+          var maxHFromW = Math.floor(maxSpreadW / spreadRatio);
+          var maxHFromAvail = Math.floor(availH * 0.88);
+          var targetH = Math.min(maxHFromW, maxHFromAvail, 680);
+          spreadH = Math.max(targetH, 470);
+          spreadW = Math.round(spreadH * spreadRatio);
+          pageW = Math.round(spreadW / 2);
+          pageH = spreadH;
+        } else if (vw >= 768) {
+          var maxSpreadW = availW - 80;
+          var maxHFromW = Math.floor(maxSpreadW / spreadRatio);
+          var maxHFromAvail = Math.floor(availH * 0.88);
+          var targetH = Math.min(maxHFromW, maxHFromAvail, 580);
+          spreadH = Math.max(targetH, 440);
+          spreadW = Math.round(spreadH * spreadRatio);
+          pageW = Math.round(spreadW / 2);
+          pageH = spreadH;
+        } else {
+          pageW = Math.min(availW, 440);
+          pageH = Math.round(pageW / 0.8);
+          spreadW = pageW;
+          spreadH = pageH;
+        }
+        var root = document.documentElement;
+        root.style.setProperty('--spread-width', spreadW + 'px');
+        root.style.setProperty('--spread-height', spreadH + 'px');
+        root.style.setProperty('--page-width', pageW + 'px');
+        root.style.setProperty('--page-height', pageH + 'px');
+        root.style.setProperty('--book-width', pageW + 'px');
+        root.style.setProperty('--book-height', pageH + 'px');
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Critical inline styles ensuring intentional entrance before first paint -->
+  <style>
+    body {
+      background-color: #0647fa;
+      margin: 0;
+      color: #080807;
+    }
+    .site-header {
+      opacity: 1;
+      visibility: visible;
+    }
+    .book-stage {
+      position: relative;
+      width: var(--spread-width, 1180px);
+      height: var(--spread-height, 738px);
+    }
+    @media (max-width: 768px) {
+      .book-stage {
+        width: var(--book-width, 360px);
+        height: var(--book-height, 450px);
+      }
+    }
+    /* Hidden initial states: complete book must decode before opacity reveal */
+    .book-base,
+    .book-base-picture img {
+      opacity: 0;
+    }
+    /* Cover overlays and drag hint hidden initially */
+    .closed-cover-inner .intro-block,
+    .closed-cover-inner .sticker-drag-wrapper,
+    .closed-cover-inner .open-book-btn,
+    .closed-cover-inner .book-grid,
+    .sticker-drag-hint,
+    .id-tag-wrapper {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .crawler-video {
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Inside pages strictly hidden while closed or loading */
+    .book-stage.is-closed .page-right,
+    .book-stage.is-loading .page-right,
+    .book-stage.is-closed .spread-base,
+    .book-stage.is-loading .spread-base,
+    .book-stage.is-closed .mobile-paper-frame,
+    .book-stage.is-loading .mobile-paper-frame,
+    .book-stage.is-closed .cover-face-back,
+    .book-stage.is-loading .cover-face-back {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+  </style>
+
+  <link rel="stylesheet" href="sketchbook.css?v=78">
 </head>
 <body>
   <div id="appRoot">
@@ -38,7 +143,7 @@
 
     <main class="main-stage">
       <div class="scene-wrapper book-scene-wrapper">
-        <div class="book-stage is-closed">
+        <div class="book-stage is-closed is-loading">
           <!-- Loaded dynamically via sketchbook.js -->
         </div>
       </div>
@@ -58,6 +163,6 @@
     </dialog>
   </div>
 
-  <script type="module" src="sketchbook.js?v=61"></script>
+  <script type="module" src="sketchbook.js?v=67"></script>
 </body>
 </html>

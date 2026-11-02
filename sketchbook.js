@@ -2,9 +2,10 @@ import { sketchbookData } from './data.js?v=48';
 import { createHeader } from './components/Header.js?v=48';
 import { createBookScene } from './components/BookScene.js?v=46';
 import { createChapterDialog } from './components/ChapterDialog.js?v=48';
-import { createExperimentNote } from './components/ExperimentNote.js?v=46';
+import { createExperimentNote } from './components/ExperimentNote.js?v=48';
 import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=47';
 import { createMemoryMachine } from './components/MemoryMachine.js?v=57';
+import { initScrollReveal } from './components/ScrollReveal.js?v=2';
 
 /**
  * Fits the book composition (both closed and open spread) to available viewport space below header.
@@ -145,12 +146,29 @@ function initPortfolio() {
     dialogManager.openChapter(chapterId, triggerEl);
   }
 
-  // Header Component
-  const header = createHeader({
-    brand: sketchbookData.brand,
-    navigation: sketchbookData.navigation,
-    onSelectChapter: handleSelectChapter
-  });
+  // Header Component (Hydrate existing site-header from index.html if present to prevent re-render flash)
+  let header = root.querySelector('.site-header');
+  if (header) {
+    const wordmark = header.querySelector('.wordmark');
+    if (wordmark) {
+      wordmark.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleSelectChapter('Home');
+      });
+    }
+    header.querySelectorAll('.nav-item').forEach(btn => {
+      const chapter = btn.getAttribute('data-chapter');
+      if (chapter && !btn.getAttribute('href')) {
+        btn.addEventListener('click', () => handleSelectChapter(chapter, btn));
+      }
+    });
+  } else {
+    header = createHeader({
+      brand: sketchbookData.brand,
+      navigation: sketchbookData.navigation,
+      onSelectChapter: handleSelectChapter
+    });
+  }
 
   // Main Stage
   const main = document.createElement('main');
@@ -179,34 +197,34 @@ function initPortfolio() {
     return isIOSorIPad || isSafariUA;
   })();
 
-  const video = document.createElement('video');
-  video.className = 'crawler-video';
-  video.autoplay = true;
-  video.muted = true;
-  video.playsInline = true;
-  video.loop = true;
-  video.poster = 'assets/sketchbook/character-crawler-poster.png';
-  video.setAttribute('muted', '');
-  video.setAttribute('playsinline', '');
-  video.setAttribute('aria-hidden', 'true');
+  let video = root.querySelector('.crawler-video');
+  if (!video) {
+    video = document.createElement('video');
+    video.className = 'crawler-video';
+    video.muted = true;
+    video.playsInline = true;
+    video.loop = true;
+    video.poster = 'assets/sketchbook/character-crawler-poster.png';
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('aria-hidden', 'true');
 
-  if (isAppleOrSafari) {
-    // Safari on iPad/iPhone does not support WebM alpha; use precomposited cobalt-blue MP4
-    const sourceMp4 = document.createElement('source');
-    sourceMp4.src = 'IMG_0122_blue.mp4?v=35';
-    sourceMp4.type = 'video/mp4';
-    video.appendChild(sourceMp4);
-  } else {
-    // Chrome, Firefox, Edge, Android: native transparent WebM with MP4 fallback
-    const sourceWebm = document.createElement('source');
-    sourceWebm.src = 'IMG_0122_dark.webm?v=35';
-    sourceWebm.type = 'video/webm';
-    video.appendChild(sourceWebm);
+    if (isAppleOrSafari) {
+      const sourceMp4 = document.createElement('source');
+      sourceMp4.src = 'IMG_0122_blue.mp4?v=35';
+      sourceMp4.type = 'video/mp4';
+      video.appendChild(sourceMp4);
+    } else {
+      const sourceWebm = document.createElement('source');
+      sourceWebm.src = 'IMG_0122_dark.webm?v=35';
+      sourceWebm.type = 'video/webm';
+      video.appendChild(sourceWebm);
 
-    const sourceMp4 = document.createElement('source');
-    sourceMp4.src = 'IMG_0122_blue.mp4?v=35';
-    sourceMp4.type = 'video/mp4';
-    video.appendChild(sourceMp4);
+      const sourceMp4 = document.createElement('source');
+      sourceMp4.src = 'IMG_0122_blue.mp4?v=35';
+      sourceMp4.type = 'video/mp4';
+      video.appendChild(sourceMp4);
+    }
   }
 
   // Reusable "Keep calm. Experiment on." Section Component
@@ -248,14 +266,24 @@ function initPortfolio() {
     if (selectedWork.projectsElement) gridRo.observe(selectedWork.projectsElement);
   }
 
-  // Mount components in natural document flow
-  root.innerHTML = '';
-  root.appendChild(header);
-  root.appendChild(video);
-  root.appendChild(main);
+  // Mount components in natural document flow without clearing static header/video
+  const existingMain = root.querySelector('.main-stage');
+  if (existingMain) {
+    existingMain.innerHTML = '';
+    existingMain.appendChild(bookScene.element);
+  } else {
+    root.appendChild(main);
+  }
+
   root.appendChild(experimentNote.element);
   root.appendChild(showcaseWrapper);
-  root.appendChild(dialogManager.element);
+
+  const existingDialog = root.querySelector('#chapterDialog');
+  if (existingDialog) {
+    existingDialog.replaceWith(dialogManager.element);
+  } else {
+    root.appendChild(dialogManager.element);
+  }
 
   // Setup layout fitting with ResizeObserver
   const bookStage = bookScene.stage;
@@ -272,34 +300,94 @@ function initPortfolio() {
     if (header) ro.observe(header);
   }
 
-  // Bounded hero asset readiness coordinator (avoids disjointed elements or floating text on cold loads)
-  async function waitForHeroAssets(stageEl, videoEl) {
-    const promises = [];
+  /**
+   * Controlled 5-Step Hero Entrance Sequence
+   * 1. Blue background, logo, and navigation shown immediately (done via CSS & HTML).
+   * 2. Load and decode the complete closed-book image before revealing it.
+   * 3. Reveal the whole book with a subtle 200-300ms opacity transition (no height/clip wipe).
+   * 4. Once book is visible, fade in cover text, stickers, and open controls in a short restrained sequence.
+   * 5. Reveal secondary decorative elements last (crawler video, drag hint, id tag).
+   */
+  async function revealEntranceSequence(stageEl, videoEl) {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const wait = (ms) => prefersReduced ? Promise.resolve() : new Promise(r => setTimeout(r, ms));
+
     const bookBaseImg = stageEl.querySelector('.book-base');
+
+    // Step 2: Ensure complete hero book asset is fully loaded and decoded
     if (bookBaseImg) {
-      if (bookBaseImg.complete && bookBaseImg.naturalWidth > 0) {
-        // already decoded
+      if (!bookBaseImg.complete || bookBaseImg.naturalWidth === 0) {
+        await new Promise((resolve) => {
+          let settled = false;
+          const finish = () => {
+            if (settled) return;
+            settled = true;
+            resolve();
+          };
+          if (typeof bookBaseImg.decode === 'function') {
+            bookBaseImg.decode().then(finish).catch(() => {
+              if (bookBaseImg.complete) finish();
+            });
+          }
+          bookBaseImg.addEventListener('load', finish, { once: true });
+          bookBaseImg.addEventListener('error', finish, { once: true });
+          // Safety failsafe only if asset completely hangs (e.g. 6s max offline timeout)
+          setTimeout(finish, 6000);
+        });
       } else if (typeof bookBaseImg.decode === 'function') {
-        promises.push(bookBaseImg.decode().catch(() => {}));
-      } else {
-        promises.push(new Promise(res => {
-          bookBaseImg.onload = res;
-          bookBaseImg.onerror = res;
-        }));
+        try {
+          await bookBaseImg.decode();
+        } catch (e) {}
       }
     }
 
+    // Critical fonts readiness (capped at 1s to prevent external font network stall)
     if (document.fonts && document.fonts.ready) {
-      promises.push(document.fonts.ready.catch(() => {}));
+      await Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1000))]).catch(() => {});
     }
 
-    // Bounded wait (max 1200ms) ensuring the interface never hangs
-    const timeout = new Promise(res => setTimeout(res, 1200));
-    await Promise.race([Promise.all(promises), timeout]);
-
+    // Lock layout dimensions before triggering reveal
     runLayout();
+
+    function enableCoverControls() {
+      const openBtn = stageEl.querySelector('.open-book-btn');
+      if (openBtn) {
+        openBtn.tabIndex = 0;
+        openBtn.removeAttribute('aria-hidden');
+      }
+      const stickers = stageEl.querySelectorAll('.closed-cover-inner .sticker-drag-wrapper');
+      stickers.forEach(s => {
+        s.tabIndex = 0;
+        s.removeAttribute('aria-hidden');
+      });
+    }
+
+    if (prefersReduced) {
+      stageEl.classList.remove('is-loading');
+      stageEl.classList.add('is-book-visible', 'is-cover-ready', 'is-scene-ready', 'is-ready');
+      document.body.classList.add('is-scene-ready');
+      enableCoverControls();
+      if (videoEl && typeof videoEl.play === 'function') {
+        videoEl.play().catch(() => {});
+      }
+      return;
+    }
+
+    // Step 3: Reveal the whole book with a subtle 260ms opacity transition
     stageEl.classList.remove('is-loading');
-    stageEl.classList.add('is-ready');
+    stageEl.classList.add('is-book-visible');
+
+    await wait(260);
+
+    // Step 4: Fade in cover text, stickers, and controls in a short restrained sequence
+    stageEl.classList.add('is-cover-ready');
+    enableCoverControls();
+
+    await wait(260);
+
+    // Step 5: Reveal secondary decorative elements last
+    stageEl.classList.add('is-scene-ready', 'is-ready');
+    document.body.classList.add('is-scene-ready', 'is-ready');
 
     if (videoEl && typeof videoEl.play === 'function') {
       try { videoEl.currentTime = 0; } catch (e) {}
@@ -307,7 +395,8 @@ function initPortfolio() {
     }
   }
 
-  waitForHeroAssets(bookStage, video);
+  revealEntranceSequence(bookStage, video);
+  initScrollReveal(root);
 }
 
 // Initialize when DOM is ready

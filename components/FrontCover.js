@@ -13,15 +13,24 @@ export function createFrontCover({ coverData, onOpenBook }) {
   container.id = 'closedCoverInner';
 
   // Base book image (spine, paper grain, bottom pages, rounded corners)
+  const bookBasePicture = document.createElement('picture');
+  bookBasePicture.className = 'book-base-picture';
+
+  const webpSource = document.createElement('source');
+  webpSource.type = 'image/webp';
+  webpSource.srcset = 'assets/sketchbook/native/blank-book.webp 1x, assets/sketchbook/4k/blank-book.webp 2x';
+  bookBasePicture.appendChild(webpSource);
+
   const bookBase = document.createElement('img');
   bookBase.className = 'book-base';
-  bookBase.src = 'assets/sketchbook/4k/blank-book.png';
+  bookBase.src = 'assets/sketchbook/native/blank-book.png';
   bookBase.srcset = 'assets/sketchbook/native/blank-book.png 1x, assets/sketchbook/4k/blank-book.png 2x';
-  bookBase.alt = '';
+  bookBase.alt = 'Rushabh Mahore Sketchbook Cover';
   bookBase.loading = 'eager';
-  bookBase.decoding = 'async';
+  bookBase.fetchPriority = 'high';
   bookBase.draggable = false;
-  container.appendChild(bookBase);
+  bookBasePicture.appendChild(bookBase);
+  container.appendChild(bookBasePicture);
 
   // Architectural Blueprint Grid (fades toward center)
   const grid = document.createElement('div');
@@ -35,6 +44,8 @@ export function createFrontCover({ coverData, onOpenBook }) {
     data: coverData?.roleBadge
   });
   roleBadge.dataset.page = 'cover';
+  roleBadge.tabIndex = -1;
+  roleBadge.setAttribute('aria-hidden', 'true');
   container.appendChild(roleBadge);
 
   // Portrait Sticker
@@ -43,6 +54,8 @@ export function createFrontCover({ coverData, onOpenBook }) {
     alt: coverData?.portraitSticker?.alt
   });
   portrait.dataset.page = 'cover';
+  portrait.tabIndex = -1;
+  portrait.setAttribute('aria-hidden', 'true');
   container.appendChild(portrait);
 
   // Intro Typography Block (Real selectable text)
@@ -80,6 +93,8 @@ export function createFrontCover({ coverData, onOpenBook }) {
     alt: coverData?.cursorSticker?.alt
   });
   cursor.dataset.page = 'cover';
+  cursor.tabIndex = -1;
+  cursor.setAttribute('aria-hidden', 'true');
   container.appendChild(cursor);
 
   // Open Book Interactive Button
@@ -87,10 +102,13 @@ export function createFrontCover({ coverData, onOpenBook }) {
     label: coverData?.openButton?.label || "Open my sketchbook",
     onOpenSketchbook: onOpenBook
   });
+  openBtn.tabIndex = -1;
+  openBtn.setAttribute('aria-hidden', 'true');
   container.appendChild(openBtn);
 
   return {
     element: container,
-    openButton: openBtn
+    openButton: openBtn,
+    bookBaseImg: bookBase
   };
 }

@@ -252,10 +252,9 @@ function initJarAnimation(scene) {
     // Jar neck center in scene coordinates (calculated dynamically from actual rendered stageRect)
     const jarNeckSceneX = (stageRect.left - sceneRect.left) + (stageRect.width / 2);
     const jarNeckSceneY = (stageRect.top - sceneRect.top) + (stageRect.height * 0.185);
-    const jarHalfW = stageRect.width / 2;
 
-    // Sizing: 38px on mobile, 62px desktop
-    const iconFinalSize = isMobile ? 38 : 62;
+    // Sizing: 38px phones, 48px tablets, 62px desktop
+    const iconFinalSize = window.innerWidth <= 640 ? 38 : (isMobile ? 48 : 62);
 
     // Update icon node crop & image sizing
     iconNodes.forEach(node => {
@@ -271,76 +270,41 @@ function initJarAnimation(scene) {
     });
 
     if (isMobile) {
-      // Mobile / narrow screens: arrange in an airy, curated constellation above the rim and flanking the jar
-      // Strict requirement: Icons must sit outside the jar's silhouette with breathing room between the icons and the glass!
+      // Phones / narrow screens: the flanks beside the glass are too narrow for icons without clashing,
+      // so icons settle into a tidy 3-row band in the reserved gap between the note card and the jar.
+      // tx/ty are the icon's top-left corner in scene coordinates.
       const noteRect = noteAssembly ? noteAssembly.getBoundingClientRect() : null;
-      let noteBottom = 0;
-      let noteLeft = 0;
-      let noteRight = 0;
-      if (noteRect && noteRect.width > 0) {
-        noteBottom = noteRect.bottom - sceneRect.top;
-        noteLeft = noteRect.left - sceneRect.left;
-        noteRight = noteRect.right - sceneRect.left;
-      }
-      const safeNoteBottom = noteBottom > 0 ? noteBottom + 12 : (jarNeckSceneY - 110);
+      const noteBottom = noteRect && noteRect.width > 0 ? noteRect.bottom - sceneRect.top : jarNeckSceneY - 260;
+      const jarTop = stageRect.top - sceneRect.top;
 
-      // Flank clearance: full icon radius + glass half-width + breathing room
-      const minFlankDx = Math.round(jarHalfW + (iconFinalSize / 2) + 15);
-      const outerFlankDx = minFlankDx + 8;
+      const COLS = 6;
+      const ROWS = Math.ceil(iconNodes.length / COLS);
+      const sidePad = 16;
+      const cellW = (sceneW - sidePad * 2) / COLS;
+      const bandTop = noteBottom + 18;
+      const bandBottom = jarTop - 14;
+      const rowH = Math.max(iconFinalSize + 8, (bandBottom - bandTop) / ROWS);
 
-      const mobileSlotsLeft = [
-        // Upper constellation above the jar rim (dy <= -55)
-        { dx: -38,  dy: -85, rot: -8 },   // Slot 0: Inner left above rim
-        { dx: -88,  dy: -95, rot: 10 },   // Slot 1: Mid left above rim
-        { dx: -138, dy: -75, rot: -6 },   // Slot 2: Outer left above shoulder
-        { dx: -60,  dy: -135, rot: 8 },   // Slot 3: High left arc below note card
-        // Flanking the left glass body (all strictly outside glass silhouette)
-        { dx: -minFlankDx, dy: -20, rot: -10 }, // Slot 4: High left flank beside neck
-        { dx: -outerFlankDx, dy: 45,  rot: 8 },   // Slot 5: Mid left flank
-        { dx: -minFlankDx, dy: 110, rot: -8 },  // Slot 6: Lower mid left flank
-        { dx: -outerFlankDx, dy: 175, rot: 11 },  // Slot 7: Lower left flank
-        { dx: -minFlankDx, dy: 240, rot: -7 }   // Slot 8: Bottom left flank beside jar base
+      // Small deterministic offsets keep the band hand-placed rather than grid-rigid
+      const jitter = [
+        [-4, 2, -8], [3, -3, 7], [-2, 4, -5], [4, -2, 9], [-3, 3, -7], [2, -4, 6]
       ];
 
-      const mobileSlotsRight = [
-        // Upper constellation above the jar rim (dy <= -55)
-        { dx: 38,   dy: -85, rot: 7 },    // Slot 9: Inner right above rim
-        { dx: 88,   dy: -95, rot: -9 },   // Slot 10: Mid right above rim
-        { dx: 138,  dy: -75, rot: 10 },   // Slot 11: Outer right above shoulder
-        { dx: 60,   dy: -135, rot: -8 },  // Slot 12: High right arc below note card
-        // Flanking the right glass body (all strictly outside glass silhouette)
-        { dx: minFlankDx, dy: -25, rot: 9 },    // Slot 13: High right flank above annotation
-        { dx: outerFlankDx, dy: 50,  rot: -7 },   // Slot 14: Mid right flank below annotation
-        { dx: outerFlankDx, dy: 115, rot: 12 },   // Slot 15: Lower mid right flank
-        { dx: minFlankDx + 2, dy: 180, rot: -6 }, // Slot 16: Lower right flank above lid
-        { dx: minFlankDx, dy: 245, rot: 10 }    // Slot 17: Bottom right flank beside jar base
-      ];
+      iconNodes.forEach((node, i) => {
+        const row = Math.floor(i / COLS);
+        const col = i % COLS;
+        const [jx, jy, rot] = jitter[(col + row * 2) % jitter.length];
+        const rowShift = row % 2 === 1 ? cellW * 0.18 : -cellW * 0.08;
 
-      // Dynamically ensure no horizontal overflow off-screen on narrow phones
-      const maxAllowedDx = (sceneW - iconFinalSize - 16) / 2;
-      const xRatio = outerFlankDx > maxAllowedDx ? Math.max(0.85, maxAllowedDx / outerFlankDx) : 1.0;
+        let targetX = sidePad + col * cellW + (cellW - iconFinalSize) / 2 + rowShift + jx;
+        let targetY = bandTop + row * rowH + (rowH - iconFinalSize) / 2 + jy;
 
-      iconNodes.forEach(node => {
-        const isLeft = node.spec.side === 'left';
-        const slots = isLeft ? mobileSlotsLeft : mobileSlotsRight;
-        const slotIdx = isLeft ? node.index : (node.index - 9);
-        const slot = slots[slotIdx] || slots[0];
-
-        let targetX = jarNeckSceneX + slot.dx * xRatio;
-        let targetY = jarNeckSceneY + slot.dy;
-
-        // Strict Exclusion Zone check: Never overlap the note paper, text, or signature!
-        if (targetY < safeNoteBottom && targetX >= noteLeft - 8 && targetX <= noteRight + 8) {
-          targetY = safeNoteBottom + ((node.index % 3) * 14);
-        }
-
-        // Viewport padding bounds
-        const pad = iconFinalSize / 2 + 10;
-        targetX = Math.max(pad, Math.min(sceneW - pad, targetX));
+        // Keep fully on-screen (icons rotate up to ~9deg, so leave a few px for corners)
+        targetX = Math.max(6, Math.min(sceneW - iconFinalSize - 6, targetX));
 
         node.tx = targetX;
         node.ty = targetY;
-        node.rot = slot.rot;
+        node.rot = rot;
       });
     } else {
       // Desktop: 9 Left and 9 Right flanking the note, away from note text, tape, and stickers
@@ -423,7 +387,8 @@ function initJarAnimation(scene) {
       if (lidShadow) lidShadow.style.opacity = '0';
     } else if (mode === 'resting') {
       // Safe resting coordinates on mobile: sits beside the base outside the jar silhouette
-      const restX = isNarrow ? 115 : (isMob ? 132 : 145);
+      // Phones: closer to the jar so the cap never runs past the right screen edge
+      const restX = isNarrow ? 68 : (isMob ? 85 : 145);
       const restY = isMob ? 215 : 220;
       const restRot = isNarrow ? 28 : (isMob ? 35 : 42);
       lid.style.transform = `translate(${restX}px, ${restY}px) rotate(${restRot}deg)`;
@@ -611,7 +576,8 @@ function initJarAnimation(scene) {
       // Silver cap pops up, arcs through the air, and lands beside jar
       const isMobile = window.innerWidth < 820;
       const isNarrow = window.innerWidth <= 380;
-      const targetLidX = isNarrow ? 115 : (isMobile ? 130 : 145);
+      const isPhone = window.innerWidth <= 640;
+      const targetLidX = isNarrow ? 68 : (isPhone ? 85 : (isMobile ? 130 : 145));
       const targetLidY = isMobile ? 215 : 220;
       const targetLidRot = isNarrow ? 28 : (isMobile ? 35 : 42);
 
