@@ -76,6 +76,16 @@ const DEFAULT_MEMORIES = [
     height: 2000
   },
   {
+    id: "lake-dusk",
+    type: "video",
+    src: "assets/memory-machine/videos/lake-dusk.mp4",
+    poster: "assets/memory-machine/videos/lake-dusk-poster.jpg",
+    caption: "Dusk, slow and pink.",
+    alt: "A boat drifting on a calm lake at dusk under a pink sky, a palace on the water in the distance.",
+    width: 960,
+    height: 540
+  },
+  {
     id: "mountains",
     focusY: "90%",
     src: "assets/memory-machine/photos/mountains.jpg",
@@ -378,12 +388,9 @@ export function createMemoryMachine(options = {}) {
   }
 
   function renderStaticState(index) {
-    // Current memory at top, previous memory in outgoing position
-    const prevIndex = (index - 1 + memories.length) % memories.length;
-    paperEl.innerHTML = `
-      ${createPanelHTML(memories[index])}
-      ${createPanelHTML(memories[prevIndex])}
-    `;
+    // Current memory at top, previous memory (if any) in outgoing position. No wrap-around,
+    // so the opening print never shows the last memory.
+    paperEl.innerHTML = createPanelHTML(memories[index]) + (index > 0 ? createPanelHTML(memories[index - 1]) : '');
     paperEl.style.transition = 'none';
     paperEl.style.transform = 'none';
     updateCounter(index);
@@ -398,7 +405,7 @@ export function createMemoryMachine(options = {}) {
 
   function scheduleNextCycle() {
     clearHoldTimer();
-    if (isUserPaused || isAutoPaused || !isVisible || !isReady || prefersReducedMotion) {
+    if (isUserPaused || isAutoPaused || !isVisible || !isReady || prefersReducedMotion || isLastMemory()) {
       return;
     }
     // Hold the visible memory: short for photos, longer for videos
@@ -551,8 +558,13 @@ export function createMemoryMachine(options = {}) {
     }, durationMs);
   }
 
+  function isLastMemory() {
+    return currentIndex >= memories.length - 1;
+  }
+
   function feedNext() {
-    const nextIndex = (currentIndex + 1) % memories.length;
+    if (isLastMemory()) return; // each memory prints once; the roll rests on the final one
+    const nextIndex = currentIndex + 1;
     if (isAnimating) {
       queuedTargetIndex = nextIndex;
       return;
@@ -561,7 +573,8 @@ export function createMemoryMachine(options = {}) {
   }
 
   function feedPrevious() {
-    const prevIndex = (currentIndex - 1 + memories.length) % memories.length;
+    if (currentIndex <= 0) return;
+    const prevIndex = currentIndex - 1;
     if (isAnimating) {
       queuedTargetIndex = prevIndex;
       return;
