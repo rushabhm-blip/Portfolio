@@ -78,7 +78,7 @@ export function createSelectedWorkSection() {
 
         <div class="project-text-col">
           <h3 class="project-name">Sajag</h3>
-          <p class="project-subheading">Everyday concerns.<br><span class="marker-highlight marker-lime">Collective action.</span></p>
+          <p class="project-subheading">Everyday concerns. <br><span class="marker-highlight marker-lime">Collective action.</span></p>
           <p class="project-desc">Helping people raise civic concerns, find support, and stay informed about what happens next.</p>
           <div class="project-meta-details">
             <span class="project-meta-item">2026 · Individual project</span>
@@ -103,7 +103,7 @@ export function createSelectedWorkSection() {
       <!-- Project 2: The Fear Between Us (Text Left, Thumbnail Right on Desktop) -->
       <article class="project-row project-row-fear" id="project-the-fear-between-us" data-project-id="the-fear-between-us">
         <div class="project-text-col">
-          <h3 class="project-name">The Fear<br>Between Us</h3>
+          <h3 class="project-name">The Fear <br>Between Us</h3>
           <p class="project-subheading">Understanding <span class="marker-highlight marker-peach">beyond fear.</span></p>
           <p class="project-desc">An interactive data story exploring snakebite and our relationship with snakes in India.</p>
           <div class="project-discipline-capsules" aria-label="Project disciplines">
@@ -184,7 +184,7 @@ export function createSelectedWorkSection() {
 
         <div class="project-text-col">
           <h3 class="project-name">Time Wanderers</h3>
-          <p class="project-subheading">Discover the object.<br><span class="marker-highlight marker-lime">Travel through its history.</span></p>
+          <p class="project-subheading">Discover the object. <br><span class="marker-highlight marker-lime">Travel through its history.</span></p>
           <p class="project-desc">A multimodal spatial museum experience exploring Indus Valley civilization through touchless gesture interaction, physical proximity, and contextual storytelling.</p>
           <div class="project-meta-details">
             <span class="project-meta-item">2026 · Group project · Multimodal & Spatial Experience</span>
@@ -306,6 +306,30 @@ export function createSelectedWorkSection() {
       </article>
     </div>
   `;
+
+  // Phone-only "More details" toggle: description, meta and capsules stay tucked away until asked for
+  // (hidden by CSS on phones only; the button itself is hidden on larger screens)
+  projectsSection.querySelectorAll('.project-row').forEach(row => {
+    const textCol = row.querySelector('.project-text-col');
+    const subheading = textCol && textCol.querySelector('.project-subheading');
+    if (!subheading) return;
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'project-details-toggle';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.innerHTML = '<span class="project-details-toggle-label">More details</span><span class="project-details-toggle-icon" aria-hidden="true">+</span>';
+    subheading.insertAdjacentElement('afterend', toggle);
+
+    toggle.addEventListener('click', () => {
+      const expanded = row.classList.toggle('is-details-open');
+      toggle.setAttribute('aria-expanded', String(expanded));
+      toggle.querySelector('.project-details-toggle-label').textContent = expanded ? 'Less' : 'More details';
+      toggle.querySelector('.project-details-toggle-icon').textContent = expanded ? '−' : '+';
+      // Let the scroll-reveal pass pick up the newly visible blocks
+      window.dispatchEvent(new Event('scroll'));
+    });
+  });
 
   // Ensure paper airplane doodle video autoplays reliably
   const planeVideo = headerSection.querySelector('.selected-work-plane-video');
