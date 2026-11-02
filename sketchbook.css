@@ -5004,26 +5004,70 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 }
 
 /* =========================================================
-   PHONE: COMPACT PROJECT ROWS
-   Image + name + hook + links at first glance (two projects per screen);
-   description, meta and capsules open via "More details". Laptop untouched.
+   PHONE: PROJECT ROWS
+   "01 / SELECTED WORK" label, image, category, title, tagline,
+   "See more…" (opens description, meta, tags) and short links.
+   Dashed dividers between projects. Laptop untouched.
    ========================================================= */
 
-.project-details-toggle {
+.project-mobile-index,
+.project-mobile-category,
+.project-details-toggle,
+.link-label-short {
   display: none;
 }
 
 @media (max-width: 640px) {
   .projects-container {
-    gap: 30px !important;
+    gap: 0 !important;
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+    box-sizing: border-box;
   }
 
   .project-row {
-    gap: 12px !important;
+    gap: 0 !important;
+    padding: 30px 0 34px;
   }
 
-  /* "01 / SAJAG" repeats the project name; hide it at first glance */
-  .project-index-label {
+  .project-row:first-child {
+    padding-top: 8px;
+  }
+
+  .project-row + .project-row {
+    border-top: 1.5px dashed rgba(100, 116, 139, 0.32);
+  }
+
+  /* 01 / SELECTED WORK */
+  .project-mobile-index {
+    display: flex;
+    align-items: baseline;
+    order: 0 !important;
+    margin: 0 0 28px; /* clears the tape that sits over the frame's top corner */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+
+  .project-mobile-index-num {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #0647fa;
+  }
+
+  .project-mobile-index-sep {
+    margin: 0 12px;
+    color: #94a3b8;
+    letter-spacing: 0;
+  }
+
+  /* Desktop's "01 / SAJAG" label and on-image tab are replaced by the lines above/below */
+  .project-index-label,
+  .category-tab {
     display: none;
   }
 
@@ -5031,26 +5075,39 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
     padding: 8px;
   }
 
-  /* Thumbnails are 16:9 videos, so this shows them uncropped and shorter */
+  /* Thumbnails are 16:9 videos, so this shows them uncropped */
   .project-video-aperture {
     aspect-ratio: 16 / 9;
   }
 
-  .category-tab {
-    font-size: 12px;
-    padding: 4px 11px;
-    bottom: -11px;
+  /* Text starts below the stickers that hang off the frame's lower-left corner */
+  .project-text-col {
+    padding-top: 30px;
+  }
+
+  .project-mobile-category {
+    display: block;
+    margin: 0 0 8px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #7b8494;
   }
 
   .project-name {
-    font-size: 26px;
-    margin-bottom: 4px;
+    font-size: clamp(26px, 8vw, 32px);
+    line-height: 1.06;
+    margin: 0 0 8px;
+    overflow-wrap: anywhere;
   }
 
   .project-subheading {
-    font-size: 16px;
-    line-height: 1.4;
-    margin-bottom: 8px;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.45;
+    margin: 0 0 6px;
   }
 
   .project-name br,
@@ -5065,38 +5122,48 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
     display: none;
   }
 
+  /* Plain muted "See more…" text (still a real button for keyboard & screen readers) */
   .project-details-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin: 0 0 10px;
-    padding: 5px 12px 5px 14px;
-    border: 1px solid rgba(15, 23, 42, 0.12);
-    border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.7);
+    display: inline-block;
+    margin: 0 0 12px;
+    padding: 6px 0;
+    border: 0;
+    background: none;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 13.5px;
-    font-weight: 600;
-    color: #334155;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #94a3b8;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
   }
 
-  .project-details-toggle-icon {
-    font-size: 16px;
-    line-height: 1;
-    color: #0647fa;
+  .project-details-toggle:focus-visible {
+    outline: 2px solid #0647fa;
+    outline-offset: 3px;
+    border-radius: 3px;
   }
 
   .project-row.is-details-open .project-desc {
     margin-bottom: 14px;
   }
 
+  /* Short blue links: "Case study ↗", "Live demo ↗" */
+  .link-label-full {
+    display: none;
+  }
+
+  .link-label-short {
+    display: inline;
+  }
+
   .project-link-wrapper {
-    gap: 8px 20px;
+    gap: 8px 26px;
+    margin: 0;
   }
 
   .project-case-study-link {
     font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
   }
 }

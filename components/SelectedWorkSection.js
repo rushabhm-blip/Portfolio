@@ -307,25 +307,58 @@ export function createSelectedWorkSection() {
     </div>
   `;
 
-  // Phone-only "More details" toggle: description, meta and capsules stay tucked away until asked for
-  // (hidden by CSS on phones only; the button itself is hidden on larger screens)
-  projectsSection.querySelectorAll('.project-row').forEach(row => {
+  // Phone-only extras (all hidden by CSS on larger screens):
+  // - "01 / SELECTED WORK" label, category line above the title, short link names
+  // - "See more…" toggle: description, meta and capsules stay tucked away until asked for
+  const SHORT_LINK_LABELS = {
+    'Explore case study': 'Case study',
+    'Explore project': 'Case study',
+    'Interactive demo': 'Live demo',
+    'Watch video': 'Video'
+  };
+
+  projectsSection.querySelectorAll('.project-row').forEach((row, i) => {
     const textCol = row.querySelector('.project-text-col');
+    const name = textCol && textCol.querySelector('.project-name');
     const subheading = textCol && textCol.querySelector('.project-subheading');
-    if (!subheading) return;
+    if (!name || !subheading) return;
+
+    const indexLabel = document.createElement('div');
+    indexLabel.className = 'project-mobile-index';
+    indexLabel.setAttribute('aria-hidden', 'true');
+    indexLabel.innerHTML = `<span class="project-mobile-index-num">${String(i + 1).padStart(2, '0')}</span><span class="project-mobile-index-sep">/</span>Selected work`;
+    row.insertBefore(indexLabel, row.firstElementChild);
+
+    const tab = row.querySelector('.category-tab');
+    if (tab) {
+      const category = document.createElement('p');
+      category.className = 'project-mobile-category';
+      category.textContent = tab.textContent.trim();
+      name.insertAdjacentElement('beforebegin', category);
+    }
+
+    textCol.querySelectorAll('.project-case-study-link').forEach(link => {
+      const label = link.querySelector('span:not(.link-arrow)');
+      const short = label && SHORT_LINK_LABELS[label.textContent.trim()];
+      if (!short) return;
+      label.classList.add('link-label-full');
+      const mobileLabel = document.createElement('span');
+      mobileLabel.className = 'link-label-short';
+      mobileLabel.textContent = short;
+      label.insertAdjacentElement('afterend', mobileLabel);
+    });
 
     const toggle = document.createElement('button');
     toggle.type = 'button';
     toggle.className = 'project-details-toggle';
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.innerHTML = '<span class="project-details-toggle-label">More details</span><span class="project-details-toggle-icon" aria-hidden="true">+</span>';
+    toggle.textContent = 'See more…';
     subheading.insertAdjacentElement('afterend', toggle);
 
     toggle.addEventListener('click', () => {
       const expanded = row.classList.toggle('is-details-open');
       toggle.setAttribute('aria-expanded', String(expanded));
-      toggle.querySelector('.project-details-toggle-label').textContent = expanded ? 'Less' : 'More details';
-      toggle.querySelector('.project-details-toggle-icon').textContent = expanded ? '−' : '+';
+      toggle.textContent = expanded ? 'See less' : 'See more…';
       // Let the scroll-reveal pass pick up the newly visible blocks
       window.dispatchEvent(new Event('scroll'));
     });
