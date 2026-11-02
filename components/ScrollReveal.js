@@ -25,7 +25,7 @@ const TEXT_TARGETS = [
   '.memory-main-heading',
   '.memory-main-para',
   '.memory-secondary-para',
-  '.services-tab',
+  '.services-kicker',
   '.services-heading',
   '.services-intro',
   '.services-cta'
@@ -37,7 +37,7 @@ const IMAGE_TARGETS = [
   '.project-paper-frame',
   '.childhood-collage-wrap',
   '.vr-sticker-wrapper',
-  '.service-card'
+  '.services-folder'
 ];
 
 const STAGGER_MS = 90;

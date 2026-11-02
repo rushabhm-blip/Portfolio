@@ -5,8 +5,8 @@ import { createChapterDialog } from './components/ChapterDialog.js?v=49';
 import { createExperimentNote } from './components/ExperimentNote.js?v=50';
 import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=52';
 import { createMemoryMachine } from './components/MemoryMachine.js?v=59';
-import { initScrollReveal } from './components/ScrollReveal.js?v=4';
-import { createServicesSection } from './components/ServicesSection.js?v=2';
+import { initScrollReveal } from './components/ScrollReveal.js?v=5';
+import { createServicesSection } from './components/ServicesSection.js?v=4';
 
 /**
  * Fits the book composition (both closed and open spread) to available viewport space below header.
