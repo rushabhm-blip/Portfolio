@@ -3,16 +3,18 @@
  * "What can I do for you?" section that follows About me.
  * One interactive folder with three chapter tabs (UX research / Design / Prototype):
  * - The whole folder and the active tab take the chapter colour; inactive tabs stay ivory.
- * - Each chapter: handwritten line, heading, services, related-work link and a
+ * - Each chapter: heading, services, related-work link and a
  *   four-frame stop-motion illustration (1→2→3→4→3→2→1, hard frame swaps, ~150ms).
  * - Illustration plays once when its tab opens (or first scrolls into view) and replays on
  *   hover, keyboard focus or tap, then rests on frame 1. Reduced motion shows frame 1 only.
  * - All panels share one grid cell so the folder keeps the same size across tabs.
  * - Accessible tabs (roving tabindex, arrow keys, Home/End).
+ * - Footer: "Let's connect" (LinkedIn), email, LinkedIn and résumé links.
  */
 
 const LINKEDIN_URL = 'https://www.linkedin.com/in/rushabh-mahore-834425207/';
 const RESUME_URL = '/assets/Rushabh_Mahore_Resume.pdf';
+const EMAIL = 'rushabh_m@nid.edu';
 
 const FRAME_SEQUENCE = [1, 2, 3, 4, 3, 2, 1];
 const FRAME_MS = 150;
@@ -22,7 +24,6 @@ const CHAPTERS = [
     id: 'understand',
     label: 'UX research',
     color: '#E7DDF7',
-    eyebrow: 'Listen closely. Connect the dots.',
     title: 'Find the right problem.',
     items: [
       { name: 'Research & discovery', line: 'Understand people, their needs and everyday context.' },
@@ -36,7 +37,6 @@ const CHAPTERS = [
     id: 'design',
     label: 'Design',
     color: '#FFE1CC',
-    eyebrow: 'Make it clear. Make it feel right.',
     title: 'Design that makes sense.',
     items: [
       { name: 'Interaction & UX design', line: 'Clear flows, thoughtful interfaces, useful details.' },
@@ -49,7 +49,6 @@ const CHAPTERS = [
     id: 'make',
     label: 'Prototype',
     color: '#D5EEDC',
-    eyebrow: 'Build it. Play with it. Make it work.',
     title: 'Bring ideas to life.',
     items: [
       { name: 'Prototyping', line: 'Clickable and coded experiences to test ideas early.' },
@@ -79,7 +78,6 @@ export function createServicesSection() {
         <div class="services-panel${i === 0 ? ' is-active' : ''}" role="tabpanel"
              id="servicesPanel-${c.id}" aria-labelledby="servicesTab-${c.id}" tabindex="0"${i === 0 ? '' : ' inert'}>
           <div class="services-panel-text">
-            <p class="services-panel-eyebrow">${c.eyebrow}</p>
             <h3 class="services-panel-title">${c.title}</h3>
             <ul class="services-panel-list">
               ${c.items.map(item => `
@@ -124,13 +122,14 @@ export function createServicesSection() {
         <div class="services-cta-start">
           <p class="services-cta-text">Have something in mind?</p>
           <a class="services-cta-hand" href="${LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">
-            Let's make it useful <span aria-hidden="true">↗</span>
+            Let's connect <span aria-hidden="true">↗</span>
             <svg class="services-cta-underline" viewBox="0 0 200 12" fill="none" aria-hidden="true">
               <path d="M3 9 C 60 3, 130 2, 197 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </a>
         </div>
         <div class="services-cta-links">
+          <a class="services-cta-link" href="mailto:${EMAIL}">${EMAIL}</a>
           <a class="services-cta-link" href="${LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
           <a class="services-cta-link" href="${RESUME_URL}" target="_blank" rel="noopener noreferrer">My résumé <span aria-hidden="true">↗</span></a>
         </div>
