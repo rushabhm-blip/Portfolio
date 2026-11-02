@@ -4,8 +4,9 @@ import { createBookScene } from './components/BookScene.js?v=46';
 import { createChapterDialog } from './components/ChapterDialog.js?v=48';
 import { createExperimentNote } from './components/ExperimentNote.js?v=48';
 import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=47';
-import { createMemoryMachine } from './components/MemoryMachine.js?v=57';
-import { initScrollReveal } from './components/ScrollReveal.js?v=2';
+import { createMemoryMachine } from './components/MemoryMachine.js?v=58';
+import { initScrollReveal } from './components/ScrollReveal.js?v=3';
+import { createServicesSection } from './components/ServicesSection.js?v=1';
 
 /**
  * Fits the book composition (both closed and open spread) to available viewport space below header.
@@ -236,6 +237,9 @@ function initPortfolio() {
   // Personal Photos Section ("A LITTLE MORE ME" Memory Machine)
   const memoryMachine = createMemoryMachine();
 
+  // "What can I do for you?" services section (follows About me on the same paper)
+  const servicesSection = createServicesSection();
+
   // Unified Showcase & About Container (Single continuous seamless hand-drawn grid background across Selected Work + Still That Kid)
   const showcaseWrapper = document.createElement('div');
   showcaseWrapper.className = 'works-and-about-wrapper';
@@ -248,7 +252,12 @@ function initPortfolio() {
 
   showcaseWrapper.appendChild(selectedWork.headerElement);
   showcaseWrapper.appendChild(selectedWork.projectsElement);
-  showcaseWrapper.appendChild(memoryMachine.element);
+  // About me + services share one continuous sheet of grid paper so the grid never breaks between them
+  const aboutPaperGroup = document.createElement('div');
+  aboutPaperGroup.className = 'about-paper-group';
+  aboutPaperGroup.appendChild(memoryMachine.element);
+  aboutPaperGroup.appendChild(servicesSection.element);
+  showcaseWrapper.appendChild(aboutPaperGroup);
 
   // Update boundary height for background grid mask transition
   function updateGridTransition() {

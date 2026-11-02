@@ -17,8 +17,8 @@
  * - Authentic roll feed motion:
  *     - Each photo preserves intrinsic aspect ratio (portrait prints taller, landscape shorter).
  *     - Downward feed reveals leading edge (bottom of upright photo) first.
- *     - Consistent feed speed (~240px/sec).
- *     - 4-second hold on completed photo.
+ *     - Consistent feed speed (~380px/sec for photos).
+ *     - Photos hold for 2.5s; video memories feed slower and hold longer while they play.
  *     - Stable reserved viewport room prevents layout jumps.
  *     - Outgoing photos fade smoothly as they exit; old panels recycled from DOM.
  * - Accessible controls:
@@ -38,6 +38,14 @@ const DEFAULT_MEMORIES = [
     height: 2048
   },
   {
+    id: "misty-road",
+    src: "assets/memory-machine/photos/misty-road.jpg",
+    caption: "Walking into the fog, happily.",
+    alt: "Rushabh walking down a misty hill road in a floral shirt.",
+    width: 1126,
+    height: 2000
+  },
+  {
     id: "kayaking",
     src: "assets/memory-machine/photos/kayaking.jpg",
     caption: "Good company. New directions.",
@@ -46,12 +54,22 @@ const DEFAULT_MEMORIES = [
     height: 1153
   },
   {
-    id: "vr-work",
-    src: "assets/memory-machine/photos/vr-work.jpg",
-    caption: "Still figuring things out.",
-    alt: "Rushabh trying a VR headset and controllers.",
-    width: 1153,
-    height: 2048
+    id: "light-wall",
+    type: "video",
+    src: "assets/memory-machine/videos/light-wall.mp4",
+    poster: "assets/memory-machine/videos/light-wall-poster.jpg",
+    caption: "Touching everything. For research.",
+    alt: "Rushabh waving a hand across an interactive light installation that ripples in response.",
+    width: 540,
+    height: 960
+  },
+  {
+    id: "palace-pillar",
+    src: "assets/memory-machine/photos/palace-pillar.jpg",
+    caption: "Old arches, new questions.",
+    alt: "Rushabh leaning on a carved marble pillar in a palace courtyard.",
+    width: 1500,
+    height: 2000
   },
   {
     id: "mountains",
@@ -62,12 +80,36 @@ const DEFAULT_MEMORIES = [
     height: 2048
   },
   {
+    id: "bridge-sunset",
+    src: "assets/memory-machine/photos/bridge-sunset.jpg",
+    caption: "Good structure at golden hour.",
+    alt: "A steel truss footbridge over a river at sunset.",
+    width: 2000,
+    height: 1500
+  },
+  {
+    id: "boat",
+    src: "assets/memory-machine/photos/boat.jpg",
+    caption: "Front seat on the backwaters.",
+    alt: "Rushabh lounging on the bow of a blue boat on open water.",
+    width: 1500,
+    height: 2000
+  },
+  {
     id: "coast",
     src: "assets/memory-machine/photos/coast.jpg",
     caption: "Some days, this is enough.",
     alt: "Palm trees overlooking the sea.",
     width: 1536,
     height: 2048
+  },
+  {
+    id: "lake-sunrise",
+    src: "assets/memory-machine/photos/lake-sunrise.jpg",
+    caption: "Quiet mornings count too.",
+    alt: "Sunrise over a still lake between forested hills.",
+    width: 1500,
+    height: 2000
   },
   {
     id: "forest",
@@ -257,6 +299,12 @@ export function createMemoryMachine(options = {}) {
   let isAutoPaused = false;
   let isAnimating = false;
   let holdTimer = null;
+
+  // Pacing: photos print briskly; videos get a gentler feed and a longer hold so the clip can play
+  const PHOTO_FEED_PX_PER_SEC = 380;
+  const VIDEO_FEED_PX_PER_SEC = 260;
+  const PHOTO_HOLD_MS = 2500;
+  const VIDEO_HOLD_MS = 9000;
   let isVisible = false;
   let isReady = false;
   let queuedTargetIndex = null;
@@ -279,12 +327,19 @@ export function createMemoryMachine(options = {}) {
     return `
       <article class="receipt-panel" data-id="${memory.id}">
         <div class="panel-photo-frame">
-          <img src="${memory.src}" 
-               alt="${memory.alt}" 
-               class="panel-photo-img" 
-               width="${memory.width}" 
+          ${memory.type === 'video' ? `<video src="${memory.src}"
+               poster="${memory.poster}"
+               class="panel-photo-img panel-video"
+               width="${memory.width}"
                height="${memory.height}"
-               loading="eager" />
+               style="aspect-ratio: ${memory.width} / ${memory.height}"
+               aria-label="${memory.alt}"
+               muted autoplay loop playsinline preload="metadata"></video>` : `<img src="${memory.src}"
+               alt="${memory.alt}"
+               class="panel-photo-img"
+               width="${memory.width}"
+               height="${memory.height}"
+               loading="eager" />`}
         </div>
         <div class="panel-caption-band">
           <p class="panel-caption">${memory.caption}</p>
@@ -325,10 +380,11 @@ export function createMemoryMachine(options = {}) {
     if (isUserPaused || isAutoPaused || !isVisible || !isReady || prefersReducedMotion) {
       return;
     }
-    // Hold visible photo for ~4000ms
+    // Hold the visible memory: short for photos, longer for videos
+    const holdMs = memories[currentIndex] && memories[currentIndex].type === 'video' ? VIDEO_HOLD_MS : PHOTO_HOLD_MS;
     holdTimer = setTimeout(() => {
       feedNext();
-    }, 4000);
+    }, holdMs);
   }
 
   /**
@@ -336,7 +392,7 @@ export function createMemoryMachine(options = {}) {
    * Printer housing PNG: 2135 x 736
    * Slit exit line: Y = 525 (71.33% of printer container height)
    * Slit usable width: 66.8% of printer container width
-   * Viewport height: Tallest panel (vr-work 9:16) + outgoing buffer (~130px)
+   * Viewport height: Tallest panel in the roll (9:16) + outgoing buffer (~130px)
    * Controls margin: Distance from container top to bottom of paper viewport + 24px gap
    */
   function updateLayoutDimensions() {
@@ -345,8 +401,8 @@ export function createMemoryMachine(options = {}) {
     const paperWidth = containerWidth * 0.668;
     const innerPhotoWidth = Math.max(120, paperWidth - 20); // 10px side borders
 
-    // Maximum photo aspect ratio: vr-work is 1153 x 2048 -> ratio = 1.7762
-    const maxRatio = 1.7762;
+    // Reserve room for the tallest memory in the roll (height / width)
+    const maxRatio = Math.max(...memories.map(m => m.height / m.width));
     const tallestPhotoHeight = innerPhotoWidth * maxRatio;
     const captionAndPadding = 75; // caption band, paddings & tear line
     const tallestPanelHeight = Math.round(tallestPhotoHeight + captionAndPadding);
@@ -387,7 +443,7 @@ export function createMemoryMachine(options = {}) {
 
     // 1. Preload & decode incoming image
     const imgLoader = new Image();
-    imgLoader.src = nextMemory.src;
+    imgLoader.src = nextMemory.poster || nextMemory.src;
     if (typeof imgLoader.decode === 'function') {
       try {
         await imgLoader.decode();
@@ -427,8 +483,9 @@ export function createMemoryMachine(options = {}) {
     // Force reflow
     void paperEl.offsetHeight;
 
-    // 5. Calculate feed duration proportional to panel height (~240px / sec)
-    const durationMs = Math.round(Math.max(900, Math.min(2600, (panelHeight / 240) * 1000)));
+    // 5. Calculate feed duration proportional to panel height
+    const feedSpeed = nextMemory.type === 'video' ? VIDEO_FEED_PX_PER_SEC : PHOTO_FEED_PX_PER_SEC;
+    const durationMs = Math.round(Math.max(700, Math.min(2600, (panelHeight / feedSpeed) * 1000)));
 
     // Update counter as new photo emerges
     updateCounter(nextIndex);
@@ -641,7 +698,7 @@ export function createMemoryMachine(options = {}) {
     setTimeout(() => {
       memories.forEach(m => {
         const img = new Image();
-        img.src = m.src;
+        img.src = m.poster || m.src;
         if (typeof img.decode === 'function') img.decode().catch(() => {});
       });
     }, 200);
