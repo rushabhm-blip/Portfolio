@@ -5167,3 +5167,50 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
     text-decoration: none;
   }
 }
+
+/* =========================================================
+   PHONE: FULL NOTE PAPER
+   Phones need a taller card than the art's aspect, so the paper art is
+   drawn as a 9-slice: torn top (punch holes), bottom and side edges keep
+   their shape, only the plain cream middle stretches to fit the text.
+   Slices are in source pixels of the 1024 x 661 note-paper art.
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .note-assembly {
+    --note-w: min(90vw, 390px);
+    --slice-top: calc(var(--note-w) * 150 / 1024);
+    --slice-right: calc(var(--note-w) * 70 / 1024);
+    --slice-bottom: calc(var(--note-w) * 110 / 1024);
+    --slice-left: calc(var(--note-w) * 80 / 1024);
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.10));
+  }
+
+  .note-assembly::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    box-sizing: border-box;
+    border-style: solid;
+    border-width: var(--slice-top) var(--slice-right) var(--slice-bottom) var(--slice-left);
+    border-image: url('assets/note/note-paper.webp') 150 70 110 80 fill stretch;
+  }
+
+  /* The cropped top-strip version of the art is replaced by the 9-slice above */
+  .note-paper {
+    display: none;
+  }
+
+  .note-content {
+    padding:
+      calc(var(--slice-top) + 6px)
+      calc(var(--slice-right) + 16px)
+      calc(var(--slice-bottom) + 6px)
+      calc(var(--slice-left) + 10px);
+  }
+}
