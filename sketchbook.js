@@ -6,7 +6,7 @@ import { createExperimentNote } from './components/ExperimentNote.js?v=50';
 import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=54';
 import { createMemoryMachine } from './components/MemoryMachine.js?v=66';
 import { initScrollReveal } from './components/ScrollReveal.js?v=6';
-import { createServicesSection } from './components/ServicesSection.js?v=14';
+import { createServicesSection } from './components/ServicesSection.js?v=15';
 import { createContactSection, createSiteFooter } from './components/SiteFooter.js?v=2';
 
 /**

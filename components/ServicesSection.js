@@ -12,6 +12,7 @@
  *   the chapters advance as the page scrolls; picking a tab scrolls to that chapter's spot.
  *   Viewports too short for the folder keep plain tabs.
  * - Accessible tabs (roving tabindex, arrow keys, Home/End).
+ * - Phones show service names only, with a "See more…" toggle for their descriptions.
  * - Contact and footer links live in SiteFooter.js.
  */
 
@@ -85,6 +86,7 @@ export function createServicesSection() {
                 <p class="services-item-line">${item.line}</p>
               </li>`).join('')}
             </ul>
+            <button type="button" class="services-details-toggle" aria-expanded="false">See more…</button>
             <a class="services-panel-link" href="${c.link}">Explore related work <span aria-hidden="true">↗</span></a>
           </div>
           <div class="services-art" role="img" aria-label="${c.art}" tabindex="0" data-chapter="${c.id}">
@@ -196,6 +198,18 @@ export function createServicesSection() {
     showFrame(art, 1);
     play(art);
   };
+
+  // Phone: service descriptions stay tucked away until "See more…"; one state for every chapter
+  const detailToggles = [...section.querySelectorAll('.services-details-toggle')];
+  detailToggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const open = section.classList.toggle('is-details-open');
+      detailToggles.forEach(t => {
+        t.setAttribute('aria-expanded', String(open));
+        t.textContent = open ? 'See less' : 'See more…';
+      });
+    });
+  });
 
   tabButtons.forEach((btn, i) => {
     btn.addEventListener('click', () => select(i));

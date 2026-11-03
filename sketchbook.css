@@ -5304,6 +5304,10 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   opacity: 1;
 }
 
+.services-details-toggle {
+  display: none;
+}
+
 .services-panel-link:hover {
   color: #0035c4;
 }
@@ -5371,7 +5375,7 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
 
   .services-card {
     border-radius: 0 0 14px 14px;
-    padding: 26px 20px 24px;
+    padding: 26px 20px 12px;
   }
 
   .services-panel {
@@ -5384,26 +5388,84 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   }
 
   .services-panel-title {
-    font-size: 26px;
-    margin-bottom: 20px;
+    font-size: 24px;
+    margin-bottom: 16px;
   }
 
   .services-panel-list li {
-    padding: 14px 0;
+    padding: 9px 0;
   }
 
+  /* Names read as a list under the title: regular weight, softer ink, small cobalt dot */
   .services-item-name {
-    font-size: 17px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    color: #334155;
+  }
+
+  .services-item-name::before {
+    content: "";
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #0647fa;
+  }
+
+  /* Opened up, each name heads its description */
+  .services-section.is-details-open .services-item-name {
+    font-weight: 650;
+    color: #0b0f19;
+  }
+
+  .services-section.is-details-open .services-item-line {
+    padding-left: 16px;
   }
 
   .services-item-line {
-    font-size: 15px;
+    font-size: 14px;
+    margin-top: 2px;
+  }
+
+  /* Service names only until "See more…" (one state for every chapter) */
+  .services-section:not(.is-details-open) .services-item-line {
+    display: none;
+  }
+
+  .services-details-toggle {
+    display: inline-block;
+    margin: 4px 0 6px;
+    padding: 6px 0;
+    border: 0;
+    background: none;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .services-details-toggle:focus-visible {
+    outline: 2px solid #0647fa;
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .services-panel-link {
+    display: flex;
+    width: fit-content;
+    font-size: 14.5px;
   }
 
   .services-art {
     justify-self: center;
-    max-width: 320px;
-    margin-top: 6px;
+    max-width: 220px;
+    margin-top: 2px;
   }
 }
 
