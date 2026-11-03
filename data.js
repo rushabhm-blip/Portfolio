@@ -14,7 +14,7 @@ export const sketchbookData = {
     { id: 'About', label: 'About', route: '/#about' },
     { id: 'Resume', label: 'Resume', route: '/assets/Rushabh_Mahore_Resume.pdf', url: '/assets/Rushabh_Mahore_Resume.pdf' },
     { id: 'Architecture', label: 'Architecture', route: '/assets/Architectural_Portfolio_2019-24_Rushabh.pdf', url: '/assets/Architectural_Portfolio_2019-24_Rushabh.pdf' },
-    { id: 'Playground', label: 'Playground', route: '/#playground' }
+    { id: 'Playground', label: 'Playground', route: '/playground/' }
   ],
   cover: {
     greeting: "Hi, I’m",

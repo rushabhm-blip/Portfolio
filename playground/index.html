@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playground · Rushabh Mahore</title>
+  <meta name="description" content="A dotted board of small interactive experiments by Rushabh Mahore. Drag to look around and pick one to play.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/playground/playground.css?v=1">
+</head>
+<body>
+  <header class="pg-header">
+    <a class="pg-wordmark" href="/">rushabh<span>.</span></a>
+    <a class="pg-back" href="/">← Back to portfolio</a>
+  </header>
+
+  <main class="pg-viewport" id="pgViewport" tabindex="0" aria-label="Playground board. Drag, scroll or use the arrow keys to look around.">
+    <div class="pg-board" id="pgBoard">
+      <div class="pg-item" style="--x: 760px; --y: 560px;">
+        <h1 class="pg-title">Play<span>ground</span></h1>
+        <p class="pg-subtitle">Small experiments, built to be touched. Pick one and try it.</p>
+      </div>
+
+      <a class="pg-item pg-tile" href="/playground/cooldice/" style="--x: 1180px; --y: 520px; --r: 1.5deg;">
+        <img class="pg-tile-tape" src="/assets/yellow-tape.webp" alt="" aria-hidden="true">
+        <img class="pg-tile-img" src="/assets/projects/cooldice/hero_thumbnail.webp" alt="" loading="eager" draggable="false">
+        <div class="pg-tile-meta">
+          <h2 class="pg-tile-name">CoolDice</h2>
+          <span class="pg-tile-cta">Play ↗</span>
+        </div>
+        <p class="pg-tile-line">Wave at the camera to send a marble down the run, roll the dice and win candy.</p>
+        <span class="pg-tile-tag" aria-hidden="true">Uses your camera</span>
+      </a>
+
+      <div class="pg-item pg-hand" style="--x: 1010px; --y: 470px; --r: -8deg;" aria-hidden="true">try this one</div>
+      <svg class="pg-item pg-arrow" style="--x: 1080px; --y: 500px;" viewBox="0 0 90 60" fill="none" aria-hidden="true">
+        <path d="M4 8C30 4 58 14 76 42" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M64 40L77 44L80 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+
+      <p class="pg-item pg-note" style="--x: 1700px; --y: 600px; --r: 3deg;">More experiments are on their way.</p>
+      <p class="pg-item pg-note pg-note-blue" style="--x: 820px; --y: 860px; --r: -3deg;">Click a project to play it. Drag the paper to look around.</p>
+    </div>
+  </main>
+
+  <div class="pg-hint" role="note">
+    <span>Drag to look around</span>
+    <button type="button" class="pg-recenter" id="pgRecenter">Recenter</button>
+  </div>
+
+  <script src="/playground/playground.js?v=1"></script>
+</body>
+</html>

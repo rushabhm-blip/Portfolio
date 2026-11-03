@@ -5,7 +5,7 @@
  *   and the envelope illustration.
  * - Footer band on the cobalt paper texture: wordmark + tagline, site links, then copyright,
  *   "Keep calm. Experiment on." and a Back to top button.
- * Work and About jump to their sections; Playground opens its chapter like the header does.
+ * Work and About jump to their sections; Playground links to the /playground/ board.
  * Reduced motion: no illustration lift, Back to top jumps instead of scrolling.
  */
 
@@ -64,7 +64,7 @@ export function createSiteFooter({ onSelectChapter } = {}) {
           <ul class="site-footer-links">
             <li><a class="site-footer-link" href="#works">Work</a></li>
             <li><a class="site-footer-link" href="#about">About</a></li>
-            <li><button type="button" class="site-footer-link" data-chapter="Playground">Playground</button></li>
+            <li><a class="site-footer-link" href="/playground/">Playground</a></li>
             <li><a class="site-footer-link" href="${LINKEDIN_URL}" target="_blank" rel="noopener noreferrer">LinkedIn${ARROW_UP_RIGHT}<span class="sr-only"> (opens in a new tab)</span></a></li>
             <li><a class="site-footer-link" href="${RESUME_URL}" target="_blank" rel="noopener noreferrer">My résumé${ARROW_UP_RIGHT}<span class="sr-only"> (PDF, opens in a new tab)</span></a></li>
           </ul>
@@ -101,10 +101,6 @@ export function createSiteFooter({ onSelectChapter } = {}) {
     if (!onSelectChapter) return;
     e.preventDefault();
     onSelectChapter('Home');
-  });
-
-  footer.querySelector('[data-chapter="Playground"]').addEventListener('click', (e) => {
-    onSelectChapter?.('Playground', e.currentTarget);
   });
 
   // Back to top: scroll up, then hand keyboard focus to the header wordmark

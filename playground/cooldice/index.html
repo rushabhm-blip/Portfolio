@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CoolDice · Playground · Rushabh Mahore</title>
+  <meta name="description" content="Play CoolDice in the browser: drag the marble onto START, swipe your hand at the camera, watch it run, roll the dice and collect candy.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/playground/playground.css?v=1">
+  <link rel="stylesheet" href="/playground/cooldice/cooldice.css?v=4">
+</head>
+<body class="cd-page">
+  <header class="pg-header">
+    <a class="pg-wordmark" href="/">rushabh<span>.</span></a>
+    <a class="pg-back" href="/playground/">← Playground</a>
+  </header>
+
+  <main class="cd-main">
+    <section class="cd-panel" aria-labelledby="cdTitle">
+      <p class="cd-kicker">Playground · 01</p>
+      <h1 class="cd-title" id="cdTitle">CoolDice</h1>
+      <p class="cd-intro">A gesture-controlled marble run that turns a dice roll into a candy reward.</p>
+
+      <ol class="cd-steps">
+        <li data-step="place"><span class="cd-step-num">1</span><span>Drag the marble onto <b>START</b></span></li>
+        <li data-step="swipe"><span class="cd-step-num">2</span><span>Swipe your hand <b>right to left</b></span></li>
+        <li data-step="roll"><span class="cd-step-num">3</span><span>Watch it roll, collect your candy</span></li>
+      </ol>
+
+      <p class="cd-status" id="cdStatus" role="status" aria-live="polite">Drag the blue marble onto the START gate.</p>
+
+      <div class="cd-cam">
+        <button type="button" class="cd-btn cd-btn-primary" id="cdCamBtn">Turn on camera</button>
+        <p class="cd-cam-note" id="cdCamNote">Your camera is only used in this tab to follow your hand. Nothing is recorded or sent anywhere.</p>
+        <div class="cd-cam-view" id="cdCamView" hidden>
+          <video id="cdVideo" playsinline muted></video>
+          <span class="cd-hand-dot" id="cdHandDot" hidden></span>
+          <span class="cd-cam-label" id="cdCamLabel">Starting camera…</span>
+        </div>
+      </div>
+
+      <div class="cd-actions">
+        <button type="button" class="cd-btn" id="cdSwipeBtn">Swipe without camera</button>
+        <button type="button" class="cd-btn cd-btn-lime" id="cdAgainBtn" hidden>Play again</button>
+      </div>
+      <p class="cd-tip">No camera? Swipe right to left across the machine with your mouse or finger.</p>
+    </section>
+
+    <div class="cd-stage" id="cdStage">
+      <img class="cd-scene" src="/playground/cooldice/scene.webp" width="1600" height="1051" draggable="false"
+           alt="The CoolDice machine: a laser-cut wooden marble run with a START gate, a spiral funnel, a dice screen, a candy jar with zigzag ramps and a glass bowl.">
+      <div class="cd-screen" aria-hidden="true">
+        <div class="cd-die" id="cdDie" data-face="0">
+          <span class="cd-pip"></span><span class="cd-pip"></span><span class="cd-pip"></span>
+          <span class="cd-pip"></span><span class="cd-pip"></span><span class="cd-pip"></span>
+          <span class="cd-pip"></span><span class="cd-pip"></span><span class="cd-pip"></span>
+          <span class="cd-die-q">?</span>
+        </div>
+      </div>
+      <div class="cd-candies" id="cdCandies" aria-hidden="true"></div>
+      <span class="cd-start-ring" id="cdStartRing" aria-hidden="true"></span>
+      <span class="cd-dish" id="cdDish" aria-hidden="true"><span class="cd-dish-label">drag me</span></span>
+      <button type="button" class="cd-ball" id="cdBall" aria-label="Marble. Drag it onto START, or press Enter to place it there.">
+        <span class="cd-ball-spin" aria-hidden="true"></span>
+      </button>
+      <!-- Funnel front wall and rail clamps, cut from the same artwork, so the marble passes behind them -->
+      <img class="cd-fg" src="/playground/cooldice/fg.webp" width="1600" height="1051" alt="" aria-hidden="true" draggable="false">
+
+      <div class="cd-cue" aria-hidden="true">
+        <span class="cd-cue-step" id="cdCueStep">1</span>
+        <div class="cd-cue-body">
+          <p class="cd-cue-text" id="cdCueText">Drag the marble onto START</p>
+          <p class="cd-cue-sub" id="cdCueSub">Pick it up from the dish.</p>
+          <span class="cd-cue-arrow" aria-hidden="true">
+            <svg viewBox="0 0 64 20" fill="none"><path d="M62 10H6M14 2L5 10l9 8" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <button type="button" class="cd-btn cd-btn-lime cd-cue-again" id="cdCueAgain" hidden>Play again</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="/playground/cooldice/cooldice.js?v=2"></script>
+</body>
+</html>

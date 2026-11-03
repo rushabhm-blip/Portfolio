@@ -1,0 +1,656 @@
+/* =========================================================
+   COOLDICE (virtual): instructions panel + the machine stage
+   Everything on the stage is placed in % of the scene image,
+   so the marble, dice screen and candy stay on the artwork.
+   ========================================================= */
+
+.cd-page {
+  min-height: 100vh;
+  background-color: var(--paper);
+  background-image: radial-gradient(circle, var(--dot) 1.4px, transparent 1.8px);
+  background-size: 28px 28px;
+}
+
+.cd-main {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 92px clamp(16px, 3vw, 40px) 40px;
+  display: grid;
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 40px);
+  align-items: start;
+}
+
+/* ---------- Panel ---------- */
+
+.cd-panel {
+  padding: 26px 24px 24px;
+  background: #fffefa;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 14px;
+  box-shadow: 0 14px 34px rgba(0, 16, 60, 0.08);
+}
+
+.cd-kicker {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.cd-title {
+  margin: 6px 0 0;
+  font-size: clamp(34px, 3vw, 42px);
+  font-weight: 850;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.cd-intro {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.cd-steps {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.cd-steps li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.35;
+  color: #94a3b8;
+  transition: color 0.25s ease;
+}
+
+.cd-step-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cd-steps li.is-current {
+  color: var(--ink);
+}
+
+.cd-steps li.is-current .cd-step-num {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
+.cd-steps li.is-done {
+  color: #475569;
+}
+
+.cd-steps li.is-done .cd-step-num {
+  border-color: var(--lime);
+  background: var(--lime);
+  color: var(--ink);
+}
+
+.cd-status {
+  margin: 18px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #eef3ff;
+  font-size: 15px;
+  font-weight: 550;
+  line-height: 1.45;
+  color: #1e2a55;
+}
+
+.cd-cam {
+  margin-top: 18px;
+}
+
+.cd-cam-note {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #7b8494;
+}
+
+.cd-cam-view {
+  position: relative;
+  margin-top: 12px;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #11131a;
+}
+
+.cd-cam-view[hidden] {
+  display: none;
+}
+
+.cd-cam-view video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scaleX(-1); /* mirror, so moving left looks like moving left */
+}
+
+.cd-hand-dot {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 0 4px rgba(189, 255, 0, 0.35), 0 0 14px rgba(189, 255, 0, 0.8);
+  pointer-events: none;
+}
+
+.cd-cam-label {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(8, 8, 7, 0.7);
+  color: #fffefa;
+  font-size: 12.5px;
+  font-weight: 550;
+  text-align: center;
+}
+
+.cd-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.cd-btn {
+  padding: 10px 16px;
+  border: 1.5px solid #1c1a17;
+  border-radius: 999px;
+  background: #fffefa;
+  color: #1c1a17;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.cd-btn:hover {
+  transform: translateY(-1px);
+}
+
+.cd-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
+}
+
+.cd-btn:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.cd-btn-primary {
+  width: 100%;
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
+.cd-btn-lime {
+  border-color: var(--lime);
+  background: var(--lime);
+}
+
+.cd-tip {
+  margin: 14px 0 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #7b8494;
+}
+
+/* ---------- Stage ---------- */
+
+.cd-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1600 / 1051;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(0, 16, 60, 0.1);
+  touch-action: pan-y; /* vertical page scroll still works; horizontal swipes reach the game */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cd-scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Dice screen, laid over the machine's display */
+.cd-screen {
+  position: absolute;
+  left: 54.9%;
+  top: 52.5%;
+  width: 18.7%;
+  height: 12.5%;
+  display: grid;
+  place-items: center;
+  border-radius: 0.4vw;
+  background: linear-gradient(180deg, #eaf2ff, #d9e7fb);
+  box-shadow: inset 0 0 0 2px rgba(30, 60, 140, 0.12);
+}
+
+.cd-die {
+  position: relative;
+  height: 72%;
+  aspect-ratio: 1;
+  padding: 12%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  place-items: center;
+  border-radius: 18%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(20, 40, 100, 0.18);
+}
+
+.cd-pip {
+  width: 72%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #1d3ea8;
+  visibility: hidden;
+}
+
+.cd-die-q {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(14px, 2vw, 30px);
+  font-weight: 800;
+  color: #1d3ea8;
+}
+
+.cd-die:not([data-face="0"]) .cd-die-q {
+  display: none;
+}
+
+/* Pip positions per face (cells 1-9, left to right, top to bottom) */
+.cd-die[data-face="1"] .cd-pip:nth-child(5),
+.cd-die[data-face="2"] .cd-pip:is(:nth-child(1), :nth-child(9)),
+.cd-die[data-face="3"] .cd-pip:is(:nth-child(1), :nth-child(5), :nth-child(9)),
+.cd-die[data-face="4"] .cd-pip:is(:nth-child(1), :nth-child(3), :nth-child(7), :nth-child(9)),
+.cd-die[data-face="5"] .cd-pip:is(:nth-child(1), :nth-child(3), :nth-child(5), :nth-child(7), :nth-child(9)),
+.cd-die[data-face="6"] .cd-pip:is(:nth-child(1), :nth-child(3), :nth-child(4), :nth-child(6), :nth-child(7), :nth-child(9)) {
+  visibility: visible;
+}
+
+.cd-die.is-rolling {
+  animation: cdDieShake 0.16s linear infinite;
+}
+
+.cd-die.is-landed {
+  animation: cdDieLand 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes cdDieShake {
+  0% { transform: rotate(-8deg) scale(0.96); }
+  50% { transform: rotate(8deg) scale(1.02); }
+  100% { transform: rotate(-8deg) scale(0.96); }
+}
+
+@keyframes cdDieLand {
+  0% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* START drop target */
+.cd-start-ring {
+  position: absolute;
+  width: max(4.6%, 26px);
+  aspect-ratio: 1;
+  border: 2px dashed var(--blue);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.cd-stage.is-idle .cd-start-ring {
+  opacity: 0.85;
+  animation: cdPulse 1.6s ease-in-out infinite;
+}
+
+.cd-stage.is-near-start .cd-start-ring {
+  opacity: 1;
+  border-style: solid;
+  background: rgba(189, 255, 0, 0.35);
+  animation: none;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+@keyframes cdPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.18); }
+}
+
+/* The dish the marble waits in, above the machine */
+.cd-dish {
+  position: absolute;
+  z-index: 3;
+  width: max(4.4%, 30px);
+  aspect-ratio: 2.4;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 35%, #f6e2c4 0 35%, #d9b183 70%, #b98d5e 100%);
+  box-shadow: 0 0.3vw 0.6vw rgba(80, 50, 20, 0.25), inset 0 -0.15vw 0.3vw rgba(80, 50, 20, 0.35);
+  transform: translate(-50%, -20%);
+  pointer-events: none;
+}
+
+.cd-dish-label {
+  position: absolute;
+  left: 50%;
+  bottom: 140%;
+  font-family: 'Caveat', cursive;
+  font-size: clamp(15px, 1.7vw, 24px);
+  font-weight: 700;
+  color: var(--blue);
+  white-space: nowrap;
+  transform: translateX(-50%) rotate(-6deg);
+  transition: opacity 0.2s ease;
+}
+
+.cd-stage:not(.is-idle) .cd-dish-label {
+  opacity: 0;
+}
+
+/* The marble: glass with a swirl that spins as it rolls, light from the top left stays put */
+.cd-ball {
+  --s: 1;
+  position: absolute;
+  z-index: 5;
+  width: max(1.4%, 11px);
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  overflow: visible;
+  background: radial-gradient(circle at 50% 50%, #3d7bff 0%, #1745d6 60%, #0a2580 100%);
+  box-shadow: 0 0.18vw 0.3vw rgba(10, 30, 90, 0.45);
+  transform: translate(-50%, -50%) scale(var(--s));
+  cursor: grab;
+  touch-action: none;
+}
+
+.cd-ball-spin {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background:
+    conic-gradient(from 0deg, transparent 0 18%, rgba(160, 205, 255, 0.75) 22%, transparent 30% 60%, rgba(120, 180, 255, 0.55) 66%, transparent 74%);
+  pointer-events: none;
+}
+
+/* Fixed highlight on top of the spinning swirl */
+.cd-ball::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.95) 0 12%, rgba(255, 255, 255, 0.15) 30%, transparent 55%);
+  pointer-events: none;
+}
+
+/* Bigger invisible grab area than the marble itself (at least 44px for fingers) */
+.cd-ball::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(400%, 44px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Picked up: carried in front of everything */
+.cd-ball.is-held {
+  z-index: 12;
+  cursor: grabbing;
+  transform: translate(-50%, -50%) scale(calc(var(--s) * 1.3));
+  box-shadow: 0 0.6vw 1vw rgba(10, 30, 90, 0.35);
+}
+
+.cd-ball.is-snapping {
+  transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1), top 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cd-ball:focus-visible {
+  outline: 3px solid var(--lime);
+  outline-offset: 3px;
+}
+
+.cd-stage.is-running .cd-ball,
+.cd-stage.is-done .cd-ball {
+  cursor: default;
+}
+
+/* Foreground cut-outs (funnel wall, rail clamps) above the marble */
+.cd-fg {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* On-machine instructions, in the open space top left */
+.cd-cue {
+  position: absolute;
+  z-index: 8;
+  left: 3%;
+  top: 5%;
+  width: 40%;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(8px, 1.2vw, 16px);
+  pointer-events: none;
+}
+
+.cd-cue-step {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: clamp(26px, 3vw, 44px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  font-size: clamp(13px, 1.4vw, 20px);
+  font-weight: 800;
+}
+
+.cd-stage.is-done .cd-cue-step {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+.cd-cue-text {
+  margin: 0;
+  font-size: clamp(15px, 2vw, 30px);
+  font-weight: 850;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.cd-cue-sub {
+  margin: 6px 0 0;
+  font-size: clamp(11.5px, 1.1vw, 16px);
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.cd-cue-sub[hidden] {
+  display: none;
+}
+
+/* Swipe hint: an arrow sliding right to left while the marble waits on START */
+.cd-cue-arrow {
+  display: none;
+  width: clamp(44px, 6vw, 84px);
+  margin-top: clamp(6px, 1vw, 12px);
+  color: var(--blue);
+}
+
+.cd-cue-arrow svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cd-stage.is-armed .cd-cue-arrow {
+  display: block;
+  animation: cdSwipeHint 1.4s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+
+@keyframes cdSwipeHint {
+  0% { transform: translateX(60%); opacity: 0; }
+  20% { opacity: 1; }
+  70% { transform: translateX(-30%); opacity: 1; }
+  100% { transform: translateX(-30%); opacity: 0; }
+}
+
+.cd-cue-again {
+  margin-top: clamp(8px, 1vw, 14px);
+  pointer-events: auto;
+}
+
+.cd-cue-again[hidden] {
+  display: none;
+}
+
+/* Candy */
+.cd-candies {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.cd-candy {
+  position: absolute;
+  width: 1.55%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.85) 0 12%, var(--c) 40%, color-mix(in srgb, var(--c) 70%, #000) 100%);
+  box-shadow: 0 0.15vw 0.3vw rgba(0, 0, 0, 0.25);
+  transform: translate(-50%, -50%);
+}
+
+/* Debug overlay (?debug): the traced paths */
+.cd-debug {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* ---------- Narrow screens: machine first, instructions below ---------- */
+
+@media (max-width: 900px) {
+  .cd-main {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 80px;
+  }
+
+  .cd-stage {
+    order: 1;
+    border-radius: 12px;
+  }
+
+  .cd-panel {
+    order: 2;
+  }
+
+  .cd-cam-view {
+    max-width: 320px;
+  }
+}
+
+/* Phones: the banner keeps just the main line (the status box below has the details),
+   so it stays clear of the track */
+@media (max-width: 640px) {
+  .cd-cue {
+    left: 3%;
+    top: 4%;
+    width: 60%;
+    gap: 8px;
+  }
+
+  .cd-cue-step {
+    width: 22px;
+    font-size: 12px;
+  }
+
+  .cd-cue-text {
+    font-size: 14px;
+  }
+
+  .cd-cue-sub {
+    display: none;
+  }
+
+  .cd-cue-arrow {
+    width: 34px;
+    margin-top: 4px;
+  }
+
+  .cd-cue-again {
+    margin-top: 6px;
+    padding: 6px 12px;
+    font-size: 12.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-stage.is-idle .cd-start-ring,
+  .cd-stage.is-armed .cd-cue-arrow,
+  .cd-die.is-rolling,
+  .cd-die.is-landed {
+    animation: none;
+  }
+
+  .cd-ball.is-snapping {
+    transition: none;
+  }
+}

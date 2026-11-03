@@ -1,4 +1,4 @@
-import { sketchbookData } from './data.js?v=49';
+import { sketchbookData } from './data.js?v=50';
 import { createHeader, enableHeaderAutoHide } from './components/Header.js?v=51';
 import { createBookScene } from './components/BookScene.js?v=48';
 import { createChapterDialog } from './components/ChapterDialog.js?v=49';
@@ -7,7 +7,7 @@ import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v
 import { createMemoryMachine } from './components/MemoryMachine.js?v=66';
 import { initScrollReveal } from './components/ScrollReveal.js?v=6';
 import { createServicesSection } from './components/ServicesSection.js?v=15';
-import { createContactSection, createSiteFooter } from './components/SiteFooter.js?v=2';
+import { createContactSection, createSiteFooter } from './components/SiteFooter.js?v=3';
 
 /**
  * Fits the book composition (both closed and open spread) to available viewport space below header.
@@ -143,6 +143,10 @@ function initPortfolio() {
     if (chapterId === 'Architecture') {
       dialogManager.closeDialog();
       window.open('/assets/Architectural_Portfolio_2019-24_Rushabh.pdf', '_blank');
+      return;
+    }
+    if (chapterId === 'Playground') {
+      window.location.href = '/playground/';
       return;
     }
     dialogManager.openChapter(chapterId, triggerEl);
