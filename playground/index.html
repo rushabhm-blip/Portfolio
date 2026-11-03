@@ -7,7 +7,7 @@
   <meta name="description" content="A dotted board of small interactive experiments by Rushabh Mahore. Drag to look around and pick one to play.">
   <link rel="icon" href="data:,">
   <script src="/password-gate.js"></script>
-  <link rel="stylesheet" href="/playground/playground.css?v=1">
+  <link rel="stylesheet" href="/playground/playground.css?v=2">
 </head>
 <body>
   <header class="pg-header">
@@ -39,7 +39,22 @@
         <path d="M64 40L77 44L80 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
 
-      <p class="pg-item pg-note" style="--x: 1700px; --y: 600px; --r: 3deg;">More experiments are on their way.</p>
+      <a class="pg-item pg-tile pg-film-tile" href="/playground/films/" style="--x: 1690px; --y: 560px; --r: -2deg;">
+        <img class="pg-tile-tape" src="/assets/yellow-tape.webp" alt="" aria-hidden="true">
+        <!-- A strip of film with the two titles -->
+        <div class="pg-strip" aria-hidden="true">
+          <span class="pg-strip-frame"><em>01</em>Between the pages</span>
+          <span class="pg-strip-frame"><em>02</em>Overheard</span>
+        </div>
+        <div class="pg-tile-meta">
+          <h2 class="pg-tile-name">Two short films</h2>
+          <span class="pg-tile-cta">Watch ↗</span>
+        </div>
+        <p class="pg-tile-line">Acting in one; storyboard, camera and edit in the other.</p>
+        <span class="pg-tile-tag" aria-hidden="true">Digital Media &amp; Visualization</span>
+      </a>
+
+      <p class="pg-item pg-note" style="--x: 1760px; --y: 980px; --r: 3deg;">More experiments are on their way.</p>
       <p class="pg-item pg-note pg-note-blue" style="--x: 820px; --y: 860px; --r: -3deg;">Click a project to play it. Drag the paper to look around.</p>
     </div>
   </main>
@@ -49,6 +64,6 @@
     <button type="button" class="pg-recenter" id="pgRecenter">Recenter</button>
   </div>
 
-  <script src="/playground/playground.js?v=1"></script>
+  <script src="/playground/playground.js?v=2"></script>
 </body>
 </html>

@@ -28,9 +28,9 @@
     board.style.transform = `translate3d(${x}px, ${y}px, 0)`;
   };
 
-  // Centre the projects (board middle, nudged right so the title and tile share the view)
+  // Centre the projects: everything sits between x 760 (title) and 2070 (films tile)
   const recenter = (smooth) => {
-    x = viewport.clientWidth / 2 - (board.offsetWidth / 2 + 120);
+    x = viewport.clientWidth / 2 - 1415;
     y = viewport.clientHeight / 2 - (board.offsetHeight / 2 - 40);
     apply(smooth);
   };

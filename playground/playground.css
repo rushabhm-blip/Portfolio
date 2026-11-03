@@ -320,3 +320,48 @@ body {
     transition: none;
   }
 }
+
+/* Film tile: a strip of film with the two titles instead of a photo */
+.pg-film-tile {
+  width: 380px;
+}
+
+.pg-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  aspect-ratio: 1400 / 994;
+  padding: 22px 10px;
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(90deg, #f6f3ea 0 9px, transparent 9px 22px) left 8px top 7px / 100% 8px no-repeat,
+    repeating-linear-gradient(90deg, #f6f3ea 0 9px, transparent 9px 22px) left 8px bottom 7px / 100% 8px no-repeat,
+    #111318;
+}
+
+.pg-strip-frame {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 3px;
+  background: linear-gradient(160deg, #23324f, #0b0d12 70%);
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: #fffefa;
+}
+
+.pg-strip-frame:nth-child(2) {
+  background: linear-gradient(160deg, #3b1f47, #0b0d12 70%);
+}
+
+.pg-strip-frame em {
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--lime);
+}
