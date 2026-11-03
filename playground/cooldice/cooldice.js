@@ -104,6 +104,38 @@ const handDot = document.getElementById('cdHandDot');
 const swipeBtn = document.getElementById('cdSwipeBtn');
 const againBtn = document.getElementById('cdAgainBtn');
 const steps = [...document.querySelectorAll('.cd-steps li')];
+const dieCube = document.getElementById('cdDieCube');
+const screenEl = document.getElementById('cdScreen');
+const screenTitle = document.getElementById('cdScreenTitle');
+const screenSub = document.getElementById('cdScreenSub');
+
+// Dice: opposite faces add up to 7. Pip spots are % of a face; FACE_TURN is the cube rotation
+// [x, y] (deg) that brings each number to the front.
+const DIE_SIDES = { front: 1, back: 6, top: 2, bottom: 5, right: 3, left: 4 };
+const PIP_SPOTS = {
+  1: [[50, 50]],
+  2: [[27, 27], [73, 73]],
+  3: [[27, 27], [50, 50], [73, 73]],
+  4: [[27, 27], [73, 27], [27, 73], [73, 73]],
+  5: [[27, 27], [73, 27], [50, 50], [27, 73], [73, 73]],
+  6: [[27, 25], [73, 25], [27, 50], [73, 50], [27, 75], [73, 75]]
+};
+const FACE_TURN = { 1: [0, 0], 6: [0, 180], 3: [0, -90], 4: [0, 90], 2: [-90, 0], 5: [90, 0] };
+let dieTurn = { x: 0, y: 0 };
+
+Object.entries(DIE_SIDES).forEach(([side, n]) => {
+  const face = document.createElement('div');
+  face.className = 'cd-die-face';
+  face.dataset.side = side;
+  PIP_SPOTS[n].forEach(([x, y]) => {
+    const pip = document.createElement('span');
+    pip.className = 'cd-die-pip';
+    pip.style.left = `${x}%`;
+    pip.style.top = `${y}%`;
+    face.appendChild(pip);
+  });
+  dieCube.appendChild(face);
+});
 
 let state = 'idle'; // idle → armed → running → done
 let camOn = false;
@@ -237,6 +269,7 @@ const placeOnStart = () => {
   snapTo(START);
   setState('armed');
   armedCue();
+  screen('Swipe to start', 'Right to left');
   setStatus(camOn
     ? 'The marble is on START. Now swipe your hand from right to left.'
     : 'The marble is on START. Turn on the camera and swipe your hand right to left, or swipe across the machine.');
@@ -274,6 +307,7 @@ const endDrag = (e) => {
   } else {
     snapTo(DISH);
     setState('idle');
+    screen('Ready', 'Place the marble on START');
     cue('1', 'Drag the marble onto START', 'Almost! Drop it right inside the START gate.');
     setStatus('Almost! Drop the marble right inside the START gate.');
   }
@@ -318,45 +352,78 @@ async function run() {
   setState('running');
   cue('3', 'Here it goes…', 'Watch it through the funnel.');
   setStatus('Swipe detected! Off it goes…');
+  screen('Marble run in progress', 'The dice rolls when it reaches the end', true);
   await play(ball, MARBLE_ROUTE, (s) => setBallLook(depthScale(s.y), (s.d / MARBLE_RADIUS) * (180 / Math.PI) * -1));
 
+  // The marble is home: the dice appears and tumbles
   cue('3', 'Rolling the dice…');
   setStatus('The marble reached the end. Rolling the dice…');
-  await wait(300);
+  screenEl.dataset.mode = 'die';
+  await wait(350);
   const n = 1 + Math.floor(Math.random() * 6);
   await rollDie(n);
 
+  // Settle square-on: one flat face showing the number
+  die.classList.add('is-flat');
   const candyWord = n === 1 ? 'candy' : 'candies';
+  cue('3', `You rolled a ${n}!`);
+  setStatus(`You rolled a ${n}!`);
+  await wait(1400);
+
+  // Then the screen announces the candy, and it drops
+  screen('Dispensing candies', `0 of ${n}`, true);
   cue('3', `You rolled a ${n}!`, `Here come ${NUMBER_WORDS[n]} ${candyWord}…`);
-  setStatus(`You rolled a ${n}! Here come ${NUMBER_WORDS[n]} ${candyWord}…`);
+  setStatus(`Dispensing ${NUMBER_WORDS[n]} ${candyWord}…`);
+  await wait(700);
   for (let i = 0; i < n; i++) {
     dropCandy(i);
-    await wait(reducedMotion.matches ? 150 : 420);
+    screenSub.textContent = `${i + 1} of ${n}`;
+    await wait(reducedMotion.matches ? 150 : 520);
   }
   await wait(1100);
   setState('done');
+  screen(`Enjoy your ${n} ${candyWord}!`, 'Play again any time');
   cue('✓', `${n} ${candyWord} for you!`, 'Fancy another go?');
   setStatus(`You rolled a ${n}: ${NUMBER_WORDS[n]} ${candyWord} in the bowl. Play again?`);
 }
 
+// Tumble forward a few full turns, ending with face n towards the viewer
 async function rollDie(n) {
-  if (!reducedMotion.matches) {
-    die.classList.add('is-rolling');
-    const end = performance.now() + 1300 / speedUp;
-    let last = 0;
-    while (performance.now() < end) {
-      let face = 1 + Math.floor(Math.random() * 6);
-      if (face === last) face = (face % 6) + 1;
-      last = face;
-      die.dataset.face = String(face);
-      await wait(85);
-    }
-    die.classList.remove('is-rolling');
+  const [tx, ty] = FACE_TURN[n];
+  const forward = (from, target, minTurns) => {
+    let v = target;
+    while (v < from + 360 * minTurns) v += 360;
+    return v;
+  };
+  if (reducedMotion.matches) {
+    dieTurn = { x: tx, y: ty };
+  } else {
+    dieTurn = { x: forward(dieTurn.x, tx, 2 + Math.round(Math.random())), y: forward(dieTurn.y, ty, 2 + Math.round(Math.random())) };
+    dieCube.classList.add('is-rolling');
   }
+  dieCube.style.transform = `rotateX(${dieTurn.x}deg) rotateY(${dieTurn.y}deg)`;
+  if (!reducedMotion.matches) await wait(1500);
+  dieCube.classList.remove('is-rolling');
   die.dataset.face = String(n);
   die.classList.remove('is-landed');
   void die.offsetWidth;
   die.classList.add('is-landed');
+}
+
+function idleDie() {
+  dieTurn = { x: 0, y: 0 };
+  dieCube.classList.remove('is-rolling');
+  dieCube.style.transform = '';
+  die.dataset.face = '0';
+  die.classList.remove('is-landed', 'is-flat');
+}
+
+// The machine screen in message mode: a title, a smaller line, and optional ticking dots
+function screen(title, sub = '', busy = false) {
+  screenEl.dataset.mode = 'msg';
+  screenEl.classList.toggle('is-busy', busy);
+  screenTitle.textContent = title;
+  screenSub.textContent = sub;
 }
 
 function dropCandy(i) {
@@ -374,11 +441,11 @@ function dropCandy(i) {
 
 function reset() {
   candyLayer.textContent = '';
-  die.dataset.face = '0';
-  die.classList.remove('is-landed', 'is-rolling');
+  idleDie();
   snapTo(DISH);
   setBallLook(depthScale(DISH[1]));
   setState('idle');
+  screen('Ready', 'Place the marble on START');
   cue('1', 'Drag the marble onto START', 'Pick it up from the dish.');
   setStatus('Drag the blue marble from its dish onto the START gate.');
 }

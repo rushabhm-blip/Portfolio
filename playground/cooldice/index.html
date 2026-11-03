@@ -7,7 +7,7 @@
   <meta name="description" content="Play CoolDice in the browser: drag the marble onto START, swipe your hand at the camera, watch it run, roll the dice and collect candy.">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/playground/playground.css?v=1">
-  <link rel="stylesheet" href="/playground/cooldice/cooldice.css?v=4">
+  <link rel="stylesheet" href="/playground/cooldice/cooldice.css?v=6">
 </head>
 <body class="cd-page">
   <header class="pg-header">
@@ -49,12 +49,18 @@
     <div class="cd-stage" id="cdStage">
       <img class="cd-scene" src="/playground/cooldice/scene.webp" width="1600" height="1051" draggable="false"
            alt="The CoolDice machine: a laser-cut wooden marble run with a START gate, a spiral funnel, a dice screen, a candy jar with zigzag ramps and a glass bowl.">
-      <div class="cd-screen" aria-hidden="true">
+      <div class="cd-screen" id="cdScreen" data-mode="msg" aria-hidden="true">
+        <!-- Messages ("Marble run in progress", "Dispensing candies"…) and the dice share this screen -->
+        <p class="cd-screen-msg">
+          <span class="cd-screen-title" id="cdScreenTitle">Ready</span>
+          <span class="cd-screen-sub" id="cdScreenSub">Place the marble on START</span>
+        </p>
+        <!-- 3D dice: six faces are built by cooldice.js -->
         <div class="cd-die" id="cdDie" data-face="0">
-          <span class="cd-pip"></span><span class="cd-pip"></span><span class="cd-pip"></span>
-          <span class="cd-pip"></span><span class="cd-pip"></span><span class="cd-pip"></span>
-          <span class="cd-pip"></span><span class="cd-pip"></span><span class="cd-pip"></span>
-          <span class="cd-die-q">?</span>
+          <div class="cd-die-tilt">
+            <div class="cd-die-cube" id="cdDieCube"></div>
+          </div>
+          <span class="cd-die-shadow"></span>
         </div>
       </div>
       <div class="cd-candies" id="cdCandies" aria-hidden="true"></div>
@@ -80,6 +86,6 @@
     </div>
   </main>
 
-  <script type="module" src="/playground/cooldice/cooldice.js?v=2"></script>
+  <script type="module" src="/playground/cooldice/cooldice.js?v=4"></script>
 </body>
 </html>

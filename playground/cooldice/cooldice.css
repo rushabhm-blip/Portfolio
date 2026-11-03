@@ -249,7 +249,7 @@
   pointer-events: none;
 }
 
-/* Dice screen, laid over the machine's display */
+/* Dice screen, laid over the machine's display; a size container so the cube scales with it */
 .cd-screen {
   position: absolute;
   left: 54.9%;
@@ -258,73 +258,155 @@
   height: 12.5%;
   display: grid;
   place-items: center;
+  container-type: size;
+  overflow: hidden;
   border-radius: 0.4vw;
-  background: linear-gradient(180deg, #eaf2ff, #d9e7fb);
-  box-shadow: inset 0 0 0 2px rgba(30, 60, 140, 0.12);
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, 0.9), transparent 70%),
+    linear-gradient(180deg, #eaf2ff, #d4e3fa);
+  box-shadow: inset 0 0 0 2px rgba(30, 60, 140, 0.12), inset 0 -6px 14px rgba(30, 60, 140, 0.1);
 }
 
-.cd-die {
-  position: relative;
-  height: 72%;
-  aspect-ratio: 1;
-  padding: 12%;
+/* Message and dice share one cell; data-mode says which one is showing */
+.cd-screen > * {
+  grid-area: 1 / 1;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cd-screen-msg {
+  margin: 0;
+  padding: 0 6cqw;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  place-items: center;
-  border-radius: 18%;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(20, 40, 100, 0.18);
-}
-
-.cd-pip {
-  width: 72%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #1d3ea8;
-  visibility: hidden;
-}
-
-.cd-die-q {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-size: clamp(14px, 2vw, 30px);
-  font-weight: 800;
+  gap: 4cqh;
+  text-align: center;
   color: #1d3ea8;
 }
 
-.cd-die:not([data-face="0"]) .cd-die-q {
-  display: none;
+.cd-screen-title {
+  font-size: 19cqh;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
 }
 
-/* Pip positions per face (cells 1-9, left to right, top to bottom) */
-.cd-die[data-face="1"] .cd-pip:nth-child(5),
-.cd-die[data-face="2"] .cd-pip:is(:nth-child(1), :nth-child(9)),
-.cd-die[data-face="3"] .cd-pip:is(:nth-child(1), :nth-child(5), :nth-child(9)),
-.cd-die[data-face="4"] .cd-pip:is(:nth-child(1), :nth-child(3), :nth-child(7), :nth-child(9)),
-.cd-die[data-face="5"] .cd-pip:is(:nth-child(1), :nth-child(3), :nth-child(5), :nth-child(7), :nth-child(9)),
-.cd-die[data-face="6"] .cd-pip:is(:nth-child(1), :nth-child(3), :nth-child(4), :nth-child(6), :nth-child(7), :nth-child(9)) {
-  visibility: visible;
+.cd-screen-sub {
+  font-size: 12cqh;
+  font-weight: 550;
+  line-height: 1.2;
+  color: #4a6297;
 }
 
-.cd-die.is-rolling {
-  animation: cdDieShake 0.16s linear infinite;
+/* "Marble run in progress…" with dots that keep counting */
+.cd-screen.is-busy .cd-screen-title::after {
+  content: '';
+  display: inline-block;
+  width: 1.2em;
+  text-align: left;
+  animation: cdDots 1.2s steps(4, end) infinite;
+}
+
+@keyframes cdDots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
+
+.cd-screen[data-mode="msg"] .cd-die {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+.cd-screen[data-mode="die"] .cd-screen-msg {
+  opacity: 0;
+  transform: translateY(-20%);
+}
+
+/* 3D dice: a cube of six faces, tilted a little so its depth reads */
+.cd-die {
+  --edge: 58cqh;
+  position: relative;
+  width: var(--edge);
+  height: var(--edge);
+  perspective: calc(var(--edge) * 4.5);
+}
+
+.cd-die-tilt {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(-16deg) rotateY(-22deg);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Roll finished: the cube turns square-on, so it reads as one flat face showing the number */
+.cd-die.is-flat .cd-die-tilt {
+  transform: none;
+}
+
+.cd-die.is-flat .cd-die-shadow {
+  opacity: 0;
+}
+
+.cd-die-cube {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+/* Waiting: a slow turn so it reads as a dice, not a picture */
+.cd-die-cube.is-rolling {
+  transition: transform 1.5s cubic-bezier(0.18, 0.75, 0.2, 1);
+}
+
+.cd-die-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 16%;
+  background: radial-gradient(circle at 35% 30%, #ffffff 0 45%, #eef1f7 100%);
+  box-shadow: inset 0 0 0 1px rgba(20, 40, 100, 0.1), inset 0 -0.6cqh 1.6cqh rgba(20, 40, 100, 0.12);
+  backface-visibility: hidden;
+}
+
+.cd-die-face[data-side="front"]  { transform: translateZ(calc(var(--edge) / 2)); }
+.cd-die-face[data-side="back"]   { transform: rotateY(180deg) translateZ(calc(var(--edge) / 2)); }
+.cd-die-face[data-side="right"]  { transform: rotateY(90deg) translateZ(calc(var(--edge) / 2)); }
+.cd-die-face[data-side="left"]   { transform: rotateY(-90deg) translateZ(calc(var(--edge) / 2)); }
+.cd-die-face[data-side="top"]    { transform: rotateX(90deg) translateZ(calc(var(--edge) / 2)); }
+.cd-die-face[data-side="bottom"] { transform: rotateX(-90deg) translateZ(calc(var(--edge) / 2)); }
+
+.cd-die-pip {
+  position: absolute;
+  width: 19%;
+  height: 19%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #3b63d9 0 20%, #1d3ea8 55%, #0f2470 100%);
+  box-shadow: inset 0 0.3cqh 0.5cqh rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, -50%);
+}
+
+/* Soft contact shadow under the cube, tighter once it lands */
+/* Shadow fades out as the dice turns flat */
+.cd-die-shadow {
+  transition: opacity 0.3s ease;
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -14%;
+  height: 16%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(20, 40, 100, 0.28), transparent 70%);
+  transform: translateZ(-1px);
 }
 
 .cd-die.is-landed {
-  animation: cdDieLand 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes cdDieShake {
-  0% { transform: rotate(-8deg) scale(0.96); }
-  50% { transform: rotate(8deg) scale(1.02); }
-  100% { transform: rotate(-8deg) scale(0.96); }
+  animation: cdDieLand 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes cdDieLand {
-  0% { transform: scale(1.25); }
+  0% { transform: scale(1.2); }
+  60% { transform: scale(0.95); }
   100% { transform: scale(1); }
 }
 
@@ -645,8 +727,8 @@
 @media (prefers-reduced-motion: reduce) {
   .cd-stage.is-idle .cd-start-ring,
   .cd-stage.is-armed .cd-cue-arrow,
-  .cd-die.is-rolling,
-  .cd-die.is-landed {
+  .cd-die.is-landed,
+  .cd-screen.is-busy .cd-screen-title::after {
     animation: none;
   }
 
