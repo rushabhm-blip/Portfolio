@@ -4,66 +4,93 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Playground · Rushabh Mahore</title>
-  <meta name="description" content="A dotted board of small interactive experiments by Rushabh Mahore. Drag to look around and pick one to play.">
+  <meta name="description" content="Small experiments and moving stories by Rushabh Mahore: the CoolDice marble run you can play in the browser, and two short films.">
   <link rel="icon" href="data:,">
   <script src="/password-gate.js"></script>
-  <link rel="stylesheet" href="/playground/playground.css?v=2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/playground/playground.css?v=7">
 </head>
-<body>
-  <header class="pg-header">
-    <a class="pg-wordmark" href="/">rushabh<span>.</span></a>
-    <a class="pg-back" href="/">← Back to portfolio</a>
+<body class="pgh-page">
+  <header class="pgh-nav">
+    <a class="pgh-wordmark" href="/">rushabh<span>.</span></a>
+    <nav aria-label="Portfolio">
+      <a href="/#works">Work</a>
+      <a href="/#about">About</a>
+      <a href="/playground/" aria-current="page">Playground</a>
+    </nav>
   </header>
 
-  <main class="pg-viewport" id="pgViewport" tabindex="0" aria-label="Playground board. Drag, scroll or use the arrow keys to look around.">
-    <div class="pg-board" id="pgBoard">
-      <div class="pg-item" style="--x: 760px; --y: 560px;">
-        <h1 class="pg-title">Play<span>ground</span></h1>
-        <p class="pg-subtitle">Small experiments, built to be touched. Pick one and try it.</p>
+  <main class="pgh-main">
+    <section class="pgh-hero">
+      <div class="pgh-hero-title">
+        <p class="pgh-kicker">A space to try things</p>
+        <h1 class="pgh-title">Play<span>ground</span></h1>
       </div>
+      <p class="pgh-lede">Small experiments. Moving stories.<br>Pick something. See what happens.</p>
+      <p class="pgh-scribble" aria-hidden="true">
+        a little curiosity<br>goes a long way
+        <svg viewBox="0 0 90 60" fill="none">
+          <path d="M80 4C76 30 52 46 10 50" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M20 40L8 50L21 57" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </p>
+    </section>
 
-      <a class="pg-item pg-tile" href="/playground/cooldice/" style="--x: 1180px; --y: 520px; --r: 1.5deg;">
-        <img class="pg-tile-tape" src="/assets/yellow-tape.webp" alt="" aria-hidden="true">
-        <img class="pg-tile-img" src="/assets/projects/cooldice/hero_thumbnail.webp" alt="" loading="eager" draggable="false">
-        <div class="pg-tile-meta">
-          <h2 class="pg-tile-name">CoolDice</h2>
-          <span class="pg-tile-cta">Play ↗</span>
+    <div class="pgh-cards">
+      <!-- 01 · CoolDice -->
+      <article class="pgh-card" aria-labelledby="pghCoolDice">
+        <img class="pgh-tape" src="/assets/yellow-tape.webp" alt="" aria-hidden="true">
+        <a class="pgh-media" href="/playground/cooldice/" tabindex="-1" aria-hidden="true">
+          <img src="/playground/cooldice-card.webp" alt="" width="1300" height="559">
+        </a>
+        <div class="pgh-body">
+          <p class="pgh-tag">01 / Interactive</p>
+          <h2 class="pgh-name" id="pghCoolDice">CoolDice</h2>
+          <p class="pgh-line">A gesture. A roll. A sweet surprise.</p>
+          <div class="pgh-actions">
+            <a class="pgh-btn" href="/playground/cooldice/">Try the experiment <span aria-hidden="true">↗</span></a>
+            <span class="pgh-meta">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.5" stroke="currentColor" stroke-width="1.6"/></svg>
+              Camera required
+            </span>
+          </div>
         </div>
-        <p class="pg-tile-line">Wave at the camera to send a marble down the run, roll the dice and win candy.</p>
-        <span class="pg-tile-tag" aria-hidden="true">Uses your camera</span>
-      </a>
+      </article>
 
-      <div class="pg-item pg-hand" style="--x: 1010px; --y: 470px; --r: -8deg;" aria-hidden="true">try this one</div>
-      <svg class="pg-item pg-arrow" style="--x: 1080px; --y: 500px;" viewBox="0 0 90 60" fill="none" aria-hidden="true">
-        <path d="M4 8C30 4 58 14 76 42" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-        <path d="M64 40L77 44L80 30" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-
-      <a class="pg-item pg-tile pg-film-tile" href="/playground/films/" style="--x: 1690px; --y: 560px; --r: -2deg;">
-        <img class="pg-tile-tape" src="/assets/yellow-tape.webp" alt="" aria-hidden="true">
-        <!-- A strip of film with the two titles -->
-        <div class="pg-strip" aria-hidden="true">
-          <span class="pg-strip-frame"><em>01</em>Between the pages</span>
-          <span class="pg-strip-frame"><em>02</em>Overheard</span>
+      <!-- 02 · Two short films -->
+      <article class="pgh-card" aria-labelledby="pghFilms">
+        <img class="pgh-tape" src="/assets/yellow-tape.webp" alt="" aria-hidden="true">
+        <div class="pgh-media pgh-filmstrip">
+          <a class="pgh-film" href="/playground/films/#between-the-pages">
+            <img src="/playground/films/frames/thumb-between.webp" alt="" width="1000" height="563" style="object-position: 68% 40%;">
+            <span class="pgh-film-label"><span class="pgh-play" aria-hidden="true"></span>Between the pages</span>
+          </a>
+          <a class="pgh-film" href="/playground/films/#overheard">
+            <img src="/playground/films/frames/thumb-overheard.webp" alt="" width="1000" height="563" style="object-position: 18% 50%;">
+            <span class="pgh-film-label"><span class="pgh-play" aria-hidden="true"></span>Overheard</span>
+          </a>
         </div>
-        <div class="pg-tile-meta">
-          <h2 class="pg-tile-name">Two short films</h2>
-          <span class="pg-tile-cta">Watch ↗</span>
+        <div class="pgh-body">
+          <p class="pgh-tag">02 / Short films</p>
+          <h2 class="pgh-name" id="pghFilms">Two short films</h2>
+          <p class="pgh-line">A different kind of screen time.</p>
+          <div class="pgh-actions">
+            <a class="pgh-btn" href="/playground/films/">Watch the films <span aria-hidden="true">↗</span></a>
+            <span class="pgh-meta">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="8" width="13" height="11" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M16 12l5-3v9l-5-3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="6.5" cy="5" r="2" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="5" r="2" stroke="currentColor" stroke-width="1.6"/></svg>
+              2 films
+            </span>
+          </div>
         </div>
-        <p class="pg-tile-line">Acting in one; storyboard, camera and edit in the other.</p>
-        <span class="pg-tile-tag" aria-hidden="true">Digital Media &amp; Visualization</span>
-      </a>
-
-      <p class="pg-item pg-note" style="--x: 1760px; --y: 980px; --r: 3deg;">More experiments are on their way.</p>
-      <p class="pg-item pg-note pg-note-blue" style="--x: 820px; --y: 860px; --r: -3deg;">Click a project to play it. Drag the paper to look around.</p>
+      </article>
     </div>
+
+    <footer class="pgh-foot">
+      <p>Made to explore, watch, and play.</p>
+      <p class="pgh-sticky">More experiments on the way.</p>
+    </footer>
   </main>
-
-  <div class="pg-hint" role="note">
-    <span>Drag to look around</span>
-    <button type="button" class="pg-recenter" id="pgRecenter">Recenter</button>
-  </div>
-
-  <script src="/playground/playground.js?v=2"></script>
 </body>
 </html>
