@@ -12,7 +12,7 @@
       }
     } catch (e) {}
   </script>
-  <link rel="stylesheet" href="/projects/digital-fabrication/case-study.css?v=exact_figma_v2">
+  <link rel="stylesheet" href="/projects/digital-fabrication/case-study.css?v=exact_figma_v3">
 </head>
 <body>
 
@@ -103,6 +103,12 @@
           <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
         </a>
       </li>
+      <li class="cs-dot-item" data-index="10">
+        <a href="#sec-play-virtually" class="cs-dot-link" aria-label="Play it virtually">
+          <span class="cs-dot-label">Play it virtually</span>
+          <span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span>
+        </a>
+      </li>
     </ul>
   </nav>
 
@@ -177,6 +183,11 @@
         <h2>Closing Thought</h2>
         <p>A wave becomes motion. Motion becomes anticipation. A number becomes a reward. An exploration of how a distant gesture can feel connected to a physical consequence. Rushabh Mahore / Interaction design</p>
       </section>
+
+      <section>
+        <h2>Play it virtually</h2>
+        <p>A browser version of CoolDice you can play on this page: place the marble on START, swipe right to left at your camera or across the machine, and watch the dice and candy.</p>
+      </section>
     </div>
 
     <!-- 01. Hero Introduction Artboard -->
@@ -234,8 +245,36 @@
            decoding="async">
     </div>
 
+    <!-- 04. Playable version (the same game as /playground/cooldice/, embedded) -->
+    <section class="cs-play-section" id="sec-play-virtually-section" aria-labelledby="csPlayTitle">
+      <div id="sec-play-virtually" class="cs-section-anchor" style="top: 0;" data-section-index="10" data-section-id="sec-play-virtually"></div>
+      <div class="cs-play-container">
+        <div class="cs-video-badge-wrapper">
+          <span class="cs-video-badge">PLAY IT HERE</span>
+        </div>
+        <h2 class="cs-play-title" id="csPlayTitle">Can’t play it in person?<br>Try it virtually.</h2>
+        <p class="cs-play-sub">The real machine lives in the studio. This one runs in your browser: drop the marble on START, swipe your hand right to left at your camera, and see what the dice gives you.</p>
+        <div class="cs-play-frame">
+          <iframe id="csPlayFrame"
+                  src="/playground/cooldice/?embed"
+                  title="CoolDice, playable in the browser"
+                  allow="camera"
+                  loading="lazy"></iframe>
+        </div>
+        <a class="cs-play-link" href="/playground/cooldice/" target="_blank" rel="noopener">Open full screen <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
   </main>
 
+  <script>
+    // The embedded game reports its height, so the frame always fits it without scrolling
+    window.addEventListener('message', (e) => {
+      if (e.origin !== location.origin || !e.data || e.data.type !== 'cooldice:height') return;
+      const frame = document.getElementById('csPlayFrame');
+      if (frame && Number.isFinite(e.data.height)) frame.style.height = `${e.data.height}px`;
+    });
+  </script>
   <script src="/projects/digital-fabrication/case-study.js?v=exact_figma_v2"></script>
 </body>
 </html>

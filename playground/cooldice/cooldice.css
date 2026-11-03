@@ -48,26 +48,19 @@
   line-height: 1;
 }
 
-.cd-intro {
-  margin: 10px 0 0;
-  font-size: 15px;
-  line-height: 1.5;
-  color: var(--muted);
-}
-
 .cd-steps {
   list-style: none;
-  margin: 20px 0 0;
+  margin: 18px 0 0;
   padding: 0;
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .cd-steps li {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 15px;
+  gap: 10px;
+  font-size: 14.5px;
   line-height: 1.35;
   color: #94a3b8;
   transition: color 0.25s ease;
@@ -106,25 +99,18 @@
 }
 
 .cd-status {
-  margin: 18px 0 0;
-  padding: 12px 14px;
+  margin: 16px 0 0;
+  padding: 10px 12px;
   border-radius: 10px;
   background: #eef3ff;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 550;
   line-height: 1.45;
   color: #1e2a55;
 }
 
 .cd-cam {
-  margin-top: 18px;
-}
-
-.cd-cam-note {
-  margin: 8px 0 0;
-  font-size: 12.5px;
-  line-height: 1.45;
-  color: #7b8494;
+  margin-top: 14px;
 }
 
 .cd-cam-view {
@@ -220,11 +206,93 @@
   background: var(--lime);
 }
 
-.cd-tip {
-  margin: 14px 0 0;
-  font-size: 12.5px;
+/* "How it works": the explanations, collapsed by default */
+.cd-more {
+  margin-top: 14px;
+  font-size: 13px;
   line-height: 1.45;
-  color: #7b8494;
+  color: #64748b;
+}
+
+.cd-more summary {
+  width: fit-content;
+  cursor: pointer;
+  font-weight: 600;
+  color: #475569;
+}
+
+.cd-more summary:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.cd-more p {
+  margin: 8px 0 0;
+}
+
+/* ---------- Embedded (?embed, e.g. inside the case study) ----------
+   No site header; the machine comes first with a slim controls bar under it. The on-machine
+   banner already says which step you are on, so the title and step list are dropped. */
+.cd-embed {
+  min-height: 0;
+  background: transparent;
+}
+
+.cd-embed .pg-header,
+.cd-embed .cd-kicker,
+.cd-embed .cd-title,
+.cd-embed .cd-steps {
+  display: none;
+}
+
+.cd-embed .cd-main {
+  padding: 4px 4px 8px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+
+.cd-embed .cd-stage {
+  order: 1;
+}
+
+.cd-embed .cd-panel {
+  order: 2;
+  padding: 12px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  box-shadow: 0 8px 22px rgba(0, 16, 60, 0.06);
+}
+
+.cd-embed .cd-status {
+  flex: 1 1 260px;
+  margin: 0;
+}
+
+.cd-embed .cd-cam,
+.cd-embed .cd-actions,
+.cd-embed .cd-more {
+  margin: 0;
+}
+
+.cd-embed .cd-cam {
+  display: contents;
+}
+
+.cd-embed .cd-btn-primary {
+  width: auto;
+}
+
+.cd-embed .cd-cam-view {
+  order: 5;
+  flex: 0 0 200px;
+  margin: 0;
+}
+
+.cd-embed .cd-more {
+  flex-basis: 100%;
 }
 
 /* ---------- Stage ---------- */

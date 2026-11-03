@@ -588,6 +588,21 @@ if (params.has('debug')) {
   stage.appendChild(svg);
 }
 
+/* ---------- embedded in another page (?embed): report height so the frame fits ---------- */
+
+if (params.has('embed') && window.parent !== window) {
+  let lastHeight = 0;
+  const report = () => {
+    // The content itself (scrollHeight never drops below the frame's current height, so it could only grow)
+    const height = Math.ceil(document.querySelector('.cd-main').getBoundingClientRect().bottom + window.scrollY);
+    if (height === lastHeight) return;
+    lastHeight = height;
+    window.parent.postMessage({ type: 'cooldice:height', height }, location.origin);
+  };
+  new ResizeObserver(report).observe(document.querySelector('.cd-main'));
+  window.addEventListener('load', report);
+}
+
 /* ---------- start ---------- */
 
 place(dish, DISH);

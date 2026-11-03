@@ -7,9 +7,11 @@
   <meta name="description" content="Play CoolDice in the browser: drag the marble onto START, swipe your hand at the camera, watch it run, roll the dice and collect candy.">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/playground/playground.css?v=1">
-  <link rel="stylesheet" href="/playground/cooldice/cooldice.css?v=6">
+  <link rel="stylesheet" href="/playground/cooldice/cooldice.css?v=7">
 </head>
 <body class="cd-page">
+  <!-- ?embed (inside the case study): set before first paint so the header never flashes -->
+  <script>if (new URLSearchParams(location.search).has('embed')) document.body.classList.add('cd-embed');</script>
   <header class="pg-header">
     <a class="pg-wordmark" href="/">rushabh<span>.</span></a>
     <a class="pg-back" href="/playground/">← Playground</a>
@@ -19,7 +21,6 @@
     <section class="cd-panel" aria-labelledby="cdTitle">
       <p class="cd-kicker">Playground · 01</p>
       <h1 class="cd-title" id="cdTitle">CoolDice</h1>
-      <p class="cd-intro">A gesture-controlled marble run that turns a dice roll into a candy reward.</p>
 
       <ol class="cd-steps">
         <li data-step="place"><span class="cd-step-num">1</span><span>Drag the marble onto <b>START</b></span></li>
@@ -31,7 +32,6 @@
 
       <div class="cd-cam">
         <button type="button" class="cd-btn cd-btn-primary" id="cdCamBtn">Turn on camera</button>
-        <p class="cd-cam-note" id="cdCamNote">Your camera is only used in this tab to follow your hand. Nothing is recorded or sent anywhere.</p>
         <div class="cd-cam-view" id="cdCamView" hidden>
           <video id="cdVideo" playsinline muted></video>
           <span class="cd-hand-dot" id="cdHandDot" hidden></span>
@@ -43,7 +43,14 @@
         <button type="button" class="cd-btn" id="cdSwipeBtn">Swipe without camera</button>
         <button type="button" class="cd-btn cd-btn-lime" id="cdAgainBtn" hidden>Play again</button>
       </div>
-      <p class="cd-tip">No camera? Swipe right to left across the machine with your mouse or finger.</p>
+
+      <!-- The explanations stay one tap away -->
+      <details class="cd-more">
+        <summary>How it works</summary>
+        <p>A gesture-controlled marble run that turns a dice roll into a candy reward.</p>
+        <p>No camera? Swipe right to left across the machine with your mouse or finger.</p>
+        <p>Your camera is only used in this tab to follow your hand. Nothing is recorded or sent anywhere.</p>
+      </details>
     </section>
 
     <div class="cd-stage" id="cdStage">
@@ -86,6 +93,6 @@
     </div>
   </main>
 
-  <script type="module" src="/playground/cooldice/cooldice.js?v=4"></script>
+  <script type="module" src="/playground/cooldice/cooldice.js?v=6"></script>
 </body>
 </html>
