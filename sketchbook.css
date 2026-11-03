@@ -4002,6 +4002,95 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   pointer-events: none;
 }
 
+/* Hobby stickers: placed in % of the cutout's 2:3 box, in the empty space around the figure
+   (badminton above-left, flute above-right, table tennis by the right waist, map below-left) */
+.hobby-sticker {
+  position: absolute;
+  z-index: 1;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  filter:
+    drop-shadow(0 0 0.75px rgba(26, 25, 23, 0.22))
+    drop-shadow(0 10px 16px rgba(35, 25, 15, 0.14));
+  /* Stop-motion wiggle: steps() holds each pose, then jumps to the next */
+  animation: hobbyStopMotion 1.4s steps(1, end) infinite;
+}
+
+.hobby-badminton {
+  left: -7%;
+  top: -22%;
+  width: 30%;
+  rotate: -4deg;
+}
+
+.hobby-flute {
+  left: 58%;
+  top: -18%;
+  width: 46%;
+  animation-duration: 1.7s;
+  animation-delay: -0.5s;
+}
+
+.hobby-table-tennis {
+  left: 94%;
+  top: 72%;
+  width: 28%;
+  rotate: 6deg;
+  animation-duration: 1.5s;
+  animation-delay: -0.9s;
+}
+
+.hobby-map {
+  left: -7%;
+  top: 91%;
+  width: 48%;
+  rotate: -3deg;
+  animation-duration: 1.9s;
+  animation-delay: -0.3s;
+}
+
+@keyframes hobbyStopMotion {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(1px, -2px) rotate(1.6deg); }
+  50% { transform: translate(-1px, -1px) rotate(-1.2deg); }
+  75% { transform: translate(1px, 1px) rotate(0.8deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hobby-sticker {
+    animation: none;
+  }
+}
+
+/* Tablet and phone: the cutout sits beside or between other blocks, so keep the stickers
+   smaller and mostly inside its own box */
+@media (max-width: 1180px) {
+  .hobby-badminton {
+    left: 0;
+    top: -6%;
+    width: 22%;
+  }
+
+  .hobby-flute {
+    left: 70%;
+    top: -14%;
+    width: 30%;
+  }
+
+  .hobby-table-tennis {
+    left: 89%;
+    top: 73%;
+    width: 20%;
+  }
+
+  .hobby-map {
+    left: -5%;
+    top: 87%;
+    width: 34%;
+  }
+}
+
 /* Same 2:3 box as the cutout, so the arrow end stays on the headset at any width */
 .vr-callout-arrow {
   position: absolute;

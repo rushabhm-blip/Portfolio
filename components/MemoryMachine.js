@@ -230,6 +230,12 @@ export function createMemoryMachine(options = {}) {
             <path d="M58 41.5L66 47L58.5 53" stroke="#0647fa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
 
+          <!-- Hobby stickers around the cutout (decorative): badminton, flute, table tennis, map -->
+          <img src="assets/memory-machine/assets/hobby-badminton.webp" class="hobby-sticker hobby-badminton" alt="" aria-hidden="true" width="260" height="428" loading="lazy" decoding="async" />
+          <img src="assets/memory-machine/assets/hobby-flute.webp" class="hobby-sticker hobby-flute" alt="" aria-hidden="true" width="400" height="262" loading="lazy" decoding="async" />
+          <img src="assets/memory-machine/assets/hobby-table-tennis.webp" class="hobby-sticker hobby-table-tennis" alt="" aria-hidden="true" width="280" height="297" loading="lazy" decoding="async" />
+          <img src="assets/memory-machine/assets/hobby-map.webp" class="hobby-sticker hobby-map" alt="" aria-hidden="true" width="400" height="260" loading="lazy" decoding="async" />
+
           <img src="assets/memory-machine/assets/vr-sticker.webp" class="vr-sticker-img" alt="Rushabh today, wearing a VR headset and holding a controller in each hand" width="1024" height="1536" loading="lazy" decoding="async" />
         </div>
       </div>

@@ -190,89 +190,218 @@ html.is-entering-transition .portfolio-transition-curtain {
 }
 
 /* Minimal Editorial Dot Navigator */
+/* Section rail (same as Sajag): the current section is named beside its dot */
 .cs-dot-nav {
   position: fixed;
-  right: 1.5rem;
+  right: 28px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 900;
-  display: flex;
-  flex-direction: column;
+  z-index: 950;
   pointer-events: auto;
+  user-select: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
 }
 
 .cs-dot-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  position: relative;
-  padding: 8px 4px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  gap: 0;
 }
 
 .cs-dot-item {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
+  /* Pitch between adjacent dot centers: 24px (compact & elegant for 18 sections) */
+  height: 24px;
+  width: 24px;
 }
 
+/* Stationary Click Target with generous invisible hit area (>= 44x44px) */
 .cs-dot-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  padding: 4px;
-}
-
-.cs-dot-node-wrapper {
-  width: 14px;
-  height: 14px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 24px;
+  height: 24px;
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+  background: transparent;
+  border: none;
 }
 
-.cs-dot-node {
-  width: 6px;
-  height: 6px;
+/* Invisible hit area expanding to 44 x 44px without changing visible dot size */
+.cs-dot-link::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
+  background: transparent;
+  pointer-events: auto;
+}
+
+/* Accessible visible keyboard focus */
+.cs-dot-link:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+
+/* Wrapper for the visible dot that performs the rolling motion */
+.cs-dot-node-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+/* The visible circular dot */
+.cs-dot-node {
+  border-radius: 50%;
+  /* Inactive dots: 4px, light gray */
+  width: 4px;
+  height: 4px;
   background-color: #cbd5e1;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.22s ease;
+  display: block;
 }
 
+/* Inactive dot hover / focus-visible */
+.cs-dot-item:not(.is-active) .cs-dot-link:hover .cs-dot-node,
+.cs-dot-item:not(.is-active) .cs-dot-link:focus-visible .cs-dot-node {
+  background-color: #94a3b8;
+}
+
+/* Active dot: 7px, solid black, without an outer ring */
 .cs-dot-item.is-active .cs-dot-node {
-  width: 9px;
-  height: 9px;
-  background-color: var(--color-brand-accent);
-  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+  width: 7px;
+  height: 7px;
+  background-color: #000000;
+  border: none !important;
+  box-shadow: none !important;
 }
 
+/* Section heading label:
+   Black, 12-13px medium-weight text, positioned to the left with 14px gap.
+   Stationary and upright (outside the rolling transform). */
 .cs-dot-label {
   position: absolute;
-  right: 24px;
-  background: rgba(15, 23, 42, 0.88);
-  color: #ffffff;
-  font-family: var(--font-display);
-  font-size: 0.75rem;
+  right: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%);
+  color: #000000;
+  font-family: var(--font-body);
+  font-size: 13px;
   font-weight: 500;
-  padding: 4px 10px;
-  border-radius: 6px;
+  letter-spacing: -0.01em;
   white-space: nowrap;
-  opacity: 0;
   pointer-events: none;
-  transform: translateX(6px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  backdrop-filter: blur(8px);
+  user-select: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 0.22s ease;
 }
 
-.cs-dot-item:hover .cs-dot-label,
-.cs-dot-link:focus .cs-dot-label {
+/* Active section heading is shown beside its dot */
+.cs-dot-item.is-active .cs-dot-label {
   opacity: 1;
-  transform: translateX(0);
 }
 
-@media (max-width: 1200px) {
+/* Hovering or keyboard-focusing an inactive dot reveals its section name with a simple text fade */
+.cs-dot-item:not(.is-active) .cs-dot-link:hover .cs-dot-label,
+.cs-dot-item:not(.is-active) .cs-dot-link:focus-visible .cs-dot-label {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Subtle Rolling Animation:
+   Shallow elliptical path along virtual vertical wheel.
+   Restrained: roughly 6-10px vertically with 2-4px horizontal.
+   Settles back within 250-350ms.
+   ========================================================================== */
+
+.is-rolling-down .cs-dot-node-wrapper {
+  animation: csWheelRollDown 300ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.is-rolling-up .cs-dot-node-wrapper {
+  animation: csWheelRollUp 300ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes csWheelRollDown {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  38% {
+    transform: translate3d(-3px, 8px, 0);
+  }
+  72% {
+    transform: translate3d(-1px, 2px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes csWheelRollUp {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  38% {
+    transform: translate3d(-3px, -8px, 0);
+  }
+  72% {
+    transform: translate3d(-1px, -2px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Pause and reset rolling motion while navigator is hovered or keyboard-focused */
+.cs-dot-nav:hover .cs-dot-node-wrapper,
+.cs-dot-nav:focus-within .cs-dot-node-wrapper {
+  animation: none !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+/* Compact screen height adaptation */
+@media (max-height: 800px) {
+  .cs-dot-item,
+  .cs-dot-link {
+    height: 19px;
+    width: 19px;
+  }
+}
+
+/* Narrow screens: hide the rail when it cannot fit beside the content */
+@media (max-width: 1240px) {
   .cs-dot-nav {
     display: none;
   }
