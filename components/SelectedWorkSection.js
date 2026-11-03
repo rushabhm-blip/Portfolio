@@ -212,8 +212,8 @@ export function createSelectedWorkSection() {
       <article class="project-row project-row-munshiji" id="project-munshiji" data-project-id="munshiji">
         <div class="project-text-col">
           <h3 class="project-name">Munshiji</h3>
-          <p class="project-subheading">Financial confidence for everyday decisions.</p>
-          <p class="project-desc">A digital companion helping small business owners track expenses, understand cash flow, and make informed choices.</p>
+          <p class="project-subheading">Small steps. Smarter money habits.</p>
+          <p class="project-desc">Helping beginners learn about money, build saving habits, and invest with confidence.</p>
           <div class="project-meta-details">
             <span class="project-meta-item">2026 · Academic project</span>
           </div>
