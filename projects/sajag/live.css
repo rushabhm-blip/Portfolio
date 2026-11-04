@@ -60,3 +60,20 @@
   .sj-ctl button { padding: 5px 7px; }
   .sj-ctl svg { width: 11px; height: 11px; }
 }
+
+/* the hand in the drawing sits in front of the phone, so it is drawn again over the live screen, a little see-through */
+.sj-hand { position: absolute; inset: 0; z-index: 4; pointer-events: none; background-size: 100% 100%; background-repeat: no-repeat; opacity: .78; animation: sjhand 3.4s ease-in-out infinite; }
+@keyframes sjhand { 0%, 100% { opacity: .78; transform: translate(0, 0); } 50% { opacity: .62; transform: translate(-1.5%, .6%); } }
+.sj-phone.sj-try .sj-hand { display: none; }
+@media (prefers-reduced-motion: reduce) { .sj-hand { animation: none; } }
+
+/* playback controls: tucked over the bottom of the screen, shown on hover or focus (always, but faint, on touch screens), so they never cover the notes around the phone */
+.sj-phone { pointer-events: auto; }
+.sj-ctl, .sj-ctl.sj-above { top: auto; bottom: 3.4%; margin: 0; transform: translateX(-50%); opacity: 0; transition: opacity .25s; }
+.sj-phone:hover .sj-ctl, .sj-phone:focus-within .sj-ctl, .sj-phone.sj-try .sj-ctl { opacity: 1; }
+.sj-phone.sj-idle:hover .sj-ctl { opacity: 0; }
+@media (hover: none) { .sj-ctl, .sj-ctl.sj-above { opacity: .72; } }
+.sj-ctl { padding: 2px; gap: 1px; }
+.sj-ctl button { padding: 5px 8px; font-size: 11px; }
+.sj-ctl svg { width: 12px; height: 12px; }
+@media (max-width: 900px) { .sj-ctl button span { display: none; } .sj-ctl button { padding: 4px 6px; } .sj-ctl svg { width: 10px; height: 10px; } }

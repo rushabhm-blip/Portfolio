@@ -81,16 +81,16 @@
         { op: 'tap', text: 'Mark unsafe area' }, { op: 'wait', ms: 600 },
         { op: 'tip', text: 'Touch and hold the map where the concern is.', y: 130 }, { op: 'wait', ms: 2400 },
       ] },
-      { id: 'safety-yellow', label: 'Hold: low severity', rect: [1010, 3336, 365, 710], ops: [
+      { id: 'safety-yellow', label: 'Hold: low severity', hand: 1, rect: [1010, 3336, 365, 710], ops: [
         { op: 'boot', to: 'safety' }, { op: 'tap', text: 'Mark unsafe area', fast: 1 }, { op: 'wait', ms: 400 }, { op: 'ready' },
         { op: 'tip', text: 'Hold briefly, then drag to size the area. Yellow: minor.', y: 130 },
-        { op: 'drag', path: [[170, 360], [236, 360]], hold: 700, ms: 900, noRelease: 1 }, { op: 'wait', ms: 1500 },
+        { op: 'drag', path: [[172, 400], [226, 400]], hold: 700, ms: 900, noRelease: 1 }, { op: 'wait', ms: 1500 },
         { op: 'release' }, { op: 'wait', ms: 1200 }, { op: 'clear' },
       ] },
-      { id: 'safety-orange', label: 'Hold longer: higher severity', rect: [1738, 3336, 365, 710], ops: [
+      { id: 'safety-orange', label: 'Hold longer: higher severity', hand: 1, rect: [1738, 3336, 365, 710], ops: [
         { op: 'boot', to: 'safety' }, { op: 'tap', text: 'Mark unsafe area', fast: 1 }, { op: 'wait', ms: 400 }, { op: 'ready' },
         { op: 'tip', text: 'Hold longer and the severity rises: yellow, orange, red.', y: 130 },
-        { op: 'drag', path: [[170, 360], [250, 380]], hold: 2200, ms: 1000, noRelease: 1 }, { op: 'wait', ms: 1500 },
+        { op: 'drag', path: [[172, 400], [244, 424]], hold: 2200, ms: 1000, noRelease: 1 }, { op: 'wait', ms: 1500 },
         { op: 'release' }, { op: 'wait', ms: 1600 }, { op: 'clear' },
       ] },
       { id: 'safety-saved', label: 'Location saved', rect: [1488, 4784, 574, 1116], ops: [
@@ -209,12 +209,12 @@
           <button class="sj-try" aria-pressed="false" aria-label="Take over and try it"><svg viewBox="0 0 24 24"><path d="M9 11V5a2 2 0 0 1 4 0v5l5 1a2 2 0 0 1 1.6 2.4L18.5 19a3 3 0 0 1-3 2H11a3 3 0 0 1-2.4-1.2L5 15.5a1.8 1.8 0 0 1 2.8-2.2L9 14.5"/></svg><span>Try it</span></button>
         </div>`;
       layer.appendChild(el);
-      this.screen = el.querySelector('.sj-screen'); this.scaleEl = el.querySelector('.sj-scale'); this.load = el.querySelector('.sj-load');
+      this.screen = el.querySelector('.sj-screen');
+      if (def.hand) { const hd = document.createElement('div'); hd.className = 'sj-hand'; hd.style.backgroundImage = `url(/projects/sajag/hands/${def.id}.png)`; this.screen.appendChild(hd); } this.scaleEl = el.querySelector('.sj-scale'); this.load = el.querySelector('.sj-load');
       new ResizeObserver(() => this.fit()).observe(this.screen); this.fit();
       el.querySelector('.sj-rep').addEventListener('click', () => { this.setTry(false); this.start(); });
       el.querySelector('.sj-try').addEventListener('click', () => { const on = !this.tryMode; this.setTry(on); if (!on) this.start(); });
-      if (def.rect[2] < 420) el.querySelector('.sj-ctl').classList.add('sj-above');
-      if (REDUCED) { el.remove(); return; } // reduced motion: leave the pictures exactly as they were
+            if (REDUCED) { el.remove(); return; } // reduced motion: leave the pictures exactly as they were
       new IntersectionObserver(([en]) => { this.ratio = en.intersectionRatio; if (this.ratio >= 0.5 && !this.live && !this.tryMode) this.start(); }, { threshold: [0, 0.2, 0.5, 0.8] }).observe(this.screen);
       new IntersectionObserver(([en]) => { if (!en.isIntersecting && this.live) this.destroy(); }, { rootMargin: '90% 0px 90% 0px' }).observe(this.screen);
     }
