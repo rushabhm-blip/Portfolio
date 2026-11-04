@@ -48,7 +48,8 @@ export const sketchbookData = {
         { title: "The Fear Between Us", subtitle: "Snakebite awareness & coexistence scroll story", url: "/projects/snakbite/" },
         { title: "Time Wanderers", subtitle: "Multimodal spatial museum experience exploring Indus Valley civilization", url: "/projects/time-wanderers/" },
         { title: "Munshiji", subtitle: "Financial learning & decision companion", url: "/projects/munshiji/" },
-        { title: "Digital Fabrication", subtitle: "CoolDice gesture-controlled marble candy machine", url: "/projects/digital-fabrication/" }
+        { title: "Digital Fabrication", subtitle: "CoolDice gesture-controlled marble candy machine", url: "/projects/digital-fabrication/" },
+        { title: "Rilo", subtitle: "Shared ride companion for group motorcycle rides", url: "/projects/rilo/" }
       ]
     },
     About: {
@@ -84,7 +85,8 @@ export const sketchbookData = {
         { title: "The Fear Between Us", subtitle: "Explore the interactive story", url: "/projects/snakbite/" },
         { title: "Time Wanderers", subtitle: "Multimodal museum experience exploring Indus Valley civilization", url: "/projects/time-wanderers/" },
         { title: "Munshiji Companion", subtitle: "View the companion walkthrough", url: "/projects/munshiji/" },
-        { title: "Digital Fabrication", subtitle: "CoolDice tangible interaction case study", url: "/projects/digital-fabrication/" }
+        { title: "Digital Fabrication", subtitle: "CoolDice tangible interaction case study", url: "/projects/digital-fabrication/" },
+        { title: "Rilo", subtitle: "Explore the case study and live prototypes", url: "/projects/rilo/" }
       ]
     }
   },

@@ -8,6 +8,7 @@ projects/sajag/app/android/
 projects/sajag/app/dist/
 projects/munshiji/app/dist/
 projects/munshiji prototype/
+projects/Bike Touring/
 *.apk
 **/*.apk
 *.log

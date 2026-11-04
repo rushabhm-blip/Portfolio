@@ -1,0 +1,556 @@
+/* ==========================================================================
+   Rilo Case Study: the Figma documentation frame with live prototypes
+   Header, rail and footer shared with the other case studies, in Rilo colours
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Google+Sans+Flex:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-display: 'Google Sans Flex', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Rilo palette */
+  --color-bg-page: #0C0E0D;
+  --color-bg-canvas: #0C0E0D;
+  --color-brand-accent: #DFFF00;
+  --color-text-main: #FFFFFF;
+  --color-text-muted: #A39E93;
+  --color-text-light: #6E695F;
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+
+  /* Container width matching 16:9 widescreen presentation */
+  --canvas-max-width: 1440px;
+}
+
+@media (min-width: 1600px) {
+  :root {
+    --canvas-max-width: 1440px;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --canvas-max-width: 100%;
+  }
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg-page);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg-page);
+  color: var(--color-text-main);
+  line-height: 1.5;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Transition Curtain */
+.portfolio-transition-curtain {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--color-bg-page);
+  z-index: 99999999;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity;
+}
+
+html.is-entering-transition .portfolio-transition-curtain {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Accessibility / Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   Top Sticky Navigation Header
+   ========================================================================== */
+.cs-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgba(12, 14, 13, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.cs-header-inner {
+  max-width: var(--canvas-max-width);
+  margin: 0 auto;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cs-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.cs-nav-logo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: baseline;
+  transition: opacity 0.2s ease;
+}
+
+.cs-nav-logo:hover {
+  opacity: 0.75;
+}
+
+.logo-dot {
+  color: var(--color-brand-accent);
+}
+
+.cs-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cs-back-link:hover {
+  color: #FFFFFF;
+  background-color: rgba(223, 255, 0, 0.12);
+  border-color: rgba(223, 255, 0, 0.35);
+  transform: translateX(-2px);
+}
+
+.cs-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.cs-nav-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.cs-nav-link:hover {
+  color: #FFFFFF;
+}
+
+@media (max-width: 640px) {
+  .cs-header-inner {
+    padding: 10px 16px;
+  }
+  .cs-nav-links {
+    display: none;
+  }
+  .cs-header-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* ==========================================================================
+   Minimal Dot Section Navigator (Right Side)
+   ========================================================================== */
+/* Section rail (same as Sajag): the current section is named beside its dot */
+.cs-dot-nav {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 950;
+  pointer-events: auto;
+  user-select: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cs-dot-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.cs-dot-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Pitch between adjacent dot centers: 24px (compact & elegant for 18 sections) */
+  height: 24px;
+  width: 24px;
+}
+
+/* Stationary Click Target with generous invisible hit area (>= 44x44px) */
+.cs-dot-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+/* Invisible hit area expanding to 44 x 44px without changing visible dot size */
+.cs-dot-link::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: auto;
+}
+
+/* Accessible visible keyboard focus */
+.cs-dot-link:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+
+/* Wrapper for the visible dot that performs the rolling motion */
+.cs-dot-node-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+/* The visible circular dot */
+.cs-dot-node {
+  border-radius: 50%;
+  /* Inactive dots: 4px, light gray */
+  width: 4px;
+  height: 4px;
+  background-color: #cbd5e1;
+  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.22s ease;
+  display: block;
+}
+
+/* Inactive dot hover / focus-visible */
+.cs-dot-item:not(.is-active) .cs-dot-link:hover .cs-dot-node,
+.cs-dot-item:not(.is-active) .cs-dot-link:focus-visible .cs-dot-node {
+  background-color: #94a3b8;
+}
+
+/* Active dot: 7px, solid black, without an outer ring */
+.cs-dot-item.is-active .cs-dot-node {
+  width: 7px;
+  height: 7px;
+  background-color: #000000;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Section heading label:
+   Black, 12-13px medium-weight text, positioned to the left with 14px gap.
+   Stationary and upright (outside the rolling transform). */
+.cs-dot-label {
+  position: absolute;
+  right: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%);
+  color: #000000;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+}
+
+/* Active section heading is shown beside its dot */
+.cs-dot-item.is-active .cs-dot-label {
+  opacity: 1;
+}
+
+/* Hovering or keyboard-focusing an inactive dot reveals its section name with a simple text fade */
+.cs-dot-item:not(.is-active) .cs-dot-link:hover .cs-dot-label,
+.cs-dot-item:not(.is-active) .cs-dot-link:focus-visible .cs-dot-label {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Subtle Rolling Animation:
+   Shallow elliptical path along virtual vertical wheel.
+   Restrained: roughly 6-10px vertically with 2-4px horizontal.
+   Settles back within 250-350ms.
+   ========================================================================== */
+
+.is-rolling-down .cs-dot-node-wrapper {
+  animation: csWheelRollDown 300ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.is-rolling-up .cs-dot-node-wrapper {
+  animation: csWheelRollUp 300ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes csWheelRollDown {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  38% {
+    transform: translate3d(-3px, 8px, 0);
+  }
+  72% {
+    transform: translate3d(-1px, 2px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes csWheelRollUp {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  38% {
+    transform: translate3d(-3px, -8px, 0);
+  }
+  72% {
+    transform: translate3d(-1px, -2px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Pause and reset rolling motion while navigator is hovered or keyboard-focused */
+.cs-dot-nav:hover .cs-dot-node-wrapper,
+.cs-dot-nav:focus-within .cs-dot-node-wrapper {
+  animation: none !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+/* Compact screen height adaptation */
+@media (max-height: 800px) {
+  .cs-dot-item,
+  .cs-dot-link {
+    height: 19px;
+    width: 19px;
+  }
+}
+
+/* Narrow screens: hide the rail when it cannot fit beside the content */
+@media (max-width: 1240px) {
+  .cs-dot-nav {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Case Study Editorial Canvas
+   Presents the documentation sections, with the live prototypes between them
+   ========================================================================== */
+.case-study-canvas {
+  width: 100%;
+  max-width: var(--canvas-max-width);
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: var(--color-bg-canvas);
+}
+
+/* Each documentation section is an image of the Figma frame, so the page matches the design exactly */
+.case-study-canvas section {
+  position: relative;
+}
+
+.case-study-canvas section > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Invisible section anchors for scrollspy */
+.cs-section-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+  opacity: 0;
+  scroll-margin-top: 76px;
+}
+
+/* ==========================================================================
+   Next Project Navigation Footer
+   ========================================================================== */
+.cs-footer {
+  width: 100%;
+  background-color: #080908;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 60px 24px;
+}
+
+.cs-footer-inner {
+  max-width: var(--canvas-max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.cs-footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cs-footer-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cs-footer-desc {
+  font-size: 13px;
+  color: var(--color-text-light);
+}
+
+.cs-next-project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cs-next-project-link:hover {
+  background-color: rgba(223, 255, 0, 0.12);
+  border-color: rgba(223, 255, 0, 0.4);
+  transform: translateX(4px);
+}
+
+
+/* This case study has dark sections: draw the rail in white and invert it against
+   the page, so it reads black on light sections and white on dark ones */
+.cs-dot-nav {
+  mix-blend-mode: difference;
+}
+
+.cs-dot-label,
+.cs-dot-item.is-active .cs-dot-node {
+  color: #ffffff;
+  background-color: #ffffff;
+}
+
+.cs-dot-label {
+  background-color: transparent;
+}
+
+.cs-dot-node {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.cs-dot-item:not(.is-active) .cs-dot-link:hover .cs-dot-node,
+.cs-dot-item:not(.is-active) .cs-dot-link:focus-visible .cs-dot-node {
+  background-color: rgba(255, 255, 255, 0.55);
+}
+
+.cs-dot-link:focus-visible {
+  outline-color: #ffffff;
+}

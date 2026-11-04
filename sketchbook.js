@@ -1,9 +1,9 @@
-import { sketchbookData } from './data.js?v=50';
+import { sketchbookData } from './data.js?v=51';
 import { createHeader, enableHeaderAutoHide } from './components/Header.js?v=51';
 import { createBookScene } from './components/BookScene.js?v=48';
 import { createChapterDialog } from './components/ChapterDialog.js?v=49';
 import { createExperimentNote } from './components/ExperimentNote.js?v=50';
-import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=55';
+import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=56';
 import { createMemoryMachine } from './components/MemoryMachine.js?v=67';
 import { initScrollReveal } from './components/ScrollReveal.js?v=6';
 import { createServicesSection } from './components/ServicesSection.js?v=15';

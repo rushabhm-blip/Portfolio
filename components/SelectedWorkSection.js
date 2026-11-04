@@ -305,6 +305,53 @@ export function createSelectedWorkSection() {
           </div>
         </div>
       </article>
+
+      <!-- Project 6: Rilo (Text Left, Thumbnail Right on Desktop) -->
+      <article class="project-row project-row-rilo" id="project-rilo" data-project-id="rilo">
+        <div class="project-text-col">
+          <h3 class="project-name">Rilo</h3>
+          <p class="project-subheading">Ride in the loop. <span class="marker-highlight marker-peach">Together.</span></p>
+          <p class="project-desc">A shared ride companion for group motorcycle rides: one plan, everyone visible, and quick signals from the first invite to the last stop.</p>
+          <div class="project-meta-details">
+            <span class="project-meta-item">2026 · Product design</span>
+          </div>
+          <div class="project-discipline-capsules" aria-label="Project disciplines">
+            <span class="discipline-capsule capsule-lavender">Product design</span>
+            <span class="discipline-capsule capsule-mint">Interaction design</span>
+          </div>
+          <div class="project-link-wrapper">
+            <a href="/projects/rilo/" class="project-case-study-link" id="riloExploreLink">
+              <span>Explore case study</span>
+              <span class="link-arrow" aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="project-media-col">
+          <div class="project-index-label" aria-hidden="true">06 / RILO</div>
+
+          <div class="project-paper-frame">
+            <!-- Decorative Yellow Tape (Upper-Right, ~ +18deg) -->
+            <img class="tape-strip tape-upper-right" src="assets/yellow-tape.webp" alt="" aria-hidden="true" loading="lazy" />
+
+            <!-- 3:2 Media Aperture -->
+            <a href="/projects/rilo/" class="project-aperture-link" aria-label="Explore Rilo case study">
+              <div class="project-video-aperture" style="background-color: #0C0E0D;">
+                <img class="project-thumbnail-img"
+                     src="assets/projects/rilo/thumbnail.webp"
+                     alt="Illustration of three motorcycle riders travelling together along a winding road at night"
+                     loading="lazy"
+                     style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+              </div>
+            </a>
+
+            <!-- Category Tab (Lower-Right overhang) -->
+            <div class="category-tab tab-mint" aria-hidden="true">
+              <span>Product design</span>
+            </div>
+          </div>
+        </div>
+      </article>
     </div>
   `;
 

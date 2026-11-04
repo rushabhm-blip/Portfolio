@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0C0E0D">
+  <title>Rilo · Ride in the Loop · Rushabh Mahore</title>
+  <meta name="description" content="Rilo: a shared ride companion for group motorcycle rides. Product design documentation with live prototypes of each user flow. Designed by Rushabh Mahore.">
+  <script>
+    try {
+      if (sessionStorage.getItem('portfolio_case_study_enter') === 'true') {
+        document.documentElement.classList.add('is-entering-transition');
+      }
+    } catch (e) {}
+  </script>
+  <script src="../../password-gate.js"></script>
+  <link rel="stylesheet" href="/projects/rilo/case-study.css?v=2">
+  <link rel="stylesheet" href="/projects/rilo/demo.css?v=1">
+</head>
+<body>
+
+  <!-- Transition Curtain -->
+  <div id="portfolioTransitionCurtain" class="portfolio-transition-curtain" aria-hidden="true"></div>
+
+  <!-- Top Sticky Navigation -->
+  <header class="cs-header" id="csHeader">
+    <div class="cs-header-inner">
+      <div class="cs-header-left">
+        <a href="/#home" class="cs-nav-logo" aria-label="Rushabh Home">rushabh<span class="logo-dot">.</span></a>
+        <a href="/#projects" class="cs-back-link" id="headerBackLink" aria-label="Back to projects">
+          <span aria-hidden="true">←</span>
+          <span>Back to projects</span>
+        </a>
+      </div>
+      <nav class="cs-nav-links" aria-label="Portfolio Navigation">
+        <a href="/#home" class="cs-nav-link">Home</a>
+        <a href="/#projects" class="cs-nav-link">Works</a>
+        <a href="/#about" class="cs-nav-link">About</a>
+        <a href="/assets/Rushabh_Mahore_Resume.pdf" target="_blank" rel="noopener noreferrer" class="cs-nav-link">Resume</a>
+        <a href="/assets/Architectural_Portfolio_2019-24_Rushabh.pdf" target="_blank" rel="noopener noreferrer" class="cs-nav-link">Architecture</a>
+        <a href="/playground/" class="cs-nav-link">Playground</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Minimal Dot Section Navigator (filled in below from SECTIONS) -->
+  <nav class="cs-dot-nav" id="csDotNav" aria-label="Section Navigation">
+    <ul class="cs-dot-list" id="csDotList" role="list"></ul>
+  </nav>
+
+  <main class="case-study-canvas" id="doc"></main>
+
+  <!-- Footer / Next Project Banner -->
+  <footer class="cs-footer">
+    <div class="cs-footer-inner">
+      <div class="cs-footer-left">
+        <span class="cs-footer-title">Next Project in Selected Works</span>
+        <span class="cs-footer-desc">01 / Sajag · Civic concern reporting and community participation</span>
+      </div>
+      <a href="/projects/sajag/" class="cs-next-project-link">
+        <span>Explore Sajag</span>
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </footer>
+
+  <script src="/projects/rilo/flows.js?v=1"></script>
+  <script src="/projects/rilo/demo.js?v=1"></script>
+  <script>
+    // [section number, full title for screen readers, short name for the rail, image height]
+    // (the frame is 1440 wide, 29 sections, in the order of the Figma document)
+    const SECTIONS = [
+      [1, 'Rilo · Product design. Ride in the Loop', 'Overview', 1362],
+      [2, 'The starting point', 'The Starting Point', 1000],
+      [3, 'The design brief', 'The Design Brief', 991],
+      [4, 'Secondary research', 'Secondary Research', 3269],
+      [5, 'Primary research · firsthand ride account', 'Primary Research', 5359],
+      [6, 'Research to decisions', 'Research to Decisions', 1377],
+      [7, 'Ride today vs with Rilo', 'Today vs With Rilo', 1311],
+      [8, 'Coordination toolkit', 'Coordination Toolkit', 640],
+      [9, 'Design approach', 'Design Approach', 1480],
+      [10, 'People in the loop', 'People in the Loop', 1000],
+      [11, 'System view', 'System View', 978],
+      [12, 'Brand identity', 'Brand Identity', 780],
+      [13, 'Visual language', 'Visual Language', 889],
+      [14, 'Experience map', 'Experience Map', 1030],
+      [15, 'User flow · Plan: Plan, simplified', 'Flow: Plan', 941],
+      [16, 'User flow · Ride & signals: Ride, simplified', 'Flow: Ride & Signals', 857],
+      [17, 'User flow · Fuel stop: A request becomes a shared stop', 'Flow: Fuel Stop', 931],
+      [18, 'Information architecture', 'Information Architecture', 993],
+      [19, 'User flow · Connection & sharing: Last seen is not live, sharing is a choice', 'Flow: Connection & Sharing', 1067],
+      [20, 'Before wheels move', 'Before Wheels Move', 1197],
+      [21, 'Before the ride', 'Before the Ride', 1101],
+      [22, 'During the ride', 'During the Ride', 1304],
+      [23, 'Connectivity states', 'Connectivity States', 1009],
+      [24, 'Changing the plan', 'Changing the Plan', 1266],
+      [25, 'Privacy by choice', 'Privacy by Choice', 850],
+      [26, 'Care in the loop', 'Care in the Loop', 1802],
+      [27, 'Beyond the ride', 'Beyond the Ride', 960],
+      [28, 'A thoughtful finish', 'A Thoughtful Finish', 1106],
+      [29, 'What comes next', 'What Comes Next', 947],
+    ];
+    // the live prototype of a user flow goes straight under that flow's diagram
+    const DEMO_AFTER = {
+      15: { flow: 'plan', eyebrow: '15 / Prototype · Plan', title: 'Plan, in the real app.' },
+      16: { flow: 'ride', eyebrow: '16 / Prototype · Ride & signals', title: 'Ride, in the real app.' },
+      17: { flow: 'fuel', eyebrow: '17 / Prototype · Fuel stop', title: 'A fuel stop, in the real app.' },
+      19: { flow: 'connection', eyebrow: '19 / Prototype · Connection & sharing', title: 'Last seen and sharing, in the real app.' },
+    };
+    const doc = document.getElementById('doc');
+    const dotList = document.getElementById('csDotList');
+    SECTIONS.forEach(([n, title, short, h], i) => {
+      const id = String(n).padStart(2, '0');
+      const sec = document.createElement('section');
+      sec.setAttribute('aria-label', title);
+      sec.innerHTML = `<div class="cs-section-anchor" id="sec-${id}"></div>` +
+        `<img src="/projects/rilo/sections/${id}.webp" width="1440" height="${h}" alt="${title}" ${n > 2 ? 'loading="lazy"' : ''} decoding="async">`;
+      doc.appendChild(sec);
+
+      const dot = document.createElement('li');
+      dot.className = 'cs-dot-item' + (i === 0 ? ' is-active' : '');
+      dot.dataset.index = i;
+      dot.innerHTML = `<a href="#sec-${id}" class="cs-dot-link" aria-label="${short}"${i === 0 ? ' aria-current="true"' : ''}>` +
+        `<span class="cs-dot-label">${short}</span>` +
+        `<span class="cs-dot-node-wrapper"><span class="cs-dot-node"></span></span></a>`;
+      dotList.appendChild(dot);
+
+      const d = DEMO_AFTER[n];
+      if (d) {
+        const box = document.createElement('section');
+        box.className = 'demo'; box.id = 'demo-' + d.flow;
+        doc.appendChild(box);
+        new RiloDemo(box, window.RILO_FLOWS.find((f) => f.id === d.flow), { eyebrow: d.eyebrow, title: d.title });
+      }
+    });
+  </script>
+  <script src="/projects/rilo/case-study.js?v=1"></script>
+</body>
+</html>

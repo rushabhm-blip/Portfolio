@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0C0E0D">
+<title>Rilo · Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="demo.css">
+<style>html,body{margin:0;background:#0C0E0D}.demo{padding-top:24px;padding-bottom:40px}</style>
+</head>
+<body>
+<!-- One flow on its own, for embedding in another page:  flow.html?flow=plan | ride | fuel | connection -->
+<section class="demo" id="demo"></section>
+<script src="flows.js"></script>
+<script src="demo.js"></script>
+<script>
+  const id = new URLSearchParams(location.search).get('flow') || 'plan';
+  const flow = window.RILO_FLOWS.find((f) => f.id === id) || window.RILO_FLOWS[0];
+  new RiloDemo(document.getElementById('demo'), flow, { eyebrow: `Prototype · ${flow.tab}`, title: flow.title });
+</script>
+</body>
+</html>
