@@ -69,14 +69,14 @@
         { op: 'tip', text: 'The whole trip on one map: board, change, alight.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
       ] },
     ] },
-    { img: '21_journey_safety', h: 7054, phones: [
+    { img: '21_journey_safety', h: 7054, cover: { src: '/projects/sajag/safety-hands-cover.png?v=3', rect: [150, 3290, 2246, 840] }, phones: [
       { id: 'safety-sos', label: 'Emergency help', rect: [495, 1988, 566, 1116], ops: [
         { op: 'boot', to: 'safety' }, { op: 'ready' }, { op: 'wait', ms: 700 },
         { op: 'spot', text: 'Emergency', pad: 5 }, { op: 'tip', text: 'Emergency help is one tap away, always.', y: 80 },
         { op: 'wait', ms: 1900 }, { op: 'clear' },
         { op: 'tap', text: 'Emergency' }, { op: 'wait', ms: 2800 },
       ] },
-      { id: 'safety-mark', label: 'Start marking', rect: [259, 3333, 360, 711], ops: [
+      { id: 'safety-mark', label: 'Start marking', hand: 1, rect: [259, 3333, 360, 711], ops: [
         { op: 'boot', to: 'safety' }, { op: 'ready' }, { op: 'wait', ms: 700 },
         { op: 'tap', text: 'Mark unsafe area' }, { op: 'wait', ms: 600 },
         { op: 'tip', text: 'Touch and hold the map where the concern is.', y: 130 }, { op: 'wait', ms: 2400 },
@@ -85,13 +85,13 @@
         { op: 'boot', to: 'safety' }, { op: 'tap', text: 'Mark unsafe area', fast: 1 }, { op: 'wait', ms: 400 }, { op: 'ready' },
         { op: 'tip', text: 'Hold briefly, then drag to size the area. Yellow: minor.', y: 130 },
         { op: 'drag', path: [[172, 400], [226, 400]], hold: 700, ms: 900, noRelease: 1 }, { op: 'wait', ms: 1500 },
-        { op: 'release' }, { op: 'wait', ms: 1200 }, { op: 'clear' },
+        { op: 'release' }, { op: 'hideTouch' }, { op: 'wait', ms: 1200 }, { op: 'clear' },
       ] },
       { id: 'safety-orange', label: 'Hold longer: higher severity', hand: 1, rect: [1738, 3336, 365, 710], ops: [
         { op: 'boot', to: 'safety' }, { op: 'tap', text: 'Mark unsafe area', fast: 1 }, { op: 'wait', ms: 400 }, { op: 'ready' },
         { op: 'tip', text: 'Hold longer and the severity rises: yellow, orange, red.', y: 130 },
         { op: 'drag', path: [[172, 400], [244, 424]], hold: 2200, ms: 1000, noRelease: 1 }, { op: 'wait', ms: 1500 },
-        { op: 'release' }, { op: 'wait', ms: 1600 }, { op: 'clear' },
+        { op: 'release' }, { op: 'hideTouch' }, { op: 'wait', ms: 1600 }, { op: 'clear' },
       ] },
       { id: 'safety-saved', label: 'Location saved', rect: [1488, 4784, 574, 1116], ops: [
         { op: 'boot', to: 'home' }, { op: 'ready' }, { op: 'wait', ms: 800 },
@@ -208,10 +208,12 @@
           <button class="sj-rep" aria-label="Replay"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5"/></svg><span>Replay</span></button>
           <button class="sj-try" aria-pressed="false" aria-label="Take over and try it"><svg viewBox="0 0 24 24"><path d="M9 11V5a2 2 0 0 1 4 0v5l5 1a2 2 0 0 1 1.6 2.4L18.5 19a3 3 0 0 1-3 2H11a3 3 0 0 1-2.4-1.2L5 15.5a1.8 1.8 0 0 1 2.8-2.2L9 14.5"/></svg><span>Try it</span></button>
         </div>`;
+      if (def.hand) { const h = this.handEl = document.createElement('img'); h.className = 'sj-hand'; h.alt = ''; h.src = '/projects/sajag/live/hand.png?v=2'; el.appendChild(h); }
       layer.appendChild(el);
       this.screen = el.querySelector('.sj-screen');
-      if (def.hand) { const hd = document.createElement('div'); hd.className = 'sj-hand'; hd.style.backgroundImage = `url(/projects/sajag/hands/${def.id}.png)`; this.screen.appendChild(hd); } this.scaleEl = el.querySelector('.sj-scale'); this.load = el.querySelector('.sj-load');
-      new ResizeObserver(() => this.fit()).observe(this.screen); this.fit();
+      this.scaleEl = el.querySelector('.sj-scale'); this.load = el.querySelector('.sj-load');
+      new ResizeObserver(() => { this.fit(); if (this.lastTouch) this.placeHand(this.lastTouch); }).observe(this.screen); this.fit();
+      el.addEventListener('click', (e) => { if (e.target.closest('.sj-ctl')) return; el.classList.add('sj-show'); clearTimeout(this.showT); this.showT = setTimeout(() => el.classList.remove('sj-show'), 3200); });
       el.querySelector('.sj-rep').addEventListener('click', () => { this.setTry(false); this.start(); });
       el.querySelector('.sj-try').addEventListener('click', () => { const on = !this.tryMode; this.setTry(on); if (!on) this.start(); });
             if (REDUCED) { el.remove(); return; } // reduced motion: leave the pictures exactly as they were
@@ -223,7 +225,17 @@
       const f = document.createElement('iframe'); f.className = 'sj-frame'; f.title = 'Sajag prototype: ' + this.def.label; f.tabIndex = -1; f.setAttribute('aria-hidden', 'true');
       f.style.height = (this.hc - this.top) + 'px'; f.style.visibility = 'hidden'; this.scaleEl.insertBefore(f, this.load); return f;
     }
+    /* the drawn hand lives outside the app, so it can reach out over the bezel; the app only reports where the fingertip is */
+    placeHand(t) {
+      const h = this.handEl; if (!h) return; this.lastTouch = t;
+      const S = 1.15, TIPX = 50.5, TIPY = 50.5, W = 446; // size relative to the app screen, fingertip position and width of hand.png
+      const k = this.screen.clientWidth / 376, sc = this.screen;
+      const x = sc.offsetLeft + t.x * k, y = sc.offsetTop + (this.top + t.y) * k;
+      h.style.width = (W * S * k) + 'px'; h.style.left = (x - TIPX * S * k) + 'px'; h.style.top = (y - TIPY * S * k) + 'px';
+      h.classList.toggle('sj-down', !!t.down); h.classList.toggle('sj-on', !!t.on && !this.tryMode);
+    }
     onMessage(m, src) {
+      if (m.touch) { if (this.frame && this.frame.contentWindow === src) this.placeHand(m.touch); return; }
       if (m.ready) { if (this.next && this.next.contentWindow === src) this.readyRes && this.readyRes(); return; }
       const f = this.pending.get(m.id); if (f) { this.pending.delete(m.id); f(m); }
     }
@@ -242,11 +254,12 @@
       if (this.next) { this.next.remove(); this.next = null; }
             const f = this.next = this.makeFrame();
       const ready = new Promise((r) => { this.readyRes = r; });
-      f.src = APP + '&v=' + Date.now();
+      f.src = APP + (this.def.hand ? '&hand=1' : '') + '&v=' + Date.now();
       await Promise.race([ready, sleep(20000)]); if (my !== this.token) return;
       let shown = false;
       const reveal = async () => {
         if (shown) return; shown = true; await sleep(250); if (my !== this.token) return;
+        if (this.handEl) this.handEl.classList.remove('sj-on'); this.lastTouch = null;
         f.style.visibility = 'visible'; if (this.frame) this.frame.remove(); this.frame = f; this.next = null; this.load.classList.add('off'); this.el.classList.remove('sj-idle');
       };
       const ops = this.def.ops;
@@ -276,17 +289,27 @@
       }
     }
     destroy() {
-      this.token++; this.live = false; this.tryMode = false; this.el.classList.remove('sj-try');
+      this.token++; this.live = false; this.tryMode = false; this.el.classList.remove('sj-try'); if (this.handEl) this.handEl.classList.remove('sj-on');
       [this.frame, this.next].forEach((f) => f && f.remove()); this.frame = this.next = null; this.load.classList.remove('off'); this.el.classList.add('sj-idle');
     }
   }
 
   /* ------------------------------------------------------------------ find the pictures and lay the phones over them */
+  /* the colour behind the picture, so the cover blends in */
+  function pageColor(el) {
+    for (let e = el; e; e = e.parentElement) { const c = getComputedStyle(e).backgroundColor; if (c && c !== 'transparent' && c.split(' ').join('') !== 'rgba(0,0,0,0)') return c; }
+    return '#fff';
+  }
   function init() {
     JOURNEYS.forEach((j) => {
       const img = document.querySelector(`.cs-canvas-block img[src*="${j.img}"]`); if (!img) return;
       const block = img.closest('.cs-canvas-block'); block.classList.add('sj-has-live');
       const layer = document.createElement('div'); layer.className = 'sj-layer'; block.appendChild(layer);
+      if (j.cover && !REDUCED) { // hide the hands that were drawn in the picture; the live phones bring their own
+        const [cx, cy, cw, ch] = j.cover.rect; const cv = document.createElement('div'); cv.className = 'sj-cover';
+        Object.assign(cv.style, { left: (cx / IMG_W * 100) + '%', top: (cy / j.h * 100) + '%', width: (cw / IMG_W * 100) + '%', height: (ch / j.h * 100) + '%', backgroundColor: pageColor(block), webkitMaskImage: 'url(' + j.cover.src + ')', maskImage: 'url(' + j.cover.src + ')' });
+        layer.appendChild(cv);
+      }
       j.phones.forEach((p) => new LivePhone(layer, p, j.h));
     });
   }

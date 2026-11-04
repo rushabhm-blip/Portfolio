@@ -41,7 +41,8 @@
   #sj-spot{position:absolute;border-radius:14px;border:2.5px solid #155DFC;box-shadow:0 0 0 4px rgba(21,93,252,.2),0 0 0 9999px rgba(11,21,40,.12);opacity:0;transition:all .35s cubic-bezier(.22,.8,.2,1)}
   #sj-spot.on{opacity:1;animation:sjpulse 1.6s ease-in-out infinite}
   @keyframes sjpulse{50%{box-shadow:0 0 0 8px rgba(21,93,252,.08),0 0 0 9999px rgba(11,21,40,.12)}}
-  #sj-tip{position:absolute;left:12px;right:12px;max-width:340px;margin:0 auto;background:#0B1528;color:#fff;font-size:12.5px;line-height:1.35;font-weight:600;
+  #sj-touch.hand{background:none;border:0;box-shadow:none}
+    #sj-tip{position:absolute;left:12px;right:12px;max-width:340px;margin:0 auto;background:#0B1528;color:#fff;font-size:12.5px;line-height:1.35;font-weight:600;
     padding:9px 12px;border-radius:12px;box-shadow:0 8px 24px rgba(11,21,40,.35);opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
   #sj-tip.on{opacity:1;transform:none}
   #sj-tip:before{content:"";position:absolute;left:var(--ax,50%);width:10px;height:10px;background:#0B1528;transform:translateX(-50%) rotate(45deg)}
@@ -52,6 +53,15 @@
   layer.innerHTML = '<div id="sj-spot"></div><div id="sj-touch"></div><div id="sj-tip"></div>';
   document.body.appendChild(layer);
   const touch = layer.querySelector('#sj-touch'), spotEl = layer.querySelector('#sj-spot'), tipEl = layer.querySelector('#sj-tip');
+  if (Q.has('hand')) {
+    // the hand is drawn by the page around the phone, so it can reach out over the frame: here we only say where the finger is
+    touch.classList.add('hand');
+    const report = () => {
+      const m = /translate\(([-\d.]+)px,\s*([-\d.]+)px\)(?:\s*scale\(([\d.]+)\))?/.exec(touch.style.transform || '');
+      parent.postMessage({ sj: 1, touch: { x: m ? +m[1] : -100, y: m ? +m[2] : -100, on: touch.classList.contains('on'), down: touch.classList.contains('down') || !!(m && m[3] && +m[3] < 0.9) } }, '*');
+    };
+    new MutationObserver(report).observe(touch, { attributes: true, attributeFilter: ['style', 'class'] });
+  }
   let tx = -100, ty = -100;
 
   const visible = (e) => { const r = e.getBoundingClientRect(); const cs = getComputedStyle(e); return r.width > 1 && r.height > 1 && cs.visibility !== 'hidden' && cs.display !== 'none'; };
@@ -106,7 +116,7 @@
   const OPS = {
     async ping() {},
     async release(o, fast) {
-      if (!held) return; const { te, xe, ye } = held; held = null;
+      if (!held) return; const { te, xe, ye } = held; held = null; touch.classList.remove('down');
       fire(te, xe, ye, ['pointerup', 'mouseup']);
       if (!fast) { touch.style.transform = `translate(${xe}px,${ye}px) scale(1)`; await sleep(350); }
     },
@@ -152,7 +162,7 @@
       const pts = o.path; const steps = o.steps || 14;
       const [x0, y0] = pts[0]; const t = document.elementFromPoint(x0, y0) || el;
       if (!fast) { await moveTouch(x0, y0); touch.style.transform = `translate(${x0}px,${y0}px) scale(.82)`; ripple(x0, y0); }
-      fire(t, x0, y0, ['pointerdown', 'mousedown']);
+      touch.classList.add('down'); fire(t, x0, y0, ['pointerdown', 'mousedown']);
       if (o.hold) await sleep(fast ? 80 : o.hold);
       for (let i = 1; i < pts.length; i++) {
         const [ax, ay] = pts[i - 1], [bx, by] = pts[i];
@@ -165,7 +175,7 @@
       }
       const [xe, ye] = pts[pts.length - 1]; const te = document.elementFromPoint(xe, ye) || t;
       if (o.noRelease) { held = { te, xe, ye }; return; }
-      fire(te, xe, ye, ['pointerup', 'mouseup']);
+      touch.classList.remove('down'); fire(te, xe, ye, ['pointerup', 'mouseup']);
       if (!fast) { touch.style.transform = `translate(${xe}px,${ye}px) scale(1)`; await sleep(350); }
     },
     async type(o, fast) {
