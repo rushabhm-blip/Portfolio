@@ -415,8 +415,8 @@ body.is-book-open .crawler-video,
   z-index: var(--z-id-tag);
   width: 22%;
   aspect-ratio: 1363 / 1154;
-  right: -14%;
-  top: -2%;
+  right: -13.2%;
+  top: 3.5%;
   transform: rotate(14deg) translateZ(-3px);
   transform-origin: 32% 10%;
   filter: drop-shadow(var(--id-shadow));
@@ -439,9 +439,10 @@ body.is-book-open .crawler-video,
 /* When the book opens: moves outward toward upper-right edge, reduces slightly, increases opacity */
 .book-stage.is-open .id-tag-wrapper,
 .book-stage.is-opening .id-tag-wrapper {
-  width: 17%;
-  right: -9%;
-  top: 5%;
+  /* same size and anchor as the closed state so the tag does not rescale or drift */
+  width: 22%;
+  right: -13.2%;
+  top: 3.5%;
   transform: rotate(14deg) translateZ(-3px);
   opacity: 1;
 }
