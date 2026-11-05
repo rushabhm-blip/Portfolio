@@ -12,7 +12,7 @@ export function createHangingIdCard({ alt = 'NID design school student ID tag wi
 
   const img = document.createElement('img');
   img.className = 'id-tag-img';
-  img.src = 'assets/sketchbook/nid-card-logo.webp';
+  img.src = 'assets/sketchbook/nid-card-logo-v2.webp';
   img.alt = alt;
   img.loading = 'eager';
   img.decoding = 'async';

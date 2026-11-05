@@ -414,6 +414,7 @@ body.is-book-open .crawler-video,
   position: absolute;
   z-index: var(--z-id-tag);
   width: 22%;
+  aspect-ratio: 1363 / 1154;
   right: -8%;
   top: -2%;
   transform: rotate(14deg) translateZ(10px);
@@ -450,6 +451,11 @@ body.is-book-open .crawler-video,
 }
 
 .id-tag-img {
+  /* v2 art: same tag-body footprint as before (wrapper keeps the old 1363x1154 box),
+     the longer clasp extends 59px above it. */
+  position: absolute;
+  left: 0;
+  top: -4.33%;
   width: 100%;
   height: auto;
   display: block;
