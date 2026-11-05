@@ -82,7 +82,8 @@ export function createSelectedWorkSection() {
           <p class="project-subheading">Everyday concerns. <br><span class="marker-highlight marker-lime">Collective action.</span></p>
           <p class="project-desc">Helping people raise civic concerns, find support, and stay informed about what happens next.</p>
           <div class="project-meta-details">
-            <span class="project-meta-item">2026 · Individual project</span>
+            <span class="project-meta-item">2026 · Individual academic project</span>
+            <span class="project-meta-item project-guidance"><span class="guidance-label">Guidance</span> Dr. Mamata Rao, Prof. Athul</span>
           </div>
           <div class="project-discipline-capsules" aria-label="Project disciplines">
             <span class="discipline-capsule capsule-lavender">Interaction design</span>
@@ -107,6 +108,10 @@ export function createSelectedWorkSection() {
           <h3 class="project-name">The Fear <br>Between Us</h3>
           <p class="project-subheading">Understanding <span class="marker-highlight marker-peach">beyond fear.</span></p>
           <p class="project-desc">An interactive data story exploring snakebite and our relationship with snakes in India.</p>
+          <div class="project-meta-details">
+            <span class="project-meta-item">2026 · Individual academic project</span>
+            <span class="project-meta-item project-guidance"><span class="guidance-label">Guidance</span> Amit Kapoor</span>
+          </div>
           <div class="project-discipline-capsules" aria-label="Project disciplines">
             <span class="discipline-capsule capsule-lavender">Data visualisation</span>
             <span class="discipline-capsule capsule-mint">Scrollytelling</span>
@@ -189,6 +194,7 @@ export function createSelectedWorkSection() {
           <p class="project-desc">A multimodal spatial museum experience exploring Indus Valley civilization through touchless gesture interaction, physical proximity, and contextual storytelling.</p>
           <div class="project-meta-details">
             <span class="project-meta-item">2026 · Group project · Multimodal & Spatial Experience</span>
+            <span class="project-meta-item project-guidance"><span class="guidance-label">Guidance</span> Dr. Mamata Rao, Prof. Athul</span>
           </div>
           <div class="project-discipline-capsules" aria-label="Project disciplines">
             <span class="discipline-capsule capsule-lavender">Multimodal interaction</span>
@@ -215,7 +221,8 @@ export function createSelectedWorkSection() {
           <p class="project-subheading">Small steps. Smarter money habits.</p>
           <p class="project-desc">Helping beginners learn about money, build saving habits, and invest with confidence.</p>
           <div class="project-meta-details">
-            <span class="project-meta-item">2026 · Academic project</span>
+            <span class="project-meta-item">2026 · Individual academic project</span>
+            <span class="project-meta-item project-guidance"><span class="guidance-label">Guidance</span> Dr. Mamata Rao, Prof. Jagriti Galphade</span>
           </div>
           <div class="project-discipline-capsules" aria-label="Project disciplines">
             <span class="discipline-capsule capsule-lavender">Interaction design</span>
@@ -291,7 +298,8 @@ export function createSelectedWorkSection() {
           <p class="project-subheading">A small gesture. <span class="marker-highlight marker-peach">A little magic.</span></p>
           <p class="project-desc">CoolDice explores how a touchless palm gesture sets a physical marble run in motion, rolls a digital dice, and dispenses a tangible candy reward.</p>
           <div class="project-meta-details">
-            <span class="project-meta-item">2026 · 2 weeks · Physical Computing & Digital Fabrication</span>
+            <span class="project-meta-item">2026 · 2 weeks · Individual academic project</span>
+            <span class="project-meta-item project-guidance"><span class="guidance-label">Guidance</span> Allwin</span>
           </div>
           <div class="project-discipline-capsules" aria-label="Project disciplines">
             <span class="discipline-capsule capsule-lavender">Physical computing</span>
@@ -313,7 +321,7 @@ export function createSelectedWorkSection() {
           <p class="project-subheading">Ride in the loop. <span class="marker-highlight marker-peach">Together.</span></p>
           <p class="project-desc">A shared ride companion for group motorcycle rides: one plan, everyone visible, and quick signals from the first invite to the last stop.</p>
           <div class="project-meta-details">
-            <span class="project-meta-item">2026 · Product design</span>
+            <span class="project-meta-item">2026 · Mobility app</span>
           </div>
           <div class="project-discipline-capsules" aria-label="Project disciplines">
             <span class="discipline-capsule capsule-lavender">Product design</span>
@@ -352,7 +360,7 @@ export function createSelectedWorkSection() {
 
             <!-- Category Tab (Lower-Right overhang) -->
             <div class="category-tab tab-mint" aria-hidden="true">
-              <span>Product design</span>
+              <span>Mobility app</span>
             </div>
           </div>
         </div>

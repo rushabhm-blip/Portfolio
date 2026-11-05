@@ -5973,3 +5973,12 @@ body.is-scene-ready .sticker-drag-hint:not(.is-hidden),
   }
 }
 
+
+/* "Guidance" line in the project details */
+.project-guidance { color: #64748B; }
+.project-guidance .guidance-label {
+  color: #334155;
+  font-weight: 600;
+  margin-right: 0.35em;
+}
+.project-guidance .guidance-label::after { content: ' ·'; font-weight: 400; color: #94A3B8; }
