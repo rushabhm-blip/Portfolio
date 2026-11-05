@@ -1,48 +1,44 @@
 /**
- * Reusable OpenBookButton Component
- * Renders the handwritten label in Caveat, curved arrow SVG, and lime circle button.
- * The entire area acts as a semantic button with full keyboard accessibility.
+ * Cover actions: two small buttons at the bottom of the closed sketchbook.
+ *   "My works"         scrolls down to the work cards
+ *   "Open sketchbook"  opens the book
+ * They are kept deliberately small and quiet so they never compete with the cover.
+ * The wrapper keeps the old class name (open-book-btn), so the reveal sequence and focus handling keep working.
  */
-export function createOpenBookButton({ label = 'Open my sketchbook', onOpenSketchbook }) {
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'open-book-btn';
-  button.setAttribute('aria-label', label);
-  button.setAttribute('data-chapter', 'Sketchbook');
+function scrollToWorks() {
+  const target = document.getElementById('works') || document.getElementById('pageContent');
+  if (target) target.scrollIntoView({ behavior: 'smooth' });
+}
 
-  // Handwritten text label
-  const textSpan = document.createElement('span');
-  textSpan.className = 'open-book-label';
-  textSpan.textContent = label;
+export function createOpenBookButton({ label = 'Open sketchbook', worksLabel = 'My works', onOpenSketchbook, onOpenWorks }) {
+  const wrap = document.createElement('div');
+  wrap.className = 'open-book-btn cover-actions';
+  wrap.setAttribute('role', 'group');
+  wrap.setAttribute('aria-label', 'Explore');
+  wrap.setAttribute('data-chapter', 'Sketchbook');
 
-  // Curved arrow SVG
-  const arrowImg = document.createElement('img');
-  arrowImg.className = 'curved-arrow-img';
-  arrowImg.src = 'assets/sketchbook/curved-arrow.svg';
-  arrowImg.alt = '';
-  arrowImg.setAttribute('aria-hidden', 'true');
-
-  // Lime circle with right arrow
-  const circle = document.createElement('b');
-  circle.className = 'lime-circle';
-  circle.setAttribute('aria-hidden', 'true');
-
-  const arrowRight = document.createElement('img');
-  arrowRight.className = 'arrow-right-img';
-  arrowRight.src = 'assets/sketchbook/arrow-right.svg';
-  arrowRight.alt = '';
-
-  circle.appendChild(arrowRight);
-
-  button.appendChild(textSpan);
-  button.appendChild(arrowImg);
-  button.appendChild(circle);
-
-  button.addEventListener('click', () => {
-    if (typeof onOpenSketchbook === 'function') {
-      onOpenSketchbook();
-    }
+  // 1) My works
+  const works = document.createElement('button');
+  works.type = 'button';
+  works.className = 'cover-action cover-action--works';
+  works.innerHTML = '<span>' + worksLabel + '</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>';
+  works.addEventListener('click', () => {
+    if (typeof onOpenWorks === 'function') onOpenWorks(); else scrollToWorks();
   });
 
-  return button;
+  // 2) Open sketchbook
+  const book = document.createElement('button');
+  book.type = 'button';
+  book.className = 'cover-action cover-action--book';
+  book.setAttribute('aria-label', 'Open my sketchbook');
+  book.innerHTML = '<span>' + label.replace(/^Open my /i, 'Open ') + '</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  book.addEventListener('click', () => {
+    if (typeof onOpenSketchbook === 'function') onOpenSketchbook();
+  });
+
+  wrap.appendChild(works);
+  wrap.appendChild(book);
+  // closing the book returns focus to the "Open sketchbook" button
+  wrap.focus = () => book.focus();
+  return wrap;
 }

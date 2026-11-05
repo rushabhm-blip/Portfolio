@@ -1,6 +1,6 @@
 import { sketchbookData } from './data.js?v=51';
 import { createHeader, enableHeaderAutoHide } from './components/Header.js?v=51';
-import { createBookScene } from './components/BookScene.js?v=49';
+import { createBookScene } from './components/BookScene.js?v=50';
 import { createChapterDialog } from './components/ChapterDialog.js?v=49';
 import { createExperimentNote } from './components/ExperimentNote.js?v=50';
 import { createSelectedWorkSection } from './components/SelectedWorkSection.js?v=56';
@@ -390,7 +390,7 @@ function initPortfolio() {
     function enableCoverControls() {
       const openBtn = stageEl.querySelector('.open-book-btn');
       if (openBtn) {
-        openBtn.tabIndex = 0;
+        openBtn.querySelectorAll('button').forEach((b) => { b.tabIndex = 0; });
         openBtn.removeAttribute('aria-hidden');
       }
       const stickers = stageEl.querySelectorAll('.closed-cover-inner .sticker-drag-wrapper');

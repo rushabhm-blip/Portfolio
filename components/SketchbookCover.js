@@ -1,6 +1,6 @@
 import { createIdTag } from './IdTag.js';
 import { createSticker } from './Sticker.js';
-import { createOpenBookButton } from './OpenBookButton.js';
+import { createOpenBookButton } from './OpenBookButton.js?v=2';
 import { setupDraggableStickers } from './DraggableStickers.js';
 
 /**

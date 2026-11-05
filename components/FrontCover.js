@@ -1,5 +1,5 @@
 import { createSticker } from './Sticker.js?v=2';
-import { createOpenBookButton } from './OpenBookButton.js';
+import { createOpenBookButton } from './OpenBookButton.js?v=2';
 
 /**
  * FrontCover Component
@@ -99,10 +99,11 @@ export function createFrontCover({ coverData, onOpenBook }) {
 
   // Open Book Interactive Button
   const openBtn = createOpenBookButton({
-    label: coverData?.openButton?.label || "Open my sketchbook",
+    label: coverData?.openButton?.label || "Open sketchbook",
     onOpenSketchbook: onOpenBook
   });
   openBtn.tabIndex = -1;
+  openBtn.querySelectorAll('button').forEach((b) => { b.tabIndex = -1; });
   openBtn.setAttribute('aria-hidden', 'true');
   container.appendChild(openBtn);
 

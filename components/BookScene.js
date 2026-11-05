@@ -1,5 +1,5 @@
 import { createHangingIdCard } from './HangingIdCard.js?v=43';
-import { createFrontCover } from './FrontCover.js?v=42';
+import { createFrontCover } from './FrontCover.js?v=43';
 import { createLeftPage } from './LeftPage.js?v=42';
 import { createRightPage } from './RightPage.js?v=42';
 import { setupDraggableStickers } from './DraggableStickers.js?v=41';
