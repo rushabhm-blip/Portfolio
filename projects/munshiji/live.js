@@ -196,6 +196,14 @@
       this.scaleEl = el.querySelector('.mj-scale'); this.load = el.querySelector('.mj-load');
       new ResizeObserver(() => this.fit()).observe(this.screen); this.fit();
       el.addEventListener('click', (e) => { if (e.target.closest('.mj-ctl')) return; el.classList.add('mj-show'); clearTimeout(this.showT); this.showT = setTimeout(() => el.classList.remove('mj-show'), 3200); });
+      // hover (mouse): the flow starts on this phone straight away, whatever the round was showing; a tap does the same on touch screens
+      let hoverT = null;
+      el.addEventListener('pointerenter', (e) => {
+        if (e.pointerType === 'touch') return; clearTimeout(hoverT);
+        hoverT = setTimeout(() => { if (!this.tryMode && SCHED.current !== this && !(SCHED.taken)) SCHED.playNow(this); }, 220); // a short pause, so sweeping the mouse across the page does not set everything off
+      });
+      el.addEventListener('pointerleave', () => clearTimeout(hoverT));
+      el.addEventListener('click', (e) => { if (e.target.closest('.mj-ctl')) return; if (this.el.classList.contains('mj-idle') && !this.tryMode && SCHED.current !== this) SCHED.playNow(this); });
       el.querySelector('.mj-rep').addEventListener('click', () => { this.setTry(false); SCHED.playNow(this); });
       el.querySelector('.mj-try').addEventListener('click', () => { const on = !this.tryMode; if (on) SCHED.takeOver(this); else { this.setTry(false); this.stop(); } });
       if (REDUCED) { el.remove(); if (this.cap) this.cap.remove(); return; } // reduced motion: leave the pictures exactly as they were
