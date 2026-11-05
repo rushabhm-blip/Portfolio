@@ -204,6 +204,21 @@ function initPortfolio() {
   })();
 
   let video = root.querySelector('.crawler-video');
+  if (video && isAppleOrSafari) {
+    // index.html already ships this <video> with the transparent WebM listed first. Safari/iPadOS can decode
+    // that WebM but ignores its transparency, so it paints the green keying colour; give it the blue MP4 only.
+    const blueSrc = 'IMG_0122_blue.mp4?v=35';
+    if (!video.currentSrc || !video.currentSrc.includes('IMG_0122_blue.mp4')) {
+      video.querySelectorAll('source').forEach(s => s.remove());
+      const sourceMp4 = document.createElement('source');
+      sourceMp4.src = blueSrc;
+      sourceMp4.type = 'video/mp4';
+      video.appendChild(sourceMp4);
+      video.load();
+      const resume = video.play();
+      if (resume && typeof resume.catch === 'function') resume.catch(() => {});
+    }
+  }
   if (!video) {
     video = document.createElement('video');
     video.className = 'crawler-video';
