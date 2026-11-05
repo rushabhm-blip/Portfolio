@@ -115,7 +115,7 @@
         { op: 'scroll', top: 260 }, { op: 'wait', ms: 600 },
         { op: 'spot', text: 'Invest more', pad: 6 }, { op: 'tip', text: 'Withdraw or invest: add funds to the asset.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
       ] },
-      { id: 'gyro', label: 'Tilt to explore', rect: [1040, 3540, 440, 520], gyro: { src: '/assets/projects/munshiji/gyro_hand.png?v=1', box: { cx: 148, cy: 227, w: 190, h: 395, rot: -4 } }, ops: [
+      { id: 'gyro', label: 'Tilt to explore', rect: [1040, 3540, 440, 520], gyro: { src: '/assets/projects/munshiji/gyro_hand.png?v=3', box: { cx: 148, cy: 227, w: 190, h: 395, rot: -4 } }, ops: [
         { op: 'boot', to: 'home' }, { op: 'tap', text: 'Enter room', fast: 1 }, { op: 'wait', ms: 1800 }, { op: 'ready' }, { op: 'wait', ms: 600 },
         { op: 'tip', text: 'Turn the phone to the left: the room slides to show its left side.' },
         { op: 'tiltpan', deg: 24, path: [[110, 420], [330, 420]], ms: 2000 }, { op: 'wait', ms: 900 }, { op: 'clear' },
@@ -175,7 +175,7 @@
       const el = this.el = document.createElement('div'); el.className = 'mj-phone mj-idle'; el.dataset.id = def.id;
       Object.assign(el.style, { left: (x / IMG_W * 100) + '%', top: (y / imgH * 100) + '%', width: (w / IMG_W * 100) + '%', height: (h / imgH * 100) + '%' });
       const scr = '<div class="mj-screen"><div class="mj-scale" style="height:' + this.hc + 'px"><div class="mj-load"><div class="mj-spin"></div></div></div></div>';
-      el.innerHTML = (gy ? '<div class="mj-gbg"></div><div class="mj-gstage"><div class="mj-gclip" style="clip-path:polygon(13.18% 9.62%,15.91% 8.27%,34.09% 7.88%,46.59% 7.88%,48.64% 9.04%,49.32% 11.54%,51.82% 38.46%,53.64% 57.69%,54.09% 74.04%,52.73% 75.96%,34.09% 77.50%,20.91% 78.65%,19.09% 77.69%,17.27% 69.23%,15.00% 55.77%,13.18% 38.46%,12.05% 19.23%)"><div class="mj-gscreen" style="left:' + ((gy.box.cx - gy.box.w / 2) / w * 100) + '%;top:' + ((gy.box.cy - gy.box.h / 2) / h * 100) + '%;width:' + (gy.box.w / w * 100) + '%;height:' + (gy.box.h / h * 100) + '%;transform:rotate(' + gy.box.rot + 'deg)">' + scr + '</div></div><img class="mj-ghand" alt="" src="' + gy.src + '"></div>' : scr) +
+      el.innerHTML = (gy ? '<div class="mj-gbg"></div><div class="mj-gstage"><div class="mj-gclip" style="clip-path:polygon(14.32% 10.00%,16.59% 8.65%,34.09% 8.27%,46.14% 8.27%,47.95% 9.23%,48.41% 11.54%,49.55% 23.08%,50.68% 38.46%,51.82% 57.69%,52.05% 71.54%,50.45% 74.62%,34.09% 76.54%,21.82% 77.69%,20.00% 76.73%,18.18% 69.62%,15.91% 55.77%,14.09% 38.46%,12.95% 19.23%)"><div class="mj-gscreen" style="left:' + ((gy.box.cx - gy.box.w / 2) / w * 100) + '%;top:' + ((gy.box.cy - gy.box.h / 2) / h * 100) + '%;width:' + (gy.box.w / w * 100) + '%;height:' + (gy.box.h / h * 100) + '%;transform:rotate(' + gy.box.rot + 'deg)">' + scr + '</div></div><img class="mj-ghand" alt="" src="' + gy.src + '"></div>' : scr) +
         '<div class="mj-ctl" role="group" aria-label="' + def.label + ': playback">' +
         '<button class="mj-rep" aria-label="Replay"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5"/></svg><span>Replay</span></button>' +
         '<button class="mj-try" aria-pressed="false" aria-label="Take over and try it"><svg viewBox="0 0 24 24"><path d="M9 11V5a2 2 0 0 1 4 0v5l5 1a2 2 0 0 1 1.6 2.4L18.5 19a3 3 0 0 1-3 2H11a3 3 0 0 1-2.4-1.2L5 15.5a1.8 1.8 0 0 1 2.8-2.2L9 14.5"/></svg><span>Try it</span></button>' +
