@@ -26,7 +26,7 @@
   const COIN = [[195, 188], [195, 300], [195, 470]];
   const JOURNEYS = [
     { img: '16_personality_companion', h: 7100, phones: [
-      { id: 'home', label: 'Home', rect: [947, 1242, 484, 1006], ops: [
+      { id: 'home', label: 'Home', rect: [959, 1243, 452, 1003], ops: [
         { op: 'boot', to: 'home' }, { op: 'ready' }, { op: 'wait', ms: 700 },
         { op: 'spot', text: 'Your Gullak', pad: 6 }, { op: 'tip', text: 'Balance and streak keep progress visible.', y: 70 }, { op: 'wait', ms: 2400 }, { op: 'clear' },
         { op: 'spot', text: 'Add savings', pad: 6 }, { op: 'tip', text: 'Start a saving ritual: tap to begin a deposit.', y: 70 }, { op: 'wait', ms: 2400 }, { op: 'clear' },
