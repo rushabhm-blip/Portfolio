@@ -440,8 +440,8 @@ body.is-book-open .crawler-video,
 .book-stage.is-open .id-tag-wrapper,
 .book-stage.is-opening .id-tag-wrapper {
   width: 17%;
-  right: -13%;
-  top: 3.5%;
+  right: -9%;
+  top: 5%;
   transform: rotate(14deg) translateZ(-3px);
   opacity: 1;
 }
