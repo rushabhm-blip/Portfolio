@@ -74,7 +74,7 @@
   --z-right-page: 5;
   --z-cast-shadow: 8;
   --z-hinged-cover: 15;
-  --z-id-tag: 25;
+  --z-id-tag: 10; /* behind the hinged cover (15) so the tag looks clipped on from inside the book */
   --z-scene-controls: 30;
   --z-active-drag: 50;
 
@@ -415,9 +415,9 @@ body.is-book-open .crawler-video,
   z-index: var(--z-id-tag);
   width: 22%;
   aspect-ratio: 1363 / 1154;
-  right: -8%;
+  right: -14%;
   top: -2%;
-  transform: rotate(14deg) translateZ(10px);
+  transform: rotate(14deg) translateZ(-3px);
   transform-origin: 32% 10%;
   filter: drop-shadow(var(--id-shadow));
   opacity: 0.92;
@@ -433,21 +433,21 @@ body.is-book-open .crawler-video,
 }
 
 .id-tag-wrapper:hover {
-  transform: rotate(16deg) translateZ(12px) scale(1.02);
+  transform: rotate(16deg) translateZ(-2px) scale(1.02);
 }
 
 /* When the book opens: moves outward toward upper-right edge, reduces slightly, increases opacity */
 .book-stage.is-open .id-tag-wrapper,
 .book-stage.is-opening .id-tag-wrapper {
   width: 17%;
-  right: -6%;
+  right: -13%;
   top: 3.5%;
-  transform: rotate(14deg) translateZ(10px);
+  transform: rotate(14deg) translateZ(-3px);
   opacity: 1;
 }
 
 .book-stage.is-open .id-tag-wrapper:hover {
-  transform: rotate(16deg) translateZ(12px) scale(1.02);
+  transform: rotate(16deg) translateZ(-2px) scale(1.02);
 }
 
 .id-tag-img {
