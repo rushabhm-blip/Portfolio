@@ -268,7 +268,7 @@
   });
 
   const announce = () => parent.postMessage({ sj: 1, ready: true }, '*');
-  const iv = setInterval(() => { if (document.querySelector('button')) { clearInterval(iv); announce(); } }, 100);
+  const iv = setInterval(() => { if (document.querySelector("button")) { clearInterval(iv); announce(); } }, 30);
 })();
 
 /* test helpers for the author: open the app with ?docs=1&dev=1 and use  S({op:'tap',text:'Explore'})  /  L()  in the console */

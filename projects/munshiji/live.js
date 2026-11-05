@@ -167,7 +167,7 @@
 
   class LivePhone {
     constructor(layer, def, imgH) {
-      this.def = def; this.ratio = 0; this.token = 0; this.live = false; this.tryMode = false; this.msgId = 0; this.pending = new Map(); this.readyRes = null;
+      this.def = def; this.ratio = 0; this.token = 0; this.gen = 0; this.prep = null; this.live = false; this.tryMode = false; this.msgId = 0; this.pending = new Map(); this.readyRes = null;
       this.frame = null; this.next = null; PHONES.push(this);
       const [x, y, w, h] = def.rect;
       const gy = this.gy = def.gyro || null;
@@ -200,7 +200,7 @@
       let hoverT = null;
       el.addEventListener('pointerenter', (e) => {
         if (e.pointerType === 'touch') return; clearTimeout(hoverT);
-        hoverT = setTimeout(() => { if (!this.tryMode && SCHED.current !== this && !(SCHED.taken)) SCHED.playNow(this); }, 220); // a short pause, so sweeping the mouse across the page does not set everything off
+        hoverT = setTimeout(() => { if (!this.tryMode && SCHED.current !== this && !(SCHED.taken)) SCHED.playNow(this); }, 0);
       });
       el.addEventListener('pointerleave', () => clearTimeout(hoverT));
       el.addEventListener('click', (e) => { if (e.target.closest('.mj-ctl')) return; if (this.el.classList.contains('mj-idle') && !this.tryMode && SCHED.current !== this) SCHED.playNow(this); });
@@ -250,35 +250,58 @@
     }
     gated() { return this.tryMode || this.ratio < 0.3 || document.hidden; }
     async gate(my) { while (this.gated() && my === this.token) await sleep(150); return my === this.token; }
-    /* play the script once, from a clean start; resolves when it has finished and the screen has rested on its last state */
+    /* load the prototype in a hidden frame and do everything up to the "ready" mark, so the flow can start the moment it is wanted */
+    prepare() {
+      if (this.prep) return this.prep;
+      const gen = this.gen;
+      this.prep = (async () => {
+        if (this.next) { this.next.remove(); this.next = null; }
+        const f = this.next = this.makeFrame();
+        const ready = new Promise((r) => { this.readyRes = r; });
+        f.src = APP + '&v=' + Date.now();
+        await Promise.race([ready, sleep(20000)]);
+        const dead = () => { if (gen !== this.gen) { f.remove(); if (this.next === f) this.next = null; return true; } return false; };
+        if (dead()) return null;
+        const ops = this.def.ops; const ri = ops.findIndex((o) => o.op === 'ready');
+        const pre = ri < 0 ? [] : ops.slice(0, ri);
+        for (const o of pre) {
+          if (dead()) return null;
+          if (o.op === 'wait') { await sleep(Math.min(o.ms, 300)); continue; }
+          const rest = Object.assign({}, o); delete rest.fast;
+          const r = await this.send(rest, true, f);
+          if (!r.ok) console.warn('[munshiji-live]', this.def.id, o.op, o.text || o.sel || '', r.err);
+        }
+        if (dead()) return null;
+        this.prepDone = true;
+        return { f, ri };
+      })();
+      return this.prep;
+    }
+    /* a pause that ends early if this run has been stopped */
+    async nap(ms, my) { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (my !== this.token) return; await sleep(Math.min(40, ms)); } }
+    /* play the script once; resolves when it has finished and the screen has rested on its last state */
     async runOnce() {
       const my = ++this.token; this.live = true;
-      if (this.next) { this.next.remove(); this.next = null; }
-      const f = this.next = this.makeFrame();
-      const ready = new Promise((r) => { this.readyRes = r; });
-      f.src = APP + '&v=' + Date.now();
-      await Promise.race([ready, sleep(20000)]); if (my !== this.token) return;
-      let shown = false;
+      const prep = await this.prepare(); this.prep = null;
+      if (my !== this.token || !prep) return;
+      const f = prep.f;
       const reveal = async () => {
-        if (shown) return; shown = true; await sleep(250); if (my !== this.token) return;
-        f.style.visibility = 'visible'; if (this.frame) this.frame.remove(); this.frame = f; this.next = null; this.load.classList.add('off'); this.el.classList.remove('mj-idle');
+        f.style.visibility = 'visible'; this.el.classList.remove('mj-loading'); if (this.frame) this.frame.remove(); this.frame = f; this.next = null; this.load.classList.add('off'); this.el.classList.remove('mj-idle');
       };
       const ops = this.def.ops;
-      const firstReady = ops.findIndex((o) => o.op === 'ready');
-      for (let i = 0; i < ops.length; i++) {
-        const o = ops[i]; const fastPhase = firstReady >= 0 && i < firstReady;
-        if (o.op === 'ready') { await reveal(); continue; }
-        if (!fastPhase && !(await this.gate(my))) return;
+      await reveal(); if (my !== this.token) return;
+      for (let i = prep.ri + 1; i < ops.length; i++) {
+        const o = ops[i];
+        if (!(await this.gate(my))) return;
         if (my !== this.token) return;
-        if (o.op === 'wait') { await sleep(fastPhase ? Math.min(o.ms, 300) : o.ms); continue; }
+        if (o.op === 'wait') { await this.nap(o.ms, my); continue; }
         const rest = Object.assign({}, o); const fl = rest.fast; delete rest.fast;
-        const r = await this.send(rest, fastPhase || !!fl, f);
+        const r = await this.send(rest, !!fl, f);
         if (!r.ok) console.warn('[munshiji-live]', this.def.id, o.op, o.text || o.sel || '', r.err);
       }
-      if (firstReady < 0) await reveal();
       await this.send({ op: 'clear' }, false, f).catch(() => {});
       // rest on the end state for a moment
-      const t0 = Date.now(); while (Date.now() - t0 < 2600) { if (my !== this.token) return; await sleep(150); }
+      await this.nap(2600, my);
       if (my === this.token) this.stop();   // hand the stage back to the drawing, so the reader's eye moves to the next phone
     }
     setTry(on) {
@@ -294,7 +317,7 @@
     /* stop whatever this phone is doing and show the original picture again */
     stop() {
       if (this.stage) { this.stage.style.transition = 'none'; this.stage.style.transform = ''; }
-      this.token++; this.live = false; this.tryMode = false; this.el.classList.remove('mj-try'); this.hideCap();
+      this.token++; this.gen++; this.prep = null; this.prepDone = false; this.live = false; this.el.classList.remove('mj-loading'); this.tryMode = false; this.el.classList.remove('mj-try'); this.hideCap();
       [this.frame, this.next].forEach((f) => f && f.remove()); this.frame = this.next = null; this.load.classList.remove('off'); this.el.classList.add('mj-idle');
     }
   }
@@ -312,19 +335,31 @@
       const after = vis.filter((p) => order(p) > this.last).sort((a, b) => order(a) - order(b));
       return after[0] || vis.sort((a, b) => order(a) - order(b))[0];
     },
-    playNow(p) { this.forced = p; if (this.current && this.current !== p) this.current.stop(); },
+    playNow(p) { if (p.el.classList.contains('mj-idle')) p.el.classList.add('mj-loading'); this.forced = p; if (this.wakeRes) this.wakeRes(); },
+    /* phones on screen get their prototype loaded and set up in the background, so a hover can start the flow on the spot */
+    warmUp() {
+      const order = (p) => PHONES.indexOf(p);
+      const vis = PHONES.filter((p) => p.ratio >= 0.5 && p.el.isConnected).sort((a, b) => order(a) - order(b));
+      PHONES.forEach((p) => { if (p.prep && !p.live && p.ratio < 0.1) { p.gen++; p.prep = null; [p.next].forEach((f) => f && f.remove()); p.next = null; } });
+      let n = PHONES.filter((p) => p.prep && !p.live).length;
+      for (const p of vis) { if (n >= 4) break; if (!p.live && !p.prep && !p.tryMode) { p.prepare(); n++; } }
+    },
     takeOver(p) { if (this.taken && this.taken !== p) { this.taken.setTry(false); this.taken.stop(); } this.taken = p; if (this.current && this.current !== p) this.current.stop(); p.setTry(true); },
+    run(p) {
+      this.current = p; this.last = PHONES.indexOf(p);
+      p.runOnce().catch((e) => console.warn('[munshiji-live]', e)).then(() => {
+        if (this.current === p) { this.current = null; if (!this.taken) p.stop(); if (this.wakeRes) this.wakeRes(); }
+      });
+    },
     async loop() {
       for (;;) {
-        await sleep(250);
+        await Promise.race([sleep(250), new Promise((r) => { this.wakeRes = r; })]); this.wakeRes = null;
         if (document.hidden) continue;
+        this.warmUp();
         if (this.taken) { if (this.taken.tryMode) continue; this.taken = null; }
-        const p = this.forced || this.pickNext(); this.forced = null;
-        if (!p) continue;
-        this.current = p; this.last = PHONES.indexOf(p);
-        try { await p.runOnce(); } catch (e) { console.warn('[munshiji-live]', e); }
-        this.current = null;
-        if (!this.taken) p.stop();
+        if (this.forced) { const p = this.forced; this.forced = null; if (this.current && this.current !== p) this.current.stop(); if (this.current !== p) this.run(p); continue; }
+        if (this.current) continue;
+        const p = this.pickNext(); if (p) this.run(p);
       }
     },
   };
