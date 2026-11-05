@@ -88,3 +88,37 @@
 .sj-phone.sj-try .sj-hand { display: none; }
 /* the picture of the hand is cropped at the wrist; let that end fade out instead of showing a hard edge */
 .sj-hand { -webkit-mask-image: linear-gradient(to right, #000 78%, transparent 100%); mask-image: linear-gradient(to right, #000 78%, transparent 100%); }
+
+/* captions: a small card in the free white space beside the phone. Nothing on the phone is covered. */
+.sj-layer { container-type: inline-size; }
+.sj-cap {
+  position: absolute; z-index: 4; pointer-events: none; box-sizing: border-box; display: flex; align-items: center; gap: .7em;
+  padding: .75em 1em .8em .85em; border-radius: 14px; background: #fff; color: #0b1528;
+  border: 1px solid #d9e4fb; box-shadow: 0 10px 26px -12px rgba(21, 93, 252, .30), 0 2px 6px rgba(11, 21, 40, .07);
+  font: 600 clamp(9.5px, 1.2cqw, 16px)/1.38 'Google Sans', 'Inter', system-ui, sans-serif; letter-spacing: -.005em;
+  opacity: 0; transform: translateY(6px); transition: opacity .3s ease, transform .3s ease;
+}
+.sj-cap-above { transform: translateY(-6px); }
+.sj-cap-left { transform: translateX(-6px); }
+.sj-cap-right { transform: translateX(6px); }
+.sj-cap.on { opacity: 1; transform: none; }
+.sj-cap p { margin: 0; }
+.sj-cap i { flex: none; align-self: stretch; width: 4px; border-radius: 4px; background: linear-gradient(#155dfc, #7fb0ff); }
+
+/* small screens: one slim bar at the bottom of the screen */
+.sj-bar {
+  position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); z-index: 60; width: min(92vw, 420px); box-sizing: border-box;
+  padding: 11px 14px; border-radius: 14px; background: #fff; color: #0b1528; border: 1px solid #d9e4fb; border-left: 4px solid #155dfc;
+  box-shadow: 0 12px 30px -10px rgba(21, 93, 252, .40); font: 600 13px/1.4 'Google Sans', 'Inter', system-ui, sans-serif;
+  opacity: 0; transform: translate(-50%, 8px); transition: opacity .25s, transform .25s; pointer-events: none;
+}
+.sj-bar.on { opacity: 1; transform: translate(-50%, 0); }
+.sj-bar p { margin: 0; }
+@media (max-width: 760px) { .sj-cap { display: none; } }
+
+/* the instant a phone is hovered the picture shows a small spinner, until the live screen is ready */
+.sj-phone.sj-loading::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; margin: -17px 0 0 -17px; z-index: 6; box-sizing: border-box;
+  border-radius: 50%; border: 3px solid rgba(21, 93, 252, .22); border-top-color: #155dfc; background: rgba(255, 255, 255, .85);
+  box-shadow: 0 6px 16px rgba(11, 21, 40, .25); animation: sjspin .8s linear infinite; pointer-events: none;
+}

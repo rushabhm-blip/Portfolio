@@ -28,6 +28,23 @@
     if (syn) { syn.speak = (u) => { setTimeout(() => u && u.onend && u.onend({}), 900); }; syn.cancel = () => {}; }
   } catch (e) {}
 
+  try { navigator.vibrate = () => false; } catch (e) {} // no buzzing from a documentation page
+
+  /* every run starts from a clean app: progress is kept in memory only, so runs never leak into each other */
+  try {
+    const mem = {};
+    const fake = { getItem: (k) => (k in mem ? mem[k] : null), setItem: (k, v) => { mem[k] = String(v); }, removeItem: (k) => { delete mem[k]; }, clear: () => { for (const k in mem) delete mem[k]; }, key: (i) => Object.keys(mem)[i] || null, get length() { return Object.keys(mem).length; } };
+    Object.defineProperty(window, 'localStorage', { configurable: true, get: () => fake });
+  } catch (e) {}
+
+  /* while a phone is set up behind the scenes, the app's own long waits can run faster ('timers' op) */
+  { const _st = window.setTimeout.bind(window); window.__sjK = 1; window.setTimeout = (fn, ms, ...rest) => _st(fn, (ms > 600 && window.__sjK > 1) ? ms / window.__sjK : ms, ...rest); }
+
+  /* a documentation page must never start talking: audio plays muted until the visitor takes over ('unmute') */
+  let QUIET = true;
+  const _play = HTMLMediaElement.prototype.play;
+  HTMLMediaElement.prototype.play = function () { if (QUIET) this.muted = true; return _play.apply(this, arguments); };
+
   /* ---------- overlay: touch point, highlight ring, caption ---------- */
   const css = document.createElement('style');
   css.textContent = `
@@ -38,9 +55,9 @@
   #sj-touch.on{opacity:1}#sj-touch.down{transition-duration:.12s;transform-origin:center}
   .sj-rip{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:3px solid #155DFC;opacity:.9;animation:sjrip .6s ease-out forwards}
   @keyframes sjrip{to{transform:scale(2.6);opacity:0}}
-  #sj-spot{position:absolute;border-radius:14px;border:2.5px solid #155DFC;box-shadow:0 0 0 4px rgba(21,93,252,.2),0 0 0 9999px rgba(11,21,40,.12);opacity:0;transition:all .35s cubic-bezier(.22,.8,.2,1)}
+  #sj-spot{position:absolute;border-radius:14px;border:2.5px solid #155DFC;box-shadow:0 0 0 4px rgba(21,93,252,.22);opacity:0;transition:all .35s cubic-bezier(.22,.8,.2,1)}
   #sj-spot.on{opacity:1;animation:sjpulse 1.6s ease-in-out infinite}
-  @keyframes sjpulse{50%{box-shadow:0 0 0 8px rgba(21,93,252,.08),0 0 0 9999px rgba(11,21,40,.12)}}
+  @keyframes sjpulse{50%{box-shadow:0 0 0 9px rgba(21,93,252,.10)}}
   #sj-touch.hand{background:none;border:0;box-shadow:none}
     #sj-tip{position:absolute;left:12px;right:12px;max-width:340px;margin:0 auto;background:#0B1528;color:#fff;font-size:12.5px;line-height:1.35;font-weight:600;
     padding:9px 12px;border-radius:12px;box-shadow:0 8px 24px rgba(11,21,40,.35);opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
@@ -115,6 +132,9 @@
   let held = null;
   const OPS = {
     async ping() {},
+    async timers(o) { window.__sjK = o.k || 1; },
+    async unmute() { QUIET = false; document.querySelectorAll('audio,video').forEach((m) => { m.muted = false; }); },
+    async mute() { QUIET = true; document.querySelectorAll('audio,video').forEach((m) => { m.muted = true; }); },
     async release(o, fast) {
       if (!held) return; const { te, xe, ye } = held; held = null; touch.classList.remove('down');
       fire(te, xe, ye, ['pointerup', 'mouseup']);
@@ -139,7 +159,8 @@
       await sleep(fast ? 300 : 600);
     },
     async tap(o, fast) {
-      const el = await waitEl(o);
+      let el;
+      try { el = await waitEl(o, o.opt ? 1500 : 9000); } catch (e) { if (o.opt) return; throw e; }
       try { el.scrollIntoView({ block: 'nearest' }); } catch (e) {}
       await sleep(fast ? 0 : 60);
       const [x, y] = center(el, o);
@@ -233,7 +254,7 @@
         const e = find(o);
         if (o.gone ? !e : e) return;
         if (Date.now() - t0 > ms) throw new Error('waitFor timeout ' + (o.sel || '') + ' ' + (o.text || ''));
-        await sleep(80);
+        await sleep(30);
       }
     },
     async mock(o) { const fn = MOCKS[o.fn]; if (!fn) throw new Error('no mock ' + o.fn); await fn(...(o.args || [])); },
@@ -258,7 +279,7 @@
   });
 
   const announce = () => parent.postMessage({ sj: 1, ready: true }, '*');
-  const iv = setInterval(() => { if (document.querySelector('button')) { clearInterval(iv); announce(); } }, 100);
+  const iv = setInterval(() => { if (document.querySelector('button')) { clearInterval(iv); announce(); } }, 30);
 })();
 
 /* test helpers for the author: open the app with ?docs=1&dev=1 and use  S({op:'tap',text:'Explore'})  /  L()  in the console */
