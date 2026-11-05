@@ -82,7 +82,7 @@ export function createSelectedWorkSection() {
           <p class="project-subheading">Everyday concerns. <br><span class="marker-highlight marker-lime">Collective action.</span></p>
           <p class="project-desc">Helping people raise civic concerns, find support, and stay informed about what happens next.</p>
           <div class="project-meta-details">
-            <span class="project-meta-item">2026 · Individual academic project</span>
+            <span class="project-meta-item">2026 · 4 weeks · Individual academic project</span>
             <span class="project-meta-item project-guidance"><span class="guidance-label">Guidance</span> Dr. Mamata Rao, Prof. Athul</span>
           </div>
           <div class="project-discipline-capsules" aria-label="Project disciplines">
@@ -109,7 +109,7 @@ export function createSelectedWorkSection() {
           <p class="project-subheading">Understanding <span class="marker-highlight marker-peach">beyond fear.</span></p>
           <p class="project-desc">An interactive data story exploring snakebite and our relationship with snakes in India.</p>
           <div class="project-meta-details">
-            <span class="project-meta-item">2026 · Individual academic project</span>
+            <span class="project-meta-item">2026 · 2 weeks · Individual academic project</span>
             <span class="project-meta-item project-guidance"><span class="guidance-label">Guidance</span> Amit Kapoor</span>
           </div>
           <div class="project-discipline-capsules" aria-label="Project disciplines">
@@ -193,7 +193,7 @@ export function createSelectedWorkSection() {
           <p class="project-subheading">Discover the object. <br><span class="marker-highlight marker-lime">Travel through its history.</span></p>
           <p class="project-desc">A multimodal spatial museum experience exploring Indus Valley civilization through touchless gesture interaction, physical proximity, and contextual storytelling.</p>
           <div class="project-meta-details">
-            <span class="project-meta-item">2026 · Group project · Multimodal & Spatial Experience</span>
+            <span class="project-meta-item">2026 · 4 weeks · Group project · Multimodal & Spatial Experience</span>
             <span class="project-meta-item project-guidance"><span class="guidance-label">Guidance</span> Dr. Mamata Rao, Prof. Athul</span>
           </div>
           <div class="project-discipline-capsules" aria-label="Project disciplines">
@@ -221,7 +221,7 @@ export function createSelectedWorkSection() {
           <p class="project-subheading">Small steps. Smarter money habits.</p>
           <p class="project-desc">Helping beginners learn about money, build saving habits, and invest with confidence.</p>
           <div class="project-meta-details">
-            <span class="project-meta-item">2026 · Individual academic project</span>
+            <span class="project-meta-item">2026 · 6 weeks · Individual academic project</span>
             <span class="project-meta-item project-guidance"><span class="guidance-label">Guidance</span> Dr. Mamata Rao, Prof. Jagriti Galphade</span>
           </div>
           <div class="project-discipline-capsules" aria-label="Project disciplines">
