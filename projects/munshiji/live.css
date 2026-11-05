@@ -40,3 +40,39 @@
 @media (hover: none) { .mj-ctl { opacity: 0; pointer-events: none; }
   .mj-phone.mj-show .mj-ctl, .mj-phone.mj-try .mj-ctl { opacity: 1; pointer-events: auto; } }
 @media (max-width: 900px) { .mj-ctl button span { display: none; } .mj-ctl button { padding: 4px 6px; } .mj-ctl svg { width: 10px; height: 10px; } }
+
+/* captions: a small card in the free white space beside the phone. Nothing on the phone is covered. */
+.mj-layer { container-type: inline-size; }
+.mj-cap {
+  position: absolute; z-index: 4; pointer-events: none; box-sizing: border-box; display: flex; align-items: center; gap: .7em;
+  padding: .75em 1em .8em .85em; border-radius: 14px; background: #fff; color: #1d1830;
+  border: 1px solid #e2d9fa; box-shadow: 0 10px 26px -12px rgba(76, 44, 160, .35), 0 2px 6px rgba(76, 44, 160, .08);
+  font: 600 clamp(9.5px, 1.2cqw, 16px)/1.38 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif; letter-spacing: -.005em;
+  opacity: 0; transform: translateY(6px); transition: opacity .3s ease, transform .3s ease;
+}
+.mj-cap-above { transform: translateY(-6px); }
+.mj-cap.on { opacity: 1; transform: none; }
+.mj-cap p { margin: 0; }
+.mj-cap i { flex: none; align-self: stretch; width: 4px; border-radius: 4px; background: linear-gradient(#7c4dff, #b79cff); }
+
+/* small screens: one slim bar at the bottom of the screen */
+.mj-bar {
+  position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); z-index: 60; width: min(92vw, 420px); box-sizing: border-box;
+  padding: 11px 14px; border-radius: 14px; background: #fff; color: #1d1830; border: 1px solid #e2d9fa; border-left: 4px solid #7c4dff;
+  box-shadow: 0 12px 30px -10px rgba(76, 44, 160, .45); font: 600 13px/1.4 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  opacity: 0; transform: translate(-50%, 8px); transition: opacity .25s, transform .25s; pointer-events: none;
+}
+.mj-bar.on { opacity: 1; transform: translate(-50%, 0); }
+.mj-bar p { margin: 0; }
+@media (max-width: 760px) { .mj-cap { display: none; } }
+
+/* the hand that turns the phone (gyroscope): the room plays inside the cut-out screen of the sketch, behind the hand */
+.mj-gyro { pointer-events: auto; }
+.mj-gyro .mj-gbg { position: absolute; inset: 0; background: #fff; opacity: 0; }
+.mj-gyro:not(.mj-idle) .mj-gbg { opacity: 1; }
+.mj-gyro.mj-idle .mj-gstage { visibility: hidden; }
+.mj-gstage { position: absolute; inset: 0; transform-origin: 48% 50%; will-change: transform; }
+.mj-gscreen { position: absolute; transform-origin: 50% 50%; }
+.mj-gscreen .mj-screen { border-radius: 0; background: #fff; }
+.mj-ghand { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+.mj-gyro .mj-ctl { bottom: -2%; }

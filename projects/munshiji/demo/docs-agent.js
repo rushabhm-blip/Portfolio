@@ -28,6 +28,8 @@
     if (syn) { syn.speak = (u) => { setTimeout(() => u && u.onend && u.onend({}), 900); }; syn.cancel = () => {}; }
   } catch (e) {}
 
+  try { navigator.vibrate = () => false; } catch (e) {} // no buzzing from a documentation page
+
   /* every run starts from a clean app: progress is kept in memory only, so runs never leak into each other
      (or into the visitor's own copy of the demo, which shares this origin) */
   try {
@@ -51,9 +53,9 @@
   #sj-touch.on{opacity:1}#sj-touch.down{transition-duration:.12s;transform-origin:center}
   .sj-rip{position:absolute;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:3px solid #7C4DFF;opacity:.9;animation:sjrip .6s ease-out forwards}
   @keyframes sjrip{to{transform:scale(2.6);opacity:0}}
-  #sj-spot{position:absolute;border-radius:14px;border:2.5px solid #7C4DFF;box-shadow:0 0 0 4px rgba(124,77,255,.2),0 0 0 9999px rgba(11,21,40,.12);opacity:0;transition:all .35s cubic-bezier(.22,.8,.2,1)}
+  #sj-spot{position:absolute;border-radius:14px;border:2.5px solid #7C4DFF;box-shadow:0 0 0 4px rgba(124,77,255,.22);opacity:0;transition:all .35s cubic-bezier(.22,.8,.2,1)}
   #sj-spot.on{opacity:1;animation:sjpulse 1.6s ease-in-out infinite}
-  @keyframes sjpulse{50%{box-shadow:0 0 0 8px rgba(124,77,255,.08),0 0 0 9999px rgba(11,21,40,.12)}}
+  @keyframes sjpulse{50%{box-shadow:0 0 0 9px rgba(124,77,255,.10)}}
   #sj-touch.hand{background:none;border:0;box-shadow:none}
     #sj-tip{position:absolute;left:12px;right:12px;max-width:340px;margin:0 auto;background:#1d1830;color:#fff;font-size:12.5px;line-height:1.35;font-weight:600;
     padding:9px 12px;border-radius:12px;box-shadow:0 8px 24px rgba(11,21,40,.35);opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
