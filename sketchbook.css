@@ -3564,6 +3564,7 @@ body.is-book-open .crawler-video,
 .book-stage.is-scene-ready .id-tag-wrapper,
 .book-stage.is-ready .id-tag-wrapper {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 
