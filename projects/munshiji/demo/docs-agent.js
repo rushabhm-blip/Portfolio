@@ -38,6 +38,8 @@
     Object.defineProperty(window, 'localStorage', { configurable: true, get: () => fake });
   } catch (e) {}
 
+  { const _st = window.setTimeout.bind(window); window.__sjK = 1; window.setTimeout = (fn, ms, ...rest) => _st(fn, (ms > 600 && window.__sjK > 1) ? ms / window.__sjK : ms, ...rest); }
+
   /* a documentation page must never start talking: audio plays muted until the visitor takes over ('unmute') */
   let QUIET = true;
   const _play = HTMLMediaElement.prototype.play;
@@ -130,6 +132,8 @@
   let held = null;
   const OPS = {
     async ping() {},
+    /* while a phone is being set up behind the scenes, the app's own long waits (payment, animations) can run faster; k:1 puts them back */
+    async timers(o) { window.__sjK = o.k || 1; },
     async unmute() { QUIET = false; document.querySelectorAll('audio,video').forEach((m) => { m.muted = false; }); },
     async mute() { QUIET = true; document.querySelectorAll('audio,video').forEach((m) => { m.muted = true; }); },
     async release(o, fast) {
@@ -250,7 +254,7 @@
         const e = find(o);
         if (o.gone ? !e : e) return;
         if (Date.now() - t0 > ms) throw new Error('waitFor timeout ' + (o.sel || '') + ' ' + (o.text || ''));
-        await sleep(80);
+        await sleep(30);
       }
     },
     async mock(o) { const fn = MOCKS[o.fn]; if (!fn) throw new Error('no mock ' + o.fn); await fn(...(o.args || [])); },

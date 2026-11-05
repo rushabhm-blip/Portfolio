@@ -44,15 +44,15 @@
         { op: 'drag', path: COIN, ms: 1100, hold: 500 }, { op: 'wait', ms: 2200 }, { op: 'clear' },
       ] },
       { id: 'amount', label: 'Choose your amount', rect: [592, 4781, 404, 834], ops: [
-        { op: 'boot', to: 'gullak' }, { op: 'drag', path: COIN, fast: 1 }, { op: 'wait', ms: 2200 }, { op: 'ready' }, { op: 'wait', ms: 500 },
+        { op: 'boot', to: 'gullak' }, { op: 'timers', k: 10 }, { op: 'drag', path: COIN, fast: 1 }, { op: 'waitFor', text: 'Continue' }, { op: 'timers', k: 1 }, { op: 'ready' }, { op: 'wait', ms: 500 },
         { op: 'spot', text: '₹10', exact: true, pad: 4 }, { op: 'tip', text: 'An amount that suits you: choose a preset or enter your own.', y: 70 }, { op: 'wait', ms: 2200 }, { op: 'clear' },
         { op: 'tap', text: '₹10', exact: true }, { op: 'wait', ms: 500 },
         { op: 'spot', text: 'Your current savings', pad: 6 }, { op: 'tip', text: 'Your balance, in view, before adding more.', y: 70 }, { op: 'wait', ms: 2200 }, { op: 'clear' },
         { op: 'tap', text: 'Continue' }, { op: 'wait', ms: 1500 },
       ] },
       { id: 'celebrate', label: 'Celebrate your savings', rect: [1316, 4942, 404, 834], ops: [
-        { op: 'boot', to: 'gullak' }, { op: 'drag', path: COIN, fast: 1 }, { op: 'wait', ms: 2200 }, { op: 'tap', text: '₹10', exact: true, fast: 1 }, { op: 'wait', ms: 300 },
-        { op: 'tap', text: 'Continue', fast: 1 }, { op: 'wait', ms: 1000 }, { op: 'tap', text: 'Pay ₹10', fast: 1 }, { op: 'wait', ms: 4200 }, { op: 'ready' },
+        { op: 'boot', to: 'gullak' }, { op: 'timers', k: 10 }, { op: 'drag', path: COIN, fast: 1 }, { op: 'waitFor', text: '₹10', exact: true }, { op: 'tap', text: '₹10', exact: true, fast: 1 },
+        { op: 'tap', text: 'Continue', fast: 1 }, { op: 'waitFor', text: 'Pay ₹10' }, { op: 'tap', text: 'Pay ₹10', fast: 1 }, { op: 'waitFor', text: 'GULLAK BALANCE', ms: 12000 }, { op: 'timers', k: 1 }, { op: 'ready' },
         { op: 'tip', text: 'A moment of celebration: each small saving is acknowledged.', y: 70 }, { op: 'wait', ms: 2500 }, { op: 'clear' },
         { op: 'spot', text: 'GULLAK BALANCE', pad: 10 }, { op: 'tip', text: 'An updated balance.', y: 70 }, { op: 'wait', ms: 2200 }, { op: 'clear' },
         { op: 'spot', text: 'Done', pad: 6 }, { op: 'tip', text: 'Choose what comes next: done, or continue learning.', y: 70 }, { op: 'wait', ms: 2400 }, { op: 'clear' },
@@ -67,7 +67,7 @@
         { op: 'tap', text: 'Start emergency fund lesson' }, { op: 'wait', ms: 1800 },
       ] },
       { id: 'learn-sort', label: 'Learn by acting in situations', rect: [1222, 422, 404, 834], ops: [
-        { op: 'boot', to: 'learn' }, { op: 'tap', text: 'Start emergency fund lesson', fast: 1 }, { op: 'wait', ms: 700 }, { op: 'tap', text: 'Jump to step 2', fast: 1 }, { op: 'wait', ms: 800 }, { op: 'ready' },
+        { op: 'boot', to: 'learn' }, { op: 'tap', text: 'Start emergency fund lesson', fast: 1 }, { op: 'wait', ms: 700 }, { op: 'tap', text: 'Jump to step 2', fast: 1 }, { op: 'waitFor', text: 'Emergency or planned' }, { op: 'ready' },
         { op: 'tip', text: 'Sort each expense into the right place: tap a category or drag the card.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
         { op: 'tap', text: 'Plan and save' }, { op: 'wait', ms: 600 },
         { op: 'tip', text: 'Not quite? You get the reason, then try again.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
@@ -76,13 +76,13 @@
     ] },
     { img: '18_feature_goals', h: 2640, phones: [
       { id: 'goals-start', label: 'Make room for what matters', rect: [623, 193, 404, 834], ops: [
-        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Goals', exact: true, fast: 1 }, { op: 'wait', ms: 900 }, { op: 'ready' }, { op: 'wait', ms: 500 },
+        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Goals', exact: true, fast: 1 }, { op: 'waitFor', text: 'Create a goal' }, { op: 'ready' }, { op: 'wait', ms: 500 },
         { op: 'spot', text: 'Create a goal', pad: 6 }, { op: 'tip', text: 'Start with what matters: a goal, an amount and a pace that works for you.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
         { op: 'spot', text: 'Set up emergency fund', pad: 6 }, { op: 'tip', text: 'Prepare for the unexpected: a dedicated route to build your emergency fund.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
         { op: 'tap', text: 'Create a goal' }, { op: 'wait', ms: 1400 },
       ] },
       { id: 'goals-create', label: 'Create a goal', rect: [1561, 481, 404, 834], ops: [
-        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Goals', exact: true, fast: 1 }, { op: 'wait', ms: 700 }, { op: 'tap', text: 'Create a goal', fast: 1 }, { op: 'wait', ms: 900 }, { op: 'ready' },
+        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Goals', exact: true, fast: 1 }, { op: 'wait', ms: 700 }, { op: 'tap', text: 'Create a goal', fast: 1 }, { op: 'waitFor', text: 'What are you saving for' }, { op: 'ready' },
         { op: 'tip', text: 'Select the reason for the goal.', y: 70 }, { op: 'wait', ms: 1800 }, { op: 'clear' },
         { op: 'tap', text: 'Education' }, { op: 'wait', ms: 700 },
         { op: 'tap', text: 'Something else' }, { op: 'wait', ms: 700 },
@@ -91,13 +91,13 @@
     ] },
     { img: '19_feature_radio', h: 1640, phones: [
       { id: 'radio-listen', label: 'Listen', rect: [608, 306, 404, 834], ops: [
-        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Radio', exact: true, fast: 1 }, { op: 'wait', ms: 900 }, { op: 'ready' }, { op: 'wait', ms: 500 },
+        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Radio', exact: true, fast: 1 }, { op: 'waitFor', text: 'Play episode' }, { op: 'ready' }, { op: 'wait', ms: 500 },
         { op: 'spot', text: 'Play episode', pad: 6 }, { op: 'tip', text: 'Start with one story. A featured episode makes everyday economics approachable.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
         { op: 'tap', text: 'Play episode' }, { op: 'wait', ms: 900 },
         { op: 'tip', text: 'Audio continues in a mini-player as you move through the app.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
       ] },
       { id: 'radio-news', label: 'News', rect: [1569, 528, 404, 834], ops: [
-        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Radio', exact: true, fast: 1 }, { op: 'wait', ms: 700 }, { op: 'tap', text: 'News', exact: true, fast: 1 }, { op: 'wait', ms: 800 }, { op: 'ready' },
+        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Radio', exact: true, fast: 1 }, { op: 'wait', ms: 700 }, { op: 'tap', text: 'News', exact: true, fast: 1 }, { op: 'waitFor', text: 'Why prices rise' }, { op: 'ready' },
         { op: 'tip', text: 'Prefer reading? Go through the articles that explain the whole story in short.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
         { op: 'tap', text: 'India' }, { op: 'wait', ms: 1200 },
       ] },
@@ -110,13 +110,13 @@
         { op: 'tap', text: 'Index fund' }, { op: 'wait', ms: 1600 },
       ] },
       { id: 'investment', label: 'Investment details', rect: [1520, 1321, 456, 976], ops: [
-        { op: 'boot', to: 'portfolio' }, { op: 'tap', text: 'Index fund', fast: 1 }, { op: 'wait', ms: 900 }, { op: 'ready' }, { op: 'wait', ms: 500 },
+        { op: 'boot', to: 'portfolio' }, { op: 'tap', text: 'Index fund', fast: 1 }, { op: 'waitFor', text: 'Units held' }, { op: 'ready' }, { op: 'wait', ms: 500 },
         { op: 'spot', text: 'Units held', pad: 10 }, { op: 'tip', text: 'Explore the details: how much you own and what it is worth.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
         { op: 'scroll', top: 260 }, { op: 'wait', ms: 600 },
         { op: 'spot', text: 'Invest more', pad: 6 }, { op: 'tip', text: 'Withdraw or invest: add funds to the asset.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
       ] },
       { id: 'gyro', label: 'Tilt to explore', rect: [1040, 3540, 440, 520], gyro: { src: '/assets/projects/munshiji/gyro_hand.png?v=3', box: { cx: 148, cy: 227, w: 190, h: 395, rot: -4 } }, ops: [
-        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Enter room', fast: 1 }, { op: 'wait', ms: 1800 }, { op: 'ready' }, { op: 'wait', ms: 600 },
+        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Enter room', fast: 1 }, { op: 'waitFor', text: 'Ask', exact: true }, { op: 'wait', ms: 200 }, { op: 'ready' }, { op: 'wait', ms: 600 },
         { op: 'tip', text: 'Turn the phone to the left: the room slides to show its left side.' },
         { op: 'tiltpan', deg: 24, path: [[110, 420], [330, 420]], ms: 2000 }, { op: 'wait', ms: 900 }, { op: 'clear' },
         { op: 'tip', text: 'Bring it back to the middle and the room settles again.' },
@@ -126,20 +126,20 @@
         { op: 'tiltpan', deg: 0, path: [[110, 420], [330, 420]], ms: 1700 }, { op: 'wait', ms: 500 },
       ] },
       { id: 'room-left', label: 'Look left', rect: [518, 4357, 338, 721], ops: [
-        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Enter room', fast: 1 }, { op: 'wait', ms: 1600 }, { op: 'drag', path: [[110, 400], [330, 400]], ms: 900, fast: 1 }, { op: 'wait', ms: 800 }, { op: 'ready' },
+        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Enter room', fast: 1 }, { op: 'waitFor', text: 'Ask', exact: true }, { op: 'wait', ms: 200 }, { op: 'drag', path: [[110, 400], [330, 400]], ms: 900, fast: 1 }, { op: 'wait', ms: 800 }, { op: 'ready' },
         { op: 'tip', text: 'Tilt the phone left, or swipe, to see the other side of the room.', y: 70 }, { op: 'wait', ms: 3000 }, { op: 'clear' },
       ] },
       { id: 'room-center', label: 'The room', rect: [989, 4315, 382, 818], ops: [
-        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Enter room', fast: 1 }, { op: 'wait', ms: 1800 }, { op: 'ready' },
+        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Enter room', fast: 1 }, { op: 'waitFor', text: 'Ask', exact: true }, { op: 'wait', ms: 200 }, { op: 'ready' },
         { op: 'tip', text: 'Munshiji’s room: every object opens a feature.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
         { op: 'spot', text: 'Learn', exact: true, pad: 8 }, { op: 'tip', text: 'Discover familiar objects: tap one to preview its feature.', y: 70 }, { op: 'wait', ms: 2600 }, { op: 'clear' },
       ] },
       { id: 'room-right', label: 'Look right', rect: [1494, 4357, 342, 732], ops: [
-        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Enter room', fast: 1 }, { op: 'wait', ms: 1600 }, { op: 'drag', path: [[330, 400], [110, 400]], ms: 900, fast: 1 }, { op: 'wait', ms: 800 }, { op: 'ready' },
+        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Enter room', fast: 1 }, { op: 'waitFor', text: 'Ask', exact: true }, { op: 'wait', ms: 200 }, { op: 'drag', path: [[330, 400], [110, 400]], ms: 900, fast: 1 }, { op: 'wait', ms: 800 }, { op: 'ready' },
         { op: 'tip', text: 'Gently tilt left or right to pan across the room.', y: 70 }, { op: 'wait', ms: 3000 }, { op: 'clear' },
       ] },
       { id: 'room-ask', label: 'Ask Munshiji', rect: [1236, 5519, 444, 950], ops: [
-        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Enter room', fast: 1 }, { op: 'wait', ms: 1800 }, { op: 'ready' }, { op: 'wait', ms: 500 },
+        { op: 'boot', to: 'home' }, { op: 'tap', text: 'Enter room', fast: 1 }, { op: 'waitFor', text: 'Ask', exact: true }, { op: 'wait', ms: 200 }, { op: 'ready' }, { op: 'wait', ms: 500 },
         { op: 'spot', text: 'Ask', exact: true, pad: 6 }, { op: 'tip', text: 'Tap and speak, or type about any topic: Munshiji is here to help.', y: 70 }, { op: 'wait', ms: 2400 }, { op: 'clear' },
         { op: 'tap', text: 'Ask', exact: true }, { op: 'wait', ms: 700 },
         { op: 'say', text: 'What is the difference between needs and wants?' }, { op: 'wait', ms: 500 },
@@ -266,7 +266,7 @@
         const pre = ri < 0 ? [] : ops.slice(0, ri);
         for (const o of pre) {
           if (dead()) return null;
-          if (o.op === 'wait') { await sleep(Math.min(o.ms, 300)); continue; }
+          if (o.op === 'wait') { await sleep(Math.min(o.ms, 90)); continue; }
           const rest = Object.assign({}, o); delete rest.fast;
           const r = await this.send(rest, true, f);
           if (!r.ok) console.warn('[munshiji-live]', this.def.id, o.op, o.text || o.sel || '', r.err);
@@ -288,13 +288,14 @@
       const reveal = async () => {
         f.style.visibility = 'visible'; this.el.classList.remove('mj-loading'); if (this.frame) this.frame.remove(); this.frame = f; this.next = null; this.load.classList.add('off'); this.el.classList.remove('mj-idle');
       };
-      const ops = this.def.ops;
+      const ops = this.def.ops; const quick = !!this.quick; this.quick = false; let first = true;
       await reveal(); if (my !== this.token) return;
       for (let i = prep.ri + 1; i < ops.length; i++) {
         const o = ops[i];
         if (!(await this.gate(my))) return;
         if (my !== this.token) return;
-        if (o.op === 'wait') { await this.nap(o.ms, my); continue; }
+        if (o.op === 'wait') { if (quick && first) { first = false; continue; } await this.nap(quick ? o.ms * 0.6 : o.ms, my); continue; }
+        first = false;
         const rest = Object.assign({}, o); const fl = rest.fast; delete rest.fast;
         const r = await this.send(rest, !!fl, f);
         if (!r.ok) console.warn('[munshiji-live]', this.def.id, o.op, o.text || o.sel || '', r.err);
@@ -335,14 +336,14 @@
       const after = vis.filter((p) => order(p) > this.last).sort((a, b) => order(a) - order(b));
       return after[0] || vis.sort((a, b) => order(a) - order(b))[0];
     },
-    playNow(p) { if (p.el.classList.contains('mj-idle')) p.el.classList.add('mj-loading'); this.forced = p; if (this.wakeRes) this.wakeRes(); },
+    playNow(p) { if (p.el.classList.contains('mj-idle')) p.el.classList.add('mj-loading'); p.quick = true; this.forced = p; if (this.wakeRes) this.wakeRes(); },
     /* phones on screen get their prototype loaded and set up in the background, so a hover can start the flow on the spot */
     warmUp() {
       const order = (p) => PHONES.indexOf(p);
-      const vis = PHONES.filter((p) => p.ratio >= 0.5 && p.el.isConnected).sort((a, b) => order(a) - order(b));
+      const vis = PHONES.filter((p) => p.ratio >= 0.2 && p.el.isConnected).sort((a, b) => order(a) - order(b));
       PHONES.forEach((p) => { if (p.prep && !p.live && p.ratio < 0.1) { p.gen++; p.prep = null; [p.next].forEach((f) => f && f.remove()); p.next = null; } });
       let n = PHONES.filter((p) => p.prep && !p.live).length;
-      for (const p of vis) { if (n >= 4) break; if (!p.live && !p.prep && !p.tryMode) { p.prepare(); n++; } }
+      for (const p of vis) { if (n >= 5) break; if (!p.live && !p.prep && !p.tryMode) { p.prepare(); n++; } }
     },
     takeOver(p) { if (this.taken && this.taken !== p) { this.taken.setTry(false); this.taken.stop(); } this.taken = p; if (this.current && this.current !== p) this.current.stop(); p.setTry(true); },
     run(p) {
