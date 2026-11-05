@@ -1,0 +1,42 @@
+/* Live phones laid over the annotated phone screens of the Munshiji case study (see live.js).
+ * The documentation images are untouched. Each live phone sits exactly on the screen of the phone drawn in the picture. */
+.cs-canvas-block.mj-has-live { position: relative; font-size: 16px; }
+.mj-layer { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.mj-phone { position: absolute; pointer-events: auto; font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif; }
+
+/* the screen opening of the phone in the picture */
+.mj-screen {
+  position: absolute; inset: 0;
+  overflow: hidden; background: #fff; border-radius: 8.6% / 4.2%; container-type: inline-size;
+  isolation: isolate;
+}
+.mj-scale { position: absolute; left: 0; top: 0; width: 390px; transform-origin: 0 0; background: #fff; }
+.mj-frame { position: absolute; left: 0; top: 0; display: block; width: 390px; border: 0; background: #fff; pointer-events: none; }
+.mj-phone.mj-try .mj-frame { pointer-events: auto; }
+.mj-phone.mj-try .mj-screen { pointer-events: auto; }
+
+.mj-load { position: absolute; inset: 0; z-index: 3; background: #fff; display: grid; place-content: center; justify-items: center; gap: 10px;
+  transition: opacity .35s, visibility 0s .35s; }
+.mj-load.off { opacity: 0; visibility: hidden; }
+.mj-spin { width: 26px; height: 26px; border-radius: 50%; border: 3px solid #e7e0fb; border-top-color: #7c4dff; animation: mjspin .8s linear infinite; }
+@keyframes mjspin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .mj-spin { animation: none; } }
+
+/* until the live screen is ready, the original picture of the screen stays visible */
+.mj-phone.mj-idle .mj-screen { visibility: hidden; }
+.mj-phone.mj-idle .mj-ctl { opacity: 0; pointer-events: none; }
+
+/* playback controls: tucked over the bottom of the screen, shown on hover or focus (and on tap on touch screens), so they never cover the notes around the phone */
+.mj-ctl { position: absolute; left: 50%; bottom: 3.4%; transform: translateX(-50%); display: flex; gap: 1px; padding: 2px; white-space: nowrap;
+  background: rgba(29, 24, 48, .92); border-radius: 999px; pointer-events: auto; box-shadow: 0 6px 18px rgba(0, 0, 0, .25); z-index: 5; opacity: 0; transition: opacity .25s; }
+.mj-phone:hover .mj-ctl, .mj-phone:focus-within .mj-ctl, .mj-phone.mj-try .mj-ctl { opacity: 1; }
+.mj-phone.mj-idle:hover .mj-ctl { opacity: 0; }
+.mj-ctl button { all: unset; box-sizing: border-box; cursor: pointer; color: #fff; font: 600 11px/1 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  padding: 5px 8px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; }
+.mj-ctl button:hover { background: rgba(255, 255, 255, .14); }
+.mj-ctl button:focus-visible { outline: 2px solid #b9a2ff; outline-offset: 1px; }
+.mj-ctl button[aria-pressed="true"] { background: #7c4dff; }
+.mj-ctl svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+@media (hover: none) { .mj-ctl { opacity: 0; pointer-events: none; }
+  .mj-phone.mj-show .mj-ctl, .mj-phone.mj-try .mj-ctl { opacity: 1; pointer-events: auto; } }
+@media (max-width: 900px) { .mj-ctl button span { display: none; } .mj-ctl button { padding: 4px 6px; } .mj-ctl svg { width: 10px; height: 10px; } }
