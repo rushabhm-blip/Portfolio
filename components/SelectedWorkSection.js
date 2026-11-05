@@ -337,11 +337,16 @@ export function createSelectedWorkSection() {
             <!-- 3:2 Media Aperture -->
             <a href="/projects/rilo/" class="project-aperture-link" aria-label="Explore Rilo case study">
               <div class="project-video-aperture" style="background-color: #0C0E0D;">
-                <img class="project-thumbnail-img"
-                     src="assets/projects/rilo/thumbnail.webp"
-                     alt="Illustration of three motorcycle riders travelling together along a winding road at night"
-                     loading="lazy"
-                     style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+                <video class="project-video"
+                       src="assets/projects/rilo/thumbnail_video_web.mp4"
+                       autoplay
+                       muted
+                       loop
+                       playsinline
+                       preload="auto"
+                       poster="assets/projects/rilo/thumbnail_poster.webp"
+                       aria-label="Illustration of three motorcycle riders travelling together along a winding road, with the Rilo logo and the line Everyone in the loop">
+                </video>
               </div>
             </a>
 
