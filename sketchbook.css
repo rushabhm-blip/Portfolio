@@ -417,7 +417,7 @@ body.is-book-open .crawler-video,
   aspect-ratio: 1363 / 1154;
   right: -13.2%;
   top: 3.5%;
-  transform: rotate(14deg) translateZ(-3px);
+  transform: rotate(7deg) translateZ(-3px);
   transform-origin: 32% 10%;
   filter: drop-shadow(var(--id-shadow));
   opacity: 0.92;
@@ -433,7 +433,7 @@ body.is-book-open .crawler-video,
 }
 
 .id-tag-wrapper:hover {
-  transform: rotate(16deg) translateZ(-2px) scale(1.02);
+  transform: rotate(9deg) translateZ(-2px) scale(1.02);
 }
 
 /* When the book opens: moves outward toward upper-right edge, reduces slightly, increases opacity */
@@ -443,12 +443,12 @@ body.is-book-open .crawler-video,
   width: 22%;
   right: -13.2%;
   top: 3.5%;
-  transform: rotate(14deg) translateZ(-3px);
+  transform: rotate(7deg) translateZ(-3px);
   opacity: 1;
 }
 
 .book-stage.is-open .id-tag-wrapper:hover {
-  transform: rotate(16deg) translateZ(-2px) scale(1.02);
+  transform: rotate(9deg) translateZ(-2px) scale(1.02);
 }
 
 .id-tag-img {
