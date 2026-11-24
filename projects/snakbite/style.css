@@ -25,6 +25,12 @@
     --font-body: 'Inter', -apple-system, sans-serif;
 }
 
+/* Vertical scroll only, at every width */
+html,
+body {
+    overflow-x: clip;
+}
+
 html {
     scrollbar-width: none !important; /* Firefox */
     -ms-overflow-style: none !important; /* IE / Edge */
